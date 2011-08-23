@@ -388,7 +388,7 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
         {
             $this->addMessage(
                 sprintf( 
-                    _( 'Current version is: %s. There is a new version available: %s. See the <a href="http://code.google.com/p/vimbadmin/source/browse/trunk/CHANGELOG">change log</a>.' ),
+                    _( 'Current version is: %s. There is a new version available: %s. See the <a href="https://github.com/opensolutions/ViMbAdmin/blob/master/CHANGELOG">change log</a>.' ),
                     ViMbAdmin_Version::VERSION,
                     ViMbAdmin_Version::getLatest()
                 ), 

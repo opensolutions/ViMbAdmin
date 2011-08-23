@@ -1,3 +1,12 @@
 .buildpath
 .project
 .settings/
+application/configs/application.ini
+library/Doctrine/
+library/Smarty/
+library/ZFDebug/
+library/Zend/
+public/.htaccess
+var/templates_c/[a-zA-Z0-9%]*
+var/session/sess_*
+

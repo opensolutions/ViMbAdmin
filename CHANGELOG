@@ -1,3 +1,10 @@
+0.3.1   2011-08-23
+ - Forgot to update changelog got 0.3 release.
+
+0.3     2011-08-23
+ - Changes required for the migration to GitHub. No new features / bugfixes 
+   or functionality.
+
 0.2.6   2011-08-08
  - fix: trim passwords at login and when entered by an admin
  - fix: could not edit aliases

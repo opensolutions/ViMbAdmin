@@ -1,0 +1,50 @@
+{include file="header.phtml"}
+
+{assign var='purgeMailboxParams' value="open: true, iframe: true, transition: 'elastic', width: '580px', height: '600px'"}
+{assign var='editMailboxParams' value="open: true, iframe: true, transition: 'elastic', width: '680px', height: '440px'"}
+{assign var='aliasesParams' value="open: true, iframe: true, transition: 'elastic', width: '800px', height: '600px'"}
+{assign var='mailboxPasswordParams' value="open: true, iframe: true, transition: 'elastic', width: '800px', height: '300px'"}
+
+<h1>Mailboxes {if $domain} for {$domain.domain} {if $domain.mailboxes neq 0}({$domain->countMailboxes()}/{$domain.mailboxes}){/if}{/if}</h1>
+
+{ViMbAdmin_Messages}
+
+<table id="mailbox_list_table" class="info">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Domain</th>
+            <th>Active</th>
+            <th>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='edit'}{if $domain}/did/{$domain.id}{/if}', {$editMailboxParams} });">Add Mailbox</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach $mailboxes as $oneMailbox}
+        <tr>
+            <td>{$oneMailbox.username}</td>
+            <td>{$oneMailbox.name}</td>
+            <td>{$oneMailbox.domain}</td>
+            <td><a id="toggle_active_{$oneMailbox.id}" href="#" onclick="toggleActive({$oneMailbox.id});">{$oneMailbox.active|yesno}</a></td>
+            <td>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='aliases' mid=$oneMailbox.id}', {$aliasesParams} });">Aliases</button>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='purge' mid=$oneMailbox.id}', {$purgeMailboxParams} });">Purge</button>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='password' mid=$oneMailbox.id}', {$mailboxPasswordParams} });">Password</button>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='edit' mid=$oneMailbox.id}', {$editMailboxParams} });">Edit</button>
+                <button onclick="document.location.href='{genUrl controller='mailbox' action='email-settings' mid=$oneMailbox.id}';">Email Settings</button>
+            </td>
+        </tr>
+{/foreach}
+    </tbody>
+</table>
+
+<br />
+<br />
+
+<button onclick="document.location.href='{genUrl controller='domain' action='list'}';">Back to domain list</button>
+
+{include file='mailbox/js/list.js'}
+
+{include file="footer.phtml"}

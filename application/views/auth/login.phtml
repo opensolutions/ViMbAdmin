@@ -1,0 +1,52 @@
+{include file="header.phtml"}
+
+{ViMbAdmin_Messages}
+
+{if isset( $loggedOut ) and $loggedOut}
+
+<div id="vimbadmin_messages">
+    <div id="vimbadmin-message-9999">
+        <div class="vimbadmin-message vimbadmin-message-success">
+            <p>You have been logged out.</p>
+        </div>
+    </div>
+</div>
+
+{/if}
+
+<div id="login-image">
+	<img src="{genUrl}/images/logo_500x159.jpg" />
+</div>
+
+<div id="login">
+
+	<div id="login-left">
+	    <h1>Login</h1>
+	    
+	    <p>
+	    Welcome to <em>ViMbAdmin</em>, a web application for managing your virtual mailboxes, domains and aliases.
+	    </p>
+	    <p>
+        <input type="button" onclick="document.location.href='{genUrl}/auth/password-reset';" value="Forgotten Password" />
+	    </p>
+	    
+	</div>
+	
+	<div id="login-right">    
+    
+	    {$loginForm}
+    </div>
+    
+</div>
+
+<div id="mb_pw_change">
+
+    <p>
+    Are you a user (mailbox owner) looking to change your <br />password? If so, please 
+    click on the button across.
+    <input style="float: right;" type="button" onclick="document.location.href='{genUrl}/change-password';" value="Mailbox Password Change" />
+    </p>
+    
+</div>
+
+{include file="footer.phtml"}

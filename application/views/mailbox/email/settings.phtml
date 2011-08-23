@@ -1,0 +1,92 @@
+Dear {$mailbox.name},
+
+{if $welcome}
+Welcome to your new email account.
+{/if}
+
+Your email address is: {$mailbox.username}
+
+{if $welcome}
+Your password is: {$password}
+{/if}
+
+Access to your mail can be configured using the settings below.
+
+If you want to change your password, you may do so at:
+
+    {genUrl controller='change-password'}
+
+For assistance, please contact:
+
+  {$settings.email.name} <{$settings.email.address}>
+
+
+
+
+{if $settings.webmail.enabled}
+Webmail Access
+====================
+
+We have a web based email client so that you can access your email
+from anywhere with Internet access. Just browse to:
+
+Website:  {$settings.webmail.host}
+Username: {$settings.webmail.user}
+
+Log in with the password above.
+
+{/if}
+
+{if $settings.smtp.enabled}
+Sending Email / SMTP Access
+==============================
+
+To send email from your mail client such as Outlook or Thunderbird, 
+please configure it with the following settings:
+
+SMTP Server:  {$settings.smtp.host}
+SMTP Port:    {$settings.smtp.port}
+SSL/TLS:      {$settings.smtp.crypt}
+Username:     {$settings.smtp.user}
+
+Log in with the password above.
+
+{/if}
+
+{if $settings.imap.enabled}
+Receiving Email via IMAP
+==============================
+
+To receive email from your mail client such as Outlook 
+or Thunderbird using IMAP, please configure it with the 
+following settings:
+
+IMAP Server:  {$settings.imap.host}
+IMAP Port:    {$settings.imap.port}
+SSL/TLS:      {$settings.imap.crypt}
+Username:     {$settings.imap.user}
+
+Log in with the password above.
+
+{/if}
+
+
+{if $settings.pop3.enabled}
+Receiving Email via POP3
+==============================
+
+To receive email from your mail client such as Outlook 
+or Thunderbird using POP3, please configure it with the 
+following settings:
+
+POP3 Server:  {$settings.pop3.host}
+POP3 Port:    {$settings.pop3.port}
+SSL/TLS:      {$settings.pop3.crypt}
+Username:     {$settings.pop3.user}
+
+Log in with the password above.
+
+{/if}
+
+
+

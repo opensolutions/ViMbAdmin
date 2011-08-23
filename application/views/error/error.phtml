@@ -1,0 +1,44 @@
+{include file="header.phtml"}
+
+<h1>Unexpected Error</h1>
+
+{ViMbAdmin_Messages}
+
+<p align="center">
+
+<table width="80%" align="center">
+<tr>
+    <td valign="top" align="center">
+        <br />
+        <h3>An Error has Occurred</h3>
+
+        <p>We apologise but an unexpected server error has occured.</p>
+    </td>
+</tr>
+</table>
+
+</p>
+
+{if $exception}
+
+    <dl>
+        <dt>File</dt>
+        <dd>{$exception->getFile()}</dd>
+    
+        <dt>Line</dt>
+        <dd>{$exception->getLine()}</dd>
+    
+        <dt>Message</dt>
+        <dd>{$exception->getMessage()}</dd>
+    
+        <dt>Code</dt>
+        <dd>{$exception->getCode()}</dd>
+    </dl>
+    
+    <h3>Trace</h3>
+    
+    <pre>{$exception->getTraceAsString()}</pre>
+
+{/if}
+
+{include file="footer.phtml"}

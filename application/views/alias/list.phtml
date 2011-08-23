@@ -1,0 +1,49 @@
+{include file="header.phtml"}
+
+{assign var='editAliasParams' value="open: true, iframe: true, transition: 'elastic', width: '750px', height: '500px'"}
+
+<h1>Aliases {if $domain} for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}{/if}</h1>
+
+{ViMbAdmin_Messages}
+
+<label><input type="checkbox" name="ima" id="ima" value="1" {if $includeMailboxAliases}checked="checked" {/if}/> Include mailbox aliases</label>
+
+<br/>
+
+<table id="domain_aliases_table" class="info">
+    <thead>
+        <tr>
+            <th>Address</th>
+            <th>Domain</th>
+            <th>Active</th>
+            <th>Goto</th>
+            <th>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' did=$domainModel.id}', {$editAliasParams} });">Add Alias</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    {foreach $aliases as $oneAlias}
+        <tr id="alias_{$oneAlias.id}">
+            <td>{$oneAlias.address}</td>
+            <td>{$oneAlias.domain}</td>
+            <td><a id="toggle_active_{$oneAlias.id}" href="#" onclick="toggleActive({$oneAlias.id});">{$oneAlias.active|yesno}</a></td>
+            <td class="OSSTooltip-bl-tl" title="{$oneAlias.goto}">{$oneAlias.goto|shorten:50}</td>
+            <td>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' alid=$oneAlias.id}', {$editAliasParams} });">Edit</button>
+                <button onclick="deleteAlias({$oneAlias.id});">Delete</button>
+            </td>
+        </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+<br />
+<br />
+<br />
+
+<button onclick="document.location.href='{genUrl controller='domain' action='list'}';">Back to domains</button>
+
+{include file='alias/js/list.js'}
+
+{include file="footer.phtml"}

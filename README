@@ -1,0 +1,59 @@
+
+ViMbAdmin (pronounced Vim-Be-Admin)
+=======================================
+
+The ViMbAdmin Project provides an easily manageable web based virtual
+mailbox administration system for use with Postfix for example.
+
+Copyright (c) 2011 Open Source Solutions Limited
+
+ViMbAdmin is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ViMbAdmin is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ViMbAdmin.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Open Source Solutions Limited T/A Open Solutions
+    147 Stepaside Park, Stepaside, Dublin 18, Ireland.
+    Barry O'Donovan <barry _at_ opensolutions.ie>
+
+Author: Barry O'Donovan
+Author: Roland Huszti
+
+Thirdparty Software
+=====================
+
+ViMbAdmin includes some other thirdparty software in its distribution:
+
+bin/yuicompressor.jar - released under the BSD license but in itself also
+       contains code under Mozilla Public License (MPL). See:
+       http://developer.yahoo.com/yui/compressor/
+
+bin/compiler.jar - a Java command-line utility that compresses, optimizes,
+       and looks for mistakes in your JavaScript. Released under the
+       Apache License Version 2.0. See:
+       http://code.google.com/p/closure-compiler/
+
+public/js-dev/08-superfish.js - jQuery menu widget. Dual licensed under
+       the MIT and GPL licenses.
+
+public/js-dev/08-vimbadmin.tooltip.js - a jQuery tool tip.Licensed under
+       the MIT license.
+
+public/js-dev/
+       01-jquery.js - JQuery - http://jquery.com/ - MIT/GPL
+       02-jquery-ui.js - JQuery UI - http://jqueryui.com/ - MIT/GPL
+       03-jquery-validate.js - JQuery Validator - MIT/GPL http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+       07-jquery-colorbox.js - ColorBox - MIT
+       09-jquery-datatables.js JQuery Datatables - http://www.datatables.net - GPL/MIT
+
+
+In addition, Doctrine, Zend Framework and Smarty are used from SVN externals.

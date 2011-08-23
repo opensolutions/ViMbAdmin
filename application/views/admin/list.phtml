@@ -1,0 +1,57 @@
+{include file="header.phtml"}
+
+{assign var='changePwdParams' value="open: true, iframe: true, transition: 'elastic', width: '700px', height: '270px'"}
+{assign var='addAdminParams' value="open: true, iframe: true, transition: 'elastic', width: '500px', height: '400px'"}
+{assign var='domainListParams' value="open: true, iframe: true, transition: 'elastic', width: '700px', height: '600px'"}
+
+<h1>Admin List</h1>
+
+{ViMbAdmin_Messages}
+
+<table id="admin_list_table" class="info">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Active</th>
+            <th>Super</th>
+            <th>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='add'}', {$addAdminParams} });">Add admin</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach $admins as $oneAdmin}
+        <tr id="admin_{$oneAdmin.id}" {if $identity.admin.id == $oneAdmin.id}class="bold"{/if}>
+            <td>{$oneAdmin.username}</td>
+            <td>
+            {if $identity.admin.id != $oneAdmin.id}
+                <a id="toggle_active_{$oneAdmin.id}" href="#" onclick="toggleActive({$oneAdmin.id});">{$oneAdmin.active|yesno}</a>
+            {else}
+                {$oneAdmin.active|yesno}
+            {/if}
+            </td>
+            <td>
+                {if $identity.admin.id != $oneAdmin.id}
+                    <a id="toggle_super_{$oneAdmin.id}" href="#" onclick="toggleSuper({$oneAdmin.id});">{$oneAdmin.super|yesno}</a>
+                {else}
+                    {$oneAdmin.super|yesno}
+                {/if}
+            </td>
+            <td>
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='password'}/aid/{$oneAdmin.id}', {$changePwdParams} });">Password</button>
+                <button onclick="document.location.href='{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}';">Log</button>
+                {if not $oneAdmin.super}
+                    <button onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}', {$domainListParams} });">Domains</button>
+                {/if}
+                {if $identity.admin.id neq $oneAdmin.id}
+                    <button onclick="purgeAdmin({$oneAdmin.id}, '{$oneAdmin.username}');">Purge</button>
+                {/if}
+            </td>
+        </tr>
+{/foreach}
+    </tbody>
+</table>
+
+{include file='admin/js/list.js'}
+
+{include file="footer.phtml"}

@@ -1,0 +1,115 @@
+
+Contents:
+=================
+
+  * Specific Update Notes
+  
+    * Upgrading from 0.1.2 and below to 2.0 and above
+    
+  * Updating In General
+  
+  * Examples
+
+
+
+Specific Update Notes
+======================
+
+Upgrading from 0.1.2 and below to 2.0 and above
+------------------------------------------------
+
+In application.ini:
+
+1) rename "likeForLikeAliases" to "mailboxAliases"
+2) add new option "defaults.table.entries" and set it to one of 10, 25, 50, 100
+
+
+
+
+
+
+
+Updating In General
+===================
+
+As we distribute the configuration file as application.ini.dist, you should
+be able to unpack new versions directly over older versions bearing 
+specific notes below in mind.
+
+Also ensure to chown / chmod the var/ directory if its ownership changes.
+
+There is an example below.
+
+
+
+
+
+
+Examples
+========
+
+Example 1
+==========
+
+In your current directory, you have a live version of vimbadmin V0.1.2 in the 
+directory: vimbadmin
+ 
+To install vimbadmin-0.2.2, you might start by downloading it:
+
+http://vimbadmin.googlecode.com/files/vimbadmin-0.2.2.tar.gz
+
+Then change directory to:
+
+cd vimbadmin
+
+And replace current files with new version:
+
+tar zxvf ../vimbadmin-0.2.2.tar.gz --strip=1 
+
+This command unpacks the new release striping the leading directory name 
+(which we always append with the version: vimbadmin-0.2.2) over the
+current one.
+
+As we distribute the configuration as .dist, it will not replace your existing
+configured.
+
+IMPORTANT: make sure you check specific upgrade notes above to see if they
+apply to you!
+
+Example 2
+==========
+
+
+In your current directory, you have a live version of vimbadmin V0.1.2 in the 
+directory: vimbadmin-0.1.2.
+
+This is symlinked as followings:
+
+vimbadmin -> vimbadmin-0.1.2
+
+and Apache uses vimbadmin in its configuration.
+ 
+To install vimbadmin-0.2.2, you might:
+
+http://vimbadmin.googlecode.com/files/vimbadmin-0.2.2.tar.gz
+
+and then extract it with:
+
+tar zxf vimbadmin-0.2.2.tar.gz
+
+Now, copy over your configuration file:
+
+cp vimbadmin-0.1.2/application/config/application.ini vimbadmin-0.2.2/application/config/application.ini
+
+and ensure you make the changes to the config file as required below.
+ 
+Ensure the var directory is set up correctly. E.g.
+
+chown -R www-data: vimbadmin-0.2.2/var
+
+And finally, change your symlink:
+
+rm vimbadmin
+ln -s vimbadmin-0.2.2 vimbadmin
+
+

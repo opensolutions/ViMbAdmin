@@ -1,0 +1,76 @@
+<div id="form_div_edit_mailbox">
+
+    <form action="{$element->getAction()}"
+          method="{$element->getMethod()}"
+          enctype="{$element->getAttrib('enctype')}"
+          id="{$element->getId()}"
+          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+          class="default_form">
+
+        <table>
+            <tr>
+                <td class="right bold valign_top" style="width: 140px;">Email</td>
+                <td>
+                    {$element->local_part}
+                    @
+                    {$element->domain}
+
+                    {include file='form_element_errors.phtml' pTheElement=$element->local_part}
+                    {include file='form_element_errors.phtml' pTheElement=$element->domain}
+                </td>
+            </tr>
+            <tr>
+                <td class="right bold valign_top">{$element->name->getLabel()}</td>
+                <td>
+                    {$element->name}
+                    {include file='form_element_errors.phtml' pTheElement=$element->name}
+                </td>
+            </tr>
+        {if isset($element->password)}
+            <tr>
+                <td class="right bold valign_top">{$element->password->getLabel()}</td>
+                <td>
+                    {$element->password}
+                {if $element->password->getAttrib('disabled') != 'disabled'}
+                    &nbsp;
+                    <input type="button" onclick="$( '#{$element->password->getId()}' ).val( randomPassword( 12 ) );" value="Random" />
+                {/if}
+                    {include file='form_element_errors.phtml' pTheElement=$element->password}
+                </td>
+            </tr>
+        {/if}
+            <tr>
+                <td class="right bold valign_top">{$element->quota->getLabel()}</td>
+                <td>
+                    {$element->quota}
+                    {include file='form_element_errors.phtml' pTheElement=$element->quota}
+                </td>
+            </tr>
+            <tr>
+                <td class="right bold"><label for="{$element->active->getId()}" class="inline">{$element->active->getLabel()}</label></td>
+                <td>{$element->active}</td>
+            </tr>
+        {if $element->local_part->getValue() == ''}
+            <tr>
+                <td class="right bold"><label for="{$element->welcome_email->getId()}" class="inline">{$element->welcome_email->getLabel()}</label></td>
+                <td>{$element->welcome_email}</td>
+            </tr>
+            <tr id="cc_welcome_email_tr" class="dontdisplay">
+                <td class="right bold valign_top">{$element->cc_welcome_email->getLabel()}</td>
+                <td>
+                    {$element->cc_welcome_email}
+                    {include file='form_element_errors.phtml' pTheElement=$element->cc_welcome_email}
+                </td>
+            </tr>
+        {/if}
+        </table>
+
+        <input type="button" onclick="parent.$.fn.colorbox.close();" value="Cancel" />
+        &nbsp;
+        <input type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+        &nbsp; &nbsp;
+        <span id="saving" class="dontdisplay"><img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...</span>
+    </form>
+
+</div> <!-- #form_div_edit_mailbox -->

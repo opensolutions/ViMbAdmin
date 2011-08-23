@@ -1,0 +1,19 @@
+{include file="header.phtml" inColorBox=true}
+
+<h1>
+    {if $aliasModel.id}
+        Edit aliases for {$aliasModel->address}
+    {else}
+        Add alias
+    {/if}
+</h1>
+
+{ViMbAdmin_Messages}
+
+{$editForm}
+
+{addJSValidator form=$editForm}
+
+{include file='alias/js/edit.js'}
+
+{include file="footer.phtml" inColorBox=true}

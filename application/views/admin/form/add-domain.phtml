@@ -1,0 +1,31 @@
+<div id="form_div_edit_admin">
+
+    <form action="{$element->getAction()}"
+          method="{$element->getMethod()}"
+          enctype="{$element->getAttrib('enctype')}"
+          id="{$element->getId()}"
+          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+          class="default_form">
+
+        <table>
+                <tr>
+                    <td class="right bold valign_top">{$element->domain->getLabel()}</td>
+                    <td>
+                        {$element->domain}
+                        {include file='form_element_errors.phtml' pTheElement=$element->domain}
+                    </td>
+                </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <br />
+                    <input type="button" onclick="document.location.href='{genUrl controller='admin' action='domains' aid={$element->adminId->getValue()}}';" value="{$element->cancel->getLabel()}" />
+                    &nbsp;
+                    <input type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div> <!-- #form_div_edit_mailbox -->

@@ -1,0 +1,29 @@
+{include file="header.phtml"}
+
+<h1>An Error has Occurred</h1>
+
+{ViMbAdmin_Messages}
+
+{include file="message.tpl"}
+
+    <dl>
+        <dt>File</dt>
+        <dd>{$errorException->getFile()}</dd>
+
+        <dt>Line</dt>
+        <dd>{$errorException->getLine()}</dd>
+
+        <dt>Message</dt>
+        <dd>{$errorException->getMessage()}</dd>
+
+        <dt>Code</dt>
+        <dd>{$errorException->getCode()}</dd>
+    </dl>
+
+    <h3>Trace</h3>
+
+    <pre>
+    {$errorException->getTraceAsString()}
+    </pre>
+
+{include file="footer.phtml"}

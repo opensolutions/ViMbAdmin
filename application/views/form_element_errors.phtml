@@ -1,0 +1,9 @@
+                {if $pTheElement->getMessages()}
+                    <ul class="errors">
+                        {foreach from=$pTheElement->getMessages() item=vMessages}
+                            {foreach from=$vMessages item=vMsg}
+                                <li>{$vMsg}</li>
+                            {/foreach}
+                        {/foreach}
+                    </ul>
+                {/if}

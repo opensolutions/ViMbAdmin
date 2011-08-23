@@ -1,0 +1,65 @@
+{include file="header.phtml" inColorBox=true}
+
+<h1>Purge Mailbox {$mailboxModel.username}</h1>
+
+{ViMbAdmin_Messages}
+
+You are about to delete the mailbox <b>{$mailboxModel.username}</b>
+
+<br />
+<br />
+
+<table class="info" style="width: 500px;">
+    <thead>
+        <tr class="dark_row">
+            <th colspan="2" class="center">Aliases</th>
+        </tr>
+    </thead>
+    <tr>
+        <td class="bold">Address</td>
+        <td class="bold">Goto</td>
+    </tr>
+{foreach $aliases as $oneAlias}
+    <tr {if $oneAlias@iteration is odd by 2}class="dark_row"{/if}>
+        <td>{$oneAlias.address}</td>
+        <td>{$oneAlias.goto}</td>
+    </tr>
+{/foreach}
+</table>
+
+<br />
+
+<table class="info" style="width: 500px;">
+    <thead>
+        <tr class="dark_row">
+            <th colspan="2" class="center">In aliases</th>
+        </tr>
+    </thead>
+    <tr>
+        <td class="bold">Address</td>
+        <td class="bold">Goto</td>
+    </tr>
+{foreach $inAliases as $oneAlias}
+    <tr {if $oneAlias@iteration is odd by 2}class="dark_row"{/if}>
+        <td>{$oneAlias.address}</td>
+        <td>{$oneAlias.goto}</td>
+    </tr>
+{/foreach}
+</table>
+
+<br />
+
+<b>The mailbox and all of its aliases will be deleted, and it will be removed from every 'goto' entry.</b>
+
+<br />
+<br />
+
+<form name="purge_mailbox_form" id="purge_mailbox_form" method="post" action="">
+    <button onclick="parent.$.fn.colorbox.close();">Cancel</button>
+    &nbsp;
+    <button type="submit" value="purge" name="purge" onclick="$('#purging').show('fast');">Purge</button>
+    &nbsp; &nbsp;
+    <span id="purging" class="dontdisplay"><img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...</span>
+</form>
+
+{include file="footer.phtml" inColorBox=true}

@@ -1,0 +1,57 @@
+{include file="header.phtml"}
+
+<h1>Welcome to Your New ViMbAdmin Installation!</h1>
+
+{ViMbAdmin_Messages}
+
+<p>
+This set-up procedure will guide you the final steps to put your system live.
+</p>
+
+{if not $saltSet}
+    <h3>Step 1: Security Salt</h3>
+    
+    <p>
+    A <em>security salt</em> is used to ensure your administrator passwords are
+    secure. You must first set a random security salt in the <code>securitysalt</code>
+    parameter in the following file: <code>application/config/application.ini</code>.
+    </p>
+    
+    <p>
+    We suggest you use the following <strong>randomly generated</strong> string:
+    </p>
+    
+     <pre style="padding: 5px; border: 1px solid black; margin: 5px; width: 25em;">{$randomSalt}</pre>
+
+    <p>
+        <strong>Please also ensure you have set all the appropriate values
+        in the <code>[user]</code> section before continuing.</strong>
+    </p>
+{else}
+
+    <h3>Step 1: Security Salt [Done!]</h3>
+
+{/if}
+
+<h3>Step 2: Create a New Administrator</h3>
+
+    <p>
+    You now need to create a super administrator who can log into the system.
+    </p>
+    
+    <p>
+    To ensure only the person installing this application can register the user, 
+    you must enter the security salt as you entered it into the file above. If you
+    chose to use the random string then it has been copied below for your convenience.
+    </p>
+    
+    <p>
+    Enter a username (which must be your email address) and a password. You will be
+    emailed you a copy of this password to the email address provided you have set
+    your mail settings in <code>application.ini</code>.
+    </p>
+
+{$form}
+{addJSValidator form=$form}
+
+{include file="footer.phtml"}

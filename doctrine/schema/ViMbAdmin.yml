@@ -1,0 +1,266 @@
+---
+options:
+    collate: utf8_general_ci
+    charset: utf8
+Admin:
+  tableName: admin
+  columns:
+    id:
+      primary: true
+      type: integer
+      autoincrement: true
+    username:
+      unique: true
+      type: string(255)
+      notnull: true
+    password:
+      type: string(255)
+      notnull: true
+    super:
+      default: 0
+      type: boolean
+    active:
+      default: 1
+      type: boolean
+  actAs:
+    Timestampable:
+      created:
+        name: created
+        type: timestamp
+      updated:
+        name: modified
+        type: timestamp
+Domain:
+  tableName: domain
+  columns:
+    id:
+      primary: true
+      type: integer(255)
+      autoincrement: true
+    domain:
+      unique: true
+      type: string(255)
+      notnull: true
+    description:
+      type: string(255)
+    aliases:
+      default: 0
+      type: integer
+      notnull: true
+    mailboxes:
+      default: 0
+      type: integer
+      notnull: true
+    maxquota:
+      default: 0
+      type: integer(20)
+      notnull: true
+    quota:
+      default: 0
+      type: integer(20)
+      notnull: true
+    transport:
+      default: virtual
+      type: string(255)
+      notnull: true
+    backupmx:
+      default: 0
+      type: boolean
+      notnull: true
+    active:
+      default: 1
+      type: boolean
+  actAs:
+    Timestampable:
+      created:
+        name: created
+        type: timestamp
+      updated:
+        name: modified
+        type: timestamp
+DomainAdmin:
+  tableName: domain_admin
+  columns:
+    id:
+      primary: true
+      type: integer
+      autoincrement: true
+    username:
+      type: string(255)
+      notnull: true
+    domain:
+      type: string(255)
+      notnull: true
+  relations:
+    Admin:
+      local: username
+      foreign: username
+    Domain:
+      local: domain
+      foreign: domain
+  actAs:
+    Timestampable:
+      created:
+        name: created
+        type: timestamp
+      updated:
+        disabled: true
+Mailbox:
+  tableName: mailbox
+  columns:
+    id:
+      primary: true
+      type: integer
+      autoincrement: true
+    username:
+      unique: true
+      type: string(255)
+      notnull: true
+    password:
+      type: string(255)
+      notnull: true
+    name:
+      type: string(255)
+    maildir:
+      type: string(255)
+    quota:
+      default: 0
+      type: integer(20)
+      notnull: true
+    local_part:
+      type: string(255)
+      notnull: true
+    domain:
+      type: string(255)
+      notnull: true
+    active:
+      default: 1
+      type: boolean
+      notnull: true
+    homedir:
+      type: string(255)
+    uid:
+      type: integer
+    gid:
+      type: integer
+  relations:
+    Domain:
+      local: domain
+      foreign: domain
+  actAs:
+    Timestampable:
+      created:
+        name: created
+        type: timestamp
+      updated:
+        name: modified
+        type: timestamp
+Alias:
+  tableName: alias
+  columns:
+    id:
+      primary: true
+      type: integer
+      autoincrement: true
+    address:
+      unique: true
+      type: string(255)
+    goto:
+      type: string(65536)
+      notnull: true
+    domain:
+      type: string(255)
+      notnull: true
+    active:
+      default: 1
+      type: boolean
+      notnull: true
+  relations:
+    Domain:
+      local: domain
+      foreign: domain
+  actAs:
+    Timestampable:
+      created:
+        name: created
+        type: timestamp
+      updated:
+        name: modified
+        type: timestamp
+Config:
+  tableName: config
+  columns:
+    id:
+      primary: true
+      type: integer
+      autoincrement: true
+    name:
+      unique: true
+      type: string(255)
+      notnull: true
+    value:
+      type: string(255)
+  actAs:
+    Timestampable:
+Log:
+  tableName: log
+  columns:
+    id:
+      primary: true
+      type: integer
+      autoincrement: true
+    username:
+      type: string(255)
+    domain:
+      type: string(255)
+    action:
+      type: string(255)
+      notnull: true
+    data:
+      type: string(65536)
+      notnull: true
+  relations:
+    Admin:
+      local: username
+      foreign: username
+    Domain:
+      local: domain
+      foreign: domain
+  actAs:
+    Timestampable:
+      created:
+        name: timestamp
+        type: timestamp
+      updated:
+        disabled: true
+Token:
+  tableName: token
+  columns:
+    id:
+      primary: true
+      type: integer
+      autoincrement: true
+    username:
+      type: string(255)
+      notnull: true
+    type:
+      type: enum
+      values: [PASSWORD_RESET, DUMMY]
+    token:
+      type: string(64)
+      notnull: false
+      default: ''
+    rid:
+      type: string(64)
+      notnull: false
+      default: ''
+  relations:
+    Admin:
+      local: username
+      foreign: username
+      foreignType: many
+      type: one
+  actAs:
+    Timestampable:
+      updated:
+        disabled: true

@@ -1,0 +1,36 @@
+{include file="header.phtml" inColorBox=true}
+
+<h1>Aliases of {$mailboxModel.username}</h1>
+
+{ViMbAdmin_Messages}
+
+<label><input type="checkbox" name="ima" id="ima" value="1" {if $includeMailboxAliases}checked="checked" {/if}/> Include mailbox aliases</label>
+
+<br/>
+
+<table id="mailbox_aliases_table" class="info">
+    <thead>
+        <tr>
+            <th>Address</th>
+            <th>Goto</th>
+            <th>
+                <button onclick="document.location.href='{genUrl controller='alias' action='edit' mid=$mailboxModel.id}';">Add Alias</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    {foreach $aliases as $oneAlias}
+        <tr id="alias_{$oneAlias.id}">
+            <td>{$oneAlias.address}</td>
+            <td>{$oneAlias.goto}</td>
+            <td>
+                <button onclick="deleteAlias({$oneAlias.id}, {$mailboxModel.id}, '{$mailboxModel.username}');">Remove</button>
+            </td>
+        </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+{include file='mailbox/js/aliases.js'}
+
+{include file="footer.phtml" inColorBox=true}

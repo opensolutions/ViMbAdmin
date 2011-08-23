@@ -1,0 +1,13 @@
+{include file="header.phtml" inColorBox=true}
+
+<h1>{if $mailboxModel.username}Edit mailbox {$mailboxModel.username}{else}New mailbox{/if}</h1>
+
+{ViMbAdmin_Messages}
+
+{$editForm}
+
+{addJSValidator form=$editForm}
+
+{include file='mailbox/js/edit.js'}
+
+{include file="footer.phtml" inColorBox=true}

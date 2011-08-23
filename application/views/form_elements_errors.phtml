@@ -1,0 +1,12 @@
+            {if $pTheElement->isErrors()}
+                <ul class="errors">
+                    {foreach from=$pTheElement->getMessages() item=elements}
+                        {foreach from=$elements item=messages}
+                            {foreach from=$messages item=msg}
+                                <li>{$msg}</li>
+                            {/foreach}
+                        {/foreach}
+                    {/foreach}
+                </ul>
+            {/if}
+

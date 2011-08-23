@@ -1,0 +1,51 @@
+<div id="form_div_edit_alias">
+
+    <form action="{$element->getAction()}"
+          method="{$element->getMethod()}"
+          enctype="{$element->getAttrib('enctype')}"
+          id="{$element->getId()}"
+          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+          class="default_form">
+
+        <table>
+            <tr>
+                <td class="right bold valign_top">Address</td>
+                <td>
+                    {$element->local_part}
+                    @
+                    {$element->domain}
+
+                    {include file='form_element_errors.phtml' pTheElement=$element->local_part}
+                    {include file='form_element_errors.phtml' pTheElement=$element->domain}
+                </td>
+            </tr>
+            <tr>
+                <td class="right bold" style="padding-bottom: 8px;"><label for="{$element->active->getId()}" class="inline">{$element->active->getLabel()}</label></td>
+                <td style="padding-bottom: 8px;">{$element->active}</td>
+            </tr>
+            <tr>
+                <td class="right bold valign_top">{$element->goto->getLabel()}</td>
+                <td>
+                    <ul id="goto_addresses" class="no_list_type">
+                        <li>
+                            <input type="text" id="goto_empty" name="goto[]" value="" size="40" title="Goto" />
+                            <img alt="Add" title="Add" src="{genUrl}/images/add.png" class="valign_middle clickable" onclick="addGoto();" />
+                            &nbsp;
+                            <span id="invalid_email" class="red"></span>
+                        </li>
+                    </ul>
+
+                    {include file='form_element_errors.phtml' pTheElement=$element->goto}
+                </td>
+            </tr>
+        </table>
+
+        <input type="button" onclick="parent.$.fn.colorbox.close();" value="Cancel" />
+        &nbsp;
+        <input type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" onclick="$('#saving').show('fast');" />
+        &nbsp; &nbsp;
+        <span id="saving" class="dontdisplay"><img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...</span>
+    </form>
+
+</div> <!-- #form_div_edit_alias -->

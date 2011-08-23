@@ -1,0 +1,11 @@
+{include file="header.phtml" inColorBox=true}
+
+<h1>{$operation} Domain: {$domainModel.domain}</h1>
+
+{ViMbAdmin_Messages}
+
+{$editForm}
+
+{addJSValidator form=$editForm}
+
+{include file="footer.phtml" inColorBox=true}

@@ -1,0 +1,28 @@
+{include file="header.phtml" inColorBox=true}
+
+<h1>Domains for {$targetAdmin.username}</h1>
+
+{ViMbAdmin_Messages}
+
+<table id="admin_domain_list_table" class="info">
+    <thead>
+        <tr>
+            <th>Domain</th>
+            <th>
+                <button onclick="document.location.href='{genUrl controller='admin' action='add-domain' aid=$targetAdmin.id}';">Add domain</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach $domainAdmins as $domainAdmin}
+        <tr id="domain_{$domainAdmin.Domain.id}">
+            <td>{$domainAdmin.Domain.domain}</td>
+            <td><button onclick="removeAdmin( {$domainAdmin.Domain.id}, {$targetAdmin->id}, '{$domainAdmin.Domain.domain}' ); return false;">Remove</button></td>
+        </tr>
+{/foreach}
+    </tbody>
+</table>
+
+{include file='admin/js/domains.js'}
+
+{include file="footer.phtml" inColorBox=true}

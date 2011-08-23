@@ -1,0 +1,45 @@
+{include file="header.phtml"}
+
+{assign var='addDomainParams' value="open: true, iframe: true, transition: 'elastic', width: '800px', height: '480px'"}
+
+<h1>Domain List</h1>
+
+{ViMbAdmin_Messages}
+
+<table id="domain_list_table" class="info">
+    <thead>
+        <tr>
+            <th>Domain</th>
+            <th>Mailboxes</th>
+            <th>Aliases</th>
+            <th>Active</th>
+            <th>Transport</th>
+            <th>Backup MX</th>
+            <th>Created</th>
+            <th>{if $identity.admin.super}<button onclick="$.fn.colorbox({ href:'{genUrl controller='domain' action='edit'}', {$addDomainParams} });">Add Domain</button>{/if}</th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach $domains as $oneDomain}
+        <tr id="domain_{$oneDomain.id}">
+            <td>{$oneDomain.domain}</td>
+            <td><a class="ul" href="{genUrl controller='mailbox' action='list' did=$oneDomain.id}">{$oneDomain->countMailboxes()}{if $oneDomain.mailboxes}/{$oneDomain.mailboxes}{/if}</a></td>
+            <td><a class="ul" href="{genUrl controller='alias' action='list' did=$oneDomain.id}">{$oneDomain->countAliases( true )}{if $oneDomain.aliases}/{$oneDomain.aliases}{/if}</a></td>
+            <td><a id="toggle_active_{$oneDomain.id}" href="#" onclick="toggleActive({$oneDomain.id});">{$oneDomain.active|yesno}</a></td>
+            <td>{$oneDomain.transport}</td>
+            <td>{$oneDomain.backupmx|yesno}</td>
+            <td>{$oneDomain.created}</td>
+            <td>
+                <button onclick="document.location.href='{genUrl controller='log' action='list' did=$oneDomain.id}';">Logs</button>
+                {if $identity.admin.super}<button onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">Purge</button>{/if}
+                {if $identity.admin.super}<button onclick="document.location.href='{genUrl controller='domain' action='admins' did=$oneDomain.id}';">Admins</button>{/if}
+                <button onclick="$.fn.colorbox({ href:'{genUrl controller='domain' action='edit' did=$oneDomain.id}', {$addDomainParams} });">Edit</button>
+            </td>
+        </tr>
+{/foreach}
+    </tbody>
+</table>
+
+{include file='domain/js/list.js'}
+
+{include file="footer.phtml"}

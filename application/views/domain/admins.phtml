@@ -1,0 +1,45 @@
+{include file="header.phtml"}
+
+<h1>Domain Admins: {$domainModel.domain}</h1>
+
+{ViMbAdmin_Messages}
+
+<table id="admin_list_table" class="info">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>
+                <button onclick="addAdmin();">Add Admin</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach $domainModel.DomainAdmin as $oneAdmin}
+    <tr id="admin_{$oneAdmin.Admin.id}">
+        <td>{$oneAdmin.Admin.username}{if not $oneAdmin.Admin.active} <em>(inactive)</em>{/if}</td>
+        <td><button onclick="removeAdmin({$domainModel.id}, {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}');">Remove</button></td>
+    </tr>
+{/foreach}
+    </tbody>
+</table>
+
+<br />
+<br />
+
+<button onclick="document.location.href='{genUrl controller='domain' action='list'}';">Back to domain list</button>
+
+{include file='domain/js/admins.js'}
+
+<div id="add_admin_dialog">
+    <select name="admin" id="admin_list">
+    {foreach $adminList as $oneAdmin}
+        <option value="{$oneAdmin.id}">{$oneAdmin.username}{if not $oneAdmin.active} <em>(inactive)</em>{/if}</option>
+    {/foreach}
+    </select>
+
+    <br />
+
+    <span id="add_admin_msg"></span>
+</div>
+
+{include file="footer.phtml"}

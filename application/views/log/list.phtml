@@ -1,0 +1,37 @@
+{include file="header.phtml"}
+
+<h1>Log entries</h1>
+
+{ViMbAdmin_Messages}
+
+<table id="log_list_table" class="info">
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>Data</th>
+            <th>Admin</th>
+            <th>Domain</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach $logEntries as $oneLog}
+        <tr>
+            <td>{$oneLog.action}</td>
+            <td class="OSSTooltip-tl-bl" title="{$oneLog.data}">{$oneLog.data|shorten:40}</td>
+            <td>{$oneLog.Admin.username}</td>
+            <td>{$oneLog.Domain.domain}</td>
+            <td>{$oneLog.timestamp}</td>
+        </tr>
+{/foreach}
+    </tbody>
+</table>
+
+<br />
+<br />
+
+<button onclick="document.location.href='{genUrl controller='domain' action='list'}';">Back to domain list</button>
+
+{include file='log/js/list.js'}
+
+{include file="footer.phtml"}

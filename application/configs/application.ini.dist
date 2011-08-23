@@ -1,0 +1,252 @@
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; ViMbAdmin :: Virtual Mailbox Admin
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; IMPORTANT: Review and change all options in [user]
+;;
+
+[user]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Enter a random string here to add salt to admin accounts
+securitysalt = ""
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; When installing for the first time, it may be useful to set the following
+; to 1 BUT ensure you set it to zero again in a production system
+resources.frontController.params.displayExceptions = 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Default values used when created domains
+; 0 means unlimited (i.e. a user can create unlimited aliases, or a user has no quota limit)
+defaults.domain.quota = 0
+defaults.domain.maxquota = 0
+defaults.domain.transport = "virtual"
+defaults.domain.aliases = 0
+defaults.domain.mailboxes = 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Default values for creating mailboxes
+
+; This sets the uid and gid columns in the mailbox table to the below valies
+defaults.mailbox.uid = 2000
+defaults.mailbox.gid = 2000
+
+; Set the homedir and maildir values in the mailbox table where the
+; following substitutions apply:
+;
+;     %d -> domain part of email address
+;     %u -> user part of email address
+;     $m -> full email address
+;
+defaults.mailbox.maildir = "%d/%u/"
+defaults.mailbox.homedir = "/home/vmail/"
+
+; The password hashing function to use
+; one of "plain", "md5"
+defaults.mailbox.password_scheme = "md5"
+
+; The number of rows displayed in the tables
+; must be one of these: 10, 25, 50, 100
+defaults.table.entries = 25
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Settings email default values.
+;;
+;; Smae substituions apply as for maildir above. See (and edit) the
+;; following file to see how the below are used:
+;;
+;;     views/mailbox/email/settings.phtml
+;;
+
+server.smtp.enabled = 1
+server.smtp.host    = "smtp.%d"
+server.smtp.user    = "%m"
+server.smtp.port    = "25"
+server.smtp.crypt   = "SSL"
+
+server.pop3.enabled = 1
+server.pop3.host  = "pop3.%d"
+server.pop3.user  = "%m"
+server.pop3.port  = "995"
+server.pop3.crypt = "SSL"
+
+server.imap.enabled = 1
+server.imap.host  = "imap.%d"
+server.imap.user  = "%m"
+server.imap.port  = "993"
+server.imap.crypt = "SSL"
+
+server.webmail.enabled = 1
+server.webmail.host  = "https://webmail.%d"
+server.webmail.user  = "%m"
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; All mails and correspondance will come from the following;;
+
+server.email.name = "ViMbAdmin Administrator"
+server.email.address = "vimbadmin@example.com"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; A "mailbox alias" will, for example add the following entry to
+;; the alias table for a mailbox: name@example.com
+;;
+;;    name@example.com -> name@example.com
+;;
+;; This is required for aliasing an entire domain. If in doubt, leave it enabled.
+mailboxAliases = 1
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; See: http://framework.zend.com/manual/en/zend.mail.smtp-authentication.html
+;;
+;; Ensure you have a working mail server configuration so the system can
+;; send emails:
+;;
+resources.mailer.smtphost = "smtp.example.com"
+;resources.mailer.username = ""
+;resources.mailer.password = "96"
+;resources.mailer.auth     = ""
+;resources.mailer.ssl      = ""
+;resources.mailer.port     = "25"
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; You database connection.
+;;
+;; See: http://www.doctrine-project.org/projects/orm/1.2/docs/manual/introduction-to-connections/en
+;;
+;; phptype(dbsyntax)://username:password@protocol+hostspec/database?option=value
+;;
+;; Most variations are allowed:
+;;
+;; phptype://username:password@protocol+hostspec:110//usr/db_file.db
+;; phptype://username:password@hostspec/database
+;; phptype://username:password@hostspec
+;; phptype://username@hostspec
+;; phptype://hostspec/database
+;; phptype://hostspec
+;; phptype:///database
+;; phptype:///database?option=value&anotheroption=anothervalue
+;; phptype(dbsyntax)
+;; phptype
+;;
+;; phptype is typically one of: mysqli, mysql, pgsql, sqlite, mssql
+;;
+
+; resources.doctrine.connection_string = "phptype://username:password@host/database"
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Local filesystem logging.
+;;
+;; We log various things to var/log/YYYY/MM/ if you enable the logger here.
+;;
+;; It is useful to use the email logger to be alerted of serious errors.
+;;
+
+resources.logger.enabled = 0
+
+;resources.logger.writers.email.from = vimbadmin@example.com
+;resources.logger.writers.email.to = sysadmins@example.com
+;resources.logger.writers.email.prefix = "ViMbAdmin_Error"
+;resources.logger.writers.email.level = 3
+
+;resources.logger.writers.stream.level = 7
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Proceed onwards with caution.
+;;
+;; The above [user] params are the may ones of consequence.
+;;
+
+[production : user]
+
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+
+includePaths.library = APPLICATION_PATH "/../library"
+includePaths.library = APPLICATION_PATH "/../library/Doctrine"
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+appnamespace = "ViMbAdmin"
+
+temporary_directory = APPLICATION_PATH "/../var/tmp"
+
+pluginPaths.ViMbAdmin_Resource = APPLICATION_PATH "/../library/ViMbAdmin/Resource"
+
+mini_js = 1
+mini_css = 1
+
+alias_autocomplete_min_length = 2
+
+resources.router.routes.changepass.route = "/change-password"
+resources.router.routes.changepass.defaults.module = "default"
+resources.router.routes.changepass.defaults.controller = "auth"
+resources.router.routes.changepass.defaults.action = "change-password"
+
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+
+resources.doctrine.data_fixtures_path = APPLICATION_PATH "/../doctrine/data/fixtures"
+resources.doctrine.models_path = APPLICATION_PATH "/models"
+resources.doctrine.migrations_path = APPLICATION_PATH "/../doctrine/migrations"
+resources.doctrine.sql_path = APPLICATION_PATH "/../doctrine/data/sql"
+resources.doctrine.yaml_schema_path = APPLICATION_PATH "/../doctrine/schema"
+resources.doctrine.generate_models_options.generateTableClasses = true
+resources.doctrine.extensions_path = APPLICATION_PATH "/../library/DoctrineExtensions"
+
+resources.namespace.checkip = 1
+
+resources.auth = 1
+
+resources.session.save_path = APPLICATION_PATH "/../var/session"
+resources.session.use_only_cookies = true
+resources.session.remember_me_seconds = 3600
+
+resources.logger.writers.stream.path = APPLICATION_PATH "/../var/log"
+resources.logger.writers.stream.owner = www-data
+resources.logger.writers.stream.group = www-data
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Smarty View
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+resources.view.enabled     = 0
+resources.smarty.enabled   = 1
+resources.smarty.templates = APPLICATION_PATH "/views"
+resources.smarty.compiled  = APPLICATION_PATH "/../var/templates_c"
+resources.smarty.cache     = APPLICATION_PATH "/../var/cache"
+resources.smarty.config    = APPLICATION_PATH "/configs/smarty"
+resources.smarty.plugins[] = APPLICATION_PATH "/../library/ViMbAdmin/Smarty/functions"
+resources.smarty.plugins[] = APPLICATION_PATH "/../library/Smarty/plugins"
+resources.smarty.plugins[] = APPLICATION_PATH "/../library/Smarty/sysplugins"
+resources.smarty.debugging = 0
+
+[development : production]
+
+mini_js = 0
+mini_css = 0
+
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1
+
+resources.logger.writers.firebug.enabled = 1
+resources.logger.writers.firebug.level = 7
+
+resources.view.debugging = true
+resources.smarty.debugging = true

@@ -367,7 +367,7 @@ class AdminController extends ViMbAdmin_Controller_Action
                 }
                 catch( Exception $e )
                 {
-                    $this->getLogger()->debug( $vException->getTraceAsString() );
+                    $this->getLogger()->debug( $e->getTraceAsString() );
                     $this->addMessage( _( 'Could not send welcome email' ), ViMbAdmin_Message::ALERT );
                 }
             }

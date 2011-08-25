@@ -1,5 +1,8 @@
 0.3.2   xxx
  - fix: https://github.com/opensolutions/ViMbAdmin/issues/1
+ - add: optional parameter in application.ini (skipVersionCheck) to
+        tell ViMbAdmin to skip the version check on login
+        See: https://github.com/opensolutions/ViMbAdmin/issues/2
 
 0.3.1   2011-08-23
  - Forgot to update changelog got 0.3 release.

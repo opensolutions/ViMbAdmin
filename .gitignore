@@ -7,6 +7,7 @@ library/Smarty/
 library/ZFDebug/
 library/Zend/
 public/.htaccess
+var/log/[1-9]*
 var/templates_c/[a-zA-Z0-9%]*
 var/session/sess_*
 

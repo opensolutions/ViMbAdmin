@@ -6,6 +6,8 @@
  - fix: we now check for duplicate mailboxes (and aliases) rather
         than letting Doctrine throw exceptions for uniqueness 
         constraints. Thanks maysara for the bug report.
+ - fix: validate new aliases and mailboxes which was not being done
+        previously
 
 0.3.1   2011-08-23
  - Forgot to update changelog got 0.3 release.

@@ -214,8 +214,9 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
         if( $this->_auth->hasIdentity() )
         {
             // version check
-            if( $this->getAdmin()->isSuper() )
-                $this->checkVersion();
+            if( !( isset( $this->_options['skipVersionCheck'] ) && $this->_options['skipVersionCheck'] ) )
+                if( $this->getAdmin()->isSuper() )
+                    $this->checkVersion();
             
             
             // SECURITY

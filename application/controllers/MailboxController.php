@@ -372,6 +372,39 @@ class MailboxController extends ViMbAdmin_Controller_Action
                     $this->_options['defaults']['mailbox']['password_scheme'],
                     $this->_mailbox['password']
                 );
+                
+                
+                
+                // does a mailbox of the same name exist?
+                $dup = Doctrine_Query::create()
+                    ->from( 'Mailbox m' )
+                    ->where( 'm.local_part = ?', $this->_mailbox['local_part'] )
+                    ->andWhere( 'm.domain = ?', $this->_mailbox['domain'] )
+                    ->execute( null, Doctrine_Core::HYDRATE_ARRAY );
+
+                if( count( $dup ) )
+                {
+                    $this->addMessage(
+                        _( 'Mailbox already exists for' ) . " {$this->_mailbox['local_part']}@{$this->_mailbox['domain']}",
+                        ViMbAdmin_Message::ERROR
+                    );
+
+                    return $this->_redirect( $this->getRequest()->getPathInfo() );
+                }
+                    
+                // does an alias already exist?
+                $dup = Doctrine::getTable( 'Alias' )->findOneByAddress( "{$this->_mailbox['local_part']}@{$this->_mailbox['domain']}" );
+
+                if( $dup )
+                {
+                    $this->addMessage(
+                        _( 'Alias already exists for' ) . " {$this->_mailbox['local_part']}@{$this->_mailbox['domain']}",
+                        ViMbAdmin_Message::ERROR
+                    );
+
+                    return $this->_redirect( $this->getRequest()->getPathInfo() );
+                }
+                
 
                 if( $this->_options['mailboxAliases'] == 1 )
                 {

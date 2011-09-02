@@ -1,3 +1,9 @@
+0.3.4   xxx
+
+0.3.3   2011-09-02
+ - fix: Critical regression introduced in 0.3.2 preventing the editing of
+        aliases
+
 0.3.2   2011-09-01
  - fix: https://github.com/opensolutions/ViMbAdmin/issues/1
  - add: optional parameter in application.ini (skipVersionCheck) to

@@ -235,9 +235,9 @@ class AliasController extends ViMbAdmin_Controller_Action
                 else
                 {
                     // is the alias valid
-                    if( !Zend_Validate::is( "{$postValues['local_part']}@{$this->_domain['domain']}", 'EmailAddress', array( 1, null ) ) )
+                    if( !$this->_alias['id'] && !Zend_Validate::is( "{$postValues['local_part']}@{$this->_domain['domain']}", 'EmailAddress', array( 1, null ) ) )
                         $editForm->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
-                    
+                        
                     foreach( $postValues['goto'] as $key => $oneGoto )
                     {
                         $oneGoto = trim( $oneGoto );
@@ -254,7 +254,8 @@ class AliasController extends ViMbAdmin_Controller_Action
                     if( !$postValues['goto'] )
                         $editForm->getElement( 'goto' )->addError( _( 'You must have at least one goto address.' ) );
 
-                    if( !$editForm->getElement( 'goto' )->hasErrors() && !$editForm->getElement( 'local_part' )->hasErrors() )
+                    if( !$editForm->getElement( 'goto' )->hasErrors() 
+                        && ( $editForm->getElement( 'local_part' ) === null || !$editForm->getElement( 'local_part' )->hasErrors() ) )
                     {
                         $this->_alias->fromArray( $postValues );
 
@@ -295,6 +296,7 @@ class AliasController extends ViMbAdmin_Controller_Action
                         $this->addMessage( _( 'You have successfully added/edited the alias.' ), ViMbAdmin_Message::SUCCESS );
                         return print $this->view->render( 'close_colorbox_reload_parent.phtml' );
                     }
+                    
                 }
             }
         }

@@ -1,5 +1,6 @@
 0.3.4   xxx
-
+ - fix https://github.com/opensolutions/ViMbAdmin/issues/3
+       
 0.3.3   2011-09-02
  - fix: Critical regression introduced in 0.3.2 preventing the editing of
         aliases

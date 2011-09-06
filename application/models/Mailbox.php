@@ -85,9 +85,10 @@ class Mailbox extends BaseMailbox
      *
      * @param string $scheme The hashing scheme
      * @param string $password The password to hash
+     * @param string $salt The salt to use. Default: none
      * @return string The newly hashed password (also set on object)
      */
-    public function hashPassword( $scheme, $password )
+    public function hashPassword( $scheme, $password, $salt = '' )
     {
         switch( $scheme )
         {
@@ -95,8 +96,26 @@ class Mailbox extends BaseMailbox
                 $this['password'] = md5( $password );
                 break;
 
+            case 'md5.salted':
+                $this['password'] = md5( $password . $salt );
+                break;
+
+            case 'sha1':
+                $this['password'] = sha1( $password );
+                break;
+
+            case 'sha1.salted':
+                $this['password'] = sha1( $password . $salt );
+                break;
+
             case 'plain':
                 $this['password'] = $password;
+                break;
+                
+            // Standard DES hash compatible with MySQL ENCRYPT()
+            case 'crypt':
+                $s = ( strlen( $salt ) >= 2 ) ? substr( $salt, 0, 2 ) : '';
+                $this['password'] = crypt( $password, $s );
                 break;
 
             default:

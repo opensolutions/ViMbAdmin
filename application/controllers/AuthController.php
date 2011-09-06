@@ -247,13 +247,15 @@ class AuthController extends ViMbAdmin_Controller_Action
 
                 if( $cPassword == $mailbox->hashPassword(
                             $this->_options['defaults']['mailbox']['password_scheme'],
-                            $form->getValue( 'current_password' )
+                            $form->getValue( 'current_password' ),
+                            $this->_options['defaults']['mailbox']['password_hash']
                         )
                     )
                 {
                     $mailbox->hashPassword(
                         $this->_options['defaults']['mailbox']['password_scheme'],
-                        $form->getValue( 'new_password' )
+                        $form->getValue( 'new_password' ),
+                        $this->_options['defaults']['mailbox']['password_hash']
                     );
                     $mailbox->save();
                     $this->addMessage( _( 'You have successfully changed your password.' ), ViMbAdmin_Message::SUCCESS );

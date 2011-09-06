@@ -234,8 +234,8 @@ class AliasController extends ViMbAdmin_Controller_Action
                 }
                 else
                 {
-                    // is the alias valid
-                    if( !$this->_alias['id'] && !Zend_Validate::is( "{$postValues['local_part']}@{$this->_domain['domain']}", 'EmailAddress', array( 1, null ) ) )
+                    // is the alias valid (allowing for wildcard domains (i.e. with no local part)
+                    if( !$this->_alias['id'] && $postValues['local_part'] != '' && !Zend_Validate::is( "{$postValues['local_part']}@{$this->_domain['domain']}", 'EmailAddress', array( 1, null ) ) )
                         $editForm->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
                         
                     foreach( $postValues['goto'] as $key => $oneGoto )

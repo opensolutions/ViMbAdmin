@@ -1,5 +1,7 @@
 0.3.4   xxx
  - fix https://github.com/opensolutions/ViMbAdmin/issues/3
+ - Support new mailbox password hashes: crypt, sha1 and salted sha1 and md5
+   (old issue 9 from Google Code: http://code.google.com/p/vimbadmin/issues/detail?id=9)
        
 0.3.3   2011-09-02
  - fix: Critical regression introduced in 0.3.2 preventing the editing of

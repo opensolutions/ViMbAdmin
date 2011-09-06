@@ -100,6 +100,16 @@ class Mailbox extends BaseMailbox
                 $this['password'] = md5( $password . $salt );
                 break;
 
+            // MD5 based salted password hash nowadays commonly used in /etc/shadow.
+            case 'md5.crypt':
+                if( strlen( $salt ) >= 8 )
+                    $s = '$1$' . substr( $salt, 0, 8 ) . '$';
+                else
+                    throw new ViMbAdmin_Exception( sprintf( _( 'This hashing function requires a hash of at least %d character(s) to be defined in application.ini (defaults.mailbox.password_hash)' ), 8 ) );
+
+                $this['password'] = crypt( $password, $s );
+                break;
+                
             case 'sha1':
                 $this['password'] = sha1( $password );
                 break;
@@ -114,7 +124,11 @@ class Mailbox extends BaseMailbox
                 
             // Standard DES hash compatible with MySQL ENCRYPT()
             case 'crypt':
-                $s = ( strlen( $salt ) >= 2 ) ? substr( $salt, 0, 2 ) : '';
+                if( strlen( $salt ) >= 2 )
+                    $s = substr( $salt, 0, 2 );
+                else
+                    throw new ViMbAdmin_Exception( sprintf( _( 'This hashing function requires a hash of at least %d character(s) to be defined in application.ini (defaults.mailbox.password_hash)' ), 2 ) );
+
                 $this['password'] = crypt( $password, $s );
                 break;
 

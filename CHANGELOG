@@ -1,4 +1,4 @@
-0.3.4   xxx
+0.3.4   2011-09-06
  - fix: https://github.com/opensolutions/ViMbAdmin/issues/3
  - add: Support new mailbox password hashes: crypt, sha1 and salted sha1 and md5
         (old issue 9 from Google Code: http://code.google.com/p/vimbadmin/issues/detail?id=9)

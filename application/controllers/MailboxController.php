@@ -372,7 +372,8 @@ class MailboxController extends ViMbAdmin_Controller_Action
                     $plainPassword = $this->_mailbox['password'];
                     $this->_mailbox->hashPassword(
                         $this->_options['defaults']['mailbox']['password_scheme'],
-                        $this->_mailbox['password']
+                        $this->_mailbox['password'],
+                        $this->_options['defaults']['mailbox']['password_hash']
                     );
                     
                     // is the mailbox address valid?
@@ -399,19 +400,6 @@ class MailboxController extends ViMbAdmin_Controller_Action
                         break;
                     }
                         
-                    // does an alias already exist?
-                    $dup = Doctrine::getTable( 'Alias' )->findOneByAddress( "{$this->_mailbox['local_part']}@{$this->_mailbox['domain']}" );
-    
-                    if( $dup )
-                    {
-                        $this->addMessage(
-                            _( 'Alias already exists for' ) . " {$this->_mailbox['local_part']}@{$this->_mailbox['domain']}",
-                            ViMbAdmin_Message::ERROR
-                        );
-                        break;
-                    }
-                    
-    
                     if( $this->_options['mailboxAliases'] == 1 )
                     {
                         $aliasModel = new Alias();
@@ -547,7 +535,8 @@ class MailboxController extends ViMbAdmin_Controller_Action
             $plainPassword = $form->getValue( 'password' );
             $this->_mailbox->hashPassword(
                 $this->_options['defaults']['mailbox']['password_scheme'],
-                $plainPassword
+                $plainPassword,
+                $this->_options['defaults']['mailbox']['password_hash']
             );
 
             $this->_mailbox->save();

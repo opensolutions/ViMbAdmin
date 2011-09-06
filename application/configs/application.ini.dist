@@ -46,8 +46,18 @@ defaults.mailbox.maildir = "%d/%u/"
 defaults.mailbox.homedir = "/home/vmail/"
 
 ; The password hashing function to use
-; one of "plain", "md5"
+; one of:
+;   "plain"      - password stored as clearttext 
+;   "md5"        - password hashed using MD5 without salt
+;   "md5.salted" - password hashed using MD5 without salt
+;   "crypt"      - standard des hash (compatible with MySQL ENCRYPT and courier - set a two character hash below) 
 defaults.mailbox.password_scheme = "md5"
+
+; a hash to use when storing passwords. Typically used with "crypt"
+; which only uses the first two characters and includes this in the
+; final hash. For other schemes such as md5.salted then your mail system
+; will also need to know and use this hash 
+defaults.mailbox.password_hash = "ChangeMePlease"
 
 ; The number of rows displayed in the tables
 ; must be one of these: 10, 25, 50, 100

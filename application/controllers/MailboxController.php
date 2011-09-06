@@ -372,7 +372,8 @@ class MailboxController extends ViMbAdmin_Controller_Action
                     $plainPassword = $this->_mailbox['password'];
                     $this->_mailbox->hashPassword(
                         $this->_options['defaults']['mailbox']['password_scheme'],
-                        $this->_mailbox['password']
+                        $this->_mailbox['password'],
+                        $this->_options['defaults']['mailbox']['password_hash']
                     );
                     
                     // is the mailbox address valid?
@@ -534,7 +535,8 @@ class MailboxController extends ViMbAdmin_Controller_Action
             $plainPassword = $form->getValue( 'password' );
             $this->_mailbox->hashPassword(
                 $this->_options['defaults']['mailbox']['password_scheme'],
-                $plainPassword
+                $plainPassword,
+                $this->_options['defaults']['mailbox']['password_hash']
             );
 
             $this->_mailbox->save();

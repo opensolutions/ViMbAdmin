@@ -54,4 +54,29 @@ This set-up procedure will guide you the final steps to put your system live.
 {$form}
 {addJSValidator form=$form}
 
+
+<h3>Developer Pingback</h3>
+
+<p>
+Please note that when you successfully complete the above step, the system makes a 
+<em>pingback</em> to <code>stats.opensolutions.ie</code> to notify the developers
+that there is a new install. 
+</p>
+<p>
+<strong>We are only interested in counting the install
+base to know if further development and support of this open source project is
+worthwhile.</strong>.
+</p>
+
+<p>
+{if isset( $options.skipInstallPingback ) and $options.skipInstallPingback}
+    <strong>You have DISABLED the pingback. Please reconsider or drop us a 
+    mail to let us know you are using it and what you think!</strong>
+{else}
+    You can disable this by setting <code>skipInstallPingback = 1</code> in your
+    <code>application.ini</code> file.
+{/if}
+</p>
+
+
 {include file="footer.phtml"}

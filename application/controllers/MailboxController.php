@@ -505,8 +505,24 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
         try
         {
-            $mailer->send();
-            return true;
+		if (isset($this->_options['resources']['mailer']))
+		{
+			$mail_config	= array('auth' => $this->_options['resources']['mailer']['auth'],
+				'username' => $this->_options['resources']['mailer']['username'],
+				'password' => $this->_options['resources']['mailer']['password'],
+				'ssl' => $this->_options['resources']['mailer']['ssl'],
+				'port' => $this->_options['resources']['mailer']['port']
+				);
+
+			$mailserver = new Zend_Mail_Transport_Smtp($this->_options['resources']['mailer']['smtphost'], $mail_config);
+
+            		$mailer->send($mailserver);
+            		return true;
+		}
+
+          	$mailer->send();
+            	return true;
+
         }
         catch( Exception $e )
         {}

@@ -2,11 +2,15 @@
 
 {assign var='addDomainParams' value="open: true, iframe: true, transition: 'elastic', width: '800px', height: '480px'"}
 
-<h1>Domain List</h1>
+<div class="page-content" >
 
-{ViMbAdmin_Messages}
+    <div class="page-header" >
+        <h1>Domain List</h1>
+    </div>
+    
+    {ViMbAdmin_Messages}
 
-<table id="domain_list_table" class="info">
+<table id="domain_list_table"  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Domain</th>
@@ -30,16 +34,24 @@
             <td>{$oneDomain.backupmx|yesno}</td>
             <td>{$oneDomain.created}</td>
             <td>
-                <button onclick="document.location.href='{genUrl controller='log' action='list' did=$oneDomain.id}';">Logs</button>
-                {if $identity.admin.super}<button onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">Purge</button>{/if}
-                {if $identity.admin.super}<button onclick="document.location.href='{genUrl controller='domain' action='admins' did=$oneDomain.id}';">Admins</button>{/if}
-                <button onclick="$.fn.colorbox({ href:'{genUrl controller='domain' action='edit' did=$oneDomain.id}', {$addDomainParams} });">Edit</button>
+                <a class="btn btn-mini" href="{genUrl controller='log' action='list' did=$oneDomain.id}">Logs</a>
+                {if $identity.admin.super}
+                    <button  class="btn btn-mini"  onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">Purge</button>
+                {/if}
+                {if $identity.admin.super}
+                    <a class="btn btn-mini"  href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">Admins</a>
+                {/if}
+                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='domain' action='edit' did=$oneDomain.id}', {$addDomainParams} });">Edit</button>
             </td>
         </tr>
 {/foreach}
     </tbody>
 </table>
 
+<br /><br /><br />
+
 {include file='domain/js/list.js'}
+
+</div>
 
 {include file="footer.phtml"}

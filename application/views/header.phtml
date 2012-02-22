@@ -25,7 +25,6 @@
     <script type="text/javascript" src="{genUrl}/js/130-jquery.colorbox.js"></script>
     <script type="text/javascript" src="{genUrl}/js/150-jquery.datatables.js"></script>
     <script type="text/javascript" src="{genUrl}/js/151-jquery.datatables.ext.js"></script>
-    <script type="text/javascript" src="{genUrl}/js/800-superfish.js"></script>
     <script type="text/javascript" src="{genUrl}/js/900-vimbadmin.validate.js"></script>
     <script type="text/javascript" src="{genUrl}/js/901-vimbadmin.functions.js"></script>
     <script type="text/javascript" src="{genUrl}/js/902-vimbadmin.tooltip.js"></script>
@@ -40,7 +39,7 @@
     <link rel="stylesheet" type="text/css" href="{genUrl}/css/800-bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="{genUrl}/css/810-bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="{genUrl}/css/890-override_container_app.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css/910-menu.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/895-bootstrap-override.css" />
     <link rel="stylesheet" type="text/css" href="{genUrl}/css/920-style.css" />
 {else}
     <link rel="stylesheet" type="text/css" href="{genUrl}/css/min.bundle.css" />
@@ -68,19 +67,37 @@
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
                 <a class="brand" href="#">ViMbAdmin{if not $hasIdentity} :: <em>Virtual Mailbox Administration</em>{/if}</a>
 
                 {if $hasIdentity}
                     <div class="nav-collapse">
                         <ul class="nav">
-                            <li class="active"><a href="#">Home</a></li>
-                            <li><a href="#about">About</a></li>
-                            <li><a href="#contact">Contact</a></li>
+                        
+                            <li {if $controller eq 'domain'}class="active"{/if}>
+                                <a href="{genUrl controller='domain'}" title="Domains">Domains</a>
+                            </li>
+                            <li {if $controller eq 'mailbox'}class="active"{/if}>
+                                <a href="{genUrl controller='mailbox'}" title="Mailboxes">Mailboxes</a>
+                            </li>
+                            <li {if $controller eq 'alias'}class="active"{/if}>
+                                <a href="{genUrl controller='alias'}" title="Domains">Aliases</a>
+                            </li>
+                            <li {if $controller eq 'log'}class="active"{/if}>
+                                <a href="{genUrl controller='log'}" title="Logs">Logs</a>
+                            </li>
+                            {if $hasIdentity and $identity.admin->isSuper()}
+                                <li {if $controller eq 'admin'}class="active"{/if}>
+                                    <a href="{genUrl controller='admin'}" title="Administrators">Administrators</a>
+                                </li>
+                            {/if}
+                            <li>
+                                <a href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='password' aid=$identity.admin.id}', {$changePwdParams} });">Password</a>
+                            </li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <li>
+                                <a href="{genUrl controller='auth' action='logout'}" title="Logout">Logout</a>
+                            </li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 {/if}

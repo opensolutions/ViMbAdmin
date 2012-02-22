@@ -29,7 +29,7 @@
     <script type="text/javascript" src="{genUrl}/js/901-vimbadmin.functions.js"></script>
     <script type="text/javascript" src="{genUrl}/js/902-vimbadmin.tooltip.js"></script>
     {else}
-    <script type="text/javascript" src="{genUrl}/js/javascript.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/min.bundle.js"></script>
 {/if}
 
 {if !$options.mini_css}
@@ -43,14 +43,14 @@
     <link rel="stylesheet" type="text/css" href="{genUrl}/css/910-menu.css" />
     <link rel="stylesheet" type="text/css" href="{genUrl}/css/920-style.css" />
 {else}
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/min.bundle.css" />
 {/if}
 
 {if isset($inColorBox) && $inColorBox}
     {if !$options.mini_css}
         <link rel="stylesheet" type="text/css" href="{genUrl}/css/930-popup.css" />
     {else}
-        <link rel="stylesheet" type="text/css" href="{genUrl}/css/popup.min.css" />
+        <link rel="stylesheet" type="text/css" href="{genUrl}/css/min.930-popup.css" />
     {/if}
 {/if}
 

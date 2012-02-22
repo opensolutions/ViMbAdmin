@@ -9,6 +9,17 @@
 <div class="page-content" >
 
     <div class="page-header" >
+
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <a class="btn" id="add_mailbox" href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='edit'}{if $domain}/did/{$domain.id}{/if}', {$editMailboxParams} });" title="Add Mailbox">
+            	        <i class="icon-plus"></i>
+        	        </a>
+            	</span>
+        	</div>
+    	</div>
+
         <h1>Mailboxes {if $domain} for {$domain.domain} {if $domain.mailboxes neq 0}({$domain->countMailboxes()}/{$domain.mailboxes}){/if}{/if}</h1>
     </div>
 

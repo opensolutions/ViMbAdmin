@@ -5,6 +5,17 @@
 <div class="page-content" >
 
     <div class="page-header" >
+
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <a class="btn" id="add_alias" href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' did=$domainModel.id}', {$editAliasParams} });" title="Add Alias">
+            	        <i class="icon-plus"></i>
+        	        </a>
+            	</span>
+        	</div>
+    	</div>
+
         <h1>Aliases {if $domain} for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}{/if}</h1>
     </div>
 
@@ -23,9 +34,7 @@
             <th>Domain</th>
             <th>Active</th>
             <th>Goto</th>
-            <th>
-                <button onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' did=$domainModel.id}', {$editAliasParams} });">Add Alias</button>
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>

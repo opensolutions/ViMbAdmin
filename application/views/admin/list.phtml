@@ -7,6 +7,17 @@
 <div class="page-content" >
 
     <div class="page-header" >
+
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <a class="btn" id="add_admin" href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='add'}', {$addAdminParams} });" title="Add Admin">
+            	        <i class="icon-plus"></i>
+        	        </a>
+            	</span>
+        	</div>
+    	</div>
+
         <h1>Admin List</h1>
     </div>
 
@@ -18,9 +29,7 @@
             <th>Username</th>
             <th>Active</th>
             <th>Super</th>
-            <th>
-                <button onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='add'}', {$addAdminParams} });">Add admin</button>
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>

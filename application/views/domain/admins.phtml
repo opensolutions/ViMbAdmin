@@ -3,6 +3,16 @@
 <div class="page-content" >
 
     <div class="page-header" >
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <a class="btn" id="add_admin" href="#" onclick="addAdmin();" title="Add Admin">
+            	        <i class="icon-plus"></i>
+        	        </a>
+            	</span>
+        	</div>
+    	</div>
+
         <h1>Domain Admins: {$domainModel.domain}</h1>
     </div>
 
@@ -12,9 +22,7 @@
     <thead>
         <tr>
             <th>Username</th>
-            <th>
-                <button onclick="addAdmin();">Add Admin</button>
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>

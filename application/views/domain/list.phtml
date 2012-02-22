@@ -5,6 +5,19 @@
 <div class="page-content" >
 
     <div class="page-header" >
+
+        {if $identity.admin.super}
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <a class="btn" id="add_domain" href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='domain' action='edit'}', {$addDomainParams} });" title="Add Domain">
+            	        <i class="icon-plus"></i>
+        	        </a>
+            	</span>
+        	</div>
+    	</div>
+    	{/if}
+
         <h1>Domain List</h1>
     </div>
 
@@ -20,7 +33,7 @@
             <th>Transport</th>
             <th>Backup MX</th>
             <th>Created</th>
-            <th>{if $identity.admin.super}<button onclick="$.fn.colorbox({ href:'{genUrl controller='domain' action='edit'}', {$addDomainParams} });">Add Domain</button>{/if}</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>

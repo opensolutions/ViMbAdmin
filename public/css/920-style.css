@@ -1,4 +1,8 @@
 
+a.aplain, a:link.aplain, a:visited.aplain, a:hover.aplain, a:active.aplain {
+    color: #fff;
+    text-decoration: none;
+}
 
 /********************************************************************************************
  *

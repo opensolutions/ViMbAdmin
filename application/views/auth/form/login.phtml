@@ -1,23 +1,23 @@
 <div id="form_div_login">
-    <form action="{$element->getAction()}"
-          method="{$element->getMethod()}"
-          enctype="{$element->getAttrib('enctype')}"
-          id="{$element->getId()}"
-          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
-          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
-          class="default_form">
+<form action="{$element->getAction()}"
+      method="{$element->getMethod()}"
+      enctype="{$element->getAttrib('enctype')}"
+      id="{$element->getId()}"
+      name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+      {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+      class="form-horizontal">
 
-        <label>{$element->username->getLabel()}</label>
-        {$element->username}
-        {include file='form_element_errors.phtml' pTheElement=$element->username}
+{include file='form/element-input.phtml' ielement=$element->username}
+{include file='form/element-input.phtml' ielement=$element->password}
+                
 
-        <label>{$element->password->getLabel()}</label>
-        {$element->password}
-        {include file='form_element_errors.phtml' pTheElement=$element->password}
+<fieldset class="form-actions">
+    <input class="btn btn-success" type="submit" value="Login" />
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <a class="btn" href="{genUrl controller="auth" action="password-reset"}">Lost Password</a>
+</fieldset>
 
-        <br />
 
-        <input type="submit" value="{$element->login->getLabel()}" />
-    </form>
+</form>
 
 </div> <!-- #form_div_login -->

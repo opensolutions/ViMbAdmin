@@ -1,6 +1,13 @@
 {include file="header.phtml"}
 
+<div class="page-content" >
+
+    <div class="page-header" >
+        <h1>Login to ViMbAdmin</h1>
+    </div>
+    
 {ViMbAdmin_Messages}
+
 
 {if isset( $loggedOut ) and $loggedOut}
 
@@ -14,39 +21,36 @@
 
 {/if}
 
-<div id="login-image">
-	<img src="{genUrl}/images/logo_500x159.jpg" />
-</div>
+<div class="row">
 
-<div id="login">
+    <div class="span6 offset3">
 
-	<div id="login-left">
-	    <h1>Login</h1>
-	    
-	    <p>
-	    Welcome to <em>ViMbAdmin</em>, a web application for managing your virtual mailboxes, domains and aliases.
-	    </p>
-	    <p>
-        <input type="button" onclick="document.location.href='{genUrl}/auth/password-reset';" value="Forgotten Password" />
-	    </p>
-	    
-	</div>
-	
-	<div id="login-right">    
+    	<img src="{genUrl}/images/logo_500x159.jpg" />
     
-	    {$loginForm}
+        <p>
+        Welcome to <em>ViMbAdmin</em>, a web application for managing your virtual mailboxes, domains and aliases.
+        </p>
+        
+        {$loginForm}
+
+        
+        <div class="well">
+
+            <p>
+                Are you a user (mailbox owner) looking to change your <br />
+                password? If so, please click on this button:
+                
+                <a style="float: right;" class="btn btn-primary" href="{genUrl}/change-password">Mailbox Password Change</a>
+            </p>
+    
+        </div>
+        
+        
     </div>
-    
 </div>
-
-<div id="mb_pw_change">
-
-    <p>
-    Are you a user (mailbox owner) looking to change your <br />password? If so, please 
-    click on the button across.
-    <input style="float: right;" type="button" onclick="document.location.href='{genUrl}/change-password';" value="Mailbox Password Change" />
-    </p>
     
+
+
 </div>
 
 {include file="footer.phtml"}

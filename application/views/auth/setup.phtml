@@ -1,82 +1,93 @@
 {include file="header.phtml"}
 
-<h1>Welcome to Your New ViMbAdmin Installation!</h1>
+<div class="page-content" >
 
-{ViMbAdmin_Messages}
-
-<p>
-This set-up procedure will guide you the final steps to put your system live.
-</p>
-
-{if not $saltSet}
-    <h3>Step 1: Security Salt</h3>
+    <div class="page-header" >
+        <h1>Welcome to Your New ViMbAdmin Installation!</h1>
+    </div>
+    
+    {ViMbAdmin_Messages}
     
     <p>
-    A <em>security salt</em> is used to ensure your administrator passwords are
-    secure. You must first set a random security salt in the <code>securitysalt</code>
-    parameter in the following file: <code>application/config/application.ini</code>.
+    This set-up procedure will guide you the final steps to put your system live.
+    </p>
+    
+    {if not $saltSet}
+        <div class="well">
+            <h3>Step 1: Security Salt</h3>
+            
+            <p>
+            A <em>security salt</em> is used to ensure your administrator passwords are
+            secure. You must first set a random security salt in the <code>securitysalt</code>
+            parameter in the following file: <code>application/config/application.ini</code>.
+            </p>
+            
+            <p>
+            We suggest you use the following <strong>randomly generated</strong> string:
+            </p>
+            
+             <pre>{$randomSalt}</pre>
+        
+            <p>
+                <strong>Please also ensure you have set all the appropriate values
+                in the <code>[user]</code> section before continuing.</strong>
+            </p>
+        </div>
+    {else}
+    
+        <div class="alert alert-success">
+            <h3>Step 1: Security Salt - Done!</h3>
+        </div>
+    
+    {/if}
+    
+    <div class="well">
+        <h3>Step 2: Create a New Administrator</h3>
+        
+            <p>
+            You now need to create a super administrator who can log into the system.
+            </p>
+            
+            <p>
+            To ensure only the person installing this application can register the user,
+            you must enter the security salt as you entered it into the file above. If you
+            chose to use the random string then it has been copied below for your convenience.
+            </p>
+            
+            <p>
+            Enter a username (which must be your email address) and a password. You will be
+            emailed you a copy of this password to the email address provided you have set
+            your mail settings in <code>application.ini</code>.
+            </p>
+        
+        {$form}
+        {addJSValidator form=$form}
+    </div>
+    
+    <h3>Developer Pingback</h3>
+    
+    <p>
+    Please note that when you successfully complete the above step, the system makes a
+    <em>pingback</em> to <tt>stats.opensolutions.ie</tt> to notify the developers
+    that there is a new install.
+    </p>
+    <p>
+    <strong>We are only interested in counting the install
+    base to know if further development and support of this open source project is
+    worthwhile.</strong>.
     </p>
     
     <p>
-    We suggest you use the following <strong>randomly generated</strong> string:
-    </p>
-    
-     <pre style="padding: 5px; border: 1px solid black; margin: 5px; width: 25em;">{$randomSalt}</pre>
-
-    <p>
-        <strong>Please also ensure you have set all the appropriate values
-        in the <code>[user]</code> section before continuing.</strong>
-    </p>
-{else}
-
-    <h3>Step 1: Security Salt [Done!]</h3>
-
-{/if}
-
-<h3>Step 2: Create a New Administrator</h3>
-
-    <p>
-    You now need to create a super administrator who can log into the system.
-    </p>
-    
-    <p>
-    To ensure only the person installing this application can register the user, 
-    you must enter the security salt as you entered it into the file above. If you
-    chose to use the random string then it has been copied below for your convenience.
-    </p>
-    
-    <p>
-    Enter a username (which must be your email address) and a password. You will be
-    emailed you a copy of this password to the email address provided you have set
-    your mail settings in <code>application.ini</code>.
+    {if isset( $options.skipInstallPingback ) and $options.skipInstallPingback}
+        <span class="label label-important">WARNING</span>
+        <strong>You have DISABLED the pingback. Please reconsider or drop us a
+        mail to let us know you are using it and what you think!</strong>
+    {else}
+        You can disable this by setting <code>skipInstallPingback = 1</code> in your
+        <code>application.ini</code> file.
+    {/if}
     </p>
 
-{$form}
-{addJSValidator form=$form}
-
-
-<h3>Developer Pingback</h3>
-
-<p>
-Please note that when you successfully complete the above step, the system makes a 
-<em>pingback</em> to <code>stats.opensolutions.ie</code> to notify the developers
-that there is a new install. 
-</p>
-<p>
-<strong>We are only interested in counting the install
-base to know if further development and support of this open source project is
-worthwhile.</strong>.
-</p>
-
-<p>
-{if isset( $options.skipInstallPingback ) and $options.skipInstallPingback}
-    <strong>You have DISABLED the pingback. Please reconsider or drop us a 
-    mail to let us know you are using it and what you think!</strong>
-{else}
-    You can disable this by setting <code>skipInstallPingback = 1</code> in your
-    <code>application.ini</code> file.
-{/if}
-</p>
-
+</div>
 
 {include file="footer.phtml"}

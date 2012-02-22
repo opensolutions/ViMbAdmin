@@ -33,7 +33,10 @@
         <tr id="alias_{$oneAlias.id}">
             <td>{$oneAlias.address}</td>
             <td>{$oneAlias.domain}</td>
-            <td><a id="toggle_active_{$oneAlias.id}" href="#" onclick="toggleActive({$oneAlias.id});">{$oneAlias.active|yesno}</a></td>
+            <td>
+                <div id="throb-toggle-active-{$oneAlias.id}" style="float: right;"></div>
+                <span id="toggle-active-{$oneAlias.id}" class="btn btn-mini {if $oneAlias.active}btn-success{else}btn-danger{/if}">{$oneAlias.active|yesno}</span>
+            </td>
             <td class="OSSTooltip-bl-tl" title="{$oneAlias.goto}">{$oneAlias.goto|shorten:50}</td>
             <td>
                 <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' alid=$oneAlias.id}', {$editAliasParams} });">Edit</button>

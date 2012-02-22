@@ -32,7 +32,10 @@
             <td>{$oneMailbox.username}</td>
             <td>{$oneMailbox.name}</td>
             <td>{$oneMailbox.domain}</td>
-            <td><a id="toggle_active_{$oneMailbox.id}" href="#" onclick="toggleActive({$oneMailbox.id});">{$oneMailbox.active|yesno}</a></td>
+            <td>
+                <div id="throb-toggle-active-{$oneMailbox.id}" style="float: right;"></div>
+                <span id="toggle-active-{$oneMailbox.id}" class="btn btn-mini {if $oneMailbox.active}btn-success{else}btn-danger{/if}">{$oneMailbox.active|yesno}</span>
+            </td>
             <td>
                 <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='aliases' mid=$oneMailbox.id}', {$aliasesParams} });">Aliases</button>
                 <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='purge' mid=$oneMailbox.id}', {$purgeMailboxParams} });">Purge</button>

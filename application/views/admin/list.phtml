@@ -28,17 +28,18 @@
         <tr id="admin_{$oneAdmin.id}" {if $identity.admin.id == $oneAdmin.id}class="bold"{/if}>
             <td>{$oneAdmin.username}</td>
             <td>
-            {if $identity.admin.id != $oneAdmin.id}
-                <a id="toggle_active_{$oneAdmin.id}" href="#" onclick="toggleActive({$oneAdmin.id});">{$oneAdmin.active|yesno}</a>
-            {else}
-                {$oneAdmin.active|yesno}
-            {/if}
+                <div id="throb-toggle-active-{$oneAdmin.id}" style="float: right;"></div>
+                {if $identity.admin.id != $oneAdmin.id}
+                    <span id="toggle-active-{$oneAdmin.id}" class="btn btn-mini {if $oneAdmin.active}btn-success{else}btn-danger{/if}">{$oneAdmin.active|yesno}</span>
+                {else}
+                    <span id="toggle-active-{$oneAdmin.id}" class="btn btn-mini disabled {if $oneAdmin.active}btn-success{else}btn-danger{/if}">{$oneAdmin.active|yesno}</span>
+                {/if}
             </td>
             <td>
                 {if $identity.admin.id != $oneAdmin.id}
-                    <a id="toggle_super_{$oneAdmin.id}" href="#" onclick="toggleSuper({$oneAdmin.id});">{$oneAdmin.super|yesno}</a>
+                    <span id="toggle-super-{$oneAdmin.id}" class="btn btn-mini {if $oneAdmin.super}btn-success{else}btn-danger{/if}">{$oneAdmin.super|yesno}</span>
                 {else}
-                    {$oneAdmin.super|yesno}
+                    <span id="toggle-super-{$oneAdmin.id}" class="btn btn-mini disabled {if $oneAdmin.super}btn-success{else}btn-danger{/if}">{$oneAdmin.super|yesno}</span>
                 {/if}
             </td>
             <td>

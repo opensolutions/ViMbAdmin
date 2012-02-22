@@ -4,7 +4,7 @@
 <head>
     <title>ViMbAdmin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="Content-Language" content="en" />
 
@@ -25,6 +25,7 @@
     <script type="text/javascript" src="{genUrl}/js/130-jquery.colorbox.js"></script>
     <script type="text/javascript" src="{genUrl}/js/150-jquery.datatables.js"></script>
     <script type="text/javascript" src="{genUrl}/js/151-jquery.datatables.ext.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/310-throbber.js"></script>
     <script type="text/javascript" src="{genUrl}/js/900-vimbadmin.validate.js"></script>
     <script type="text/javascript" src="{genUrl}/js/910-vimbadmin.functions.js"></script>
     <script type="text/javascript" src="{genUrl}/js/920-vimbadmin.tooltip.js"></script>
@@ -73,7 +74,7 @@
                 {if $hasIdentity}
                     <div class="nav-collapse">
                         <ul class="nav">
-                        
+
                             <li {if $controller eq 'domain'}class="active"{/if}>
                                 <a href="{genUrl controller='domain'}" title="Domains">Domains</a>
                             </li>
@@ -109,4 +110,3 @@
 
 
 <div class="container">
-

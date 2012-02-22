@@ -4,12 +4,12 @@
 
 {ViMbAdmin_Messages}
 
-<table id="admin_domain_list_table" class="info">
+<table id="admin_domain_list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Domain</th>
             <th>
-                <button onclick="document.location.href='{genUrl controller='admin' action='add-domain' aid=$targetAdmin.id}';">Add domain</button>
+                <a class="btn btn-mini" herf="document.location.href='{genUrl controller='admin' action='add-domain' aid=$targetAdmin.id}';">Add domain</a>
             </th>
         </tr>
     </thead>
@@ -17,7 +17,7 @@
 {foreach $domainAdmins as $domainAdmin}
         <tr id="domain_{$domainAdmin.Domain.id}">
             <td>{$domainAdmin.Domain.domain}</td>
-            <td><button onclick="removeAdmin( {$domainAdmin.Domain.id}, {$targetAdmin->id}, '{$domainAdmin.Domain.domain}' ); return false;">Remove</button></td>
+            <td><button class="btn btn-mini" onclick="removeAdmin( {$domainAdmin.Domain.id}, {$targetAdmin->id}, '{$domainAdmin.Domain.domain}' ); return false;">Remove</button></td>
         </tr>
 {/foreach}
     </tbody>

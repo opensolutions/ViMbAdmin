@@ -4,11 +4,15 @@
 {assign var='addAdminParams' value="open: true, iframe: true, transition: 'elastic', width: '500px', height: '400px'"}
 {assign var='domainListParams' value="open: true, iframe: true, transition: 'elastic', width: '700px', height: '600px'"}
 
-<h1>Admin List</h1>
+<div class="page-content" >
+
+    <div class="page-header" >
+        <h1>Admin List</h1>
+    </div>
 
 {ViMbAdmin_Messages}
 
-<table id="admin_list_table" class="info">
+<table id="admin_list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Username</th>
@@ -38,13 +42,13 @@
                 {/if}
             </td>
             <td>
-                <button onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='password'}/aid/{$oneAdmin.id}', {$changePwdParams} });">Password</button>
-                <button onclick="document.location.href='{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}';">Log</button>
+                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='password'}/aid/{$oneAdmin.id}', {$changePwdParams} });">Password</button>
+                <a class="btn btn-mini" href="{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}">Log</a>
                 {if not $oneAdmin.super}
-                    <button onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}', {$domainListParams} });">Domains</button>
+                    <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}', {$domainListParams} });">Domains</button>
                 {/if}
                 {if $identity.admin.id neq $oneAdmin.id}
-                    <button onclick="purgeAdmin({$oneAdmin.id}, '{$oneAdmin.username}');">Purge</button>
+                    <button class="btn btn-mini" onclick="purgeAdmin({$oneAdmin.id}, '{$oneAdmin.username}');">Purge</button>
                 {/if}
             </td>
         </tr>
@@ -53,5 +57,6 @@
 </table>
 
 {include file='admin/js/list.js'}
-
+<br />
+</div>
 {include file="footer.phtml"}

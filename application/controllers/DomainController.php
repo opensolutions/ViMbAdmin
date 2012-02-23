@@ -120,7 +120,6 @@ class DomainController extends ViMbAdmin_Controller_Action
         $editForm = new ViMbAdmin_Form_Domain_Edit();
         $this->view->modal = $modal = $this->_getParam( 'modal', false );
 
-        $add = true;
         if( !$this->_domain )
         {
             $this->view->operation = 'Add';
@@ -135,7 +134,6 @@ class DomainController extends ViMbAdmin_Controller_Action
         }
         else
         {
-            $add = false;
             $this->view->operation = 'Edit';
 
             $editForm
@@ -166,7 +164,7 @@ class DomainController extends ViMbAdmin_Controller_Action
                 }
                 else
                 {
-                    if( $add )
+                    if( $this->view->operation == 'Add' )
                         $this->addMessage( _( "You have successfully added/edited the domain record." ), ViMbAdmin_Message::SUCCESS );
 
                     $this->_helper->viewRenderer->setNoRender( true );

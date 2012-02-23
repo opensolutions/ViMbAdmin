@@ -6,46 +6,59 @@
           id="{$element->getId()}"
           name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
           {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
-          class="default_form">
+          class="form-horizontal">
 
-        <table>
-            <tr>
-                <td class="right bold valign_top">Address</td>
-                <td>
-                    {$element->local_part}
-                    @
-                    {$element->domain}
+          <fieldset class="control-group" id="div-form-password">
+    	    <label for="local_part" class="control-label">
+	    	    	{$element->local_part->getLabel()}
+	    	</label>
+    	    <div id="div-controls-{$element->local_part->getId()}" class="controls">
+    		    <div class="input-append btn-group">
+    		        {$element->local_part}
+        		        <span class="add-on" >@</span>
+    		    </div>
 
-                    {include file='form_element_errors.phtml' pTheElement=$element->local_part}
-                    {include file='form_element_errors.phtml' pTheElement=$element->domain}
-                </td>
-            </tr>
-            <tr>
-                <td class="right bold" style="padding-bottom: 8px;"><label for="{$element->active->getId()}" class="inline">{$element->active->getLabel()}</label></td>
-                <td style="padding-bottom: 8px;">{$element->active}</td>
-            </tr>
-            <tr>
-                <td class="right bold valign_top">{$element->goto->getLabel()}</td>
-                <td>
-                    <ul id="goto_addresses" class="no_list_type">
-                        <li>
-                            <input type="text" id="goto_empty" name="goto[]" value="" size="40" title="Goto" />
-                            <img alt="Add" title="Add" src="{genUrl}/images/add.png" class="valign_middle clickable" onclick="addGoto();" />
-                            &nbsp;
-                            <span id="invalid_email" class="red"></span>
-                        </li>
-                    </ul>
+	        	{if $element->local_part->getMessages()}
+					<script type="text/javascript">
+						$( '#{$element->local_part->getId()}' ).addClass( 'error' );
+						$( '#div-form-{$element->local_part->getId()}' ).addClass( 'error' );
+					</script>
+					<p id="help-{$element->local_part->getId()}" class="help-block">
+    					{foreach from=$element->local_part->getMessages() item=messages}
+        					{foreach from=$messages item=msg}
+            					{$msg}<br />
+        					{/foreach}
+    					{/foreach}
+					</p>
+				{/if}
+    	    </div>
+    	</fieldset>
+    	{include file='form/element-input.phtml' ielement=$element->domain}
+    	{include file='form/element-checkbox.phtml' ielement=$element->active}
 
-                    {include file='form_element_errors.phtml' pTheElement=$element->goto}
-                </td>
-            </tr>
-        </table>
+        <fieldset class="control-group" id="div-form-goto">
+            <label for="goto" class="control-label">
+                {$element->goto->getLabel()}
+            </label>
+            <div class="controls" id="div-controls-goto">
+                <div class="input-append btn-group" id="goto-div-0">
+    		        <input type="text" id="goto_empty" name="goto[]" value="" size="40" title="Goto" />
+    		        <span id="goto-btn-0" title="Add go to" class="btn add-on" onclick="addGoto();" >
+                        <i class="icon-plus"></i>
+                    </span>
+    		    </div>
 
-        <input type="button" onclick="parent.$.fn.colorbox.close();" value="Cancel" />
-        &nbsp;
-        <input type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" onclick="$('#saving').show('fast');" />
-        &nbsp; &nbsp;
-        <span id="saving" class="dontdisplay"><img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...</span>
+            </div>
+            <span id="invalid_email" class="red"></span>
+            {include file='form_element_errors.phtml' pTheElement=$element->goto}
+        </fieldset>
+
+        {if !isset($modal) || !$modal}
+        <fieldset class="form-actions">
+            <a class="btn" type="button" href="{genUrl controller='alias' action='list'}" value="Cancel" >Cancel</a>
+            <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+        </field>
+        {/if}
     </form>
 
 </div> <!-- #form_div_edit_alias -->

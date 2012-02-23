@@ -58,7 +58,7 @@ function smarty_function_ViMbAdmin_Messages( $params, &$smarty )
 
     $count = 0;
 
-
+    $message = "";
 
     foreach( $messages as $oneMessage )
     {

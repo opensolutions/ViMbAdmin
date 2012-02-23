@@ -23,16 +23,12 @@
 {else}
     </div>
     <div class="modal-footer" id="mtfooter">
-        <button id="modal_dialog_save" class="btn btn-primary">Add</button>
+        <button id="modal_dialog_save" class="btn btn-primary">{if $operation == 'Add'}Add{else}Save{/if}</button>
         <button id="modal_dialog_cancel" class="btn">Cancel</button>
         <span class="btn" id="toogle_advanced">Advanced</span>
         <script type="text/javascript">
     $(document).ready(function()
     {
-        $('#{$element->backupmx->getId()}').bind('change', function() {
-            $('#advanced_options').toggle('fast');
-        });
-
         $('#modal_dialog_save').bind('click', function() {
             valid = true;
             var data = $('#modal_dialog').html();

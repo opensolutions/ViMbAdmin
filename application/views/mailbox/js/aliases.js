@@ -16,43 +16,42 @@
                         });
 
         $('#ima').bind( 'click', function(e) {
-            document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=$includeMailboxAliases|flipflop}";
+
+            if( $('#ima').hasClass( 'active' ) )
+                document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=0}";
+            else
+                document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=1}";
+        });
+
+        $( 'span[id|="delete-alias"]' ).click( function( event ){
+            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+            var data = $( event.target ).attr( 'ref' ).split( "/" );
+            $( "#purge_alias_name" ).html( data[0] );
+
+            delDialog = $( '#purge_dialog' ).modal({
+                backdrop: true,
+                keyboard: true,
+                show: true
+            });
+
+            $( '#purge_dialog_delete' ).click( function(){
+                doDeleteAlias( id, data[1] );
+            });
+            $( '#purge_dialog_cancel' ).click( function(){
+                delDialog.modal('hide');
+            });
         });
     }); // document onready
 
 
-    function deleteAlias( aliasId, mailboxId, address )
-    {
-        purgeDialog = $( '<div id="delete_alias_dialog"></div>' )
-            .html( 'Are you sure you want to remove ' + address + ' from this entry?'
-                + '<br /><br />'
-                + '<span id="delete_msg"></span>'
-            )
-            .dialog({
-                dialogClass : 'delete_alias_dialog',
-                autoOpen: true,
-                title: 'Are you sure?',
-                resizable: false,
-                modal: true,
-                closeOnEscape: false,
-                width: 450,
-                height: 180,
-                buttons: {
-                    "Cancel": function() {
-                        $(this).dialog("close");
-                        $('#delete_alias_dialog').remove();
-                    },
-                    "Remove": function() {
-                        doDeleteAlias( aliasId, mailboxId );
-                    }
-                }
-        });
-    }
-
 
     function doDeleteAlias( aliasId, mailboxId )
     {
-        $( '#delete_msg' ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...' );
+
+        var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#pdfooter' ).get(0) ).start();
+
+        $( '#purge_dialog_delete' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+        $( '#purge_dialog_cancel' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
 
         $.ajax({
             url: "{genUrl controller='mailbox' action='ajax-delete-alias'}/mid/" + mailboxId + '/alid/' + aliasId,
@@ -62,21 +61,24 @@
             timeout: 3000, // milliseconds
             success: function( data )
                         {
+                            delDialog.modal('hide');
                             if ( data != 'ok' )
                             {
-                                $( '#purge_msg' ).html( 'An unexpected error occured. Please try again.' );
+                                ossAddMessage( 'An unexpected error has occured.', 'error' );
                             }
                             else
                             {
-                                //$('#alias_' + aliasId).hide('fast');
-                                //purgeDialog.dialog('close');
-                                //$('#purge_admin_dialog').remove();
-                                document.location.reload();
+                                location.reload();
                             }
                         },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
+            error:      ossAjaxErrorHandler,
+            complete: function()
                         {
-                            $( '#purge_msg' ).html( 'An unexpected error occured. Please try again.' );
+                            $( '#purge_dialog_delete' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            $( '#purge_dialog_cancel' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            if( $('canvas').length ){
+                                $('canvas').remove();
+                            }
                         }
         });
     }

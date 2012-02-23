@@ -13,7 +13,7 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="add_mailbox" href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='edit'}{if $domain}/did/{$domain.id}{/if}', {$editMailboxParams} });" title="Add Mailbox">
+        	        <a class="btn" id="modal-dialog-wide-add_mailbox" href="{genUrl controller='mailbox' action='edit' modal=true}{if $domain}/did/{$domain.id}{/if}}" title="Add Mailbox">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
@@ -32,9 +32,7 @@
             <th>Name</th>
             <th>Domain</th>
             <th>Active</th>
-            <th>
-                <button onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='edit'}{if $domain}/did/{$domain.id}{/if}', {$editMailboxParams} });">Add Mailbox</button>
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -48,10 +46,10 @@
                 <span id="toggle-active-{$oneMailbox.id}" class="btn btn-mini {if $oneMailbox.active}btn-success{else}btn-danger{/if}">{$oneMailbox.active|yesno}</span>
             </td>
             <td>
-                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='aliases' mid=$oneMailbox.id}', {$aliasesParams} });">Aliases</button>
-                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='purge' mid=$oneMailbox.id}', {$purgeMailboxParams} });">Purge</button>
-                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='password' mid=$oneMailbox.id}', {$mailboxPasswordParams} });">Password</button>
-                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='mailbox' action='edit' mid=$oneMailbox.id}', {$editMailboxParams} });">Edit</button>
+                <a class="btn btn-mini" href="{genUrl controller='mailbox' action='aliases' mid=$oneMailbox.id}">Aliases</a>
+                <a class="btn btn-mini" id="modal-dialog-wide-purge_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='purge' mid=$oneMailbox.id modal=true}">Purge</a>
+                <a class="btn btn-mini" id="modal-dialog-wide-password_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='password' mid=$oneMailbox.id modal=true}">Password</a>
+                <a class="btn btn-mini" id="modal-dialog-wide-edit_mailbox_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='edit' mid=$oneMailbox.id modal=true}">Edit</a>
                 <a class="btn btn-mini" href="{genUrl controller='mailbox' action='email-settings' mid=$oneMailbox.id}">Email Settings</a>
             </td>
         </tr>

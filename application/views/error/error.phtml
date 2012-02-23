@@ -1,6 +1,12 @@
 {include file="header.phtml"}
 
-<h1>Unexpected Error</h1>
+
+<div class="page-content" >
+
+    <div class="page-header" >
+        <h1>Unexpected Error</h1>
+    </div>
+
 
 {ViMbAdmin_Messages}
 
@@ -24,21 +30,21 @@
     <dl>
         <dt>File</dt>
         <dd>{$exception->getFile()}</dd>
-    
+
         <dt>Line</dt>
         <dd>{$exception->getLine()}</dd>
-    
+
         <dt>Message</dt>
         <dd>{$exception->getMessage()}</dd>
-    
+
         <dt>Code</dt>
         <dd>{$exception->getCode()}</dd>
     </dl>
-    
+
     <h3>Trace</h3>
-    
+
     <pre>{$exception->getTraceAsString()}</pre>
 
 {/if}
-
+</div>
 {include file="footer.phtml"}

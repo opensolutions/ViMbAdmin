@@ -49,12 +49,17 @@
 
     function doPurgeDomain( id )
     {
+        var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#pdfooter' ).get(0) ).start();
+
+        $( '#purge_dialog_delete' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+        $( '#purge_dialog_cancel' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+
         $.ajax({
             url: "{genUrl controller='domain' action='ajax-purge'}/did/" + id,
             async: true,
             cache: false,
-            type: 'GET',
-            timeout: 3000, // milliseconds
+            type: 'POST',
+            timeout: 4000, // milliseconds
             success: function( data )
                      {
                          if ( data != 'ok' )
@@ -69,8 +74,17 @@
 
                          delDialog.modal('hide');
                      },
-            error:  ossAjaxErrorHandler
+            error:      ossAjaxErrorHandler,
+            complete: function()
+                        {
+                            $( '#purge_dialog_delete' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            $( '#purge_dialog_cancel' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            if( $('canvas').length ){
+                                $('canvas').remove();
+                            }
+                        }
         });
+
     }
 
 /* ]]> */ </script>

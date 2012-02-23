@@ -56,8 +56,6 @@ function smarty_function_ViMbAdmin_Messages( $params, &$smarty )
 
     if ( $messages == array() ) return '';
 
-    $message = '<div id="vimbadmin_messages">' . "\n";
-
     $count = 0;
 
 

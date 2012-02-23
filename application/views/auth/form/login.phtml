@@ -7,15 +7,15 @@
       {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
       class="form-horizontal">
 
-{include file='form/element-input.phtml' ielement=$element->username}
-{include file='form/element-input.phtml' ielement=$element->password}
-                
+    {include file='form/element-input.phtml' ielement=$element->username}
+    {include file='form/element-input.phtml' ielement=$element->password}
 
-<fieldset class="form-actions">
-    <input class="btn btn-success" type="submit" value="Login" />
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <a class="btn" href="{genUrl controller="auth" action="password-reset"}">Lost Password</a>
-</fieldset>
+
+    <fieldset class="form-actions">
+        <input class="btn btn-success" type="submit" value="Login" />
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a class="btn" href="{genUrl controller="auth" action="password-reset"}">Lost Password</a>
+    </fieldset>
 
 
 </form>

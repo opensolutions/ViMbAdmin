@@ -120,6 +120,13 @@ div#vimbadmin_messages
  *
  *********************************************************************************************/
 
+/* FIXME it need to be fixed by layout */
+.modal-wide {
+    left: 30%;
+    width: 1200px;
+}
+
+
 opacity_70
 {
     opacity: 0.7;
@@ -338,5 +345,3 @@ ul.ui-autocomplete li
 {
     cursor: pointer;
 }
-
-

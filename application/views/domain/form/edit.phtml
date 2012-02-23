@@ -1,99 +1,51 @@
-<div id="form_div_edit_domain">
 
-    <form action="{$element->getAction()}"
-          method="{$element->getMethod()}"
-          enctype="{$element->getAttrib('enctype')}"
-          id="{$element->getId()}"
-          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
-          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
-          class="default_form">
+<form action="{$element->getAction()}"
+      method="{$element->getMethod()}"
+      enctype="{$element->getAttrib('enctype')}"
+      id="{$element->getId()}"
+      name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+      {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+      class="form-horizontal">
 
-        <table style="height: 250px;">
-            <tr>
-                <td valign="top" height="100%">
-                    <table id="basic_options">
-                        <tr>
-                            <td class="right bold valign_top">{$element->domain->getLabel()}</td>
-                            <td>
-                                {$element->domain}
-                                {include file='form_element_errors.phtml' pTheElement=$element->domain}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right bold">{$element->description->getLabel()}</td>
-                            <td>
-                                {$element->description}
-                                {include file='form_element_errors.phtml' pTheElement=$element->description}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right bold"><label for="{$element->backupmx->getId()}" class="inline">{$element->backupmx->getLabel()}</label></td>
-                            <td>{$element->backupmx}</td>
-                        </tr>
-                        <tr>
-                            <td class="right bold"><label for="{$element->active->getId()}" class="inline">{$element->active->getLabel()}</label></td>
-                            <td>{$element->active}</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><button onclick="$('#advanced_options').toggle('fast'); return false;">Advanced</button></td>
-                        </tr>
-                    </table> <!-- #basic_options -->
-                </td>
-                <td valign="top" height="100%">
-                    <table id="advanced_options" class="dontdisplay">
-                        <tr>
-                            <td class="right bold">{$element->aliases->getLabel()}</td>
-                            <td>
-                                {$element->aliases}
-                                {include file='form_element_errors.phtml' pTheElement=$element->aliases}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right bold">{$element->mailboxes->getLabel()}</td>
-                            <td>
-                                {$element->mailboxes}
-                                {include file='form_element_errors.phtml' pTheElement=$element->mailboxes}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right bold">{$element->maxquota->getLabel()}</td>
-                            <td>
-                                {$element->maxquota}
-                                {include file='form_element_errors.phtml' pTheElement=$element->maxquota}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right bold">{$element->quota->getLabel()}</td>
-                            <td>
-                                {$element->quota}
-                                {include file='form_element_errors.phtml' pTheElement=$element->quota}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="right bold">{$element->transport->getLabel()}</td>
-                            <td>
-                                {$element->transport}
-                                {include file='form_element_errors.phtml' pTheElement=$element->transport}
-                            </td>
-                        </tr>
-                    </table> <!-- #advanced_options -->
-                </td>
-            </tr>
-        </table>
 
-        <input type="button" onclick="parent.$.fn.colorbox.close();" value="Cancel" />
-        &nbsp;
-        <input type="submit" value="{$element->save->getLabel()}" />
-    </form>
 
-</div> <!-- #form_div_edit_domain -->
+    <div class="row">
+        <div class="span6">
+            {include file='form/element-input.phtml' ielement=$element->domain}
+            {include file='form/element-textarea.phtml' ielement=$element->description}
+            {include file='form/element-checkbox.phtml' ielement=$element->backupmx}
+            {include file='form/element-checkbox.phtml' ielement=$element->active}
+            <br/>
+        </div>
+        <div class="span6">
+            <div id="advanced_options" style="display: none">
+                {include file='form/element-input.phtml' ielement=$element->aliases}
+                {include file='form/element-input.phtml' ielement=$element->mailboxes}
+                {include file='form/element-input.phtml' ielement=$element->maxquota}
+                {include file='form/element-input.phtml' ielement=$element->quota}
+                {include file='form/element-input.phtml' ielement=$element->transport}
+            </div>
+        </div>
+    </div>
+
+    {if !isset($modal) || !$modal }
+    <fieldset class="form-actions">
+        <span class="btn" id="toogle_advanced">Advanced</span>
+        <button class="btn" onclick="parent.$.fn.colorbox.close();">Cancel</button>
+        <input class="btn btn-primary" type="submit" value="{$element->save->getLabel()}" />
+    </fieldset>
+    {/if}
+</form>
 
 <script type="text/javascript"> /* <![CDATA[ */
 
     $(document).ready(function()
     {
         $('#{$element->backupmx->getId()}').bind('change', function() {
+            $('#advanced_options').toggle('fast');
+        });
+
+        $('#toogle_advanced').bind('click', function() {
             $('#advanced_options').toggle('fast');
         });
     }); // document onready

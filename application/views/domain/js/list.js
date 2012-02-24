@@ -7,20 +7,20 @@
     $(document).ready(function()
     {
         oDataTable = $('#domain_list_table').dataTable({
-                            'iDisplayLength': {$options.defaults.table.entries},
-                            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-                            "sPaginationType": "bootstrap",
-                            'aoColumns': [
-                                null,
-                                { 'sType': 'num-html' },
-                                { 'sType': 'num-html' },
-                                null,
-                                null,
-                                null,
-                                null,
-                                { 'bSortable': false, "bSearchable": false }
-                            ]
-                        });
+            'iDisplayLength': {$options.defaults.table.entries},
+            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            "sPaginationType": "bootstrap",
+            'aoColumns': [
+                null,
+                { 'sType': 'num-html' },
+                { 'sType': 'num-html' },
+                null,
+                null,
+                null,
+                null,
+                { 'bSortable': false, "bSearchable": false }
+            ]
+        });
 
         $( 'span[id|="toggle-active"]' ).click( function( event ){
             var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );

@@ -34,7 +34,7 @@
                 show: true
             });
 
-            $( '#purge_dialog_delete' ).click( function(){
+            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
                 doDeleteAlias( id, data[1] );
             });
             $( '#purge_dialog_cancel' ).click( function(){
@@ -57,7 +57,7 @@
             url: "{genUrl controller='mailbox' action='ajax-delete-alias'}/mid/" + mailboxId + '/alid/' + aliasId,
             async: true,
             cache: false,
-            type: 'GET',
+            type: 'POST',
             timeout: 3000, // milliseconds
             success: function( data )
                         {

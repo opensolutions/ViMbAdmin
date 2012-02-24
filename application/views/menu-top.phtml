@@ -1,5 +1,3 @@
-{assign var='changePwdParams' value="open: true, iframe: true, transition: 'elastic', width: '700px', height: '270px'"}
-
         <div id="topmenu">
             <ul class="sf-menu">
                 <li><a href="{genUrl controller='domain'}" title="Domains">Domains</a></li>
@@ -9,7 +7,7 @@
             {if $hasIdentity and $identity.admin->isSuper()}
                 <li><a href="{genUrl controller='admin'}" title="Administrators">Administrators</a></li>
             {/if}
-                <li><a href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='password' aid=$identity.admin.id}', {$changePwdParams} });">Password</a></li>
+                <li><a id="modal-dialog-your_password" href="{genUrl controller='admin' action='password' aid=$identity.admin.id modal=true}">Password</a></li>
                 <li><a href="{genUrl controller='auth' action='logout'}" title="Logout">Logout</a></li>
             </ul>
         </div> <!-- #topmenu -->

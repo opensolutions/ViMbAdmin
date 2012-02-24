@@ -296,16 +296,14 @@ class AliasController extends ViMbAdmin_Controller_Action
 
                         $this->_alias->save();
 
+                        $this->addMessage( _( "You have successfully added/edited the alias." ), ViMbAdmin_Message::SUCCESS );
+
                         if( $this->_getParam( 'helper', true ) )
                         {
-                            $this->addMessage( _( "You have successfully added/edited the alias." ), ViMbAdmin_Message::SUCCESS );
                             $this->_redirect( 'alias/list' );
                         }
                         else
                         {
-                            if( $this->view->operation == 'Add' )
-                                $this->addMessage( _( "You have successfully added/edited the alias." ), ViMbAdmin_Message::SUCCESS );
-
                             $this->_helper->viewRenderer->setNoRender( true );
                             print 'ok';
                         }
@@ -313,18 +311,11 @@ class AliasController extends ViMbAdmin_Controller_Action
 
                 }
             }
-            else
-            {
-                if( !$this->_getParam( 'helper', true ) )
-                {
-                    $this->view->modal = true;
-                }
-            }
         }
         else
         {
             if( $this->_domain )
-                $editForm->getElement( 'domain' )->setValue( $this->_domain->id );
+                $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
 
             if( $this->_mailbox )
                 $this->view->defaultGoto = "{$this->_mailbox->local_part}@{$this->_mailbox->Domain->domain}";
@@ -344,8 +335,8 @@ class AliasController extends ViMbAdmin_Controller_Action
             }
         }
 
-        if( $this->_domain )
-            $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
+        if( !$this->_getParam( 'helper', true ) )
+            $this->view->modal = true;
 
         $this->view->editForm = $editForm;
     }

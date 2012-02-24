@@ -25,7 +25,7 @@
             ossToggle( $( event.target ), "{genUrl controller='domain' action='ajax-toggle-active'}", { "did": id } );
         });
 
-        $( 'span[id|="domain-purge"]' ).click( function( event ){
+        $( 'span[id|="purge-domain"]' ).click( function( event ){
 
             var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
             $( "#purge_domain_name" ).html( $( event.target ).attr( 'ref' ) );
@@ -36,7 +36,7 @@
                 show: true
             });
 
-            $( '#purge_dialog_delete' ).click( function(){
+            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
                 doPurgeDomain( id );
             });
             $( '#purge_dialog_cancel' ).click( function(){

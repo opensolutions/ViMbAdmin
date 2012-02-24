@@ -52,7 +52,7 @@
             <td>
                 <a class="btn btn-mini" href="{genUrl controller='log' action='list' did=$oneDomain.id}">Logs</a>
                 {if $identity.admin.super}
-                    <span  class="btn btn-mini"  id="domain-purge-{$oneDomain.id}" ref="{$oneDomain.domain}">Purge</span>
+                    <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" ref="{$oneDomain.domain}">Purge</span>
                 {/if}
                 {if $identity.admin.super}
                     <a class="btn btn-mini"  href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">Admins</a>

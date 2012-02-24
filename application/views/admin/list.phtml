@@ -11,7 +11,7 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="add_admin" href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='add'}', {$addAdminParams} });" title="Add Admin">
+        	        <a class="btn" id="modal-dialog-add_admin" href="{genUrl controller='admin' action='add' modal=true}" title="Add Admin">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
@@ -45,6 +45,7 @@
                 {/if}
             </td>
             <td>
+                <div id="throb-toggle-super-{$oneAdmin.id}" style="float: right;"></div>
                 {if $identity.admin.id != $oneAdmin.id}
                     <span id="toggle-super-{$oneAdmin.id}" class="btn btn-mini {if $oneAdmin.super}btn-success{else}btn-danger{/if}">{$oneAdmin.super|yesno}</span>
                 {else}
@@ -52,19 +53,38 @@
                 {/if}
             </td>
             <td>
-                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='password'}/aid/{$oneAdmin.id}', {$changePwdParams} });">Password</button>
+                <a class="btn btn-mini" id="modal-dialog-password-{$oneAdmin.id}" href="{genUrl controller='admin' action='password' modal=true aid=$oneAdmin.id}">Password</a>
                 <a class="btn btn-mini" href="{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}">Log</a>
                 {if not $oneAdmin.super}
-                    <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}', {$domainListParams} });">Domains</button>
+                    <a class="btn btn-mini" href="{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}">Domains</a>
                 {/if}
                 {if $identity.admin.id neq $oneAdmin.id}
-                    <button class="btn btn-mini" onclick="purgeAdmin({$oneAdmin.id}, '{$oneAdmin.username}');">Purge</button>
+                    <span class="btn btn-mini" id="purge-admin-{$oneAdmin.id}" ref="{$oneAdmin.username}">Purge</span>
                 {/if}
             </td>
         </tr>
 {/foreach}
     </tbody>
 </table>
+
+
+<div id="purge_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to purge <em id="purge_admin_name"></em> ?
+        <br /><br />
+        All logs and domain associations will be removed. If you simply want to
+        close the user\'s account, deactivate it instead.
+        <br /><br />
+    </div>
+    <div id="pdfooter" class="modal-footer">
+        <span class="btn btn-danger" id="purge_dialog_delete">Purge</span>
+        <button id="purge_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
 
 {include file='admin/js/list.js'}
 <br />

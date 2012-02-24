@@ -9,9 +9,14 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="add_alias" href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' did=$domainModel.id}', {$editAliasParams} });" title="Add Alias">
+        	        <a class="btn" id="modal-dialog-add_alias" href="{genUrl controller='alias' action='edit' did=$domainModel.id modal=true}" title="Add Alias">
             	        <i class="icon-plus"></i>
         	        </a>
+            	</span>
+            	<span class="btn-group" data-toggle="buttons-checkbox">
+        	        <span class="btn {if $includeMailboxAliases}active{/if}" id="ima" title="Include mailbox aliases" >
+            	        Include mailbox aliases
+        	        </span>
             	</span>
         	</div>
     	</div>
@@ -19,11 +24,7 @@
         <h1>Aliases {if $domain} for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}{/if}</h1>
     </div>
 
-
-
 {ViMbAdmin_Messages}
-
-<label><input type="checkbox" name="ima" id="ima" value="1" {if $includeMailboxAliases}checked="checked" {/if}/> Include mailbox aliases</label>
 
 <br/>
 
@@ -48,8 +49,8 @@
             </td>
             <td class="OSSTooltip-bl-tl" title="{$oneAlias.goto}">{$oneAlias.goto|shorten:50}</td>
             <td>
-                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' alid=$oneAlias.id}', {$editAliasParams} });">Edit</button>
-                <button class="btn btn-mini" onclick="deleteAlias({$oneAlias.id});">Delete</button>
+                <a class="btn btn-mini" id="modal-dialog-edit_alias_{$oneAlias.id}" href="{genUrl controller='alias' action='edit' alid=$oneAlias.id modal=true}">Edit</a>
+                <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}">Delete</span>
             </td>
         </tr>
     {/foreach}
@@ -63,5 +64,20 @@
 <a class="btn" href="{genUrl controller='domain' action='list'}">Back to domains</a>
 
 {include file='alias/js/list.js'}
+
+<div id="purge_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete this alias?
+    </div>
+    <div id="pdfooter" class="modal-footer">
+        <span class="btn btn-danger" id="purge_dialog_delete">Delete</span>
+        <button id="purge_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
+
 </div>
 {include file="footer.phtml"}

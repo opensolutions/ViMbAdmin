@@ -574,7 +574,7 @@ class MailboxController extends ViMbAdmin_Controller_Action
                 $this->_mailbox->hashPassword(
                     $this->_options['defaults']['mailbox']['password_scheme'],
                     $plainPassword,
-                    $this->_options['securitysalt']
+                    $this->_options['defaults']['mailbox']['password_hash']
                 );
 
                 $this->_mailbox->save();

@@ -10,12 +10,13 @@
 
           <fieldset class="control-group" id="div-form-password">
     	    <label for="local_part" class="control-label">
-	    	    	{$element->local_part->getLabel()}
+	    	    	Addres
 	    	</label>
     	    <div id="div-controls-{$element->local_part->getId()}" class="controls">
     		    <div class="input-append btn-group">
     		        {$element->local_part}
-        		        <span class="add-on" >@</span>
+        		     <span class="btn add-midd">@</span>
+    		         {$element->domain}
     		    </div>
 
 	        	{if $element->local_part->getMessages()}
@@ -31,9 +32,21 @@
     					{/foreach}
 					</p>
 				{/if}
+				{if $element->domain->getMessages()}
+					<script type="text/javascript">
+						$( '#{$element->domain->getId()}' ).addClass( 'error' );
+						$( '#div-form-{$element->domain->getId()}' ).addClass( 'error' );
+					</script>
+					<p id="help-{$element->domain->getId()}" class="help-block">
+    					{foreach from=$element->domain->getMessages() item=messages}
+        					{foreach from=$messages item=msg}
+            					{$msg}<br />
+        					{/foreach}
+    					{/foreach}
+					</p>
+				{/if}
     	    </div>
     	</fieldset>
-    	{include file='form/element-input.phtml' ielement=$element->domain}
     	{include file='form/element-checkbox.phtml' ielement=$element->active}
 
         <fieldset class="control-group" id="div-form-goto">

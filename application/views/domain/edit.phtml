@@ -48,10 +48,7 @@
                 success: function(data) {
                     if( data == "ok" ) {
                         dialog.modal('hide');
-                        {if $operation == 'Add' }
                             location.reload();
-                        {/if}
-                        ossAddMessage( 'You have successfully added/edited the domain record.', 'success' );
                     }
                      else if( data.substring(0, 26) == '<div class="modal-header">' )
                             {

@@ -157,16 +157,14 @@ class DomainController extends ViMbAdmin_Controller_Action
                     $this->getAdmin(), $this->_domain
                 );
 
+                $this->addMessage( _( "You have successfully added/edited the domain record." ), ViMbAdmin_Message::SUCCESS );
+
                 if( $this->_getParam( 'helper', true ) )
                 {
-                    $this->addMessage( _( "You have successfully added/edited the domain record." ), ViMbAdmin_Message::SUCCESS );
                     $this->_redirect( 'domain/list' );
                 }
                 else
                 {
-                    if( $this->view->operation == 'Add' )
-                        $this->addMessage( _( "You have successfully added/edited the domain record." ), ViMbAdmin_Message::SUCCESS );
-
                     $this->_helper->viewRenderer->setNoRender( true );
                     print 'ok';
                 }

@@ -13,44 +13,37 @@
                                 { 'bSortable': false, "bSearchable": false }
                             ]
                         });
+
+        $( 'span[id|="domain-purge"]' ).click( function( event ){
+
+            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+            $( "#purge_domain_name" ).html( $( event.target ).attr( 'ref' ) );
+            $( "#purge_admin_name" ).html( "{$targetAdmin->username}" );
+
+            delDialog = $( '#purge_dialog' ).modal({
+                backdrop: true,
+                keyboard: true,
+                show: true
+            });
+
+            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+                doRemoveAdmin( id, $( event.target ).attr( 'ref' ) );
+            });
+            $( '#purge_dialog_cancel' ).click( function(){
+                delDialog.modal('hide');
+            });
+        });
     }); // document onready
 
-
-    function removeAdmin( domainId, adminId, domain )
+    function doRemoveAdmin( domainId, domain )
     {
-        removeDialog = $( '<div id="remove_admin_dialog"></div>' )
-            .html( 'Are you sure you want to remove <b>{$targetAdmin->username}</b> from <b>' + domain + '</b>?'
-                + '<br /><br />'
-                + '<span id="remove_msg"></span>'
-            )
-            .dialog({
-                dialogClass : 'remove_admin_dialog',
-                autoOpen: true,
-                title: 'Are you sure?',
-                resizable: false,
-                modal: true,
-                closeOnEscape: false,
-                width: 500,
-                height: 180,
-                buttons: {
-                    "Cancel": function() {
-                        $(this).dialog("close");
-                        $('#remove_admin_dialog').remove();
-                    },
-                    "Remove": function() {
-                        doRemoveAdmin( domainId, adminId );
-                    }
-                }
-        });
-    }
+        var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#pdfooter' ).get(0) ).start();
 
-
-    function doRemoveAdmin( domainId, adminId )
-    {
-        $( '#remove_msg' ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...' );
+        $( '#purge_dialog_delete' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+        $( '#purge_dialog_cancel' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
 
         $.ajax({
-            url: "{genUrl controller='admin' action='ajax-remove-domain'}/aid/" + adminId + '/domain/' + domainId,
+            url: "{genUrl controller='admin' action='ajax-remove-domain'}/aid/{$targetAdmin.id}/domain/" + domainId,
             async: true,
             cache: false,
             type: 'GET',
@@ -59,18 +52,23 @@
                         {
                             if ( data != 'ok' )
                             {
-                                $( '#remove_msg' ).html( 'An unexpected error occured. Please try again.' );
+                                 ossAddMessage( 'An unexpected error has occured.', 'error' );
                             }
                             else
                             {
-                                $('#domain_' + domainId).hide('fast');
-                                removeDialog.dialog('close');
-                                $('#remove_admin_dialog').remove();
+                                $('#domain_' + domainId).hide( 'fast' );
+                                ossAddMessage( 'You have successfully removed the admin from domain <em>' + domain + '</em>.', 'success' );
                             }
+                            delDialog.modal('hide');
                         },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
+            error: ossAjaxErrorHandler,
+            complete: function()
                         {
-                            $( '#remove_msg' ).html( 'An unexpected error occured. Please try again.' );
+                            $( '#purge_dialog_delete' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            $( '#purge_dialog_cancel' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            if( $('canvas').length ){
+                                $('canvas').remove();
+                            }
                         }
         });
 

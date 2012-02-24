@@ -94,7 +94,7 @@
                                 </li>
                             {/if}
                             <li>
-                                <a href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='admin' action='password' aid=$identity.admin.id}', {$changePwdParams} });">Password</a>
+                                <a id="modal-dialog-your_password" href="{genUrl controller='admin' action='password' aid=$identity.admin.id modal=true}">Password</a>
                             </li>
                         </ul>
                         <ul class="nav pull-right">

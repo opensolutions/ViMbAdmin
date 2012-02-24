@@ -40,21 +40,23 @@
 
     function insertGoto( address )
     {
-        str =   '<li id="goto_' + gotoId + '">' + "\n"
-              + '<input type="text" name="goto[]" value="' + address + '" size="40" title="Goto" readonly="readonly" />' + "\n"
-              + '<img alt="Remove" title="Remove" src="{genUrl}/images/remove.png" class="valign_middle clickable" onclick="removeGoto(' + gotoId + ');" />' + "\n"
-              + "</li>\n";
+        str = '<div class="input-append btn-group" id="goto-div-' + gotoId + '">' + "\n"
+		      + '<input type="text" name="goto[]" value="' + address + '" size="40" title="Goto" readonly="readonly"/>' + "\n"
+    		  + '<span title="Remove got to" class="btn add-on" onclick="removeGoto(' + gotoId + ');" >' + "\n"
+              + '<i class="icon-minus"></i>' + "\n"
+              + '</span>' + "\n"
+    		  + '</div>';
 
         gotoList[gotoId] = address;
         gotoId++;
 
-        jQuery( str ).appendTo( '#goto_addresses' ).hide().show( 'fast' );
+        jQuery( str ).appendTo( '#div-controls-goto' ).hide().show( 'fast' );
     }
 
 
     function removeGoto( id )
     {
-        $( '#goto_' + id ).hide( 'fast', function() { $(this).remove() } );
+        $( '#goto-div-' + id ).hide( 'fast', function() { $(this).remove() } );
         delete gotoList[id];
     }
 

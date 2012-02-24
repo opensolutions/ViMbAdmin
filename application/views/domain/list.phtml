@@ -10,7 +10,7 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="add_domain" href="#" onclick="$.fn.colorbox({ href:'{genUrl controller='domain' action='edit'}', {$addDomainParams} });" title="Add Domain">
+        	        <a class="btn" id="modal-dialog-wide_add_domain" href="{genUrl controller='domain' action='edit' modal=true}" title="Add Domain">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
@@ -52,12 +52,12 @@
             <td>
                 <a class="btn btn-mini" href="{genUrl controller='log' action='list' did=$oneDomain.id}">Logs</a>
                 {if $identity.admin.super}
-                    <button  class="btn btn-mini"  onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">Purge</button>
+                    <span  class="btn btn-mini"  id="domain-purge-{$oneDomain.id}" ref="{$oneDomain.domain}">Purge</span>
                 {/if}
                 {if $identity.admin.super}
                     <a class="btn btn-mini"  href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">Admins</a>
                 {/if}
-                <button class="btn btn-mini" onclick="$.fn.colorbox({ href:'{genUrl controller='domain' action='edit' did=$oneDomain.id}', {$addDomainParams} });">Edit</button>
+                <a class="btn btn-mini" id="modal-dialog-wide_edit_domain_{$oneDomain.id}" href="{genUrl controller='domain' action='edit' did=$oneDomain.id modal=true}">Edit</a>
             </td>
         </tr>
 {/foreach}
@@ -67,6 +67,26 @@
 <br /><br /><br />
 
 {include file='domain/js/list.js'}
+
+<div id="purge_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to purge
+        <em id="purge_domain_name"></em> ?
+        <br>
+        <br>
+        All mailboxes, aliases and logs will be removed.
+        <br>
+        <br>
+    </div>
+    <div id="pdfooter" class="modal-footer">
+        <span class="btn btn-danger" id="purge_dialog_delete">Purge</span>
+        <button id="purge_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
 
 </div>
 

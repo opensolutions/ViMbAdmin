@@ -90,8 +90,10 @@ function tt_throbber( size, lines, strokewidth, fallback )
 function ossToggle( e, Url, data, delElement )
 {
     e.unbind();
+
     if( e.hasClass( 'disabled' ) )
         return;
+
 
     var on = true;
     if( e.hasClass( 'btn-danger' ) ) {
@@ -157,7 +159,14 @@ function ossToggle( e, Url, data, delElement )
 function tt_openModalDialog(event) {
 
     event.preventDefault();
-    id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+
+    if( $( event.target ).is( "i" ) )
+        element = $( event.target ).parent();
+    else
+        element = $( event.target );
+
+
+    id = element.attr( 'id' ).substr( element.attr( 'id' ).lastIndexOf( '-' ) + 1 );
 
     if( id.substring( 0, 4 ) == "wide" )
         $( '#modal_dialog' ).addClass( 'modal-wide' );
@@ -176,7 +185,7 @@ function tt_openModalDialog(event) {
     });
 
     $.ajax({
-        url: $( event.target ).attr( 'href' ) ,
+        url: element.attr( 'href' ) ,
         async: true,
         cache: false,
         type: 'POST',

@@ -338,6 +338,8 @@ class AliasController extends ViMbAdmin_Controller_Action
         if( !$this->_getParam( 'helper', true ) )
             $this->view->modal = true;
 
+        $this->view->emails = $this->_autocompleteArray();
+
         $this->view->editForm = $editForm;
     }
 
@@ -345,20 +347,11 @@ class AliasController extends ViMbAdmin_Controller_Action
     /**
      * The Ajax function providing JSON data for the jQuery UI Autocomplete on adding/editing aliases.
      */
-    public function ajaxAutocompleteAction()
+    private function _autocompleteArray()
     {
-        $term = ( isset( $_GET['term'] ) ? $_GET['term'] : '' );
-
-        if( mb_strlen( $term ) < $this->_options['alias_autocomplete_min_length'] )
-            return print '';
-
-        if( !$this->authorise( false, null, false ) )
-            return print '';
-
         $query = Doctrine_Query::create()
                     ->select( 'a.address' )
-                    ->from( 'Alias a' )
-                    ->where( 'a.address like ?', "{$term}%" );
+                    ->from( 'Alias a' );
 
         if( !$this->getAdmin()->isSuper() )
         {
@@ -375,7 +368,7 @@ class AliasController extends ViMbAdmin_Controller_Action
         foreach( $temp as $oneAddress )
             $addresses[] = $oneAddress['address'];
 
-        print json_encode( $addresses );
+        return json_encode( $addresses );
     }
 
 }

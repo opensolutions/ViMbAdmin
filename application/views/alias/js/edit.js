@@ -9,19 +9,12 @@
             if( e.which == 13 )
             {
                 e.preventDefault();
-                //e.stopPropagation();
-                //$( '#goto_empty' ).autocomplete( 'close' );
-                //addGoto();
+                addGoto();
             }
         });
 
-        $( '#goto_empty' ).autocomplete({
-            source: "{genUrl controller='alias' action='ajax-autocomplete'}",
-            minLength: {$options.alias_autocomplete_min_length},
-            select: function( event, ui ) {
-                $('#goto_empty').val( ui.item ? ui.item.value : this.value );
-                if( addGoto() ) setTimeout( "$( '#goto_empty' ).val( '' );" , 100 ); // lame trick to empty the field when using autocomplete
-            }
+        $( '#goto_empty' ).typeahead( {
+            source: {$emails}
         });
 
         tempArr = "{$aliasModel.goto}".split( ',' );
@@ -85,7 +78,7 @@
             }
             else
             {
-                $( '#invalid_email' ).html( 'Invalid email address.' );
+                //$( '#invalid_email' ).html( 'Invalid email address.' );
                 return false;
             }
         }

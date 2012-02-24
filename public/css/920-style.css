@@ -6,70 +6,6 @@ a.aplain, a:link.aplain, a:visited.aplain, a:hover.aplain, a:active.aplain {
 
 /********************************************************************************************
  *
- * ViMbAdmin MESSAGE
- *
- *********************************************************************************************/
-
-div#vimbadmin_messages
-{
-    margin-top: 25px;
-    margin-bottom: 25px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.vimbadmin-message {
-    border: 1px solid;
-    font-weight: bold;
-    margin: 10px;
-    padding: 10px;
-    width: 95%;
-    font-size: 100%;
-    margin-left:  auto;
-    margin-right: auto;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -khtml-border-radius: 5px;
-    border-radius: 5px;
-}
-
-.vimbadmin-message p {
-    margin: 0px;
-    text-align: left;
-}
-
-.vimbadmin-message-icon {
-    float: right;
-}
-
-.vimbadmin-message-success {
-    border-color: rgb(0, 180, 0);
-    background-color: rgb(235, 255, 235);
-    color: rgb(0, 180, 0);
-}
-
-.vimbadmin-message-alert {
-    border-color: #ff8400;
-    background: #ffdebb;
-    color: #000000;
-}
-
-.vimbadmin-message-error {
-    border-color: rgb(180, 0, 0);
-    background-color: rgb(255, 235, 235);
-    color: rgb(180, 0, 0);
-}
-
-.vimbadmin-message-info {
-    border-color: #000000;
-    background: #F1F3F5;
-    color: #000000;
-}
-
-
-
-/********************************************************************************************
- *
  * Round Corner
  *
  *********************************************************************************************/
@@ -122,8 +58,9 @@ div#vimbadmin_messages
 
 /* FIXME it need to be fixed by layout */
 .modal-wide {
-    left: 30%;
-    width: 1200px;
+    width: 800px;
+    left: 50%;
+    margin-left: -400px;
 }
 
 

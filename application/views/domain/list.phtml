@@ -10,11 +10,11 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-wide_add_domain" href="{genUrl controller='domain' action='edit' modal=true}" title="Add Domain">
+        	    <a class="btn" id="modal-dialog-wide_add_domain" href="{genUrl controller='domain' action='edit' modal=1}" title="Add Domain">
             	        <i class="icon-plus"></i>
-        	        </a>
+        	    </a>
             	</span>
-        	</div>
+            </div>
     	</div>
     	{/if}
 
@@ -53,8 +53,6 @@
                 <a class="btn btn-mini" href="{genUrl controller='log' action='list' did=$oneDomain.id}">Logs</a>
                 {if $identity.admin.super}
                     <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" ref="{$oneDomain.domain}">Purge</span>
-                {/if}
-                {if $identity.admin.super}
                     <a class="btn btn-mini"  href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">Admins</a>
                 {/if}
                 <a class="btn btn-mini" id="modal-dialog-wide_edit_domain_{$oneDomain.id}" href="{genUrl controller='domain' action='edit' did=$oneDomain.id modal=true}">Edit</a>

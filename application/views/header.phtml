@@ -3,6 +3,7 @@
 
 <head>
     <title>ViMbAdmin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="Content-Language" content="en" />
@@ -18,62 +19,94 @@
     <link rel="icon" type="image/x-icon" href="{genUrl}/favicon.ico" />
 
 {if !$options.mini_js}
-    <script type="text/javascript" src="{genUrl}/js-dev/01-jquery.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/02-jquery-ui.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/03-jquery.validate.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/04-vimbadmin.validate.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/05-vimbadmin.functions.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/06-vimbadmin.tooltip.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/07-jquery.colorbox.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/08-superfish.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/09-jquery.datatables.js"></script>
-    <script type="text/javascript" src="{genUrl}/js-dev/10-jquery.datatables.ext.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/100-jquery.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/110-jquery-ui.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/120-jquery.validate.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/130-jquery.colorbox.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/150-jquery.datatables.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/151-jquery.datatables.ext.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/310-throbber.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/800-bootstrap.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/900-vimbadmin.validate.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/910-vimbadmin.functions.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/920-vimbadmin.tooltip.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/990-vimbadmin.js"></script>
 {else}
-    <script type="text/javascript" src="{genUrl}/js/javascript.js"></script>
+    <script type="text/javascript" src="{genUrl}/js/min.bundle.js"></script>
 {/if}
 
 {if !$options.mini_css}
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/01-yui-reset.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/02-yui-base.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/03-yui-fonts.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/04-layout.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/05-jquery-ui.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/06-menu.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/07-style.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/08-jquery-datatables.css" />
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/09-colorbox.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/110-jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/130-colorbox.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/800-bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/810-bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/890-override_container_app.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/895-bootstrap-override.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/920-style.css" />
 {else}
-    <link rel="stylesheet" type="text/css" href="{genUrl}/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="{genUrl}/css/min.bundle.css" />
 {/if}
 
 {if isset($inColorBox) && $inColorBox}
     {if !$options.mini_css}
-        <link rel="stylesheet" type="text/css" href="{genUrl}/css-dev/popup.css" />
+        <link rel="stylesheet" type="text/css" href="{genUrl}/css/930-popup.css" />
     {else}
-        <link rel="stylesheet" type="text/css" href="{genUrl}/css/popup.min.css" />
+        <link rel="stylesheet" type="text/css" href="{genUrl}/css/min.930-popup.css" />
     {/if}
 {/if}
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
     {include file="colorbox.css.phtml"}
 </head>
 
 <body>
 
-<div id="container">
-
 {if !isset($inColorBox) || !$inColorBox}
-    <div id="header">
-        <div id="header-content">
-            <div id="header-copy">
-                ViMbAdmin - <em>Virtual Mailbox Administration</em>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="#">ViMbAdmin{if not $hasIdentity} :: <em>Virtual Mailbox Administration</em>{/if}</a>
+
+                {if $hasIdentity}
+                    <div class="nav-collapse">
+                        <ul class="nav">
+
+                            <li {if $controller eq 'domain'}class="active"{/if}>
+                                <a href="{genUrl controller='domain'}" title="Domains">Domains</a>
+                            </li>
+                            <li {if $controller eq 'mailbox'}class="active"{/if}>
+                                <a href="{genUrl controller='mailbox'}" title="Mailboxes">Mailboxes</a>
+                            </li>
+                            <li {if $controller eq 'alias'}class="active"{/if}>
+                                <a href="{genUrl controller='alias'}" title="Domains">Aliases</a>
+                            </li>
+                            <li {if $controller eq 'log'}class="active"{/if}>
+                                <a href="{genUrl controller='log'}" title="Logs">Logs</a>
+                            </li>
+                            {if $hasIdentity and $identity.admin->isSuper()}
+                                <li {if $controller eq 'admin'}class="active"{/if}>
+                                    <a href="{genUrl controller='admin'}" title="Administrators">Administrators</a>
+                                </li>
+                            {/if}
+                            <li>
+                                <a id="modal-dialog-your_password" href="{genUrl controller='admin' action='password' aid=$identity.admin.id modal=true}">Password</a>
+                            </li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <li>
+                                <a href="{genUrl controller='auth' action='logout'}" title="Logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                {/if}
             </div>
         </div>
-    </div> <!-- #header -->
-
-    {if $hasIdentity}
-        {include file='menu-top.phtml'}
-    {/if}
+    </div>
 {/if}
 
 
-    <div id="main">
+<div class="container">

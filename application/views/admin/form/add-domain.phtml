@@ -6,26 +6,14 @@
           id="{$element->getId()}"
           name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
           {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
-          class="default_form">
+          class="form-horizontal">
 
-        <table>
-                <tr>
-                    <td class="right bold valign_top">{$element->domain->getLabel()}</td>
-                    <td>
-                        {$element->domain}
-                        {include file='form_element_errors.phtml' pTheElement=$element->domain}
-                    </td>
-                </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <br />
-                    <input type="button" onclick="document.location.href='{genUrl controller='admin' action='domains' aid={$element->adminId->getValue()}}';" value="{$element->cancel->getLabel()}" />
-                    &nbsp;
-                    <input type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
-                </td>
-            </tr>
-        </table>
-    </form>
+        {include file='form/element-input.phtml' ielement=$element->domain}
 
+        {if !isset($modal) || !$modal}
+        <fieldset class="form-actions">
+            <a class="btn" href="{genUrl controller='admin' action='domains' aid={$element->adminId->getValue()}}">Cancel</a>
+            <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+        </fieldset>
+        {/if}
 </div> <!-- #form_div_edit_mailbox -->

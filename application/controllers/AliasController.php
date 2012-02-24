@@ -150,8 +150,12 @@ class AliasController extends ViMbAdmin_Controller_Action
      */
     public function editAction()
     {
+        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+
+        $this->view->operation = "Edit";
         if( !$this->_alias ) // no alias id passed so adding
         {
+            $this->view->operation = "Add";
             $this->_alias = new Alias();
 
             if( $this->_domain )
@@ -170,7 +174,7 @@ class AliasController extends ViMbAdmin_Controller_Action
 
         $editForm = new ViMbAdmin_Form_Alias_Edit( null, $domainList );
 
-        if( $this->getRequest()->isPost() )
+        if( $this->getRequest()->isPost() && !$modal )
         {
             if( $this->_alias['id'] ) // editing
             {
@@ -186,13 +190,13 @@ class AliasController extends ViMbAdmin_Controller_Action
                 {
                     $this->_domain = $this->loadDomain( $postValues['domain'] );
                 }
- 
+
                 if( !$this->_domain || !$this->authorise( false, $this->_domain, false ) )
                 {
                      $this->addMessage( _( "Invalid, unauthorised or non-existent domain." ), ViMbAdmin_Message::ERROR );
                      $this->_redirect( $this->getRequest()->getPathInfo() );
                  }
- 
+
                 if( !$this->_alias['id'] ) // adding
                 {
                     $alias = Doctrine::getTable( 'Alias' )->findOneByAddress( "{$postValues['local_part']}@{$this->_domain['domain']}" );
@@ -237,7 +241,7 @@ class AliasController extends ViMbAdmin_Controller_Action
                     // is the alias valid (allowing for wildcard domains (i.e. with no local part)
                     if( !$this->_alias['id'] && $postValues['local_part'] != '' && !Zend_Validate::is( "{$postValues['local_part']}@{$this->_domain['domain']}", 'EmailAddress', array( 1, null ) ) )
                         $editForm->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
-                        
+
                     foreach( $postValues['goto'] as $key => $oneGoto )
                     {
                         $oneGoto = trim( $oneGoto );
@@ -254,7 +258,7 @@ class AliasController extends ViMbAdmin_Controller_Action
                     if( !$postValues['goto'] )
                         $editForm->getElement( 'goto' )->addError( _( 'You must have at least one goto address.' ) );
 
-                    if( !$editForm->getElement( 'goto' )->hasErrors() 
+                    if( !$editForm->getElement( 'goto' )->hasErrors()
                         && ( $editForm->getElement( 'local_part' ) === null || !$editForm->getElement( 'local_part' )->hasErrors() ) )
                     {
                         $this->_alias->fromArray( $postValues );
@@ -292,18 +296,26 @@ class AliasController extends ViMbAdmin_Controller_Action
 
                         $this->_alias->save();
 
-                        $this->_helper->viewRenderer->setNoRender( true );
-                        $this->addMessage( _( 'You have successfully added/edited the alias.' ), ViMbAdmin_Message::SUCCESS );
-                        return print $this->view->render( 'close_colorbox_reload_parent.phtml' );
+                        $this->addMessage( _( "You have successfully added/edited the alias." ), ViMbAdmin_Message::SUCCESS );
+
+                        if( $this->_getParam( 'helper', true ) )
+                        {
+                            $this->_redirect( 'alias/list' );
+                        }
+                        else
+                        {
+                            $this->_helper->viewRenderer->setNoRender( true );
+                            print 'ok';
+                        }
                     }
-                    
+
                 }
             }
         }
         else
         {
             if( $this->_domain )
-                $editForm->getElement( 'domain' )->setValue( $this->_domain->id );
+                $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
 
             if( $this->_mailbox )
                 $this->view->defaultGoto = "{$this->_mailbox->local_part}@{$this->_mailbox->Domain->domain}";
@@ -323,8 +335,8 @@ class AliasController extends ViMbAdmin_Controller_Action
             }
         }
 
-        if( $this->_domain )
-            $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
+        if( !$this->_getParam( 'helper', true ) )
+            $this->view->modal = true;
 
         $this->view->editForm = $editForm;
     }

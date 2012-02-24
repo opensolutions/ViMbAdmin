@@ -228,7 +228,7 @@ class AuthController extends ViMbAdmin_Controller_Action
      */
     public function changePasswordAction()
     {
-        $form = new ViMbAdmin_Form_Mailbox_Password;
+        $form = new ViMbAdmin_Form_Mailbox_Password();
 
         if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
         {
@@ -343,20 +343,20 @@ class AuthController extends ViMbAdmin_Controller_Action
                 {
                     // Try and track new installs to see if it is worthwhile continueing development
                     include_once( APPLICATION_PATH . '/../public/PiwikTracker.php' );
-    
+
                     if( class_exists( 'PiwikTracker' ) )
                     {
                         if( $_SERVER['HTTPS'] == 'on' )
                             PiwikTracker::$URL = 'https://stats.opensolutions.ie/';
                         else
                             PiwikTracker::$URL = 'http://stats.opensolutions.ie/';
-    
+
                         $piwikTracker = new PiwikTracker( $idSite = 5 );
                         $piwikTracker->doTrackPageView( 'Nes Install Completed' );
                         $piwikTracker->doTrackGoal( $idGoal = 1, $revenue = 0 );
                     }
                 }
-                
+
                 $this->_helper->viewRenderer->setNoRender( true );
                 $this->_redirect( 'auth/login' );
             }

@@ -7,108 +7,86 @@
     $(document).ready(function()
     {
         oDataTable = $('#domain_list_table').dataTable({
-                            'iDisplayLength': {$options.defaults.table.entries},
-                            'aoColumns': [
-                                null,
-                                { 'sType': 'num-html' },
-                                { 'sType': 'num-html' },
-                                null,
-                                null,
-                                null,
-                                null,
-                                { 'bSortable': false, "bSearchable": false }
-                            ]
-                        });
+            'iDisplayLength': {$options.defaults.table.entries},
+            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            "sPaginationType": "bootstrap",
+            'aoColumns': [
+                null,
+                { 'sType': 'num-html' },
+                { 'sType': 'num-html' },
+                null,
+                null,
+                null,
+                null,
+                { 'bSortable': false, "bSearchable": false }
+            ]
+        });
+
+        $( 'span[id|="toggle-active"]' ).click( function( event ){
+            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+            ossToggle( $( event.target ), "{genUrl controller='domain' action='ajax-toggle-active'}", { "did": id } );
+        });
+
+        $( 'span[id|="purge-domain"]' ).click( function( event ){
+
+            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+            $( "#purge_domain_name" ).html( $( event.target ).attr( 'ref' ) );
+
+            delDialog = $( '#purge_dialog' ).modal({
+                backdrop: true,
+                keyboard: true,
+                show: true
+            });
+
+            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+                doPurgeDomain( id );
+            });
+            $( '#purge_dialog_cancel' ).click( function(){
+                delDialog.modal('hide');
+            });
+        });
+
     }); // document onready
-
-
-    function toggleActive( id )
-    {
-        currentStatus = $( '#toggle_active_' + id ).html();
-        nextStatus = ( currentStatus == 'Yes' ? 'No' : 'Yes' );
-
-        $( '#toggle_active_' + id ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." />' );
-
-        $.ajax({
-            url: "{genUrl controller='domain' action='ajax-toggle-active'}/did/" + id,
-            async: true,
-            cache: false,
-            type: 'GET',
-            timeout: 3000, // milliseconds
-            success: function( data )
-                        {
-                            if ( data != 'ok' )
-                                $('#toggle_active_' + id ).html( currentStatus );
-                            else
-                                $('#toggle_active_' + id ).html( nextStatus );
-                        },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
-                        {
-                            $( '#toggle_active_' + id ).html( currentStatus );
-                            alert( 'An unexpected error occured. Please try again.' );
-                        }
-        });
-    }
-
-
-   function purgeDomain( domainId, domain )
-   {
-        purgeDialog = $( '<div id="purge_domain_dialog"></div>' )
-            .html( 'Are you sure you want to purge <b>' + domain + '</b>?'
-                + '<br /><br />All mailboxes, aliases and logs will be removed.'
-                + '<br /><br />'
-                + '<span id="purge_msg"></span>'
-            )
-            .dialog({
-                dialogClass : 'purge_domain_dialog',
-                autoOpen: true,
-                title: 'Are you sure?',
-                resizable: false,
-                modal: true,
-                closeOnEscape: false,
-                width: 400,
-                height: 200,
-                buttons: {
-                    "Cancel": function() {
-                        $(this).dialog("close");
-                        $('#purge_domain_dialog').remove();
-                    },
-                    "Purge": function() {
-                        doPurgeDomain( domainId );
-                    }
-                }
-        });
-    }
 
 
     function doPurgeDomain( id )
     {
-        $( '#purge_msg' ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...' );
+        var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#pdfooter' ).get(0) ).start();
+
+        $( '#purge_dialog_delete' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+        $( '#purge_dialog_cancel' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
 
         $.ajax({
             url: "{genUrl controller='domain' action='ajax-purge'}/did/" + id,
             async: true,
             cache: false,
-            type: 'GET',
-            timeout: 3000, // milliseconds
+            type: 'POST',
+            timeout: 4000, // milliseconds
             success: function( data )
+                     {
+                         if ( data != 'ok' )
+                         {
+                             ossAddMessage( 'An unexpected error has occured.', 'error' );
+                         }
+                         else
+                         {
+                             $('#domain_' + id).hide('fast');
+                             ossAddMessage( 'You have successfully purged the domain record.', 'success' );
+                         }
+
+                         delDialog.modal('hide');
+                     },
+            error:      ossAjaxErrorHandler,
+            complete: function()
                         {
-                            if ( data != 'ok' )
-                            {
-                                $( '#purge_msg' ).html( 'An unexpected error occured. Please try again.' );
+                            $( '#purge_dialog_delete' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            $( '#purge_dialog_cancel' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            if( $('canvas').length ){
+                                $('canvas').remove();
                             }
-                            else
-                            {
-                                $('#domain_' + id).hide('fast');
-                                purgeDialog.dialog('close');
-                                $('#purge_domain_dialog').remove();
-                            }
-                        },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
-                        {
-                            $( '#purge_msg' ).html( 'An unexpected error occured. Please try again.' );
                         }
         });
+
     }
 
 /* ]]> */ </script>

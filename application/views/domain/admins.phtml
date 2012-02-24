@@ -1,23 +1,35 @@
 {include file="header.phtml"}
 
-<h1>Domain Admins: {$domainModel.domain}</h1>
+<div class="page-content" >
+
+    <div class="page-header" >
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <span class="btn" id="open_add_admin" title="Add Admin">
+            	        <i class="icon-plus"></i>
+        	        </apan>
+            	</span>
+        	</div>
+    	</div>
+
+        <h1>Domain Admins: {$domainModel.domain}</h1>
+    </div>
 
 {ViMbAdmin_Messages}
 
-<table id="admin_list_table" class="info">
+<table id="admin_list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Username</th>
-            <th>
-                <button onclick="addAdmin();">Add Admin</button>
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
 {foreach $domainModel.DomainAdmin as $oneAdmin}
     <tr id="admin_{$oneAdmin.Admin.id}">
         <td>{$oneAdmin.Admin.username}{if not $oneAdmin.Admin.active} <em>(inactive)</em>{/if}</td>
-        <td><button onclick="removeAdmin({$domainModel.id}, {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}');">Remove</button></td>
+        <td><span class="btn btn-mini" id="remove-admin-{$oneAdmin.Admin.id}" ref="{$oneAdmin.Admin.username}">Remove</span></td>
     </tr>
 {/foreach}
     </tbody>
@@ -26,20 +38,50 @@
 <br />
 <br />
 
-<button onclick="document.location.href='{genUrl controller='domain' action='list'}';">Back to domain list</button>
+<a class="btn" href="{genUrl controller='domain' action='list'}">Back to domain list</a>
 
 {include file='domain/js/admins.js'}
 
-<div id="add_admin_dialog">
-    <select name="admin" id="admin_list">
-    {foreach $adminList as $oneAdmin}
-        <option value="{$oneAdmin.id}">{$oneAdmin.username}{if not $oneAdmin.active} <em>(inactive)</em>{/if}</option>
-    {/foreach}
-    </select>
-
-    <br />
-
-    <span id="add_admin_msg"></span>
+<div id="purge_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to remove <em id="purge_admin_name"></em> ?
+    </div>
+    <div id="pdfooter" class="modal-footer">
+        <span class="btn btn-danger" id="purge_dialog_delete">Remove</span>
+        <button id="purge_dialog_cancel" class="btn">Cancel</button>
+    </div>
 </div>
 
+
+<div id="add_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Add Admin</h3>
+    </div>
+    <div class="modal-body">
+        {if count( $adminList ) == 0 }
+            <div id="vimbadmin-message-900" class="alert alert-info fade in">
+                <a class="close" data-dismiss="alert" href="#">×</a>
+                There is no admin to assign to this domain.
+            </div>
+        {/if}
+        <select name="admin" id="admin_list">
+            {foreach $adminList as $oneAdmin}
+                <option value="{$oneAdmin.id}">{$oneAdmin.username}{if not $oneAdmin.active} <em>(inactive)</em>{/if}</option>
+            {/foreach}
+            </select>
+    </div>
+    <div id="aafooter" class="modal-footer">
+        {if count( $adminList ) > 0 }
+            <span class="btn btn-primary" id="add_dialog_add">Add</span>
+        {/if}
+        <button id="add_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
+
+</div>
 {include file="footer.phtml"}

@@ -16,37 +16,13 @@
                                 { 'bSortable': false, "bSearchable": false }
                             ]
                         });
-    }); // document onready
 
-
-    function toggleActive( id )
-    {
-        currentStatus = $( '#toggle_active_' + id ).html();
-        nextStatus = ( currentStatus == 'Yes' ? 'No' : 'Yes' );
-
-        $( '#toggle_active_' + id ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." />' );
-
-        $.ajax({
-            url: "{genUrl controller='mailbox' action='ajax-toggle-active'}/mid/" + id,
-            async: true,
-            cache: false,
-            type: 'GET',
-            timeout: 3000, // milliseconds
-            success: function( data )
-                        {
-                            if ( data != 'ok' )
-                                $('#toggle_active_' + id ).html( currentStatus );
-                            else
-                                $('#toggle_active_' + id ).html( nextStatus );
-                        },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
-                        {
-                            $( '#toggle_active_' + id ).html( currentStatus );
-                            alert( 'An unexpected error occured. Please try again.' );
-                        }
+        $( 'span[id|="toggle-active"]' ).click( function( event ){
+            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+            ossToggle( $( event.target ), "{genUrl controller='mailbox' action='ajax-toggle-active'}", { "mid": id } );
         });
-    }
 
+    }); // document onready
 
     function purgeMailbox( id, email )
     {

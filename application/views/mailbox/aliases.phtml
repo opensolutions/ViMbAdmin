@@ -1,36 +1,69 @@
-{include file="header.phtml" inColorBox=true}
+{include file="header.phtml" }
 
-<h1>Aliases of {$mailboxModel.username}</h1>
+<div class="page-content" >
 
-{ViMbAdmin_Messages}
+    <div class="page-header" >
 
-<label><input type="checkbox" name="ima" id="ima" value="1" {if $includeMailboxAliases}checked="checked" {/if}/> Include mailbox aliases</label>
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <a class="btn" id="modal-dialog-add_alias" href="{genUrl controller='alias' action='edit' mid=$mailboxModel.id modal=true}" title="Add Alias">
+            	        <i class="icon-plus"></i>
+        	        </a>
+            	</span>
+        	    <span class="btn-group" data-toggle="buttons-checkbox">
+        	        <span class="btn {if $includeMailboxAliases}active{/if}" id="ima" title="Include mailbox aliases" >
+            	        Include mailbox aliases
+        	        </span>
+            	</span>
+        	</div>
+    	</div>
+        <h1>Aliases of {$mailboxModel.username}</h1>
 
-<br/>
+    </div>
+    {ViMbAdmin_Messages}
 
-<table id="mailbox_aliases_table" class="info">
-    <thead>
-        <tr>
-            <th>Address</th>
-            <th>Goto</th>
-            <th>
-                <button onclick="document.location.href='{genUrl controller='alias' action='edit' mid=$mailboxModel.id}';">Add Alias</button>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-    {foreach $aliases as $oneAlias}
-        <tr id="alias_{$oneAlias.id}">
-            <td>{$oneAlias.address}</td>
-            <td>{$oneAlias.goto}</td>
-            <td>
-                <button onclick="deleteAlias({$oneAlias.id}, {$mailboxModel.id}, '{$mailboxModel.username}');">Remove</button>
-            </td>
-        </tr>
-    {/foreach}
-    </tbody>
-</table>
 
-{include file='mailbox/js/aliases.js'}
+    <table id="mailbox_aliases_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>Goto</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {foreach $aliases as $oneAlias}
+            <tr id="alias_{$oneAlias.id}">
+                <td>{$oneAlias.address}</td>
+                <td>{$oneAlias.goto}</td>
+                <td>
+                    <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}" ref="{$mailboxModel.username}/{$mailboxModel.id}">Remove</span>
+                </td>
+            </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <br/>
+    <br/>
 
-{include file="footer.phtml" inColorBox=true}
+    {include file='mailbox/js/aliases.js'}
+
+    <div id="purge_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to remove
+        <em id="purge_alias_name"></em> from this entry?
+    </div>
+    <div id="pdfooter" class="modal-footer">
+        <span class="btn btn-danger" id="purge_dialog_delete">Delete</span>
+        <button id="purge_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
+
+
+</div>
+{include file="footer.phtml"}

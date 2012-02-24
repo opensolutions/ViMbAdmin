@@ -1,69 +1,77 @@
 <div id="form_div_edit_admin">
 
-    <form action="{$element->getAction()}"
-          method="{$element->getMethod()}"
-          enctype="{$element->getAttrib('enctype')}"
-          id="{$element->getId()}"
-          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
-          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
-          class="default_form">
+<form action="{$element->getAction()}"
+      method="{$element->getMethod()}"
+      enctype="{$element->getAttrib('enctype')}"
+      id="{$element->getId()}"
+      name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+      {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+      class="form-horizontal">
 
-        <table>
-            {if isset( $element->salt )}
-                <tr>
-                    <td class="right bold valign_top">{$element->salt->getLabel()}</td>
-                    <td>
-                        {$element->salt}
-                        {include file='form_element_errors.phtml' pTheElement=$element->salt}
-                    </td>
-                </tr>
-            {/if}
-            <tr>
-                <td class="right bold valign_top">{$element->username->getLabel()}</td>
-                <td>
-                    {$element->username}
-                    {include file='form_element_errors.phtml' pTheElement=$element->username}
-                </td>
-            </tr>
-            <tr>
-                <td class="right bold valign_top">{$element->password->getLabel()}</td>
-                <td>
-                    {$element->password}
-                    &nbsp;
-                    <input type="button" onclick="$( '#{$element->password->getId()}' ).val( randomPassword( 12 ) );" value="Random" />
-                    {include file='form_element_errors.phtml' pTheElement=$element->password}
-                </td>
-            </tr>
-            {if isset( $element->active )}
-                <tr>
-                    <td class="right bold"><label for="{$element->active->getId()}" class="inline">{$element->active->getLabel()}</label></td>
-                    <td>{$element->active}</td>
-                </tr>
-            {/if}
-            {if isset( $element->super )}
-                <tr>
-                    <td class="right bold"><label for="{$element->super->getId()}" class="inline">{$element->super->getLabel()}</label></td>
-                    <td>{$element->super}</td>
-                </tr>
-            {/if}
-            {if isset( $element->welcome_email )}
-                <tr>
-                    <td class="right bold"><label for="{$element->welcome_email->getId()}" class="inline">{$element->welcome_email->getLabel()}</label></td>
-                    <td>{$element->welcome_email}</td>
-                </tr>
-            {/if}
-            <tr>
-                <td></td>
-                <td>
-                    <br />
-                    <input type="button" onclick="parent.$.fn.colorbox.close();" value="{$element->cancel->getLabel()}" />
-                    &nbsp;
-                    <input type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
-                    &nbsp; &nbsp;
-                    <span id="saving" class="dontdisplay"><img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...</span>
-                </td>
-            </tr>
-        </table>
-    </form>
+{if isset( $element->salt )}
+    {include file='form/element-input.phtml' ielement=$element->salt}
+{/if}
+
+{include file='form/element-input.phtml' ielement=$element->username}
+
+
+	<fieldset class="control-group" id="div-form-password">
+    	    <label for="passowrd" class="control-label">
+	    	    	{$element->password->getLabel()}
+	    	</label>
+    	    <div id="div-controls-{$element->password->getId()}" class="controls">
+    		    <div class="input-append btn-group">
+    		        {$element->password}
+        		        <span id="password_rand" onclick="$( '#password' ).val( randomPassword( 12 ) );" title="Random Password" class="btn add-on" >
+                            <i class="icon-refresh"></i>
+                        </span>
+    		    </div>
+
+	        	{if $element->password->getMessages()}
+					<script type="text/javascript">
+						$( '#{$element->password->getId()}' ).addClass( 'error' );
+						$( '#div-form-{$element->password->getId()}' ).addClass( 'error' );
+					</script>
+					<p id="help-{$element->password->getId()}" class="help-block">
+    					{foreach from=$element->password->getMessages() item=messages}
+        					{foreach from=$messages item=msg}
+            					{$msg}<br />
+        					{/foreach}
+    					{/foreach}
+					</p>
+				{/if}
+    	    </div>
+    	</fieldset>
+
+
+{if isset( $element->active )}
+    {include file='form/element-input.phtml' ielement=$element->active}
+{/if}
+{if isset( $element->super )}
+    {include file='form/element-input.phtml' ielement=$element->super}
+{/if}
+{if isset( $element->welcome_email )}
+    {include file='form/element-input.phtml' ielement=$element->welcome_email}
+{/if}
+
+{if !isset($modal) || !$modal }
+<fieldset class="form-actions">
+    {if $controller eq 'auth' and $action eq 'setup'}
+        <input type="submit" class="btn btn-success" value="Activate My Account &raquo;" />
+    {else}
+        <a class="btn btn" href="{genUrl controller='admin' action='list'}">{$element->cancel->getLabel()}</a>
+        &nbsp;
+        <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+        &nbsp; &nbsp;
+        <span id="saving" class="hide">
+            <img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." />
+            Processing...
+        </span>
+    {/if}
+</fieldset>
+{/if}
+
+
+</form>
 
 </div> <!-- #form_div_edit_mailbox -->

@@ -1,6 +1,11 @@
 {include file="header.phtml"}
 
-<h1>An Error has Occurred</h1>
+<div class="page-content" >
+
+    <div class="page-header" >
+        <h1>An Error has Occurred</h1>
+    </div>
+
 
 {ViMbAdmin_Messages}
 
@@ -25,5 +30,5 @@
     <pre>
     {$errorException->getTraceAsString()}
     </pre>
-
+</div>
 {include file="footer.phtml"}

@@ -2,24 +2,40 @@
 
 {assign var='editAliasParams' value="open: true, iframe: true, transition: 'elastic', width: '750px', height: '500px'"}
 
-<h1>Aliases {if $domain} for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}{/if}</h1>
+<div class="page-content" >
+
+    <div class="page-header" >
+
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <a class="btn" id="modal-dialog-add_alias" href="{genUrl controller='alias' action='edit' did=$domainModel.id modal=true}" title="Add Alias">
+            	        <i class="icon-plus"></i>
+        	        </a>
+            	</span>
+            	<span class="btn-group" data-toggle="buttons-checkbox">
+        	        <span class="btn {if $includeMailboxAliases}active{/if}" id="ima" title="Include mailbox aliases" >
+            	        Include mailbox aliases
+        	        </span>
+            	</span>
+        	</div>
+    	</div>
+
+        <h1>Aliases {if $domain} for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}{/if}</h1>
+    </div>
 
 {ViMbAdmin_Messages}
 
-<label><input type="checkbox" name="ima" id="ima" value="1" {if $includeMailboxAliases}checked="checked" {/if}/> Include mailbox aliases</label>
-
 <br/>
 
-<table id="domain_aliases_table" class="info">
+<table id="domain_aliases_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Address</th>
             <th>Domain</th>
             <th>Active</th>
             <th>Goto</th>
-            <th>
-                <button onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' did=$domainModel.id}', {$editAliasParams} });">Add Alias</button>
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,11 +43,14 @@
         <tr id="alias_{$oneAlias.id}">
             <td>{$oneAlias.address}</td>
             <td>{$oneAlias.domain}</td>
-            <td><a id="toggle_active_{$oneAlias.id}" href="#" onclick="toggleActive({$oneAlias.id});">{$oneAlias.active|yesno}</a></td>
+            <td>
+                <div id="throb-toggle-active-{$oneAlias.id}" style="float: right;"></div>
+                <span id="toggle-active-{$oneAlias.id}" class="btn btn-mini {if $oneAlias.active}btn-success{else}btn-danger{/if}">{$oneAlias.active|yesno}</span>
+            </td>
             <td class="OSSTooltip-bl-tl" title="{$oneAlias.goto}">{$oneAlias.goto|shorten:50}</td>
             <td>
-                <button onclick="$.fn.colorbox({ href:'{genUrl controller='alias' action='edit' alid=$oneAlias.id}', {$editAliasParams} });">Edit</button>
-                <button onclick="deleteAlias({$oneAlias.id});">Delete</button>
+                <a class="btn btn-mini" id="modal-dialog-edit_alias_{$oneAlias.id}" href="{genUrl controller='alias' action='edit' alid=$oneAlias.id modal=true}">Edit</a>
+                <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}">Delete</span>
             </td>
         </tr>
     {/foreach}
@@ -42,8 +61,23 @@
 <br />
 <br />
 
-<button onclick="document.location.href='{genUrl controller='domain' action='list'}';">Back to domains</button>
+<a class="btn" href="{genUrl controller='domain' action='list'}">Back to domains</a>
 
 {include file='alias/js/list.js'}
 
+<div id="purge_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete this alias?
+    </div>
+    <div id="pdfooter" class="modal-footer">
+        <span class="btn btn-danger" id="purge_dialog_delete">Delete</span>
+        <button id="purge_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
+
+</div>
 {include file="footer.phtml"}

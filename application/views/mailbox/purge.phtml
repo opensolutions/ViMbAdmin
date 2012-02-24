@@ -1,6 +1,17 @@
-{include file="header.phtml" inColorBox=true}
-
-<h1>Purge Mailbox {$mailboxModel.username}</h1>
+{if !isset( $modal) || !$modal }
+    {include file="header.phtml"}
+    <div class="page-content" >
+        <div class="page-header" >
+            <h1>Purge Mailbox {$mailboxModel.username}</h1>
+        </div>
+        {ViMbAdmin_Messages}
+{else}
+<div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+            <h3>Purge Mailbox {$mailboxModel.username}</h3>
+    </div>
+    <div class="modal-body" style="min-height: 200px;">
+{/if}
 
 {ViMbAdmin_Messages}
 
@@ -9,7 +20,7 @@ You are about to delete the mailbox <b>{$mailboxModel.username}</b>
 <br />
 <br />
 
-<table class="info" style="width: 500px;">
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr class="dark_row">
             <th colspan="2" class="center">Aliases</th>
@@ -29,7 +40,7 @@ You are about to delete the mailbox <b>{$mailboxModel.username}</b>
 
 <br />
 
-<table class="info" style="width: 500px;">
+<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr class="dark_row">
             <th colspan="2" class="center">In aliases</th>
@@ -53,13 +64,65 @@ You are about to delete the mailbox <b>{$mailboxModel.username}</b>
 
 <br />
 <br />
-
+{if !isset( $modal) || !$modal }
 <form name="purge_mailbox_form" id="purge_mailbox_form" method="post" action="">
-    <button onclick="parent.$.fn.colorbox.close();">Cancel</button>
-    &nbsp;
-    <button type="submit" value="purge" name="purge" onclick="$('#purging').show('fast');">Purge</button>
-    &nbsp; &nbsp;
-    <span id="purging" class="dontdisplay"><img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...</span>
+    <fieldset class="form-actions">
+        <a class="btn" href="{genUrl controller='mailbox' action='list'}">Cancel</a>
+        <button class="btn btn-danger" type="submit" value="purge" name="purge">Purge</button>
+    </fieldset>
 </form>
 
-{include file="footer.phtml" inColorBox=true}
+
+    </div>
+    {include file="footer.phtml"}
+{else}
+    </div>
+    <div class="modal-footer" id="mtfooter">
+        <button id="modal_dialog_purge" class="btn btn-danger">Purge</button>
+        <button id="modal_dialog_cancel" class="btn">Cancel</button>
+        <script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('#modal_dialog_purge').bind('click', function() {
+            valid = true;
+            var data = $('#modal_dialog').html();
+
+            var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#mtfooter' ).get(0) ).start();
+
+            $('#modal_dialog_save').attr('disabled', 'disabled' ).addClass( 'disabled' );
+            $('#modal_dialog_cancel').attr('disabled', 'disabled' ).addClass( 'disabled' );
+
+            $.ajax({
+                url: "{genUrl controller='mailbox' action='purge' mid=$mailboxModel.id modal=true }",
+                data: { purge: 'purge' },
+                async: true,
+                cache: false,
+                type: 'POST',
+                timeout: 10000,
+                success: function(data) {
+                    if( data.trim() == "ok" ) {
+                        dialog.modal('hide');
+                        location.reload();
+                    }
+                     else if( data.substring(0, 26) == '<div class="modal-header">' )
+                            {
+                                $('#modal_dialog').html( data );
+                                $( '#modal_dialog_cancel' ).bind( 'click', function(){
+                                    dialog.modal('hide');
+                                });
+
+                                $( '#local_part' ).bind( 'change', function() { ossJscriptFieldValidator( 'local_part' ) } );
+                            }
+                    else {
+                        dialog.modal('hide');
+                        ossAddMessage( 'An unexpected error has occured.', 'error' );
+                    }
+                },
+                error:   ossAjaxErrorHandler
+            });
+        });
+    });
+    </script>
+    </div>
+
+{/if}

@@ -126,6 +126,8 @@ class MailboxController extends ViMbAdmin_Controller_Action
      */
     public function purgeAction()
     {
+        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+
         if( !$this->_mailbox )
             return $this->_forward( 'list' );
 
@@ -207,9 +209,18 @@ class MailboxController extends ViMbAdmin_Controller_Action
                 $this->getAdmin(), $domain
             );
 
-            $this->_helper->viewRenderer->setNoRender( true );
-            $this->addMessage( _( 'You have successfully purged the mailbox.' ), ViMbAdmin_Message::SUCCESS);
-            return print $this->view->render( 'close_colorbox_reload_parent.phtml' );
+            $this->addMessage( _( 'You have successfully purged the mailbox.' ), ViMbAdmin_Message::SUCCESS );
+
+            if( !$modal )
+            {
+                $this->_redirect( 'mailbox/list' );
+            }
+            else
+            {
+                $this->_helper->viewRenderer->setNoRender( true );
+                print "ok";
+            }
+
         }
     }
 
@@ -300,8 +311,14 @@ class MailboxController extends ViMbAdmin_Controller_Action
      */
     public function editAction()
     {
+        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+
+        $this->view->operation = 'Edit';
         if( !$this->_mailbox )
+        {
             $this->_mailbox = new Mailbox();
+            $this->view->operation = 'Add';
+        }
 
         $this->view->mailboxModel = $this->_mailbox;
 
@@ -316,137 +333,154 @@ class MailboxController extends ViMbAdmin_Controller_Action
             $editForm->getElement( 'local_part' )->setAttrib( 'disabled', 'disabled' )->setRequired( false );
             $editForm->getElement( 'domain' )->setAttrib( 'disabled', 'disabled' )->setRequired( false );
         }
-        else
-        {
-            $editForm->getElement( 'domain' )->setValue( $this->_domain->id );
-        }
 
-        if( $this->getRequest()->isPost() && $editForm->isValid( $_POST ) )
+        if( $this->getRequest()->isPost() && !$modal )
         {
-            do
+            if( $editForm->isValid( $_POST ) )
             {
-                // do we have a domain
-                if( !$this->_domain )
+                do
                 {
-                    $this->_domain = Doctrine::getTable( 'Domain' )->find( $editForm->getElement( 'domain' )->getValue() );
-    
-                    if( !$this->_domain || !$this->authorise( false, $this->_domain, false ) )
+                    // do we have a domain
+                    if( !$this->_domain )
                     {
-                        $this->addMessage( _( "Invalid, unauthorised or non-existent domain." ), ViMbAdmin_Message::ERROR );
-                        $this->_redirect( 'domain/list' );
+                        $this->_domain = Doctrine::getTable( 'Domain' )->find( $editForm->getElement( 'domain' )->getValue() );
+
+                        if( !$this->_domain || !$this->authorise( false, $this->_domain, false ) )
+                        {
+                            $this->addMessage( _( "Invalid, unauthorised or non-existent domain." ), ViMbAdmin_Message::ERROR );
+                            $this->_redirect( 'domain/list' );
+                        }
                     }
-                }
-    
-                if( $this->_mailbox['id'] )
-                {
-                    $this->_domain = $this->_mailbox->Domain;
-    
-                    $editForm->removeElement( 'local_part' );
-                    $editForm->removeElement( 'domain' );
-                    $editForm->removeElement( 'password' );
-    
-                    $this->_mailbox->fromArray( $editForm->getValues() );
-                    $op = 'edit';
-                }
-                else
-                {
-                    // do we have available mailboxes?
-                    if( !$this->getAdmin()->isSuper() && $this->_domain['mailboxes'] != 0 && $this->_domain->countMailboxes() >= $this->_domain['mailboxes'] )
+
+                    if( $this->_mailbox['id'] )
                     {
-                        $this->_helper->viewRenderer->setNoRender( true );
-                        $this->addMessage( _( 'You have used all of your allocated mailboxes.' ), ViMbAdmin_Message::ERROR );
-                        break;
+                        $this->_domain = $this->_mailbox->Domain;
+
+                        $editForm->removeElement( 'local_part' );
+                        $editForm->removeElement( 'domain' );
+                        $editForm->removeElement( 'password' );
+
+                        $this->_mailbox->fromArray( $editForm->getValues() );
+                        $op = 'edit';
                     }
-    
-                    $this->_mailbox->fromArray( $editForm->getValues() );
-    
-                    $this->_mailbox['domain']    = $this->_domain['domain'];
-                    $this->_mailbox['username']  = "{$this->_mailbox['local_part']}@{$this->_mailbox['domain']}";
-    
-                    $this->_mailbox['homedir']   = $this->_options['defaults']['mailbox']['homedir'];
-                    $this->_mailbox['uid']       = $this->_options['defaults']['mailbox']['uid'];
-                    $this->_mailbox['gid']       = $this->_options['defaults']['mailbox']['gid'];
-    
-                    $this->_mailbox->formatMaildir( $this->_options['defaults']['mailbox']['maildir'] );
-    
-                    $plainPassword = $this->_mailbox['password'];
-                    $this->_mailbox->hashPassword(
-                        $this->_options['defaults']['mailbox']['password_scheme'],
-                        $this->_mailbox['password'],
-                        $this->_options['defaults']['mailbox']['password_hash']
+                    else
+                    {
+                        // do we have available mailboxes?
+                        if( !$this->getAdmin()->isSuper() && $this->_domain['mailboxes'] != 0 && $this->_domain->countMailboxes() >= $this->_domain['mailboxes'] )
+                        {
+                            $this->_helper->viewRenderer->setNoRender( true );
+                            $this->addMessage( _( 'You have used all of your allocated mailboxes.' ), ViMbAdmin_Message::ERROR );
+                            break;
+                        }
+
+                        $this->_mailbox->fromArray( $editForm->getValues() );
+
+                        $this->_mailbox['domain']    = $this->_domain['domain'];
+                        $this->_mailbox['username']  = "{$this->_mailbox['local_part']}@{$this->_mailbox['domain']}";
+
+                        $this->_mailbox['homedir']   = $this->_options['defaults']['mailbox']['homedir'];
+                        $this->_mailbox['uid']       = $this->_options['defaults']['mailbox']['uid'];
+                        $this->_mailbox['gid']       = $this->_options['defaults']['mailbox']['gid'];
+
+                        $this->_mailbox->formatMaildir( $this->_options['defaults']['mailbox']['maildir'] );
+
+                        $plainPassword = $this->_mailbox['password'];
+                        $this->_mailbox->hashPassword(
+                            $this->_options['defaults']['mailbox']['password_scheme'],
+                            $this->_mailbox['password'],
+                            $this->_options['defaults']['mailbox']['password_hash']
+                        );
+
+                        // is the mailbox address valid?
+                        if( !Zend_Validate::is( "{$this->_mailbox['local_part']}@{$this->_mailbox['domain']}", 'EmailAddress', array( 1, null ) ) )
+                        {
+                            $editForm->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
+                            break;
+                        }
+
+
+                        // does a mailbox of the same name exist?
+                        $dup = Doctrine_Query::create()
+                            ->from( 'Mailbox m' )
+                            ->where( 'm.local_part = ?', $this->_mailbox['local_part'] )
+                            ->andWhere( 'm.domain = ?', $this->_mailbox['domain'] )
+                            ->execute( null, Doctrine_Core::HYDRATE_ARRAY );
+
+                        if( count( $dup ) )
+                        {
+                            $this->addMessage(
+                                _( 'Mailbox already exists for' ) . " {$this->_mailbox['local_part']}@{$this->_mailbox['domain']}",
+                                ViMbAdmin_Message::ERROR
+                            );
+                            break;
+                        }
+
+                        if( $this->_options['mailboxAliases'] == 1 )
+                        {
+                            $aliasModel = new Alias();
+                            $aliasModel->address   = $this->_mailbox['username'];
+                            $aliasModel->goto      = $this->_mailbox['username'];
+                            $aliasModel->domain    = $this->_domain['domain'];
+                            $aliasModel->active    = 1;
+                            $aliasModel->save();
+                        }
+
+                        $op = 'add';
+                    }
+
+                    // check quota
+                    if( $this->_domain['quota'] != 0 )
+                    {
+                        if( $this->_mailbox['quota'] <= 0 || $this->_mailbox['quota'] > $this->_domain['quota'] )
+                        {
+                            $this->_mailbox['quota'] = $this->_domain['quota'];
+                            $this->addMessage(
+                                _( "Mailbox quota set to " ) . $this->_domain['quota'],
+                                ViMbAdmin_Message::ALERT
+                            );
+                        }
+                    }
+
+                    $this->_mailbox->save();
+
+                    if( $editForm->getValue( 'welcome_email' ) )
+                    {
+                        if( !$this->_sendSettingsEmail(
+                                ( $editForm->getValue( 'cc_welcome_email' ) ? $editForm->getValue( 'cc_welcome_email' ) : false ),
+                                $plainPassword, true )
+                        )
+                            $this->addMessage( _( 'Could not sent welcome email' ), ViMbAdmin_Message::ALERT );
+                    }
+
+                    LogTable::log( 'MAILBOX_' . ( $op == 'add' ? 'ADD' : 'EDIT' ),
+                        print_r( $this->_mailbox->toArray(), true ),
+                        $this->getAdmin(), $this->_mailbox['domain']
                     );
-                    
-                    // is the mailbox address valid?
-                    if( !Zend_Validate::is( "{$this->_mailbox['local_part']}@{$this->_mailbox['domain']}", 'EmailAddress', array( 1, null ) ) )
+
+                    if( $this->_getParam( 'helper', true ) )
                     {
-                        $editForm->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
-                        break;
+                        $this->addMessage( _( "You have successfully added/edited the mailbox record." ), ViMbAdmin_Message::SUCCESS );
+                        $this->_redirect( 'mailbox/list' );
                     }
-                        
-                    
-                    // does a mailbox of the same name exist?
-                    $dup = Doctrine_Query::create()
-                        ->from( 'Mailbox m' )
-                        ->where( 'm.local_part = ?', $this->_mailbox['local_part'] )
-                        ->andWhere( 'm.domain = ?', $this->_mailbox['domain'] )
-                        ->execute( null, Doctrine_Core::HYDRATE_ARRAY );
-    
-                    if( count( $dup ) )
+                    else
                     {
-                        $this->addMessage(
-                            _( 'Mailbox already exists for' ) . " {$this->_mailbox['local_part']}@{$this->_mailbox['domain']}",
-                            ViMbAdmin_Message::ERROR
-                        );
-                        break;
+                        if( $this->view->operation == 'Add' )
+                            $this->addMessage( _( "You have successfully added/edited the domain record." ), ViMbAdmin_Message::SUCCESS );
+
+                        $this->_helper->viewRenderer->setNoRender( true );
+                        print "ok";
+                        return;
                     }
-                        
-                    if( $this->_options['mailboxAliases'] == 1 )
-                    {
-                        $aliasModel = new Alias();
-                        $aliasModel->address   = $this->_mailbox['username'];
-                        $aliasModel->goto      = $this->_mailbox['username'];
-                        $aliasModel->domain    = $this->_domain['domain'];
-                        $aliasModel->active    = 1;
-                        $aliasModel->save();
-                    }
-    
-                    $op = 'add';
-                }
-    
-                // check quota
-                if( $this->_domain['quota'] != 0 )
+
+                }while( false ); // break-able clause
+            }
+            else
+            {
+                if( !$this->_getParam( 'helper', true ) )
                 {
-                    if( $this->_mailbox['quota'] <= 0 || $this->_mailbox['quota'] > $this->_domain['quota'] )
-                    {
-                        $this->_mailbox['quota'] = $this->_domain['quota'];
-                        $this->addMessage(
-                            _( "Mailbox quota set to " ) . $this->_domain['quota'],
-                            ViMbAdmin_Message::ALERT
-                        );
-                    }
+                    $this->view->modal = true;
                 }
-    
-                $this->_mailbox->save();
-    
-                if( $editForm->getValue( 'welcome_email' ) )
-                {
-                    if( !$this->_sendSettingsEmail(
-                            ( $editForm->getValue( 'cc_welcome_email' ) ? $editForm->getValue( 'cc_welcome_email' ) : false ),
-                            $plainPassword, true )
-                    )
-                        $this->addMessage( _( 'Could not sent welcome email' ), ViMbAdmin_Message::ALERT );
-                }
-    
-                LogTable::log( 'MAILBOX_' . ( $op == 'add' ? 'ADD' : 'EDIT' ),
-                    print_r( $this->_mailbox->toArray(), true ),
-                    $this->getAdmin(), $this->_mailbox['domain']
-                );
-    
-                $this->_helper->viewRenderer->setNoRender( true );
-                $this->addMessage( _( 'You have successfully added/edited the mailbox record.' ), ViMbAdmin_Message::SUCCESS );
-                return print $this->view->render( 'close_colorbox_reload_parent.phtml');
-                
-            }while( false ); // break-able clause
+            }
         }
 
         if( $this->_domain )
@@ -519,6 +553,8 @@ class MailboxController extends ViMbAdmin_Controller_Action
      */
     public function passwordAction()
     {
+        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+
         if( !$this->_mailbox )
         {
             $this->_helper->viewRenderer->setNoRender( true );
@@ -530,47 +566,73 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
         $form = new ViMbAdmin_Form_Admin_Password();
 
-        if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
+        if( $this->getRequest()->isPost() && !$modal )
         {
-            $plainPassword = $form->getValue( 'password' );
-            $this->_mailbox->hashPassword(
-                $this->_options['defaults']['mailbox']['password_scheme'],
-                $plainPassword,
-                $this->_options['defaults']['mailbox']['password_hash']
-            );
-
-            $this->_mailbox->save();
-
-            if( $form->getValue( 'email' ) )
+            if( $form->isValid( $_POST ) )
             {
-                $mailer = new Zend_Mail;
-                $mailer->setSubject( _( 'New Password for ' . $this->_mailbox['username'] ) );
-                $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
-                $mailer->addTo( $this->_mailbox['username'], $this->_mailbox['name'] );
+                $plainPassword = $form->getValue( 'password' );
+                $this->_mailbox->hashPassword(
+                    $this->_options['defaults']['mailbox']['password_scheme'],
+                    $plainPassword,
+                    $this->_options['securitysalt']
+                );
 
-                $this->view->newPassword = $form->getValue( 'password' );
-                $mailer->setBodyText( $this->view->render( 'mailbox/email/change_password.phtml' ) );
+                $this->_mailbox->save();
 
-                try
+                if( $form->getValue( 'email' ) )
                 {
-                    $mailer->send();
+                    $mailer = new Zend_Mail;
+                    $mailer->setSubject( _( 'New Password for ' . $this->_mailbox['username'] ) );
+                    $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
+                    $mailer->addTo( $this->_mailbox['username'], $this->_mailbox['name'] );
+
+                    $this->view->newPassword = $form->getValue( 'password' );
+                    $mailer->setBodyText( $this->view->render( 'mailbox/email/change_password.phtml' ) );
+
+                    try
+                    {
+                        $mailer->send();
+                    }
+                    catch( Zend_Mail_Exception $vException )
+                    {
+                        $this->getLogger()->debug( $vException->getTraceAsString() );
+                        $this->addMessage( _( 'Could not send email.' ), ViMbAdmin_Message::ALERT );
+                        if( $this->_getParam( 'helper', true ) )
+                        {
+                            $this->_redirect( 'mailbox/list' );
+                        }
+                        else
+                        {
+                            $this->_helper->viewRenderer->setNoRender( true );
+                            print "ok";
+                        }
+                    }
                 }
-                catch( Zend_Mail_Exception $vException )
+
+                LogTable::log( 'MAILBOX_PW_CHANGE',
+                    "Changed password for {$this->_mailbox['username']}",
+                    $this->getAdmin(), $this->_mailbox['domain']
+                );
+
+
+                $this->addMessage( _( "Password has been sucessfully changed." ), ViMbAdmin_Message::SUCCESS );
+                if( $this->_getParam( 'helper', true ) )
                 {
-                    $this->getLogger()->debug( $vException->getTraceAsString() );
-                    $this->addMessage( _( 'Could not send email.' ), ViMbAdmin_Message::ALERT );
-                    return false;
+                    $this->_redirect( 'mailbox/list' );
+                }
+                else
+                {
+                    $this->_helper->viewRenderer->setNoRender( true );
+                    print "ok";
                 }
             }
-
-            LogTable::log( 'MAILBOX_PW_CHANGE',
-                "Changed password for {$this->_mailbox['username']}",
-                $this->getAdmin(), $this->_mailbox['domain']
-            );
-
-            $this->_helper->viewRenderer->setNoRender( true );
-            $this->addMessage( _( 'Password has been sucessfully changed.' ), ViMbAdmin_Message::SUCCESS );
-            print $this->view->render( 'close_colorbox_reload_parent.phtml');
+            else
+            {
+                if( !$this->_getParam( 'helper', true ) )
+                {
+                    $this->view->modal = true;
+                }
+            }
         }
 
         $this->view->form = $form;

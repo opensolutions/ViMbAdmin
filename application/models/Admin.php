@@ -69,4 +69,19 @@ class Admin extends BaseAdmin
         return $this;
     }
 
+    /**
+     * Cheks the admin password and returns true if it is correct and false if it is bad.
+     *
+     * @param string $password the password
+     * @param string $salt default '' a random security salt to prevent dictionary lookups of the hashed value
+     * @return boolean.
+     */
+    public function checkPassword( $password, $salt = '' )
+    {
+        if( $this->password == AdminTable::hashPassword( $password, $salt ) )
+            return true;
+        else
+            return false;
+    }
+
 }

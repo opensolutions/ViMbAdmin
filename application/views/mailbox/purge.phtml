@@ -10,7 +10,7 @@
         <a href="#" class="close" data-dismiss="modal">&times;</a>
             <h3>Purge Mailbox {$mailboxModel.username}</h3>
     </div>
-    <div class="modal-body" style="min-height: 200px;">
+    <div class="modal-body" style="height: 290px; {if count( $aliases) > 0}overflow-y: scroll;{/if}">
 {/if}
 
 {ViMbAdmin_Messages}

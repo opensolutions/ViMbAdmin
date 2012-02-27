@@ -313,73 +313,89 @@ class AdminController extends ViMbAdmin_Controller_Action
             }
         }
 
-        $form = new ViMbAdmin_Form_Admin_Password;
+
 
         if( $this->_targetAdmin->id == $this->getAdmin()->id )
-            $form->removeElement( 'email' );
+            $form = new ViMbAdmin_Form_Admin_ChangePassword();
+        else
+            $form = new ViMbAdmin_Form_Admin_Password();
 
         if( $this->getRequest()->isPost() && !$modal )
         {
             if( $form->isValid( $_POST ) )
             {
-                $this->_targetAdmin->setPassword( $form->getValue( 'password' ), $this->_options['securitysalt'], true );
 
-                if( $form->getValue( 'email' ) )
+                $add = true;
+                if( $this->_targetAdmin->id == $this->getAdmin()->id )
                 {
-                    $mailer = new Zend_Mail;
-                    $mailer->setSubject( _( 'ViMbAdmin :: New Password' ) );
-                    $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
-                    $mailer->addTo( $this->_targetAdmin->username );
-
-                    $this->view->newPassword = $form->getValue( 'password' );
-                    $mailer->setBodyText( $this->view->render( 'admin/email/change_password.phtml' ) );
-
-                    try
+                    if( $this->getAdmin()->checkPassword( $form->getValue( 'current_password'), $this->_options['securitysalt'] ) == false )
                     {
-                        $mailer->send();
+                        $form->getElement( 'current_password')->addError( 'Invalid password.' );
+                        $add = false;
                     }
-                    catch( Zend_Mail_Exception $vException )
-                    {
-                        $this->getLogger()->debug( $vException->getTraceAsString() );
+                }
 
-                        if( $this->_getParam( 'helper', true ) )
+                if( $add )
+                {
+                    $this->_targetAdmin->setPassword( $form->getValue( 'password' ), $this->_options['securitysalt'], true );
+
+                    if( $form->getValue( 'email' ) )
+                    {
+                        $mailer = new Zend_Mail;
+                        $mailer->setSubject( _( 'ViMbAdmin :: New Password' ) );
+                        $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
+                        $mailer->addTo( $this->_targetAdmin->username );
+
+                        $this->view->newPassword = $form->getValue( 'password' );
+                        $mailer->setBodyText( $this->view->render( 'admin/email/change_password.phtml' ) );
+
+                        try
                         {
-                            $this->addMessage( _( 'Sending the change password email failed.' ), ViMbAdmin_Message::INFO );
-                            $this->_redirect( 'admin/list' );
+                            $mailer->send();
                         }
+                        catch( Zend_Mail_Exception $vException )
+                        {
+                            $this->getLogger()->debug( $vException->getTraceAsString() );
+
+                            if( $this->_getParam( 'helper', true ) )
+                            {
+                                $this->addMessage( _( 'Sending the change password email failed.' ), ViMbAdmin_Message::INFO );
+                                $this->_redirect( 'admin/list' );
+                            }
+                            else
+                            {
+                                $this->_helper->viewRenderer->setNoRender( true );
+                                print 'error_email';
+                            }
+                        }
+                    }
+
+                    LogTable::log( 'ADMIN_PW_CHANGE',
+                        "Changed password of {$this->_targetAdmin['username']}",
+                        $this->getAdmin(), null
+                    );
+
+
+                    if( $this->_getParam( 'helper', true ) )
+                    {
+                        if( $this->_targetAdmin->id != $this->getAdmin()->id )
+                            $this->addMessage( _( "You have successfully changed the user's password." ), ViMbAdmin_Message::SUCCESS );
                         else
-                        {
-                            $this->_helper->viewRenderer->setNoRender( true );
-                            print 'error_email';
-                        }
+                            $this->addMessage( _( "You have successfully changed your password." ), ViMbAdmin_Message::SUCCESS );
+
+                        $this->_redirect( 'admin/list' );
                     }
-                }
-
-                LogTable::log( 'ADMIN_PW_CHANGE',
-                    "Changed password of {$this->_targetAdmin['username']}",
-                    $this->getAdmin(), null
-                );
-
-
-                if( $this->_getParam( 'helper', true ) )
-                {
-                    if( $this->_targetAdmin->id != $this->getAdmin()->id )
-                        $this->addMessage( _( "You have successfully changed the user's password." ), ViMbAdmin_Message::SUCCESS );
                     else
-                        $this->addMessage( _( "You have successfully changed your password." ), ViMbAdmin_Message::SUCCESS );
+                    {
+                        $this->_helper->viewRenderer->setNoRender( true );
+                         if( $this->_targetAdmin->id != $this->getAdmin()->id )
+                            echo "ok_user";
+                        else
+                            echo "ok_self";
+                    }
 
-                    $this->_redirect( 'admin/list' );
+
                 }
-                else
-                {
-                    $this->_helper->viewRenderer->setNoRender( true );
-                     if( $this->_targetAdmin->id != $this->getAdmin()->id )
-                        echo "ok_user";
-                    else
-                        echo "ok_self";
-                }
-
-
             }
         }
 

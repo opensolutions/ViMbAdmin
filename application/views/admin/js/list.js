@@ -1,4 +1,4 @@
-<script type="text/javascript"> /* <![CDATA[ */
+<script type="text/javascript"> 
 
     var purgeDialog;
     var oDataTable;
@@ -7,17 +7,16 @@
     $(document).ready( function()
     {
         oDataTable = $( '#admin_list_table' ).dataTable({
-                            'iDisplayLength': {$options.defaults.table.entries},
-                            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-                            "sPaginationType": "bootstrap",
-                            'aoColumns': [
-                                null,
-                                null,
-                                null,
-                                { 'bSortable': false, "bSearchable": false }
-                            ]
-                        });
-
+	        'iDisplayLength': {$options.defaults.table.entries},
+	        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+	        "sPaginationType": "bootstrap",
+	        'aoColumns': [
+	            null,
+	            null,
+	            null,
+	            { 'bSortable': false, "bSearchable": false }
+	        ]
+	    });
     }); // document onready
 
 
@@ -85,4 +84,4 @@
         });
     }
 
-/* ]]> */ </script>
+</script>

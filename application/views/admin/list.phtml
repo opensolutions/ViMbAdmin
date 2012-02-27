@@ -33,37 +33,37 @@
         </tr>
     </thead>
     <tbody>
-{foreach $admins as $oneAdmin}
-    <tr id="admin_{$oneAdmin.id}" {if $identity.admin.id == $oneAdmin.id}class="bold"{/if}>
-        <td>{$oneAdmin.username}</td>
-        <td>
-            <div id="throb-toggle-active-{$oneAdmin.id}" style="float: right;"></div>
-            {if $identity.admin.id != $oneAdmin.id}
-                <span id="toggle-active-{$oneAdmin.id}" onclick="toggleActive( 'toggle-active-{$oneAdmin.id}', {$oneAdmin.id} );" class="btn btn-mini {if $oneAdmin.active}btn-success{else}btn-danger{/if}">{$oneAdmin.active|yesno}</span>
-            {else}
-                <span id="toggle-active-{$oneAdmin.id}" class="btn btn-mini disabled {if $oneAdmin.active}btn-success{else}btn-danger{/if}">{$oneAdmin.active|yesno}</span>
-            {/if}
-        </td>
-        <td>
-            <div id="throb-toggle-super-{$oneAdmin.id}" style="float: right;"></div>
-            {if $identity.admin.id != $oneAdmin.id}
-                <span id="toggle-super-{$oneAdmin.id}" onclick="toggleSuper( 'toggle-super-{$oneAdmin.id}', {$oneAdmin.id} );" class="btn btn-mini {if $oneAdmin.super}btn-success{else}btn-danger{/if}">{$oneAdmin.super|yesno}</span>
-            {else}
-                <span id="toggle-super-{$oneAdmin.id}" class="btn btn-mini disabled {if $oneAdmin.super}btn-success{else}btn-danger{/if}">{$oneAdmin.super|yesno}</span>
-            {/if}
-        </td>
-        <td>
-            <a class="btn btn-mini" id="modal-dialog-password-{$oneAdmin.id}" href="{genUrl controller='admin' action='password' modal=true aid=$oneAdmin.id}">Password</a>
-            <a class="btn btn-mini" href="{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}">Log</a>
-            {if not $oneAdmin.super}
-                <a class="btn btn-mini" href="{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}">Domains</a>
-            {/if}
-            {if $identity.admin.id neq $oneAdmin.id}
-                <span class="btn btn-mini" id="purge-admin-{$oneAdmin.id}"  onclick="purgeAdmin( {$oneAdmin.id}, '{$oneAdmin.username}' );">Purge</span>
-            {/if}
-        </td>
-    </tr>
-{/foreach}
+        {foreach $admins as $oneAdmin}
+            <tr id="admin_{$oneAdmin.id}" {if $identity.admin.id == $oneAdmin.id}class="bold"{/if}>
+                <td>{$oneAdmin.username}</td>
+                <td>
+                    <div id="throb-toggle-active-{$oneAdmin.id}" style="float: right;"></div>
+                    {if $identity.admin.id != $oneAdmin.id}
+                        <span id="toggle-active-{$oneAdmin.id}" onclick="toggleActive( 'toggle-active-{$oneAdmin.id}', {$oneAdmin.id} );" class="btn btn-mini {if $oneAdmin.active}btn-success{else}btn-danger{/if}">{$oneAdmin.active|yesno}</span>
+                    {else}
+                        <span id="toggle-active-{$oneAdmin.id}" class="btn btn-mini disabled {if $oneAdmin.active}btn-success{else}btn-danger{/if}">{$oneAdmin.active|yesno}</span>
+                    {/if}
+                </td>
+                <td>
+                    <div id="throb-toggle-super-{$oneAdmin.id}" style="float: right;"></div>
+                    {if $identity.admin.id != $oneAdmin.id}
+                        <span id="toggle-super-{$oneAdmin.id}" onclick="toggleSuper( 'toggle-super-{$oneAdmin.id}', {$oneAdmin.id} );" class="btn btn-mini {if $oneAdmin.super}btn-success{else}btn-danger{/if}">{$oneAdmin.super|yesno}</span>
+                    {else}
+                        <span id="toggle-super-{$oneAdmin.id}" class="btn btn-mini disabled {if $oneAdmin.super}btn-success{else}btn-danger{/if}">{$oneAdmin.super|yesno}</span>
+                    {/if}
+                </td>
+                <td>
+                    <a class="btn btn-mini" id="modal-dialog-password-{$oneAdmin.id}" href="{genUrl controller='admin' action='password' modal=true aid=$oneAdmin.id}">Password</a>
+                    <a class="btn btn-mini" href="{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}">Log</a>
+                    {if not $oneAdmin.super}
+                        <a class="btn btn-mini" href="{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}">Domains</a>
+                    {/if}
+                    {if $identity.admin.id neq $oneAdmin.id}
+                        <span class="btn btn-mini" id="purge-admin-{$oneAdmin.id}"  onclick="purgeAdmin( {$oneAdmin.id}, '{$oneAdmin.username}' );">Purge</span>
+                    {/if}
+                </td>
+            </tr>
+        {/foreach}
     </tbody>
 </table>
 

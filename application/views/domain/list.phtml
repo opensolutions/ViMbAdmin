@@ -37,28 +37,28 @@
         </tr>
     </thead>
     <tbody>
-{foreach $domains as $oneDomain}
-        <tr id="domain_{$oneDomain.id}">
-            <td>{$oneDomain.domain}</td>
-            <td><a class="ul" href="{genUrl controller='mailbox' action='list' did=$oneDomain.id}">{$oneDomain->countMailboxes()}{if $oneDomain.mailboxes}/{$oneDomain.mailboxes}{/if}</a></td>
-            <td><a class="ul" href="{genUrl controller='alias' action='list' did=$oneDomain.id}">{$oneDomain->countAliases( true )}{if $oneDomain.aliases}/{$oneDomain.aliases}{/if}</a></td>
-            <td>
-                <div id="throb-toggle-active-{$oneDomain.id}" style="float: right;"></div>
-                <span id="toggle-active-{$oneDomain.id}" onclick="toggleActive( 'toggle-active-{$oneDomain.id}', {$oneDomain.id} );" class="btn btn-mini {if $oneDomain.active}btn-success{else}btn-danger{/if}">{$oneDomain.active|yesno}</span>
-            </td>
-            <td>{$oneDomain.transport}</td>
-            <td>{$oneDomain.backupmx|yesno}</td>
-            <td>{$oneDomain.created}</td>
-            <td>
-                <a class="btn btn-mini" href="{genUrl controller='log' action='list' did=$oneDomain.id}">Logs</a>
-                {if $identity.admin.super}
-                    <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">Purge</span>
-                    <a class="btn btn-mini"  href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">Admins</a>
-                {/if}
-                <a class="btn btn-mini" id="modal-dialog-wide_edit_domain_{$oneDomain.id}" href="{genUrl controller='domain' action='edit' did=$oneDomain.id modal=true}">Edit</a>
-            </td>
-        </tr>
-{/foreach}
+        {foreach $domains as $oneDomain}
+            <tr id="domain_{$oneDomain.id}">
+                <td>{$oneDomain.domain}</td>
+                <td><a class="ul" href="{genUrl controller='mailbox' action='list' did=$oneDomain.id}">{$oneDomain->countMailboxes()}{if $oneDomain.mailboxes}/{$oneDomain.mailboxes}{/if}</a></td>
+                <td><a class="ul" href="{genUrl controller='alias' action='list' did=$oneDomain.id}">{$oneDomain->countAliases( true )}{if $oneDomain.aliases}/{$oneDomain.aliases}{/if}</a></td>
+                <td>
+                    <div id="throb-toggle-active-{$oneDomain.id}" style="float: right;"></div>
+                    <span id="toggle-active-{$oneDomain.id}" onclick="toggleActive( 'toggle-active-{$oneDomain.id}', {$oneDomain.id} );" class="btn btn-mini {if $oneDomain.active}btn-success{else}btn-danger{/if}">{$oneDomain.active|yesno}</span>
+                </td>
+                <td>{$oneDomain.transport}</td>
+                <td>{$oneDomain.backupmx|yesno}</td>
+                <td>{$oneDomain.created}</td>
+                <td>
+                    <a class="btn btn-mini" href="{genUrl controller='log' action='list' did=$oneDomain.id}">Logs</a>
+                    {if $identity.admin.super}
+                        <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">Purge</span>
+                        <a class="btn btn-mini"  href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">Admins</a>
+                    {/if}
+                    <a class="btn btn-mini" id="modal-dialog-wide_edit_domain_{$oneDomain.id}" href="{genUrl controller='domain' action='edit' did=$oneDomain.id modal=true}">Edit</a>
+                </td>
+            </tr>
+        {/foreach}
     </tbody>
 </table>
 

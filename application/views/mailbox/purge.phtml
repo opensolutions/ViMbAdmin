@@ -31,7 +31,7 @@ You are about to delete the mailbox <b>{$mailboxModel.username}</b>
         <td class="bold">Goto</td>
     </tr>
 {foreach $aliases as $oneAlias}
-    <tr {if $oneAlias@iteration is odd by 2}class="dark_row"{/if}>
+    <tr>
         <td>{$oneAlias.address}</td>
         <td>{$oneAlias.goto}</td>
     </tr>
@@ -51,7 +51,7 @@ You are about to delete the mailbox <b>{$mailboxModel.username}</b>
         <td class="bold">Goto</td>
     </tr>
 {foreach $inAliases as $oneAlias}
-    <tr {if $oneAlias@iteration is odd by 2}class="dark_row"{/if}>
+    <tr >
         <td>{$oneAlias.address}</td>
         <td>{$oneAlias.goto}</td>
     </tr>

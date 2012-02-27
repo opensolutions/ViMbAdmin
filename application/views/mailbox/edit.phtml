@@ -52,8 +52,7 @@
                         {/if}
                         ossAddMessage( 'You have successfully added/edited the mailbox record..', 'success' );
                     }
-                     else if( data.substring(0, 26) == '<div class="modal-header">' )
-                            {
+                    else if( data.substring(0, 26) == '<div class="modal-header">' ){
                                 $('#modal_dialog').html( data );
                                 $( '#modal_dialog_cancel' ).bind( 'click', function(){
                                     dialog.modal('hide');
@@ -61,11 +60,10 @@
 
                                 $( '#local_part' ).bind( 'change', function() { ossJscriptFieldValidator( 'local_part' ) } );
                                 $( '#domain' ).bind( 'change', function() { ossJscriptFieldValidator( 'domain' ) } );
-                                $( '#name' ).bind( 'change', function() { ossJscriptFieldValidator( 'name' ) } );
                                 {if $operation == 'Add' }
                                     $( '#password' ).bind( 'change', function() { ossJscriptFieldValidator( 'password' ) } );
                                 {/if}
-                            }
+                    }
                     else {
                         dialog.modal('hide');
                         ossAddMessage( 'An unexpected error has occured.', 'error' );

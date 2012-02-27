@@ -60,7 +60,8 @@
                             dialog.modal('hide');
                         });
 
-                        $( '#domain' ).bind( 'change', function() { ossJscriptFieldValidator( 'domain' ) } );
+                        $( '#username' ).bind( 'change', function() { ossJscriptFieldValidator( 'username', true ) } );
+                        $( '#password' ).bind( 'change', function() { ossJscriptFieldValidator( 'password' ) } );
                     }
                     else {
                         dialog.modal('hide');

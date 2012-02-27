@@ -62,7 +62,7 @@
     		    <div class="input-append btn-group">
     		        {$element->password}
     		        {if $element->password->getAttrib('disabled') != 'disabled'}
-        		        <span id="password_rand" onclick="$( '#password' ).val( randomPassword( 12 ) );" title="Random Password" class="btn add-on" >
+        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" class="btn add-on" >
                             <i class="icon-refresh"></i>
                         </span>
                     {/if}

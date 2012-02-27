@@ -301,32 +301,20 @@ function ossAddMessage( msg, type, handled )
  */
 function ossJscriptFieldValidator( fieldName, email )
 {
-    if( $( '#' + fieldName ).val() == "" )
-    {
-        $( '#div-form-' + fieldName ).addClass( 'error' );
-        $( '#help-' + fieldName ).html( "Value is required and can't be empty." );
-        $( '#help-' + fieldName ).show( );
-    }
-    else
+    if( $( '#' + fieldName ).val() != "" )
     {
         if( email )
         {
             if( ossValidateEmail( $( '#' + fieldName ).val() ) )
             {
-                $( '#div-form-' + fieldName ).removeClass( 'error' );
-                $( '#help-' + fieldName ).hide( );
-            }
-            else
-            {
-                $( '#div-form-' + fieldName ).addClass( 'error' );
-                $( '#help-' + fieldName ).html( "<br/>This is not a valid email address." );
-                $( '#help-' + fieldName ).show( );
+               $( '#div-form-' + fieldName ).removeClass( 'error' );
+               $( '#help-' + fieldName ).html( "" );
             }
         }
         else
         {
             $( '#div-form-' + fieldName ).removeClass( 'error' );
-            $( '#help-' + fieldName ).hide( );
+            $( '#help-' + fieldName ).html( "" );
         }
     }
 }
@@ -349,6 +337,18 @@ function ossValidateEmail( email)
     {
         return false;
     }
+}
+
+/**
+ * This function generates random password and set to field by given id.
+ *
+ * @param int len The wanted password length.
+ * @param string email The field id to set the password.
+ */
+function randPasword( len, id )
+{
+    $( '#' + id ).val( randomPassword( len ) );
+    $( '#' + id ).trigger( 'blur' );
 }
 
 

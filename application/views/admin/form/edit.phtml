@@ -22,7 +22,7 @@
     	    <div id="div-controls-{$element->password->getId()}" class="controls">
     		    <div class="input-append btn-group">
     		        {$element->password}
-        		        <span id="password_rand" onclick="$( '#password' ).val( randomPassword( 12 ) );" title="Random Password" class="btn add-on" >
+        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" class="btn add-on" >
                             <i class="icon-refresh"></i>
                         </span>
     		    </div>
@@ -65,11 +65,7 @@
         <a class="btn btn" href="{genUrl controller='admin' action='list'}">{$element->cancel->getLabel()}</a>
         &nbsp;
         <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
-        &nbsp; &nbsp;
-        <span id="saving" class="hide">
-            <img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." />
-            Processing...
-        </span>
+
     {/if}
 </fieldset>
 {/if}

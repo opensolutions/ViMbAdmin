@@ -16,26 +16,26 @@
                             ]
                         });
 
-        $( 'span[id|="domain-purge"]' ).click( function( event ){
-
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            $( "#purge_domain_name" ).html( $( event.target ).attr( 'ref' ) );
-            $( "#purge_admin_name" ).html( "{$targetAdmin->username}" );
-
-            delDialog = $( '#purge_dialog' ).modal({
-                backdrop: true,
-                keyboard: true,
-                show: true
-            });
-
-            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
-                doRemoveAdmin( id, $( event.target ).attr( 'ref' ) );
-            });
-            $( '#purge_dialog_cancel' ).click( function(){
-                delDialog.modal('hide');
-            });
-        });
     }); // document onready
+
+    function domainRemove(id, domain){
+
+        $( "#purge_domain_name" ).html( domain );
+        $( "#purge_admin_name" ).html( "{$targetAdmin->username}" );
+
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doRemoveAdmin( id, domain );
+        });
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
+        });
+    };
 
     function doRemoveAdmin( domainId, domain )
     {

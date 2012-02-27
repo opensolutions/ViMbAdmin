@@ -18,35 +18,34 @@
                             ]
                         });
 
-        $( 'span[id|="toggle-active"]' ).click( function( event ){
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            ossToggle( $( event.target ), "{genUrl controller='admin' action='ajax-toggle-active'}", { "aid": id } );
-        });
-
-        $( 'span[id|="toggle-super"]' ).click( function( event ){
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            ossToggle( $( event.target ), "{genUrl controller='admin' action='ajax-toggle-super'}", { "aid": id } );
-        });
-
-        $( 'span[id|="purge-admin"]' ).click( function( event ){
-
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            $( "#purge_admin_name" ).html( $( event.target ).attr( 'ref' ) );
-
-            delDialog = $( '#purge_dialog' ).modal({
-                backdrop: true,
-                keyboard: true,
-                show: true
-            });
-
-            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
-                doPurgeAdmin( id );
-            });
-            $( '#purge_dialog_cancel' ).click( function(){
-                delDialog.modal('hide');
-            });
-        });
     }); // document onready
+
+
+    function toggleActive( elid, id ){
+        ossToggle( $( '#' + elid ), "{genUrl controller='admin' action='ajax-toggle-active'}", { "aid": id } );
+    };
+
+    function toggleSuper( elid, id ){
+        ossToggle( $( '#' + elid ), "{genUrl controller='admin' action='ajax-toggle-super'}", { "aid": id } );
+    };
+
+    function purgeAdmin( id, admin ){
+        $( "#purge_admin_name" ).html( admin );
+
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doPurgeAdmin( id );
+        });
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
+        });
+    };
+
 
     function doPurgeAdmin( id )
     {

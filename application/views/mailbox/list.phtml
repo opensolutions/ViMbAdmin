@@ -13,7 +13,7 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_mailbox" href="{genUrl controller='mailbox' action='edit' modal=true}{if $domain}/did/{$domain.id}{/if}}" title="Add Mailbox">
+        	        <a class="btn" id="modal-dialog-add_mailbox" href="{genUrl controller='mailbox' action='edit' modal=true}{if $domain}/did/{$domain.id}{/if}" title="Add Mailbox">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
@@ -43,14 +43,14 @@
             <td>{$oneMailbox.domain}</td>
             <td>
                 <div id="throb-toggle-active-{$oneMailbox.id}" style="float: right;"></div>
-                <span id="toggle-active-{$oneMailbox.id}" class="btn btn-mini {if $oneMailbox.active}btn-success{else}btn-danger{/if}">{$oneMailbox.active|yesno}</span>
+                <span id="toggle-active-{$oneMailbox.id}" onclick="toggleActive( 'toggle-active-{$oneMailbox.id}', {$oneMailbox.id} );" class="btn btn-mini {if $oneMailbox.active}btn-success{else}btn-danger{/if}">{$oneMailbox.active|yesno}</span>
             </td>
             <td>
                 <a class="btn btn-mini" href="{genUrl controller='mailbox' action='aliases' mid=$oneMailbox.id}">Aliases</a>
                 <a class="btn btn-mini" id="modal-dialog-wide-purge_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='purge' mid=$oneMailbox.id modal=true}">Purge</a>
                 <a class="btn btn-mini" id="modal-dialog-wide-password_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='password' mid=$oneMailbox.id modal=true}">Password</a>
                 <a class="btn btn-mini" id="modal-dialog-wide-edit_mailbox_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='edit' mid=$oneMailbox.id modal=true}">Edit</a>
-                <span class="btn btn-mini" id="send-email-{$oneMailbox.id}" ref="{$oneMailbox.username}" >Email Settings</span>
+                <span class="btn btn-mini" onclick="sendEmail( {$oneMailbox.id}, '{$oneMailbox.username}' );" id="send-email-{$oneMailbox.id}">Email Settings</span>
             </td>
         </tr>
 {/foreach}
@@ -59,9 +59,6 @@
 
 <br />
 <br />
-
-
-<a class="btn" href="{genUrl controller='domain' action='list'}">Back to domain list</a>
 
 {include file='mailbox/js/list.js'}
 

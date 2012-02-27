@@ -27,31 +27,29 @@
                 document.location.href = "{genUrl controller='alias' action='list' did=$domain.id|int ima=1}";
         });
 
-        $( 'span[id|="toggle-active"]' ).click( function( event ){
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            ossToggle( $( event.target ), "{genUrl controller='alias' action='ajax-toggle-active'}", { "alid": id } );
-        });
-
-        $( 'span[id|="delete-alias"]' ).click( function( event ){
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-
-            delDialog = $( '#purge_dialog' ).modal({
-                backdrop: true,
-                keyboard: true,
-                show: true
-            });
-
-            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
-                doDeleteAlias( id );
-            });
-
-            $( '#purge_dialog_cancel' ).click( function(){
-                delDialog.modal('hide');
-            });
-        });
 
     }); // document onready
 
+    function toggleActive( elid, id ){
+        ossToggle( $( '#' + elid ), "{genUrl controller='alias' action='ajax-toggle-active'}", { "alid": id } );
+    };
+
+    function deleteAlias( id ){
+
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doDeleteAlias( id );
+        });
+
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
+        });
+    };
 
     function doDeleteAlias( id )
     {

@@ -22,32 +22,30 @@
             ]
         });
 
-        $( 'span[id|="toggle-active"]' ).click( function( event ){
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            ossToggle( $( event.target ), "{genUrl controller='domain' action='ajax-toggle-active'}", { "did": id } );
-        });
-
-        $( 'span[id|="purge-domain"]' ).click( function( event ){
-
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            $( "#purge_domain_name" ).html( $( event.target ).attr( 'ref' ) );
-
-            delDialog = $( '#purge_dialog' ).modal({
-                backdrop: true,
-                keyboard: true,
-                show: true
-            });
-
-            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
-                doPurgeDomain( id );
-            });
-            $( '#purge_dialog_cancel' ).click( function(){
-                delDialog.modal('hide');
-            });
-        });
-
     }); // document onready
 
+    function toggleActive( elid, id){
+        ossToggle( $( '#' + elid ), "{genUrl controller='domain' action='ajax-toggle-active'}", { "did": id } );
+    };
+
+
+    function purgeDomain( id, domain )
+    {
+        $( "#purge_domain_name" ).html( domain );
+
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doPurgeDomain( id );
+        });
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
+        });
+    };
 
     function doPurgeDomain( id )
     {

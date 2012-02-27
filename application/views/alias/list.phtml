@@ -45,12 +45,12 @@
             <td>{$oneAlias.domain}</td>
             <td>
                 <div id="throb-toggle-active-{$oneAlias.id}" style="float: right;"></div>
-                <span id="toggle-active-{$oneAlias.id}" class="btn btn-mini {if $oneAlias.active}btn-success{else}btn-danger{/if}">{$oneAlias.active|yesno}</span>
+                <span id="toggle-active-{$oneAlias.id}" onclick="toggleActive( 'toggle-active-{$oneAlias.id}', {$oneAlias.id} );" class="btn btn-mini {if $oneAlias.active}btn-success{else}btn-danger{/if}">{$oneAlias.active|yesno}</span>
             </td>
             <td class="OSSTooltip-bl-tl" title="{$oneAlias.goto}">{$oneAlias.goto|shorten:50}</td>
             <td>
                 <a class="btn btn-mini" id="modal-dialog-edit_alias_{$oneAlias.id}" href="{genUrl controller='alias' action='edit' alid=$oneAlias.id modal=true}">Edit</a>
-                <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}">Delete</span>
+                <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}" onclick="deleteAlias( {$oneAlias.id} );">Delete</span>
             </td>
         </tr>
     {/foreach}
@@ -60,8 +60,6 @@
 <br />
 <br />
 <br />
-
-<a class="btn" href="{genUrl controller='domain' action='list'}">Back to domains</a>
 
 {include file='alias/js/list.js'}
 

@@ -105,14 +105,16 @@
         {/if}
     </form>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    $(document).ready(function()
-    {
-        $('#welcome_email').bind( 'change', function() {
-            $('#div_welcome_email').toggle('slow');
-        });
-    }); // document onready
+        $(document).ready(function()
+        {
+            $( '#domain' ).chosen();
 
-</script>
+            $('#welcome_email').bind( 'change', function() {
+                $('#div_welcome_email').toggle('slow');
+            });
+        }); // document onready
+
+    </script>
 </div> <!-- #form_div_edit_mailbox -->

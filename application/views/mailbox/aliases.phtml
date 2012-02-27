@@ -38,7 +38,7 @@
                 <td>{$oneAlias.address}</td>
                 <td>{$oneAlias.goto}</td>
                 <td>
-                    <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}" ref="{$mailboxModel.username}/{$mailboxModel.id}">Remove</span>
+                    <span class="btn btn-mini" onclick="deleteAlias( {$oneAlias.id}, {$mailboxModel.id}, '{$oneAlias.address}' );" id="delete-alias-{$oneAlias.id}">Remove</span>
                 </td>
             </tr>
         {/foreach}

@@ -29,7 +29,7 @@
 {foreach $domainModel.DomainAdmin as $oneAdmin}
     <tr id="admin_{$oneAdmin.Admin.id}">
         <td>{$oneAdmin.Admin.username}{if not $oneAdmin.Admin.active} <em>(inactive)</em>{/if}</td>
-        <td><span class="btn btn-mini" id="remove-admin-{$oneAdmin.Admin.id}" ref="{$oneAdmin.Admin.username}">Remove</span></td>
+        <td><span class="btn btn-mini" onclick="removeAdmin( {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}' );" id="remove-admin-{$oneAdmin.Admin.id}">Remove</span></td>
     </tr>
 {/foreach}
     </tbody>
@@ -37,8 +37,6 @@
 
 <br />
 <br />
-
-<a class="btn" href="{genUrl controller='domain' action='list'}">Back to domain list</a>
 
 {include file='domain/js/admins.js'}
 
@@ -62,18 +60,27 @@
         <a href="#" class="close" data-dismiss="modal">&times;</a>
         <h3>Add Admin</h3>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="min-height: 50px;">
         {if count( $adminList ) == 0 }
             <div id="vimbadmin-message-900" class="alert alert-info fade in">
                 <a class="close" data-dismiss="alert" href="#">×</a>
                 There is no admin to assign to this domain.
             </div>
         {/if}
-        <select name="admin" id="admin_list">
-            {foreach $adminList as $oneAdmin}
-                <option value="{$oneAdmin.id}">{$oneAdmin.username}{if not $oneAdmin.active} <em>(inactive)</em>{/if}</option>
-            {/foreach}
-            </select>
+        <form class="form-horizontal" style="position: fixed; z-index: 1;">
+            <fieldset id="div-form-admin" class="control-group">
+                <label class="control-label" for="admin"> Admin </label>
+                <div id="div-controls-admin" class="controls">
+                    <select name="admin" id="admin_list">
+                        <div id="div-controls-admin" class="controls">
+                            {foreach $adminList as $oneAdmin}
+                                <option id="admin" value="{$oneAdmin.id}">{$oneAdmin.username}{if not $oneAdmin.active} <em>(inactive)</em>{/if}</option>
+                            {/foreach}
+                        </div>
+                    </select>
+                </div>
+            </fieldset>
+        </form>
     </div>
     <div id="aafooter" class="modal-footer">
         {if count( $adminList ) > 0 }
@@ -82,6 +89,15 @@
         <button id="add_dialog_cancel" class="btn">Cancel</button>
     </div>
 </div>
+
+    <script type="text/javascript">
+        $( '#admin_list' ).chosen();
+        $(document).ready(function()
+        {
+            $( '#domain' ).chosen();
+        }); // document onready
+
+    </script>
 
 </div>
 {include file="footer.phtml"}

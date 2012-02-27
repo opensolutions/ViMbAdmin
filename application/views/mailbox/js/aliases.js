@@ -25,27 +25,25 @@
                 document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=1}";
         });
 
-        $( 'span[id|="delete-alias"]' ).click( function( event ){
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            var data = $( event.target ).attr( 'ref' ).split( "/" );
-            $( "#purge_alias_name" ).html( data[0] );
-
-            delDialog = $( '#purge_dialog' ).modal({
-                backdrop: true,
-                keyboard: true,
-                show: true
-            });
-
-            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
-                doDeleteAlias( id, data[1] );
-            });
-            $( '#purge_dialog_cancel' ).click( function(){
-                delDialog.modal('hide');
-            });
-        });
     }); // document onready
 
+    function deleteAlias( alid, mid, alias ) {
 
+        $( "#purge_alias_name" ).html( alias );
+
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doDeleteAlias( alid, mid );
+        });
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
+        });
+    };
 
     function doDeleteAlias( aliasId, mailboxId )
     {

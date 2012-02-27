@@ -33,26 +33,25 @@
             });
         });
 
-        $( 'span[id|="remove-admin"]' ).click( function( event ){
+    }); // document onready
 
-            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
-            $( "#purge_admin_name" ).html( $( event.target ).attr( 'ref' ) );
+    function removeAdmin( id, admin ) {
 
-            delDialog = $( '#purge_dialog' ).modal({
-                backdrop: true,
-                keyboard: true,
-                show: true
-            });
+        $( "#purge_admin_name" ).html( admin );
 
-            $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
-                doRemoveAdmin( id );
-            });
-            $( '#purge_dialog_cancel' ).click( function(){
-                delDialog.modal('hide');
-            });
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
         });
 
-    }); // document onready
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doRemoveAdmin( id );
+        });
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
+        });
+     };
 
 
     function doRemoveAdmin( adminId )

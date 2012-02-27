@@ -18,7 +18,7 @@
     	</div>
     	{/if}
 
-        <h1>Domain List</h1>
+        <h1>Domains</h1>
     </div>
 
     {ViMbAdmin_Messages}
@@ -44,7 +44,7 @@
             <td><a class="ul" href="{genUrl controller='alias' action='list' did=$oneDomain.id}">{$oneDomain->countAliases( true )}{if $oneDomain.aliases}/{$oneDomain.aliases}{/if}</a></td>
             <td>
                 <div id="throb-toggle-active-{$oneDomain.id}" style="float: right;"></div>
-                <span id="toggle-active-{$oneDomain.id}" class="btn btn-mini {if $oneDomain.active}btn-success{else}btn-danger{/if}">{$oneDomain.active|yesno}</span>
+                <span id="toggle-active-{$oneDomain.id}" onclick="toggleActive( 'toggle-active-{$oneDomain.id}', {$oneDomain.id} );" class="btn btn-mini {if $oneDomain.active}btn-success{else}btn-danger{/if}">{$oneDomain.active|yesno}</span>
             </td>
             <td>{$oneDomain.transport}</td>
             <td>{$oneDomain.backupmx|yesno}</td>
@@ -52,7 +52,7 @@
             <td>
                 <a class="btn btn-mini" href="{genUrl controller='log' action='list' did=$oneDomain.id}">Logs</a>
                 {if $identity.admin.super}
-                    <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" ref="{$oneDomain.domain}">Purge</span>
+                    <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">Purge</span>
                     <a class="btn btn-mini"  href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">Admins</a>
                 {/if}
                 <a class="btn btn-mini" id="modal-dialog-wide_edit_domain_{$oneDomain.id}" href="{genUrl controller='domain' action='edit' did=$oneDomain.id modal=true}">Edit</a>

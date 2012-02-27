@@ -6,7 +6,8 @@
           id="{$element->getId()}"
           name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
           {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
-          class="form-horizontal">
+          class="form-horizontal"
+          style="position: fixed; z-index: 1;">
 
         {include file='form/element-input.phtml' ielement=$element->domain}
 
@@ -18,4 +19,12 @@
         {/if}
 
     </form>
+    <script type="text/javascript">
+
+        $(document).ready(function()
+        {
+            $( '#domain' ).chosen();
+        }); // document onready
+
+    </script>
 </div> <!-- #form_div_edit_mailbox -->

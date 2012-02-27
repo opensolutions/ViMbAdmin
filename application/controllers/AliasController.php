@@ -331,6 +331,7 @@ class AliasController extends ViMbAdmin_Controller_Action
 
                 $editForm
                     ->getElement( 'domain' )
+                    ->setValue( $this->_alias->Domain['id'] )
                     ->setAttrib( 'disabled', 'disabled' );
             }
         }

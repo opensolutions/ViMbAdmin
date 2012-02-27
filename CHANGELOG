@@ -1,3 +1,8 @@
+2.0.0   2012-02-27
+ Major UI overhaul. Frontend is now using Bootstrap from Twitter providing an altogether
+ prettier, sleeker, consistent and more professional look and feel. A number of small new
+ features and bugs fixes. No database schema changes.
+
 0.3.5   2011-09-28
  - add: allow new installers to opt out of the 'new install' developer
         pingback and display a message that it exists on the setup page

@@ -76,6 +76,11 @@ class DomainController extends ViMbAdmin_Controller_Action
      */
     public function listAction()
     {
+
+        if( isset( $this->_session->domain ) )
+            unset( $this->_session->domain );
+
+
         $query = Doctrine_Query::create()
                     ->select( 'd.*' )
                     ->from( 'Domain d' );
@@ -117,7 +122,8 @@ class DomainController extends ViMbAdmin_Controller_Action
      */
     public function editAction()
     {
-        $editForm = new ViMbAdmin_Form_Domain_Edit;
+        $editForm = new ViMbAdmin_Form_Domain_Edit();
+        $this->view->modal = $modal = $this->_getParam( 'modal', false );
 
         if( !$this->_domain )
         {
@@ -144,7 +150,7 @@ class DomainController extends ViMbAdmin_Controller_Action
 
         $this->view->domainModel = $this->_domain;
 
-        if( $this->getRequest()->isPost() )
+        if( $this->getRequest()->isPost() && !$modal )
         {
             if( $editForm->isValid( $_POST ) )
             {
@@ -156,10 +162,26 @@ class DomainController extends ViMbAdmin_Controller_Action
                     $this->getAdmin(), $this->_domain
                 );
 
-                $this->_helper->viewRenderer->setNoRender( true );
                 $this->addMessage( _( "You have successfully added/edited the domain record." ), ViMbAdmin_Message::SUCCESS );
-                print $this->view->render( 'close_colorbox_reload_parent.phtml');
+
+                if( $this->_getParam( 'helper', true ) )
+                {
+                    $this->_redirect( 'domain/list' );
+                }
+                else
+                {
+                    $this->_helper->viewRenderer->setNoRender( true );
+                    print 'ok';
+                }
             } // if valid post
+            else
+            {
+                if( !$this->_getParam( 'helper', true ) )
+                {
+                    $this->view->modal = true;
+                }
+            }
+
         }
         else
         {

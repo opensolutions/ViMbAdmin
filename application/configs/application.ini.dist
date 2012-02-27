@@ -189,6 +189,25 @@ resources.logger.enabled = 0
 
 skipVersionCheck = 0
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; ViMbAdmin 'pings' the developers as part of the set up process to let 
+;; them know there is a new installation.
+;;
+;; All we are interested in is knowing whether people are using the software 
+;; or not and whether continued support and development is worth the time
+;; and effort.
+;;
+;; Unless you're very shy, PLEASE LET US KNOW YOU'RE USING IT!
+;;
+;; This can be disabled by setting the below to 1
+;;
+
+skipInstallPingback = 0
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

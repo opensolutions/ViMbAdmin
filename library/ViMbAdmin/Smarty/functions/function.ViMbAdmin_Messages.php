@@ -56,83 +56,60 @@ function smarty_function_ViMbAdmin_Messages( $params, &$smarty )
 
     if ( $messages == array() ) return '';
 
-    $message = '<div id="vimbadmin_messages">' . "\n";
-
     $count = 0;
+
+    $message = "";
 
     foreach( $messages as $oneMessage )
     {
-        if( isset( $params['randomid'] ) && $params['randomid'] ) $count = mt_rand();
+            if( isset( $params['randomid'] ) && $params['randomid'] )
+                $count = mt_rand();
 
-        $items = $oneMessage->getMessage();
-
-        if( !is_array( $items ) )
-            $items = array( $items );
-
-        foreach( $items as $item )
-        {
-            $message .= <<<END_MESSAGE
-
-<div id="vimbadmin-message-{$count}">
-    <div class="vimbadmin-message vimbadmin-message-{$oneMessage->getClass()}">
-        <p>
-END_MESSAGE;
-
-            switch( $oneMessage->getClass() )
+            if( $oneMessage instanceof OSS_Message_Block )
             {
-                case ViMbAdmin_Message::ERROR:
-                    $message .= '                <span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>' . "\n";
-                    break;
+                $message .= <<<END_MESSAGE
 
-                default:
-                    break;
-            }
+    <div class="alert alert-block alert-{$oneMessage->getClass()} fade in" id="vimbadmin-message-{$count}">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+        {$oneMessage->getMessage()}
+END_MESSAGE;
+                if( count( $oneMessage->getActions() ) )
+                {
+                    $message .= "        <div class=\"alert-actions\">\n";
 
-            $message .= <<<END_MESSAGE
-            {$item}
-            <span id="vimbadmin-message-close-icon-{$count}" class="ui-state-default ui-corner-all vimbadmin-message-icon" title="Close">
-                <span class="ui-icon ui-icon-close"></span>
-            </span>
-        </p>
+                    foreach( $oneMessage->getActions() as $a )
+                        $message .= $a . "\n";
+
+                    $message .= "        </div>\n";
+                }
+
+                $message .= <<<END_MESSAGE
     </div>
-</div>
 
 END_MESSAGE;
+            }
+            else
+            {
 
-        } // end inner foreach
+                $items = $oneMessage->getMessage();
+
+                if( !is_array( $items ) )
+                    $items = array( $items );
+
+                foreach( $items as $item )
+                {
+                        $message .= <<<END_MESSAGE
+
+        <div class="alert alert-{$oneMessage->getClass()} fade in" id="vimbadmin-message-{$count}">
+            <a class="close" href="#" data-dismiss="alert">×</a>
+            {$item}
+        </div>
+
+END_MESSAGE;
+                }
+            } // end inner foreach
 
         $count++;
     } // end foreach()
-
-    // add JavaScript
-    $message .= <<<END_JS
-
-<script type="text/javascript"> /* <![CDATA[ */
-
-    jQuery( document ).ready( function()
-    {
-        $("span[id^='vimbadmin-message-close-icon-']").hover( function() {
-                var theid= $(this).attr('id').substr(29);
-                $("span[id='vimbadmin-message-close-icon-" + theid + "'] > span").addClass( 'ui-state-hover' );
-            },
-            function() {
-                var theid= $(this).attr('id').substr(29);
-                $("span[id='vimbadmin-message-close-icon-" + theid + "'] > span").removeClass( 'ui-state-hover' );
-            }
-        );
-
-        $("span[id^='vimbadmin-message-close-icon-']").click( function() {
-                var theid= $(this).attr('id').substr(29);
-
-                $("div[id='vimbadmin-message-" + theid + "']").slideUp( 'fast', function() {
-                    $("div[id='vimbadmin-message-" + theid + "']").remove()
-                } );
-        } );
-    } );
-
-/* ]]> */ </script>
-
-END_JS;
-
-    return $message . "</div>\n";
+    return $message;
 }

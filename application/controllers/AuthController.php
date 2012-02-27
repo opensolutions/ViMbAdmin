@@ -228,7 +228,7 @@ class AuthController extends ViMbAdmin_Controller_Action
      */
     public function changePasswordAction()
     {
-        $form = new ViMbAdmin_Form_Mailbox_Password;
+        $form = new ViMbAdmin_Form_Mailbox_Password();
 
         if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
         {
@@ -339,19 +339,22 @@ class AuthController extends ViMbAdmin_Controller_Action
                     $this->addMessage( _( 'Your administrator account has been added. Please log in below.' ), ViMbAdmin_Message::SUCCESS );
                 }
 
-                // Try and track new installs to see if it is worthwhile continueing development
-                include_once( APPLICATION_PATH . '/../public/PiwikTracker.php' );
-
-                if( class_exists( 'PiwikTracker' ) )
+                if( !( isset( $this->_options['skipInstallPingback'] ) && $this->_options['skipInstallPingback'] ) )
                 {
-                    if( $_SERVER['HTTPS'] == 'on' )
-                        PiwikTracker::$URL = 'https://stats.opensolutions.ie/';
-                    else
-                        PiwikTracker::$URL = 'http://stats.opensolutions.ie/';
+                    // Try and track new installs to see if it is worthwhile continueing development
+                    include_once( APPLICATION_PATH . '/../public/PiwikTracker.php' );
 
-                    $piwikTracker = new PiwikTracker( $idSite = 5 );
-                    $piwikTracker->doTrackPageView( 'Nes Install Completed' );
-                    $piwikTracker->doTrackGoal( $idGoal = 1, $revenue = 0 );
+                    if( class_exists( 'PiwikTracker' ) )
+                    {
+                        if( $_SERVER['HTTPS'] == 'on' )
+                            PiwikTracker::$URL = 'https://stats.opensolutions.ie/';
+                        else
+                            PiwikTracker::$URL = 'http://stats.opensolutions.ie/';
+
+                        $piwikTracker = new PiwikTracker( $idSite = 5 );
+                        $piwikTracker->doTrackPageView( 'Nes Install Completed' );
+                        $piwikTracker->doTrackGoal( $idGoal = 1, $revenue = 0 );
+                    }
                 }
 
                 $this->_helper->viewRenderer->setNoRender( true );

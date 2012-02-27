@@ -1,28 +1,61 @@
-{include file="header.phtml" inColorBox=true}
+{include file="header.phtml"}
 
-<h1>Domains for {$targetAdmin.username}</h1>
+<div class="page-content" >
 
-{ViMbAdmin_Messages}
+    <div class="page-header" >
 
-<table id="admin_domain_list_table" class="info">
+        {if $identity.admin.super}
+        <div style="float: right; margin-top: -10px;">
+            <div class="btn-toolbar">
+            	<span class="btn-group">
+        	        <a class="btn" id="modal-dialog-add_domain" href="{genUrl controller='admin' action='add-domain' aid=$targetAdmin.id modal=true}" title="Add Domain">
+            	        <i class="icon-plus"></i>
+        	        </a>
+            	</span>
+        	</div>
+    	</div>
+    	{/if}
+
+        <h1>Domains for {$targetAdmin.username}</h1>
+    </div>
+
+    {ViMbAdmin_Messages}
+
+
+<table id="admin_domain_list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Domain</th>
-            <th>
-                <button onclick="document.location.href='{genUrl controller='admin' action='add-domain' aid=$targetAdmin.id}';">Add domain</button>
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
 {foreach $domainAdmins as $domainAdmin}
         <tr id="domain_{$domainAdmin.Domain.id}">
             <td>{$domainAdmin.Domain.domain}</td>
-            <td><button onclick="removeAdmin( {$domainAdmin.Domain.id}, {$targetAdmin->id}, '{$domainAdmin.Domain.domain}' ); return false;">Remove</button></td>
+            <td><span class="btn btn-mini" id="domain-remove-{$domainAdmin.Domain.id}" onclick="domainRemove( {$domainAdmin.Domain.id}, '{$domainAdmin.Domain.domain}');">Remove</span></td>
         </tr>
 {/foreach}
     </tbody>
 </table>
+<br/>
+<br/>
+
+<div id="purge_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to remove <em id="purge_admin_name"></em> from <em id="purge_domain_name"></em> ?
+    </div>
+    <div id="pdfooter" class="modal-footer">
+        <span class="btn btn-danger" id="purge_dialog_delete">Remove</span>
+        <button id="purge_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
 
 {include file='admin/js/domains.js'}
 
-{include file="footer.phtml" inColorBox=true}
+</div>
+{include file="footer.phtml"}

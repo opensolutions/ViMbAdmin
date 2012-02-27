@@ -271,7 +271,11 @@
         }
 
         $ruleStr = mb_substr( trim( $ruleStr ), 0, -1 ) . "\n";
-        $ruleStr .= "            }
+        $ruleStr .= "            },
+          errorElement: 'span',
+        errorPlacement: function (error, element) {
+                                error.appendTo( '#help-' + element.attr('id') );
+                             }
         });
     });
 

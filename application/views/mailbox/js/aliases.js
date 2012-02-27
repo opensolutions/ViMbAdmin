@@ -8,6 +8,8 @@
     {
         oDataTable = $( '#mailbox_aliases_table' ).dataTable({
                             'iDisplayLength': {$options.defaults.table.entries},
+                            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+                            "sPaginationType": "bootstrap",
                             'aoColumns': [
                                 null,
                                 null,
@@ -16,67 +18,67 @@
                         });
 
         $('#ima').bind( 'click', function(e) {
-            document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=$includeMailboxAliases|flipflop}";
+
+            if( $('#ima').hasClass( 'active' ) )
+                document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=0}";
+            else
+                document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=1}";
         });
+
     }); // document onready
 
+    function deleteAlias( alid, mid, alias ) {
 
-    function deleteAlias( aliasId, mailboxId, address )
-    {
-        purgeDialog = $( '<div id="delete_alias_dialog"></div>' )
-            .html( 'Are you sure you want to remove ' + address + ' from this entry?'
-                + '<br /><br />'
-                + '<span id="delete_msg"></span>'
-            )
-            .dialog({
-                dialogClass : 'delete_alias_dialog',
-                autoOpen: true,
-                title: 'Are you sure?',
-                resizable: false,
-                modal: true,
-                closeOnEscape: false,
-                width: 450,
-                height: 180,
-                buttons: {
-                    "Cancel": function() {
-                        $(this).dialog("close");
-                        $('#delete_alias_dialog').remove();
-                    },
-                    "Remove": function() {
-                        doDeleteAlias( aliasId, mailboxId );
-                    }
-                }
+        $( "#purge_alias_name" ).html( alias );
+
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
         });
-    }
 
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doDeleteAlias( alid, mid );
+        });
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
+        });
+    };
 
     function doDeleteAlias( aliasId, mailboxId )
     {
-        $( '#delete_msg' ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...' );
+
+        var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#pdfooter' ).get(0) ).start();
+
+        $( '#purge_dialog_delete' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+        $( '#purge_dialog_cancel' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
 
         $.ajax({
             url: "{genUrl controller='mailbox' action='ajax-delete-alias'}/mid/" + mailboxId + '/alid/' + aliasId,
             async: true,
             cache: false,
-            type: 'GET',
+            type: 'POST',
             timeout: 3000, // milliseconds
             success: function( data )
                         {
+                            delDialog.modal('hide');
                             if ( data != 'ok' )
                             {
-                                $( '#purge_msg' ).html( 'An unexpected error occured. Please try again.' );
+                                ossAddMessage( 'An unexpected error has occured.', 'error' );
                             }
                             else
                             {
-                                //$('#alias_' + aliasId).hide('fast');
-                                //purgeDialog.dialog('close');
-                                //$('#purge_admin_dialog').remove();
-                                document.location.reload();
+                                location.reload();
                             }
                         },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
+            error:      ossAjaxErrorHandler,
+            complete: function()
                         {
-                            $( '#purge_msg' ).html( 'An unexpected error occured. Please try again.' );
+                            $( '#purge_dialog_delete' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            $( '#purge_dialog_cancel' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            if( $('canvas').length ){
+                                $('canvas').remove();
+                            }
                         }
         });
     }

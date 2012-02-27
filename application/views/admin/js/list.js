@@ -1,4 +1,4 @@
-<script type="text/javascript"> /* <![CDATA[ */
+<script type="text/javascript"> 
 
     var purgeDialog;
     var oDataTable;
@@ -7,112 +7,51 @@
     $(document).ready( function()
     {
         oDataTable = $( '#admin_list_table' ).dataTable({
-                            'iDisplayLength': {$options.defaults.table.entries},
-                            'aoColumns': [
-                                null,
-                                null,
-                                null,
-                                { 'bSortable': false, "bSearchable": false }
-                            ]
-                        });
+	        'iDisplayLength': {$options.defaults.table.entries},
+	        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+	        "sPaginationType": "bootstrap",
+	        'aoColumns': [
+	            null,
+	            null,
+	            null,
+	            { 'bSortable': false, "bSearchable": false }
+	        ]
+	    });
     }); // document onready
 
 
-    function toggleActive( id )
-    {
-        if( {$identity.admin.id} == id ) return;
+    function toggleActive( elid, id ){
+        ossToggle( $( '#' + elid ), "{genUrl controller='admin' action='ajax-toggle-active'}", { "aid": id } );
+    };
 
-        currentStatus = $( '#toggle_active_' + id ).html();
-        nextStatus = ( currentStatus == 'Yes' ? 'No' : 'Yes' );
+    function toggleSuper( elid, id ){
+        ossToggle( $( '#' + elid ), "{genUrl controller='admin' action='ajax-toggle-super'}", { "aid": id } );
+    };
 
-        $( '#toggle_active_' + id ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." />' );
+    function purgeAdmin( id, admin ){
+        $( "#purge_admin_name" ).html( admin );
 
-        $.ajax({
-            url: "{genUrl controller='admin' action='ajax-toggle-active'}/aid/" + id,
-            async: true,
-            cache: false,
-            type: 'GET',
-            timeout: 3000, // milliseconds
-            success: function( data )
-                        {
-                            if ( data != 'ok' )
-                                $('#toggle_active_' + id ).html( currentStatus );
-                            else
-                                $('#toggle_active_' + id ).html( nextStatus );
-                        },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
-                        {
-                            $( '#toggle_active_' + id ).html( currentStatus );
-                            alert( 'An unexpected error occured. Please try again.' );
-                        }
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
         });
-    }
 
-    function toggleSuper( id )
-    {
-        if( {$identity.admin.id} == id ) return;
-
-        currentStatus = $( '#toggle_super_' + id ).html();
-        nextStatus = ( currentStatus == 'Yes' ? 'No' : 'Yes' );
-
-        $( '#toggle_super_' + id ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." />' );
-
-        $.ajax({
-            url: "{genUrl controller='admin' action='ajax-toggle-super'}/aid/" + id,
-            async: true,
-            cache: false,
-            type: 'GET',
-            timeout: 3000, // milliseconds
-            success: function( data )
-                        {
-                            if ( data != 'ok' )
-                                $('#toggle_super_' + id ).html( currentStatus );
-                            else
-                                $('#toggle_super_' + id ).html( nextStatus );
-                        },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
-                        {
-                            $( '#toggle_super_' + id ).html( currentStatus );
-                            alert( 'An unexpected error occured. Please try again.' );
-                        }
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doPurgeAdmin( id );
         });
-    }
-
-
-
-    function purgeAdmin( id, username )
-    {
-        purgeDialog = $( '<div id="purge_admin_dialog"></div>' )
-            .html( 'Are you sure you want to purge <strong>' + username + '</strong>?'
-                + '<br /><br />All logs and domain associations will be removed. If you simply want to '
-                + 'close the user\'s account, deactivate it instead.<br /><br />'
-                + '<span id="purge_msg"></span>'
-            )
-            .dialog({
-                dialogClass : 'purge_admin_dialog',
-                autoOpen: true,
-                title: 'Are you sure?',
-                resizable: false,
-                modal: true,
-                closeOnEscape: false,
-                width: 420,
-                height: 220,
-                buttons: {
-                    "Cancel": function() {
-                        $(this).dialog("close");
-                        $('#purge_admin_dialog').remove();
-                    },
-                    "Purge": function() {
-                        doPurgeAdmin( id );
-                    }
-                }
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
         });
-    }
+    };
 
 
     function doPurgeAdmin( id )
     {
-        $( '#purge_msg' ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...' );
+        var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#pdfooter' ).get(0) ).start();
+
+        $( '#purge_dialog_delete' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+        $( '#purge_dialog_cancel' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
 
         $.ajax({
             url: "{genUrl controller='admin' action='ajax-purge'}/aid/" + id,
@@ -124,20 +63,25 @@
                         {
                             if ( data != 'ok' )
                             {
-                                $( '#purge_msg' ).html( 'An unexpected error occured. Please try again.' );
+                                ossAddMessage( 'An unexpected error has occured.', 'error' );
                             }
                             else
                             {
                                 $('#admin_' + id).hide('fast');
-                                purgeDialog.dialog('close');
-                                $('#purge_admin_dialog').remove();
+                                ossAddMessage( 'You have successfully purged the admin record.', 'success' );
                             }
+                            delDialog.modal('hide');
                         },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
+            error: ossAjaxErrorHandler,
+            complete: function()
                         {
-                            $( '#purge_msg' ).html( 'An unexpected error occured. Please try again.' );
+                            $( '#purge_dialog_delete' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            $( '#purge_dialog_cancel' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            if( $('canvas').length ){
+                                $('canvas').remove();
+                            }
                         }
         });
     }
 
-/* ]]> */ </script>
+</script>

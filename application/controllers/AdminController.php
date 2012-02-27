@@ -180,6 +180,8 @@ class AdminController extends ViMbAdmin_Controller_Action
     */
     public function addDomainAction()
     {
+        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+
         if( !$this->_targetAdmin )
         {
             $this->addMessage( _( 'Invalid or missing admin id.' ), ViMbAdmin_Message::ERROR );
@@ -192,28 +194,46 @@ class AdminController extends ViMbAdmin_Controller_Action
 
         $form = new ViMbAdmin_Form_Admin_AddDomain( null, $remainingDomains, $this->_targetAdmin );
 
-        if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
+        if( $this->getRequest()->isPost() && !$modal )
         {
-            $domainId = $form->getValue( 'domain' );
-            $domain = Doctrine::getTable( 'Domain' )->find( $domainId );
-
-            if( !$domain )
-                $this->addMessage( _( 'Invalid or missing domain id.' ), ViMbAdmin_Message::ERROR );
-            elseif( array_key_exists( $domainId, $adminDomains ) )
-                $this->addMessage( _( 'This domain is already assigned to the admin.' ), ViMbAdmin_Message::ERROR );
-            else
+            if( $form->isValid( $_POST ) )
             {
-                $domain->addAdmin( $this->_targetAdmin );
+                $domainId = $form->getValue( 'domain' );
+                $domain = Doctrine::getTable( 'Domain' )->find( $domainId );
 
-                unset( $remainingDomains[ $domainId ] );
-                $form = new ViMbAdmin_Form_Admin_AddDomain( null, $remainingDomains, $this->_targetAdmin );
+                if( !$domain )
+                    $this->addMessage( _( 'Invalid or missing domain id.' ), ViMbAdmin_Message::ERROR );
+                elseif( array_key_exists( $domainId, $adminDomains ) )
+                    $this->addMessage( _( 'This domain is already assigned to the admin.' ), ViMbAdmin_Message::ERROR );
+                else
+                {
+                    $domain->addAdmin( $this->_targetAdmin );
 
-                $this->addMessage( _( 'You have successfully assigned a domain to the admin.' ), ViMbAdmin_Message::SUCCESS );
+                    unset( $remainingDomains[ $domainId ] );
+                    $form = new ViMbAdmin_Form_Admin_AddDomain( null, $remainingDomains, $this->_targetAdmin );
+                    $this->addMessage( _( 'You have successfully assigned a domain to the admin.' ), ViMbAdmin_Message::SUCCESS );
+                }
+
+                if( $this->_getParam( 'helper', true ) )
+                {
+
+                    $this->_redirect( 'admin/domains/aid/' . $form->getValue( 'adminId' ) );
+                }
+                else
+                {
+                    $this->_helper->viewRenderer->setNoRender( true );
+                    print 'ok';
+                    return;
+                }
             }
+
         }
 
         if( sizeof( $remainingDomains ) == 0 )
             $this->addMessage( _( 'There is no domain to assign to this admin.' ), ViMbAdmin_Message::INFO );
+
+        if( !$this->_getParam( 'helper', true ) )
+            $this->view->modal = true;
 
         $this->view->form = $form;
     }
@@ -251,11 +271,21 @@ class AdminController extends ViMbAdmin_Controller_Action
      */
     public function passwordAction()
     {
+        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+
         if( !$this->_targetAdmin )
         {
-            $this->_helper->viewRenderer->setNoRender( true );
-            $this->addMessage( _( 'Invalid or non-existent admin.' ), ViMbAdmin_Message::ERROR );
-            print $this->view->render( 'close_colorbox_reload_parent.phtml');
+
+            if( $this->_getParam( 'helper', true ) )
+            {
+                $this->addMessage( _( 'Invalid or non-existent admin.' ), ViMbAdmin_Message::ERROR );
+                $this->_redirect( 'admin/list' );
+            }
+            else
+            {
+                $this->_helper->viewRenderer->setNoRender( true );
+                print 'error_none';
+            }
         }
 
         if( ( !$this->authorise( true, null, false ) ) && // if not superadmin, and
@@ -271,56 +301,106 @@ class AdminController extends ViMbAdmin_Controller_Action
                     ViMbAdmin_Message::ALERT
                 );
 
-            $this->_helper->viewRenderer->setNoRender( true );
-            $this->addMessage( _( 'You have insufficient privileges for this task.' ), ViMbAdmin_Message::ERROR );
-            print $this->view->render( 'close_colorbox_reload_parent.phtml');
+            if( $this->_getParam( 'helper', true ) )
+            {
+                $this->addMessage( _( 'You have insufficient privileges for this task.' ), ViMbAdmin_Message::ERROR );
+                $this->_redirect( 'admin/list' );
+            }
+            else
+            {
+                $this->_helper->viewRenderer->setNoRender( true );
+                print 'error_inpr';
+            }
         }
 
-        $form = new ViMbAdmin_Form_Admin_Password;
+
 
         if( $this->_targetAdmin->id == $this->getAdmin()->id )
-            $form->removeElement( 'email' );
+            $form = new ViMbAdmin_Form_Admin_ChangePassword();
+        else
+            $form = new ViMbAdmin_Form_Admin_Password();
 
-        if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
+        if( $this->getRequest()->isPost() && !$modal )
         {
-            $this->_targetAdmin->setPassword( $form->getValue( 'password' ), $this->_options['securitysalt'], true );
-
-            if( $form->getValue( 'email' ) )
+            if( $form->isValid( $_POST ) )
             {
-                $mailer = new Zend_Mail;
-                $mailer->setSubject( _( 'ViMbAdmin :: New Password' ) );
-                $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
-                $mailer->addTo( $this->_targetAdmin->username );
 
-                $this->view->newPassword = $form->getValue( 'password' );
-                $mailer->setBodyText( $this->view->render( 'admin/email/change_password.phtml' ) );
-
-                try
+                $add = true;
+                if( $this->_targetAdmin->id == $this->getAdmin()->id )
                 {
-                    $mailer->send();
+                    if( $this->getAdmin()->checkPassword( $form->getValue( 'current_password'), $this->_options['securitysalt'] ) == false )
+                    {
+                        $form->getElement( 'current_password')->addError( 'Invalid password.' );
+                        $add = false;
+                    }
                 }
-                catch( Zend_Mail_Exception $vException )
+
+                if( $add )
                 {
-                    $this->getLogger()->debug( $vException->getTraceAsString() );
-                    $this->addMessage( _( 'Sending the change password email failed.' ), ViMbAdmin_Message::INFO );
-                    return false;
+                    $this->_targetAdmin->setPassword( $form->getValue( 'password' ), $this->_options['securitysalt'], true );
+
+                    if( $form->getValue( 'email' ) )
+                    {
+                        $mailer = new Zend_Mail;
+                        $mailer->setSubject( _( 'ViMbAdmin :: New Password' ) );
+                        $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
+                        $mailer->addTo( $this->_targetAdmin->username );
+
+                        $this->view->newPassword = $form->getValue( 'password' );
+                        $mailer->setBodyText( $this->view->render( 'admin/email/change_password.phtml' ) );
+
+                        try
+                        {
+                            $mailer->send();
+                        }
+                        catch( Zend_Mail_Exception $vException )
+                        {
+                            $this->getLogger()->debug( $vException->getTraceAsString() );
+
+                            if( $this->_getParam( 'helper', true ) )
+                            {
+                                $this->addMessage( _( 'Sending the change password email failed.' ), ViMbAdmin_Message::INFO );
+                                $this->_redirect( 'admin/list' );
+                            }
+                            else
+                            {
+                                $this->_helper->viewRenderer->setNoRender( true );
+                                print 'error_email';
+                            }
+                        }
+                    }
+
+                    LogTable::log( 'ADMIN_PW_CHANGE',
+                        "Changed password of {$this->_targetAdmin['username']}",
+                        $this->getAdmin(), null
+                    );
+
+
+                    if( $this->_getParam( 'helper', true ) )
+                    {
+                        if( $this->_targetAdmin->id != $this->getAdmin()->id )
+                            $this->addMessage( _( "You have successfully changed the user's password." ), ViMbAdmin_Message::SUCCESS );
+                        else
+                            $this->addMessage( _( "You have successfully changed your password." ), ViMbAdmin_Message::SUCCESS );
+
+                        $this->_redirect( 'admin/list' );
+                    }
+                    else
+                    {
+                        $this->_helper->viewRenderer->setNoRender( true );
+                         if( $this->_targetAdmin->id != $this->getAdmin()->id )
+                            echo "ok_user";
+                        else
+                            echo "ok_self";
+                    }
+
+
                 }
             }
-
-            LogTable::log( 'ADMIN_PW_CHANGE',
-                "Changed password of {$this->_targetAdmin['username']}",
-                $this->getAdmin(), null
-            );
-
-            $this->_helper->viewRenderer->setNoRender( true );
-
-            if( $this->_targetAdmin->id != $this->getAdmin()->id )
-                $this->addMessage( _( "You have successfully changed the user's password." ), ViMbAdmin_Message::SUCCESS );
-            else
-                $this->addMessage( _( "You have successfully changed your password." ), ViMbAdmin_Message::SUCCESS );
-
-            return print $this->view->render( 'close_colorbox_reload_parent.phtml');
         }
+
+        if( !$this->_getParam( 'helper', true ) )
+            $this->view->modal = true;
 
         $this->view->form = $form;
     }
@@ -331,51 +411,78 @@ class AdminController extends ViMbAdmin_Controller_Action
      */
     public function addAction()
     {
-        $form = new ViMbAdmin_Form_Admin_Edit;
+        $form = new ViMbAdmin_Form_Admin_Edit();
         $form->removeElement( 'salt' );
 
-        if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
+        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+
+        if( $this->getRequest()->isPost() && !$modal )
         {
-            $adminModel = new Admin();
-            $adminModel->fromArray( $form->getValues() );
-            $adminModel->setPassword( $form->getValue( 'password' ), $this->_options['securitysalt'], false );
-            $adminModel->save();
-
-            LogTable::log( 'ADMIN_ADD',
-                "Added new " . ( $adminModel['super'] ? 'super ' : '' ) . "admin {$adminModel['username']}",
-                $this->getAdmin()
-            );
-
-            if( $form->getValue( 'welcome_email' ) )
+            if( $form->isValid( $_POST ) )
             {
-                try
+                $adminModel = new Admin();
+                $adminModel->fromArray( $form->getValues() );
+                $adminModel->setPassword( $form->getValue( 'password' ), $this->_options['securitysalt'], false );
+                $adminModel->save();
+
+                LogTable::log( 'ADMIN_ADD',
+                    "Added new " . ( $adminModel['super'] ? 'super ' : '' ) . "admin {$adminModel['username']}",
+                    $this->getAdmin()
+                );
+
+                if( $form->getValue( 'welcome_email' ) )
                 {
-                    $mailer = new Zend_Mail();
-                    $mailer->setSubject( _( 'ViMbAdmin :: Your New Administrator Account' ) );
-                    $mailer->addTo( $adminModel->username );
-                    $mailer->setFrom(
-                        $this->_options['server']['email']['address'],
-                        $this->_options['server']['email']['name']
-                    );
+                    try
+                    {
+                        $mailer = new Zend_Mail();
+                        $mailer->setSubject( _( 'ViMbAdmin :: Your New Administrator Account' ) );
+                        $mailer->addTo( $adminModel->username );
+                        $mailer->setFrom(
+                            $this->_options['server']['email']['address'],
+                            $this->_options['server']['email']['name']
+                        );
 
-                    $this->view->username = $adminModel->username;
-                    $this->view->password = $form->getValue( 'password' );
+                        $this->view->username = $adminModel->username;
+                        $this->view->password = $form->getValue( 'password' );
 
-                    $mailer->setBodyText( $this->view->render( 'admin/email/new_admin.phtml' ) );
+                        $mailer->setBodyText( $this->view->render( 'admin/email/new_admin.phtml' ) );
 
-                    $mailer->send();
+                        $mailer->send();
+                    }
+                    catch( Exception $e )
+                    {
+                        $this->getLogger()->debug( $e->getTraceAsString() );
+                        $this->addMessage( _( 'You have successfully added a new administrator to the system.' ), ViMbAdmin_Message::SUCCESS );
+                        $this->addMessage( _( 'Could not send welcome email' ), ViMbAdmin_Message::ALERT );
+                        if( $this->_getParam( 'helper', true ) )
+                        {
+                            $this->_redirect( 'admin/list' );
+                        }
+                        else
+                        {
+                            $this->_helper->viewRenderer->setNoRender( true );
+                            echo 'ok';
+                            return;
+                        }
+                    }
                 }
-                catch( Exception $e )
+
+                $this->addMessage( _( 'You have successfully added a new administrator to the system.' ), ViMbAdmin_Message::SUCCESS );
+
+                if( $this->_getParam( 'helper', true ) )
                 {
-                    $this->getLogger()->debug( $e->getTraceAsString() );
-                    $this->addMessage( _( 'Could not send welcome email' ), ViMbAdmin_Message::ALERT );
+                    $this->_redirect( 'admin/list' );
+                }
+                else
+                {
+                    $this->_helper->viewRenderer->setNoRender( true );
+                    echo "ok";
                 }
             }
-
-            $this->addMessage( _( 'You have successfully added a new administrator to the system.' ), ViMbAdmin_Message::SUCCESS );
-            $this->_helper->viewRenderer->setNoRender( true );
-            return print $this->view->render( 'close_colorbox_reload_parent.phtml');
         }
+
+        if( !$this->_getParam( 'helper', true ) )
+            $this->view->modal = true;
 
         $this->view->form = $form;
     }

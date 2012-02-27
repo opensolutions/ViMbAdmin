@@ -5,23 +5,17 @@
 
     $(document).ready( function()
     {
-        $('#goto_empty').keypress( function(e) {
+        $( '#goto_empty' ).keypress( function(e) {
             if( e.which == 13 )
             {
                 e.preventDefault();
-                //e.stopPropagation();
-                //$( '#goto_empty' ).autocomplete( 'close' );
-                //addGoto();
+                if( $( '#goto_empty' ).val().indexOf( "@" ) != -1 )
+                    addGoto();
             }
         });
 
-        $( '#goto_empty' ).autocomplete({
-            source: "{genUrl controller='alias' action='ajax-autocomplete'}",
-            minLength: {$options.alias_autocomplete_min_length},
-            select: function( event, ui ) {
-                $('#goto_empty').val( ui.item ? ui.item.value : this.value );
-                if( addGoto() ) setTimeout( "$( '#goto_empty' ).val( '' );" , 100 ); // lame trick to empty the field when using autocomplete
-            }
+        $( '#goto_empty' ).typeahead( {
+            source: {$emails}
         });
 
         tempArr = "{$aliasModel.goto}".split( ',' );
@@ -40,21 +34,23 @@
 
     function insertGoto( address )
     {
-        str =   '<li id="goto_' + gotoId + '">' + "\n"
-              + '<input type="text" name="goto[]" value="' + address + '" size="40" title="Goto" readonly="readonly" />' + "\n"
-              + '<img alt="Remove" title="Remove" src="{genUrl}/images/remove.png" class="valign_middle clickable" onclick="removeGoto(' + gotoId + ');" />' + "\n"
-              + "</li>\n";
+        str = '<div class="input-append btn-group" id="goto-div-' + gotoId + '">' + "\n"
+		      + '<input type="text" name="goto[]" value="' + address + '" size="40" title="Goto" readonly="readonly"/>' + "\n"
+    		  + '<span title="Remove got to" class="btn add-on" onclick="removeGoto(' + gotoId + ');" >' + "\n"
+              + '<i class="icon-minus"></i>' + "\n"
+              + '</span>' + "\n"
+    		  + '</div>';
 
         gotoList[gotoId] = address;
         gotoId++;
 
-        jQuery( str ).appendTo( '#goto_addresses' ).hide().show( 'fast' );
+        jQuery( str ).appendTo( '#div-controls-goto' ).hide().show( 'fast' );
     }
 
 
     function removeGoto( id )
     {
-        $( '#goto_' + id ).hide( 'fast', function() { $(this).remove() } );
+        $( '#goto-div-' + id ).hide( 'fast', function() { $(this).remove() } );
         delete gotoList[id];
     }
 
@@ -69,21 +65,20 @@
             {
                 if( gotoList.indexOf( address ) == -1 )
                 {
-                    $( '#goto_empty' ).autocomplete( 'close' );
                     insertGoto( address );
                     $( '#goto_empty' ).val( '' );
-                    $( '#invalid_email' ).html( '' );
+                    $( '#help-goto' ).html( '' );
                     return true;
                 }
                 else
                 {
-                    $( '#invalid_email' ).html( 'Already in goto list.' );
+                    $( '#help-goto' ).html( 'Already in goto list.' );
                     return false;
                 }
             }
             else
             {
-                $( '#invalid_email' ).html( 'Invalid email address.' );
+                $( '#help-goto' ).html( 'Invalid email address.' );
                 return false;
             }
         }

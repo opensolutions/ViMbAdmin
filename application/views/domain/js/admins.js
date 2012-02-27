@@ -7,107 +7,93 @@
 
     $(document).ready( function()
     {
-        addDialog = $('#add_admin_dialog')
-                            .dialog({
-                                dialogClass : 'add_admin_dialog',
-                                autoOpen: false,
-                                title: 'Add Admin',
-                                resizable: false,
-                                modal: true,
-                                closeOnEscape: false,
-                                width: 450,
-                                height: 160,
-                                buttons: {
-                                    "Cancel": function() {
-                                        $(this).dialog("close");
-                                    },
-                                    "Add": function() {
-                                        doAddAdmin( {$domainModel.id} );
-                                    }
-                                }
-                            });
-
         oDataTable = $( '#admin_list_table' ).dataTable({
                             'iDisplayLength': {$options.defaults.table.entries},
+                            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+                            "sPaginationType": "bootstrap",
                             'aoColumns': [
                                 null,
                                 { 'bSortable': false, "bSearchable": false }
                             ]
                         });
+
+        $( '#open_add_admin' ).click( function( event ){
+
+            addDialog = $( '#add_dialog' ).modal({
+                backdrop: true,
+                keyboard: true,
+                show: true
+            });
+
+            $( '#add_dialog_add' ).unbind().bind( 'click', function(){
+                doAddAdmin( );
+            });
+            $( '#add_dialog_cancel' ).click( function(){
+                addDialog.modal('hide');
+            });
+        });
+
     }); // document onready
 
+    function removeAdmin( id, admin ) {
 
-    function removeAdmin( domainId, adminId , username)
+        $( "#purge_admin_name" ).html( admin );
+
+        delDialog = $( '#purge_dialog' ).modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+
+        $( '#purge_dialog_delete' ).unbind().bind( 'click', function(){
+            doRemoveAdmin( id );
+        });
+        $( '#purge_dialog_cancel' ).click( function(){
+            delDialog.modal('hide');
+        });
+     };
+
+
+    function doRemoveAdmin( adminId )
     {
-        removeDialog = $('<div id="remove_admin_dialog"></div>')
-                            .html('Are you sure you want to remove <b>' + username + '</b>?\
-                                <br /' + '><br /' + '>\
-                                <span id="remove_msg"></span>')
-                            .dialog({
-                                dialogClass : 'remove_admin_dialog',
-                                autoOpen: true,
-                                title: 'Remove Admin?',
-                                resizable: false,
-                                modal: true,
-                                closeOnEscape: false,
-                                width: 550,
-                                height: 160,
-                                buttons: {
-                                    "Cancel": function() {
-                                        $(this).dialog("close");
-                                        $('#remove_admin_dialog').remove();
-                                    },
-                                    "Delete": function() {
-                                        doRemoveAdmin( domainId, adminId );
-                                    }
-                                }
-                            });
-    }
+        var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#pdfooter' ).get(0) ).start();
 
-
-    function doRemoveAdmin( domainId, adminId )
-    {
-        $( '#remove_msg' ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...' );
+        $( '#purge_dialog_delete' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+        $( '#purge_dialog_cancel' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
 
         $.ajax({
-            url: "{genUrl controller='domain' action='ajax-remove-admin'}/did/" + domainId + '/aid/' + adminId,
+            url: "{genUrl controller='domain' action='ajax-remove-admin'}/did/{$domainModel.id}/aid/" + adminId,
             async: true,
             cache: false,
             type: 'GET',
             timeout: 3000, // milliseconds
             success: function( data )
                         {
+                            delDialog.modal('hide');
                             if ( data != 'ok' )
                             {
-                                $( '#remove_msg' ).html( 'An unexpected error occured. Please try again.' );
+                                ossAddMessage( 'An unexpected error has occured.', 'error' );
                             }
                             else
                             {
-                                /*
-                                $( '#remove_msg' ).html( '' );
-                                $( '#admin_' + adminId ) . hide( 'fast' );
-                                removeDialog.dialog( 'close' );
-                                $('#remove_admin_dialog').remove();
-                                */
-
                                 document.location.reload();
                             }
                         },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
+            error: ossAjaxErrorHandler,
+            complete: function()
                         {
-                            $( '#remove_msg' ).html( 'An unexpected error occured. Please try again.' );
+                            $( '#purge_dialog_delete' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            $( '#purge_dialog_cancel' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            if( $('canvas').length ){
+                                $('canvas').remove();
+                            }
                         }
         });
     }
 
 
-    function addAdmin( )
-    {
-        addDialog.dialog( 'open' );
-    }
 
-
-    function doAddAdmin( domainId )
+    function doAddAdmin(  )
     {
         if( $( '#admin_list' ).val() == null )
         {
@@ -115,28 +101,37 @@
             return;
         }
 
-        $( '#add_admin_msg' ).html( '<img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...' );
+        var Throb = tt_throbber( 32, 14, 1.8 ).appendTo( $( '#aafooter' ).get(0) ).start();
+
+        $( '#purge_dialog_delete' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
+        $( '#purge_dialog_cancel' ).attr( 'disabled', 'disabled' ).addClass( 'disabled' );
 
         $.ajax({
-            url: "{genUrl controller='domain' action='ajax-add-admin'}/did/" + domainId + '/aid/' + $( '#admin_list' ).val(),
+            url: "{genUrl controller='domain' action='ajax-add-admin'}/did/{$domainModel.id}/aid/" + $( '#admin_list' ).val(),
             async: true,
             cache: false,
             type: 'GET',
             timeout: 3000, // milliseconds
             success: function( data )
                         {
+                            addDialog.modal('hide');
                             if (data != 'ok')
                             {
-                                $( '#add_admin_msg' ).html( '<span class="red">An unexpected error occured. Please try again.</span>' );
+                                ossAddMessage( 'An unexpected error has occured.', 'error' );
                             }
                             else
                             {
                                 document.location.reload();
                             }
                         },
-            error: function( XMLHttpRequest, textStatus, errorThrown )
+            error: ossAjaxErrorHandler,
+            complete: function()
                         {
-                            $( '#add_admin_msg' ).html( '<span class="red">An unexpected error occured. Please try again.</span>' );
+                            $( '#purge_dialog_delete' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            $( '#purge_dialog_cancel' ).removeAttr( 'disabled' ).removeClass( 'disabled' );
+                            if( $('canvas').length ){
+                                $('canvas').remove();
+                            }
                         }
         });
 

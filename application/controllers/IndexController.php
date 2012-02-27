@@ -47,10 +47,17 @@ class IndexController extends ViMbAdmin_Controller_Action
      */
     public function indexAction()
     {
-        if ( !$this->getAuth()->hasIdentity() )
-            $this->_redirect( 'auth/login' );
-        else
-            $this->_forward( 'list', 'domain' );
+        if( $this->getRequest()->getParam( 'action' ) != 'about' )
+        {
+            if( !$this->getAuth()->hasIdentity() )
+                $this->_redirect( 'auth/login' );
+            else
+                $this->_forward( 'list', 'domain' );
+        }
+    }
+
+    public function aboutAction()
+    {
     }
 
 }

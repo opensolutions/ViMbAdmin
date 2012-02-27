@@ -6,71 +6,115 @@
           id="{$element->getId()}"
           name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
           {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
-          class="default_form">
+          class="form-horizontal">
 
-        <table>
-            <tr>
-                <td class="right bold valign_top" style="width: 140px;">Email</td>
-                <td>
-                    {$element->local_part}
-                    @
-                    {$element->domain}
+          <fieldset class="control-group" id="div-form-address">
+    	    <label for="local_part" class="control-label">
+	    	    	Address
+	    	</label>
+    	    <div id="div-controls-{$element->local_part->getId()}" class="controls">
+    		    <div class="input-append btn-group">
+    		        {$element->local_part}
+    		        <span class="btn add-midd">@</span>
+    		         {$element->domain}
+    		    </div>
+	        	{if $element->local_part->getMessages()}
+					<script type="text/javascript">
+						$( '#{$element->local_part->getId()}' ).addClass( 'error' );
+						$( '#div-form-{$element->local_part->getId()}' ).addClass( 'error' );
+					</script>
+				{/if}
+				<p id="help-{$element->local_part->getId()}" class="help-block">
+					{if $element->domain->getMessages()}
+    					{foreach from=$element->local_part->getMessages() item=messages}
+        					{foreach from=$messages item=msg}
+            					{$msg}<br />
+        					{/foreach}
+    					{/foreach}
+					{/if}
+				</p>
+				{if $element->domain->getMessages()}
+					<script type="text/javascript">
+						$( '#{$element->domain->getId()}' ).addClass( 'error' );
+						$( '#div-form-{$element->domain->getId()}' ).addClass( 'error' );
+					</script>
+				{/if}
+				<p id="help-{$element->domain->getId()}" class="help-block">
+					{if $element->domain->getMessages()}
+    					{foreach from=$element->domain->getMessages() item=messages}
+        					{foreach from=$messages item=msg}
+            					{$msg}<br />
+        					{/foreach}
+    					{/foreach}
+					{/if}
+				</p>
+    	    </div>
+    	</fieldset>
 
-                    {include file='form_element_errors.phtml' pTheElement=$element->local_part}
-                    {include file='form_element_errors.phtml' pTheElement=$element->domain}
-                </td>
-            </tr>
-            <tr>
-                <td class="right bold valign_top">{$element->name->getLabel()}</td>
-                <td>
-                    {$element->name}
-                    {include file='form_element_errors.phtml' pTheElement=$element->name}
-                </td>
-            </tr>
+        {include file='form/element-input.phtml' ielement=$element->name}
+
         {if isset($element->password)}
-            <tr>
-                <td class="right bold valign_top">{$element->password->getLabel()}</td>
-                <td>
-                    {$element->password}
-                {if $element->password->getAttrib('disabled') != 'disabled'}
-                    &nbsp;
-                    <input type="button" onclick="$( '#{$element->password->getId()}' ).val( randomPassword( 12 ) );" value="Random" />
-                {/if}
-                    {include file='form_element_errors.phtml' pTheElement=$element->password}
-                </td>
-            </tr>
-        {/if}
-            <tr>
-                <td class="right bold valign_top">{$element->quota->getLabel()}</td>
-                <td>
-                    {$element->quota}
-                    {include file='form_element_errors.phtml' pTheElement=$element->quota}
-                </td>
-            </tr>
-            <tr>
-                <td class="right bold"><label for="{$element->active->getId()}" class="inline">{$element->active->getLabel()}</label></td>
-                <td>{$element->active}</td>
-            </tr>
-        {if $element->local_part->getValue() == ''}
-            <tr>
-                <td class="right bold"><label for="{$element->welcome_email->getId()}" class="inline">{$element->welcome_email->getLabel()}</label></td>
-                <td>{$element->welcome_email}</td>
-            </tr>
-            <tr id="cc_welcome_email_tr" class="dontdisplay">
-                <td class="right bold valign_top">{$element->cc_welcome_email->getLabel()}</td>
-                <td>
-                    {$element->cc_welcome_email}
-                    {include file='form_element_errors.phtml' pTheElement=$element->cc_welcome_email}
-                </td>
-            </tr>
-        {/if}
-        </table>
+            <fieldset class="control-group" id="div-form-password">
+    	    <label for="passowrd" class="control-label">
+	    	    	{$element->password->getLabel()}
+	    	</label>
+    	    <div id="div-controls-{$element->password->getId()}" class="controls">
+    		    <div class="input-append btn-group">
+    		        {$element->password}
+    		        {if $element->password->getAttrib('disabled') != 'disabled'}
+        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" class="btn add-on" >
+                            <i class="icon-refresh"></i>
+                        </span>
+                    {/if}
+    		    </div>
 
-        <input type="button" onclick="parent.$.fn.colorbox.close();" value="Cancel" />
-        &nbsp;
-        <input type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
-        &nbsp; &nbsp;
-        <span id="saving" class="dontdisplay"><img src="{genUrl}/images/throbber.gif" alt="Processing..." title="Processing..." /> Processing...</span>
+	        	{if $element->password->getMessages()}
+					<script type="text/javascript">
+						$( '#{$element->password->getId()}' ).addClass( 'error' );
+						$( '#div-form-{$element->password->getId()}' ).addClass( 'error' );
+					</script>
+					{/if}
+					<p id="help-{$element->password->getId()}" class="help-block">
+					{if $element->password->getMessages()}
+    					{foreach from=$element->password->getMessages() item=messages}
+        					{foreach from=$messages item=msg}
+            					{$msg}<br />
+        					{/foreach}
+    					{/foreach}
+    					{/if}
+					</p>
+
+    	    </div>
+    	</fieldset>
+        {/if}
+
+        {include file='form/element-input.phtml' ielement=$element->quota}
+        {include file='form/element-checkbox.phtml' ielement=$element->active}
+        {if $element->local_part->getValue() == ''}
+            {include file='form/element-checkbox.phtml' ielement=$element->welcome_email}
+            <div id="div_welcome_email" class="dontdisplay">
+                {include file='form/element-input.phtml' ielement=$element->cc_welcome_email}
+            </div>
+        {/if}
+
+        {if !isset($modal) || !$modal }
+        <fieldset class="form-actions">
+            <a class="btn" type="button" href="{genUrl controller='mailbox' action='list'}">Cancel</a>
+            <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+        </field>
+        {/if}
     </form>
 
+    <script type="text/javascript">
+
+        $(document).ready(function()
+        {
+            $( '#domain' ).chosen();
+
+            $('#welcome_email').bind( 'change', function() {
+                $('#div_welcome_email').toggle('slow');
+            });
+        }); // document onready
+
+    </script>
 </div> <!-- #form_div_edit_mailbox -->

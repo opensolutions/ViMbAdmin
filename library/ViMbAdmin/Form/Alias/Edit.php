@@ -59,6 +59,7 @@ class ViMbAdmin_Form_Alias_Edit extends ViMbAdmin_Form
                         ->setLabel( _( 'Local Part' ) )
                         ->setAttrib( 'title', _( 'Local Part' ) )
                         ->setRequired( false )
+                        ->setAttrib( 'class', 'span2' )
                         ->addValidator( 'StringLength', false, array( 0, 255 ) )
                         ->addFilter( 'StringTrim' )
                         ->addFilter( 'HtmlEntitiesDecode' )
@@ -71,7 +72,7 @@ class ViMbAdmin_Form_Alias_Edit extends ViMbAdmin_Form
                         ->setLabel( _( 'Domain' ) )
                         ->setAttrib( 'title', _( 'Domain' ) )
                         ->setRequired( true )
-                        ->setAttrib( 'class', 'required' )
+                        ->setAttrib( 'class', 'required add-on-input' )
                         ->addFilter( 'Digits' )
                         ->addValidator( 'InArray', true, array( array_keys( $domainList ) ) );
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
  * Open Solutions' ViMbAdmin Project.
  *
@@ -8,7 +7,7 @@
  * project which provides an easily manageable web based virtual
  * mailbox administration system.
  *
- * Copyright (c) 2011 Open Source Solutions Limited
+ * Copyright (c) 2011 - 2012 Open Source Solutions Limited
  *
  * ViMbAdmin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,88 +26,105 @@
  *   147 Stepaside Park, Stepaside, Dublin 18, Ireland.
  *   Barry O'Donovan <barry _at_ opensolutions.ie>
  *
- * @copyright Copyright (c) 2011 Open Source Solutions Limited
+ * @copyright Copyright (c) 2011 - 2012 Open Source Solutions Limited
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPLv3)
  * @author Open Source Solutions Limited <info _at_ opensolutions.ie>
  * @author Barry O'Donovan <barry _at_ opensolutions.ie>
  * @author Roland Huszti <roland _at_ opensolutions.ie>
- * @package ViMbAdmin
  */
+                               
+defined( 'APPLICATION_PATH' ) || define( 'APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application' ) );
 
-    $whatToCompress = 'all';
+$whatToCompress = 'all';
 
-    if( in_array( 'css', $argv ) && !in_array( 'js', $argv ) )
-        $whatToCompress = 'css';
+if( in_array( 'css', $argv ) && !in_array( 'js', $argv ) )
+    $whatToCompress = 'css';
 
-    if( in_array( 'js', $argv ) && !in_array( 'css', $argv ) )
-        $whatToCompress = 'js';
+if( in_array( 'js', $argv ) && !in_array( 'css', $argv ) )
+    $whatToCompress = 'js';
 
-    if( in_array( $whatToCompress, array( 'all', 'js' ) ) )
+$version = false;
+foreach( $argv as $i => $v )
+{
+    if( $v == '--version' )
     {
-        print "\n\nMinifying JavaScript using Google Closure Compiler\n\n";
+        $version = $argv[$i+1];
+        break;
+    }
+}
 
-        file_put_contents( '../public/js/javascript.js', '' ); // empty the current file
+if( in_array( $whatToCompress, array( 'all', 'js' ) ) )
+{
+    print "\n\nMinifying 'public/js':\n\n";
 
-        $files = glob( '../public/js-dev/*.js' );
-        sort( $files, SORT_STRING );
+    $files = glob( APPLICATION_PATH . '/../public/js/[0-9][0-9][0-9]-*.js' );
+    sort( $files, SORT_STRING );
 
-        $numFiles = sizeof( $files );
-        $count = 0;
-        $minifiedFileName = '../var/tmp/minified.js';
+    $numFiles = sizeof( $files );
+    $count = 0;
 
-        foreach( $files as $oneFileName )
-        {
-            $count++;
+    foreach( $files as $oneFileName )
+    {
+        $count++;
 
-            print sprintf( "%-6s", "{$count}/{$numFiles}" ) . basename( $oneFileName ) . "\n";
+        print "    [{$count}] " . basename( $oneFileName ) . " => min." . basename( $oneFileName ) . "\n";
 
-            exec(   "java -jar compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS --warning_level QUIET" .
-                    " --js {$oneFileName} --js_output_file {$minifiedFileName}"
-                );
-
-            file_put_contents( '../public/js/javascript.js', file_get_contents($minifiedFileName), FILE_APPEND );
-        }
-
-        unlink( $minifiedFileName );
-
-        print "\n\nDone.";
+        exec(   "java -jar " . APPLICATION_PATH . "/../bin/compiler.jar --compilation_level WHITESPACE_ONLY --warning_level QUIET" .
+                " --js {$oneFileName} --js_output_file " . APPLICATION_PATH . "/../public/js/min." . basename( $oneFileName )
+        );
     }
 
-    if( in_array( $whatToCompress, array( 'all', 'css' ) ) )
+    $mergedJs = '';
+
+    print "\n    Combining...";
+    foreach( $files as $fileName )
+        $mergedJs .= file_get_contents( APPLICATION_PATH . "/../public/js/min." . basename( $fileName) );
+
+    if( $version )
+        file_put_contents( APPLICATION_PATH . "/../public/js/min.bundle-v{$version}.js", $mergedJs );
+    else
+        file_put_contents( APPLICATION_PATH . "/../public/js/min.bundle.js", $mergedJs );
+
+    print " done\n\n";
+}
+
+if( in_array( $whatToCompress, array( 'all', 'css' ) ) )
+{
+
+    print "\nMinifying 'public/css':\n";
+
+    $files = glob( APPLICATION_PATH . '/../public/css/[0-9][0-9][0-9]-*.css' );
+    sort( $files, SORT_STRING );
+
+    $numFiles = sizeof( $files );
+    $count = 0;
+
+    foreach( $files as $oneFileName )
     {
-        print "\n\nMinifying CSS using YUI Compressor\n\n";
+        $count++;
 
-        file_put_contents( '../public/css/style.css', '' ); // empty the current file
+        print "    [{$count}] " . basename( $oneFileName ) . " => min." . basename( $oneFileName ) . "\n";
 
-        $files = glob( '../public/css-dev/*.css' );
-        sort( $files, SORT_STRING );
-
-        $numFiles = sizeof( $files );
-        $count = 0;
-        $minifiedFileName = '../var/tmp/minified.css';
-
-        foreach( $files as $oneFileName )
-        {
-            $count++;
-
-            print sprintf( "%-6s", "{$count}/{$numFiles}" ) . basename($oneFileName) . "\n";
-
-            exec( "java -jar yuicompressor.jar {$oneFileName} -o {$minifiedFileName} -v --charset utf-8" );
-
-            if ( preg_match("/^\d\d\-/", basename( $oneFileName ) ) )
-            {
-                file_put_contents( '../public/css/style.css', file_get_contents($minifiedFileName), FILE_APPEND );
-            }
-            else
-            {
-                $MinifiedFile = '../public/css/' . str_replace( '.css', '.min.css', basename( $oneFileName ) );
-                file_put_contents( $MinifiedFile, file_get_contents( $minifiedFileName ) );
-            }
-        }
-
-        unlink( $minifiedFileName );
-
-        print "\n\nDone.";
+        exec( "java -jar " . APPLICATION_PATH . "/../bin/yuicompressor.jar {$oneFileName} -o " . APPLICATION_PATH . "/../public/css/min." . basename( $oneFileName ) . " -v --charset utf-8" );
     }
 
-    print "\n\n";
+    $mergedCss = '';
+
+    print "\n    Combining...";
+    foreach( $files as $fileName )
+        $mergedCss .= file_get_contents( APPLICATION_PATH . "/../public/css/min." . basename( $fileName ) );
+
+    if( $version )
+        file_put_contents( APPLICATION_PATH . "/../public/css/min.bundle-v{$version}.css", $mergedCss );
+    else
+        file_put_contents( APPLICATION_PATH . '/../public/css/min.bundle.css', $mergedCss );
+
+    print " done\n\n";
+}
+
+print "\n\n";
+
+if( $version )
+{
+    echo "****** VERSION NUMBER WAS SPECIFIED - DON'T FORGET TO UPDATE HEADER FILES!! ******\n\n";
+}

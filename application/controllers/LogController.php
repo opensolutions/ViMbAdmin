@@ -69,6 +69,14 @@ class LogController extends ViMbAdmin_Controller_Action
         else if( !$this->getAdmin()->isSuper() )
             $this->_targetAdmin = $this->getAdmin();
 
+        if( $this->_getParam( 'unset', false ) )
+            unset( $this->_session->domain );
+        else
+        {
+            if( isset( $this->_session->domain) && $this->_session->domain )
+            $this->_domain = $this->_session->domain;
+        }
+
         if( $domainId = $this->_getParam( 'domain', false ) )
         {
             if( !( $this->_domain = $this->loadDomain( $domainId ) ) )

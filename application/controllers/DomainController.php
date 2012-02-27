@@ -76,6 +76,11 @@ class DomainController extends ViMbAdmin_Controller_Action
      */
     public function listAction()
     {
+
+        if( isset( $this->_session->domain ) || $this->_session->domain )
+            unset( $this->_session->domain );
+
+
         $query = Doctrine_Query::create()
                     ->select( 'd.*' )
                     ->from( 'Domain d' );

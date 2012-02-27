@@ -3,7 +3,12 @@
 <div class="page-content" >
 
     <div class="page-header" >
-        <h1>Logs</h1>
+        <h1>
+            Logs{if isset( $session->domain ) && $session->domain }<small> for {$session->domain.domain}</small>{/if}
+            {if isset( $session->domain ) && $session->domain}
+                <a class="btn" title="Show All" href="{genUrl controller='log' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+            {/if}
+        </h1>
     </div>
 
 

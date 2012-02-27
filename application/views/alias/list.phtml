@@ -21,7 +21,13 @@
         	</div>
     	</div>
 
-        <h1>Aliases {if $domain} for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}{/if}</h1>
+        <h1>
+            Aliases {if $domain}<small> for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}</small>{/if}
+
+            {if isset( $session->domain ) && $session->domain}
+                <a class="btn" title="Show All" href="{genUrl controller='alias' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+            {/if}
+        </h1>
     </div>
 
 {ViMbAdmin_Messages}

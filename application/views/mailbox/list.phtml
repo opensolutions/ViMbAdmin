@@ -20,7 +20,12 @@
         	</div>
     	</div>
 
-        <h1>Mailboxes {if $domain} for {$domain.domain} {if $domain.mailboxes neq 0}({$domain->countMailboxes()}/{$domain.mailboxes}){/if}{/if}</h1>
+        <h1>
+            Mailboxes {if $domain}<small> for {$domain.domain} {if $domain.mailboxes neq 0}({$domain->countMailboxes()}/{$domain.mailboxes}){/if}</small>{/if}
+            {if isset( $session->domain ) && $session->domain}
+                <a class="btn" title="Show All" href="{genUrl controller='mailbox' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+            {/if}
+        </h1>
     </div>
 
 {ViMbAdmin_Messages}

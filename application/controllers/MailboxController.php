@@ -59,6 +59,14 @@ class MailboxController extends ViMbAdmin_Controller_Action
         // if an ajax request, remove the view help
         if( substr( $this->getRequest()->getParam( 'action' ), 0, 4 ) == 'ajax' )
             $this->_helper->viewRenderer->setNoRender( true );
+
+        if( $this->_getParam( 'unset', false ) )
+            unset( $this->_session->domain );
+        else
+        {
+            if( isset( $this->_session->domain) && $this->_session->domain )
+            $this->_domain = $this->_session->domain;
+        }
     }
 
 
@@ -93,7 +101,7 @@ class MailboxController extends ViMbAdmin_Controller_Action
         }
         else
         {
-            $this->view->domain = $this->_domain;
+            $this->view->domain = $this->_session->domain = $this->_domain;
             $query->andWhere( 'm.domain = ?', $this->_domain['domain'] );
         }
 

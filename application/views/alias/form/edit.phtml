@@ -65,7 +65,21 @@
                         <i class="icon-plus"></i>
                     </span>
     		    </div>
-            <p id="help-goto" class="help-block"></p>
+		    {if $element->goto->getMessages()}
+				<script type="text/javascript">
+					$( '#{$element->goto->getId()}' ).addClass( 'error' );
+					$( '#div-form-{$element->goto->getId()}' ).addClass( 'error' );
+				</script>
+			{/if}
+            <p id="help-goto" class="help-block">
+                {if $element->goto->getMessages()}
+					{foreach from=$element->goto->getMessages() item=messages}
+    					{foreach from=$messages item=msg}
+        					{$msg}<br />
+    					{/foreach}
+					{/foreach}
+				{/if}
+			</p>
             </div>
         </fieldset>
 

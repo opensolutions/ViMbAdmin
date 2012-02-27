@@ -251,12 +251,12 @@ class AliasController extends ViMbAdmin_Controller_Action
                         else
                         {
                             if( !Zend_Validate::is( $oneGoto, 'EmailAddress', array( 1, null ) ) )
-                                $editForm->getElement( 'goto' )->addError( _( 'Invalid email address(es).' ) );
+                                $editForm->getElement( 'goto' )->addError( 'Invalid email address(es).' );
                         }
                     }
 
                     if( !$postValues['goto'] )
-                        $editForm->getElement( 'goto' )->addError( _( 'You must have at least one goto address.' ) );
+                        $editForm->getElement( 'goto' )->addError( 'You must have at least one goto address.' );
 
                     if( !$editForm->getElement( 'goto' )->hasErrors()
                         && ( $editForm->getElement( 'local_part' ) === null || !$editForm->getElement( 'local_part' )->hasErrors() ) )

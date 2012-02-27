@@ -4,85 +4,134 @@
     <div class="page-header" >
         <h1>About ViMbAdmin <small>Virtual Mailbox Administration</small></h1>
     </div>
+
     
-    {ViMbAdmin_Messages}
-
-<p>
-    <strong>ViMbAdmin</strong> (pronounced vim-be-admin and meaning Virtual Mailbox Administration)
-    provides a web based virtual mailbox administration system for use with mail transport agents
-    such as Postfix, Sendmail and qmail for example. It allows system administrators to add and
-    manage domains and to then add, edit and delete mailboxes and aliases for those domains.
-</p>
-
-<h3>Features</h3>
-
 <div class="row-fluid">
-    <div class="span6">
-    
+
+    <div class="span9">
+
+        {ViMbAdmin_Messages}
+        
         <p>
-        As of version 2.0.0 released March 2012, standard and enhanced features compared to PostfixAdmin include:
+            <strong>ViMbAdmin</strong> (pronounced vim-be-admin and meaning Virtual Mailbox Administration)
+            provides a web based virtual mailbox administration system for use with mail transport agents
+            such as Postfix, Sendmail and qmail for example. It allows system administrators to add and
+            manage domains and to then add, edit and delete mailboxes and aliases for those domains.
         </p>
         
-        <ul>
-            <li> Super administrator user level with full access; </li>
-            <li> Administration user level with access only to assigned domains and their mailboxes and aliases; </li>
-            <li> Super admins can create and modify super admins and admins; </li>
-            <li> JQuery Datatable throughout for quick in browser searching and pagination; </li>
-            <li> Create, modify and purge domains including limiting the number of mailboxes and aliases
-                    a non-super admin can create per-domain; </li>
-            <li> Activate / deactivate admins, domains, mailboxes and aliases at the click of a button; </li>
-            <li> Full logging; </li>
-            <li> Facility for end users (mailbox owners) to change their password; </li>
-            <li> Single login point for all administrators whether super or not. </li>
-        </ul>
-    </div>
-    <div class="span6">
-        <p>
-            Additional features include:
-        </p>
+        <h3>Features</h3>
         
-        <ul>
-            <li> Very configurable including:
+        <div class="row-fluid">
+            <div class="span6">
+            
+                <p>
+                As of version 2.0.0 released March 2012, standard and enhanced features compared to PostfixAdmin include:
+                </p>
+                
                 <ul>
-                    <li> set default values for quotas, number of mailboxes and aliases for domain creation; </li>
-                    <li> added additional columns to the mailbox schema (including UID, GID, homedir and maildir); </li>
-                    <li> templated welcome and settings email for users; </li>
+                    <li> Super administrator user level with full access; </li>
+                    <li> Administration user level with access only to assigned domains and their mailboxes and aliases; </li>
+                    <li> Super admins can create and modify super admins and admins; </li>
+                    <li> JQuery Datatable throughout for quick in browser searching and pagination; </li>
+                    <li> Create, modify and purge domains including limiting the number of mailboxes and aliases
+                            a non-super admin can create per-domain; </li>
+                    <li> Activate / deactivate admins, domains, mailboxes and aliases at the click of a button; </li>
+                    <li> Full logging; </li>
+                    <li> Facility for end users (mailbox owners) to change their password; </li>
+                    <li> Single login point for all administrators whether super or not. </li>
                 </ul>
-            </li>
-            <li> plain, MD5, SHA1, crypt or salted MD5, SHA1 and crypt mailbox password support; </li>
-            <li> admin users table is secured with salted SHA1 passwords; </li>
-            <li> Forgotten Password / Password Reset function for admins; </li>
-        </ul>
+            </div>
+            <div class="span6">
+                <p>
+                    Additional features include:
+                </p>
+                
+                <ul>
+                    <li> Very configurable including:
+                        <ul>
+                            <li> set default values for quotas, number of mailboxes and aliases for domain creation; </li>
+                            <li> added additional columns to the mailbox schema (including UID, GID, homedir and maildir); </li>
+                            <li> templated welcome and settings email for users; </li>
+                        </ul>
+                    </li>
+                    <li> plain, MD5, SHA1, crypt or salted MD5, SHA1 and crypt mailbox password support; </li>
+                    <li> admin users table is secured with salted SHA1 passwords; </li>
+                    <li> Forgotten Password / Password Reset function for admins; </li>
+                </ul>
+            </div>
+        </div>
+        
+        <h3>Behind the Site</h3>
+        
+        <p>
+            <strong>ViMbAdmin</strong> has been developed by <strong>Open Solutions</strong> -
+            <a href="http://www.opensolutions.ie/">www.opensolutions.ie</a> - a company based in
+            Dublin, Ireland specialising in PHP web application development, Linux and UNIX
+            system administration and ISP grade networking and we are releasing it under a GPL
+            V3 license.
+        </p>
+        <p>
+            It is written in <a href="http://www.php.net/">PHP</a> using the
+            <a href="http://framework.zend.com/">Zend Framework</a> with
+            <a href="http://www.doctrine-project.org/">Doctrine ORM</a> and
+            <a href="http://www.smarty.net/">Smarty</a>. The frontend is styled with the
+            fantastic <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> and made
+            functional with <a href="http://www.jquery.com/">JQuery</a>.
+        </p>
+        
+        <p>
+            Additional components include <a href="http://www.jqueryui.com/">JQuery UI</a>;
+            <a href="http://jacklmoore.com/colorbox/">Colorbox</a>;
+            <a href="http://datatables.net/">DataTables</a> - easily one of the best JQuery
+            plugins every created; <a href="http://harvesthq.github.com/chosen/">Chosen</a>, a
+            JQuery plugin that makes long, unwieldy select boxes much more user-friendly; and
+            <a href="http://aino.github.com/throbber.js/">Throbber.js</a> a JavaScript Throbber,
+            made using canvas and fully configurable with a gif fallback option.
+        </p>
+        
     </div>
+    <div class="span3">
+    
+        <h3>Support Our Charity</h3>
+        
+        <p>
+            Open Solutions would like to request donations from any of our users who find
+            this application of use - but not for us - we'd like you to donate to our chosen
+            charity, <a href="http://www.barnardos.ie/">Barnardos</a>.
+        </p>
+        <p>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                <input type="hidden" name="cmd" value="_donations">
+                <input type="hidden" name="business" value="barnardos-donation@opensolutions.ie">
+                <input type="hidden" name="lc" value="GB">
+                <input type="hidden" name="item_name" value="Barnardos (Irish Childrens Charity)">
+                <input type="hidden" name="no_note" value="0">
+                <input type="hidden" name="currency_code" value="EUR">
+                <input type="hidden" name="bn" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest">
+                <input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online.">
+                <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+            </form>
+        </p>
+        
+        <h3>Open Solutions</h3>
+        
+        <p>
+            <a href="http://www.opensolutions.ie/">Open Solutions</a> is a consultancy and services company
+            specialising in internet infrastructure.
+        </p>
+        <p>
+            Particularly we operate in a unique combination of areas: advanced IP networking; Linux
+            administration; VoIP application programming; and web application development. By being
+            able to leverage experience in all of these areas, we are ideally suited to provided
+            services and solutions in the general ISP area as well as multi-disciplinary solutions
+            you may not have expected - giving us a fairly unique and varied customer list!
+        </p>
+        <p align="center">
+            <strong>Trust your next project to us<br /><a href="http://www.opensolutions.ie/">www.opensolutions.ie</a></strong>.
+        </p>
+    </div>
+    
 </div>
-
-<h3>Behind the Site</h3>
-
-<p>
-    <strong>ViMbAdmin</strong> has been developed by <strong>Open Solutions</strong> -
-    <a href="http://www.opensolutions.ie/">www.opensolutions.ie</a> - a company based in
-    Dublin, Ireland specialising in PHP web application development, Linux and UNIX
-    system administration and ISP grade networking and we are releasing it under a GPL
-    V3 license.
-</p>
-<p>
-    It is written in <a href="http://www.php.net/">PHP</a> using the
-    <a href="http://framework.zend.com/">Zend Framework</a> with
-    <a href="http://www.doctrine-project.org/">Doctrine ORM</a> and
-    <a href="http://www.smarty.net/">Smarty</a>. The frontend is styled with the
-    fantastic <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> and made
-    functional with <a href="http://www.jquery.com/">JQuery</a>.
-</p>
-
-<p>
-    Additional components include <a href="http://www.jqueryui.com/">JQuery UI</a>;
-    <a href="http://jacklmoore.com/colorbox/">Colorbox</a>;
-    <a href="http://datatables.net/">DataTables</a> - easily one of the best JQuery
-    plugins every created; <a href="http://harvesthq.github.com/chosen/">Chosen</a>, a
-    JQuery plugin that makes long, unwieldy select boxes much more user-friendly; and
-    <a href="http://aino.github.com/throbber.js/">Throbber.js</a> a JavaScript Throbber,
-    made using canvas and fully configurable with a gif fallback option.
-</p>
 
 <h3>Software License</h3>
 

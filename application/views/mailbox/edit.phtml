@@ -47,10 +47,7 @@
                 success: function(data) {
                     if( data.trim() == "ok" ) {
                         dialog.modal('hide');
-                        {if $operation == 'Add' }
                             location.reload();
-                        {/if}
-                        ossAddMessage( 'You have successfully added/edited the mailbox record..', 'success' );
                     }
                     else if( data.substring(0, 26) == '<div class="modal-header">' ){
                                 $('#modal_dialog').html( data );

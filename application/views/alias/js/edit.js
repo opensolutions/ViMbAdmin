@@ -5,11 +5,12 @@
 
     $(document).ready( function()
     {
-        $('#goto_empty').keypress( function(e) {
+        $( '#goto_empty' ).keypress( function(e) {
             if( e.which == 13 )
             {
                 e.preventDefault();
-                addGoto();
+                if( $( '#goto_empty' ).val().indexOf( "@" ) != -1 )
+                    addGoto();
             }
         });
 
@@ -64,21 +65,20 @@
             {
                 if( gotoList.indexOf( address ) == -1 )
                 {
-                    $( '#goto_empty' ).autocomplete( 'close' );
                     insertGoto( address );
                     $( '#goto_empty' ).val( '' );
-                    $( '#invalid_email' ).html( '' );
+                    $( '#help-goto' ).html( '' );
                     return true;
                 }
                 else
                 {
-                    $( '#invalid_email' ).html( 'Already in goto list.' );
+                    $( '#help-goto' ).html( 'Already in goto list.' );
                     return false;
                 }
             }
             else
             {
-                //$( '#invalid_email' ).html( 'Invalid email address.' );
+                $( '#help-goto' ).html( 'Invalid email address.' );
                 return false;
             }
         }

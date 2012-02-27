@@ -8,7 +8,7 @@
           {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
           class="form-horizontal">
 
-          <fieldset class="control-group" id="div-form-password">
+          <fieldset class="control-group" id="div-form-address">
     	    <label for="local_part" class="control-label">
 	    	    	Address
 	    	</label>
@@ -23,27 +23,31 @@
 						$( '#{$element->local_part->getId()}' ).addClass( 'error' );
 						$( '#div-form-{$element->local_part->getId()}' ).addClass( 'error' );
 					</script>
-					<p id="help-{$element->local_part->getId()}" class="help-block">
+				{/if}
+				<p id="help-{$element->local_part->getId()}" class="help-block">
+					{if $element->domain->getMessages()}
     					{foreach from=$element->local_part->getMessages() item=messages}
         					{foreach from=$messages item=msg}
             					{$msg}<br />
         					{/foreach}
     					{/foreach}
-					</p>
-				{/if}
+					{/if}
+				</p>
 				{if $element->domain->getMessages()}
 					<script type="text/javascript">
 						$( '#{$element->domain->getId()}' ).addClass( 'error' );
 						$( '#div-form-{$element->domain->getId()}' ).addClass( 'error' );
 					</script>
-					<p id="help-{$element->domain->getId()}" class="help-block">
+				{/if}
+				<p id="help-{$element->domain->getId()}" class="help-block">
+					{if $element->domain->getMessages()}
     					{foreach from=$element->domain->getMessages() item=messages}
         					{foreach from=$messages item=msg}
             					{$msg}<br />
         					{/foreach}
     					{/foreach}
-					</p>
-				{/if}
+					{/if}
+				</p>
     	    </div>
     	</fieldset>
 
@@ -69,14 +73,17 @@
 						$( '#{$element->password->getId()}' ).addClass( 'error' );
 						$( '#div-form-{$element->password->getId()}' ).addClass( 'error' );
 					</script>
+					{/if}
 					<p id="help-{$element->password->getId()}" class="help-block">
+					{if $element->password->getMessages()}
     					{foreach from=$element->password->getMessages() item=messages}
         					{foreach from=$messages item=msg}
             					{$msg}<br />
         					{/foreach}
     					{/foreach}
+    					{/if}
 					</p>
-				{/if}
+
     	    </div>
     	</fieldset>
         {/if}

@@ -63,6 +63,11 @@ a.aplain, a:link.aplain, a:visited.aplain, a:hover.aplain, a:active.aplain {
     margin-left: -400px;
 }
 
+
+.help-block
+{
+    color: #b94a48;
+}
 .add-on-input{
   float: left;
   display: block;

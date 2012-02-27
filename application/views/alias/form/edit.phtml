@@ -24,27 +24,32 @@
 						$( '#{$element->local_part->getId()}' ).addClass( 'error' );
 						$( '#div-form-{$element->local_part->getId()}' ).addClass( 'error' );
 					</script>
-					<p id="help-{$element->local_part->getId()}" class="help-block">
+				{/if}
+				<p id="help-{$element->local_part->getId()}" class="help-block">
+					{if $element->local_part->getMessages()}
     					{foreach from=$element->local_part->getMessages() item=messages}
         					{foreach from=$messages item=msg}
             					{$msg}<br />
         					{/foreach}
     					{/foreach}
-					</p>
-				{/if}
+					{/if}
+				</p>
+
 				{if $element->domain->getMessages()}
 					<script type="text/javascript">
 						$( '#{$element->domain->getId()}' ).addClass( 'error' );
 						$( '#div-form-{$element->domain->getId()}' ).addClass( 'error' );
 					</script>
-					<p id="help-{$element->domain->getId()}" class="help-block">
+				{/if}
+				<p id="help-{$element->domain->getId()}" class="help-block">
+					{if $element->domain->getMessages()}
     					{foreach from=$element->domain->getMessages() item=messages}
         					{foreach from=$messages item=msg}
             					{$msg}<br />
         					{/foreach}
     					{/foreach}
-					</p>
-				{/if}
+					{/if}
+				</p>
     	    </div>
     	</fieldset>
     	{include file='form/element-checkbox.phtml' ielement=$element->active}
@@ -60,10 +65,8 @@
                         <i class="icon-plus"></i>
                     </span>
     		    </div>
-
+            <p id="help-goto" class="help-block"></p>
             </div>
-            <span id="invalid_email" class="red"></span>
-            {include file='form_element_errors.phtml' pTheElement=$element->goto}
         </fieldset>
 
         {if !isset($modal) || !$modal}

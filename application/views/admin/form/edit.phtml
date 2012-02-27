@@ -32,14 +32,17 @@
 						$( '#{$element->password->getId()}' ).addClass( 'error' );
 						$( '#div-form-{$element->password->getId()}' ).addClass( 'error' );
 					</script>
-					<p id="help-{$element->password->getId()}" class="help-block">
+				{/if}
+				<p id="help-{$element->password->getId()}" class="help-block">
+				    {if $element->password->getMessages()}
     					{foreach from=$element->password->getMessages() item=messages}
         					{foreach from=$messages item=msg}
             					{$msg}<br />
         					{/foreach}
     					{/foreach}
-					</p>
-				{/if}
+    				{/if}
+				</p>
+
     	    </div>
     	</fieldset>
 

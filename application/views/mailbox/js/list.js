@@ -24,35 +24,28 @@
             ossToggle( $( event.target ), "{genUrl controller='mailbox' action='ajax-toggle-active'}", { "mid": id } );
         });
 
-    }); // document onready
+        $( 'span[id|="send-email"]' ).click( function( event ){
 
-    function purgeMailbox( id, email )
-    {
-        purgeDialog = $( '<div id="purge_mailbox_dialog"></div>' )
-            .html( 'Are you sure you want to purge <b>' + email + '</b> and all of its aliases?'
-                + '<br /><br />'
-                + '<span id="purge_msg"></span>'
-            )
-            .dialog({
-                dialogClass : 'purge_mailbox_dialog',
-                autoOpen: true,
-                title: 'Are you sure?',
-                resizable: false,
-                modal: true,
-                closeOnEscape: false,
-                width: 400,
-                height: 170,
-                buttons: {
-                    "Cancel": function() {
-                        $(this).dialog("close");
-                        $('#purge_mailbox_dialog').remove();
-                    },
-                    "Delete": function() {
-                        doPurgeMailbox( id );
-                    }
-                }
+            var id = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+            $( "#email_name" ).html( $( event.target ).attr( 'ref' ) );
+
+            elDialog = $( '#email_dialog' ).modal({
+                backdrop: true,
+                keyboard: true,
+                show: true
+            });
+
+            $( '#email_dialog_send' ).unbind().bind( 'click', function(){
+                elDialog.modal('hide');
+                window.location.href = "{genUrl controller='mailbox' action='email-settings'}/mid/" + id;
+
+            });
+            $( '#email_dialog_cancel' ).click( function(){
+                elDialog.modal('hide');
+            });
         });
-    }
+
+    }); // document onready
 
 
     function doPurgeMailbox( id )

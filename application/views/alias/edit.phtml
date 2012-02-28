@@ -61,7 +61,7 @@
                 success: function(data) {
                     if( data == "ok" ) {
                         dialog.modal('hide');
-                            location.reload();
+                        window.location.href = "{genUrl controller='alias' action='list'}/did/" + $( '#domain' ).val();
                     }
                     else if( data.substring(0, 26) == '<div class="modal-header">' ){
                                 $('#modal_dialog').html( data );

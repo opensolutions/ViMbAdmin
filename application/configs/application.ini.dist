@@ -45,21 +45,24 @@ defaults.mailbox.gid = 2000
 defaults.mailbox.maildir = "%d/%u/"
 defaults.mailbox.homedir = "/home/vmail/"
 
+;minimum mailbox password length
+defaults.mailbox.min_password_length = 8
+
 ; The password hashing function to use
 ; one of:
-;   "plain"       - password stored as clearttext 
+;   "plain"       - password stored as clearttext
 ;   "md5"         - password hashed using MD5 without salt
 ;   "md5.salted"  - password hashed using MD5 without salt
 ;   "crypt"       - standard des hash (compatible with MySQL ENCRYPT and courier - set a two character hash below)
-;   "md5.crypt"   - MD5 based salted password hash nowadays commonly used in /etc/shadow. (compatible with Dovecot) Requires min 8 character hash below. 
-;   "sha1"        - password hashed using sha1 without salt 
+;   "md5.crypt"   - MD5 based salted password hash nowadays commonly used in /etc/shadow. (compatible with Dovecot) Requires min 8 character hash below.
+;   "sha1"        - password hashed using sha1 without salt
 ;   "sha1.salted" - password hashed using sha1 with salt defined below
 defaults.mailbox.password_scheme = "md5"
 
 ; a hash to use when storing passwords. Typically used with "crypt"
 ; which only uses the first two characters and includes this in the
 ; final hash. For other schemes such as md5.salted then your mail system
-; will also need to know and use this hash 
+; will also need to know and use this hash
 defaults.mailbox.password_hash = "ChangeMePlease"
 
 ; The number of rows displayed in the tables
@@ -193,10 +196,10 @@ skipVersionCheck = 0
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; ViMbAdmin 'pings' the developers as part of the set up process to let 
+;; ViMbAdmin 'pings' the developers as part of the set up process to let
 ;; them know there is a new installation.
 ;;
-;; All we are interested in is knowing whether people are using the software 
+;; All we are interested in is knowing whether people are using the software
 ;; or not and whether continued support and development is worth the time
 ;; and effort.
 ;;

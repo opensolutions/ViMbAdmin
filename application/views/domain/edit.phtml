@@ -2,13 +2,13 @@
     {include file="header.phtml"}
     <div class="page-content" >
         <div class="page-header" >
-            <h1>{$operation} Domain: {$domainModel.domain}</h1>
+            <h1>{$operation} Domain{if $operation eq 'Edit' }: {$domainModel.domain}{/if}</h1>
         </div>
         {ViMbAdmin_Messages}
 {else}
 <div class="modal-header">
         <a href="#" class="close" data-dismiss="modal">&times;</a>
-            <h3>{$operation} Domain: {$domainModel.domain}</h3>
+            <h3>{$operation} Domain{if $operation eq 'Edit' }: {$domainModel.domain}{/if}</h3>
     </div>
     <div class="modal-body" style="min-height: 200px;">
 {/if}

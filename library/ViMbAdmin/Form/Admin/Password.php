@@ -42,43 +42,38 @@
 class ViMbAdmin_Form_Admin_Password extends ViMbAdmin_Form
 {
 
-    public function __construct( $options = null )
+    public function __construct( $minPass = 8, $options = null )
     {
         parent::__construct( $options );
 
         $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'admin/form/password.phtml' ) ) ) );
 
-        $this
-            ->setMethod( 'post' )
+        $this->setMethod( 'post' )
             ->setAttrib( 'id', 'change_password_form' )
             ->setAttrib( 'name', 'change_password_form' );
 
-        $password = $this
-                        ->createElement( 'text', 'password' )
-                        ->setAttrib( 'size', 40 )
-                        ->setLabel( _( 'Password' ) )
-                        ->setAttrib( 'title', _( 'Password' ) )
-                        ->setAttrib( 'class', 'required' )
-                        ->setAttrib( 'autocomplete', 'off' )
-                        ->setRequired( true )
-                        ->addValidator( 'NotEmpty', true )
-                        ->addValidator( 'StringLength', false, array( 8, 40 ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StripSlashes' );
+        $password = $this->createElement( 'text', 'password' )
+            ->setAttrib( 'size', 40 )
+            ->setLabel( _( 'Password' ) )
+            ->setAttrib( 'title', _( 'Password' ) )
+            ->setAttrib( 'class', 'required' )
+            ->setAttrib( 'autocomplete', 'off' )
+            ->setRequired( true )
+            ->addValidator( 'NotEmpty', true )
+            ->addValidator( 'StringLength', false, array( $minPass, 40 ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' );
 
-        $sendEmail = $this
-                        ->createElement( 'checkbox', 'email' )
-                        ->setLabel( _( 'Send email' ) )
-                        ->addValidator('InArray', false, array( array( 0, 1 ) ) )
-                        ->addFilter( 'Digits' );
+        $sendEmail = $this->createElement( 'checkbox', 'email' )
+            ->setLabel( _( 'Send email' ) )
+            ->addValidator('InArray', false, array( array( 0, 1 ) ) )
+            ->addFilter( 'Digits' );
 
-        $submit = $this
-                        ->createElement( 'submit' , 'change' )
-                        ->setLabel( _( 'Submit' ) );
+        $submit = $this->createElement( 'submit' , 'change' )
+            ->setLabel( _( 'Submit' ) );
 
-        $this
-            ->addElement( $password )
+        $this->addElement( $password )
             ->addElement( $sendEmail )
             ->addElement( $submit );
 

@@ -228,7 +228,7 @@ class AuthController extends ViMbAdmin_Controller_Action
      */
     public function changePasswordAction()
     {
-        $form = new ViMbAdmin_Form_Mailbox_Password();
+        $form = new ViMbAdmin_Form_Mailbox_Password( $this->_options['defaults']['mailbox']['min_password_length'] );
 
         if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
         {

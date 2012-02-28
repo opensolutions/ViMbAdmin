@@ -469,7 +469,10 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
                     if( $this->_getParam( 'helper', true ) )
                     {
-                        $this->_redirect( 'mailbox/list' );
+                        if( $this->_domain )
+                            $this->_redirect( 'mailbox/list/did/' . $this->_domain['id'] );
+                        else
+                            $this->_redirect( 'mailbox/list' );
                     }
                     else
                     {

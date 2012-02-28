@@ -47,19 +47,19 @@
                 success: function(data) {
                     if( data.trim() == "ok" ) {
                         dialog.modal('hide');
-                            location.reload();
+                        window.location.href = "{genUrl controller='mailbox' action='list'}/did/" + $( '#domain' ).val();
                     }
                     else if( data.substring(0, 26) == '<div class="modal-header">' ){
-                                $('#modal_dialog').html( data );
-                                $( '#modal_dialog_cancel' ).bind( 'click', function(){
-                                    dialog.modal('hide');
-                                });
+                        $('#modal_dialog').html( data );
+                        $( '#modal_dialog_cancel' ).bind( 'click', function(){
+                            dialog.modal('hide');
+                        });
 
-                                $( '#local_part' ).bind( 'change', function() { ossJscriptFieldValidator( 'local_part' ) } );
-                                $( '#domain' ).bind( 'change', function() { ossJscriptFieldValidator( 'domain' ) } );
-                                {if $operation == 'Add' }
-                                    $( '#password' ).bind( 'change', function() { ossJscriptFieldValidator( 'password' ) } );
-                                {/if}
+                        $( '#local_part' ).bind( 'change', function() { ossJscriptFieldValidator( 'local_part' ) } );
+                        $( '#domain' ).bind( 'change', function() { ossJscriptFieldValidator( 'domain' ) } );
+                        {if $operation == 'Add' }
+                            $( '#password' ).bind( 'change', function() { ossJscriptFieldValidator( 'password' ) } );
+                        {/if}
                     }
                     else {
                         dialog.modal('hide');

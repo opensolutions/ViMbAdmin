@@ -75,7 +75,7 @@ class ViMbAdmin_Resource_Namespace extends Zend_Application_Resource_ResourceAbs
             }
 
             // ensure IP consistancy
-            if ( (isset($options['checkip'])) && ($options['checkip']) && (isset($_SERVER['REMOTE_ADDR'])) )
+            if( isset( $options['checkip'] ) && $options['checkip'] && isset( $_SERVER['REMOTE_ADDR'] ) && !strpos( $_SERVER["REQUEST_URI"], "logout" ) )
             {
                 if( !isset( $ApplicationNamespace->clientIP ) )
                 {
@@ -90,7 +90,7 @@ class ViMbAdmin_Resource_Namespace extends Zend_Application_Resource_ResourceAbs
                         . ' ' . _( 'old' ) . ": {$ApplicationNamespace->clientIP} " . _( 'new' ) . ": {$_SERVER['REMOTE_ADDR']}"
                     );
                     Zend_Session::destroy( true, true );
-                    die( _( 'Your IP address has changed indication a possible session hijack attempt. Your session has been destroyed for your own security.' ) );
+                    die( _( 'Your IP address has changed, indicating a possible session hijack attempt. Your session has been destroyed for your own security.' ) );
                 }
             }
 

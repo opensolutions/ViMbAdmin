@@ -48,54 +48,48 @@ class ViMbAdmin_Form_Alias_Edit extends ViMbAdmin_Form
 
         $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'alias/form/edit.phtml' ) ) ) );
 
-        $this
-            ->setMethod( 'post' )
+        $this->setMethod( 'post' )
             ->setAttrib( 'id', 'alias_edit_form' )
             ->setAttrib( 'name', 'alias_edit_form' );
 
-        $localPart = $this
-                        ->createElement( 'text', 'local_part' )
-                        ->setAttrib( 'size', 40 )
-                        ->setLabel( _( 'Local Part' ) )
-                        ->setAttrib( 'title', _( 'Local Part' ) )
-                        ->setRequired( false )
-                        ->setAttrib( 'class', 'span2' )
-                        ->addValidator( 'StringLength', false, array( 0, 255 ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StringToLower' )
-                        ->addFilter( 'StripSlashes' );
+        $localPart = $this->createElement( 'text', 'local_part' )
+            ->setAttrib( 'size', 40 )
+            ->setLabel( _( 'Local Part' ) )
+            ->setAttrib( 'title', _( 'Local Part' ) )
+            ->setRequired( false )
+            ->setAttrib( 'class', 'span2' )
+            ->addValidator( 'StringLength', false, array( 0, 255 ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StringToLower' )
+            ->addFilter( 'StripSlashes' );
 
-        $domain = $this
-                        ->createElement( 'select', 'domain' )
-                        ->setOptions( array( 'multiOptions' => array( '' => '- select -' ) + $domainList ) ) // array('' => _( '- select -' ) ) + $domainList
-                        ->setLabel( _( 'Domain' ) )
-                        ->setAttrib( 'title', _( 'Domain' ) )
-                        ->setRequired( true )
-                        ->setAttrib( 'class', 'required add-on-input' )
-                        ->addFilter( 'Digits' )
-                        ->addValidator( 'InArray', true, array( array_keys( $domainList ) ) );
+        $domain = $this->createElement( 'select', 'domain' )
+            ->setOptions( array( 'multiOptions' => array( '' => '- select -' ) + $domainList ) ) // array('' => _( '- select -' ) ) + $domainList
+            ->setLabel( _( 'Domain' ) )
+            ->setAttrib( 'title', _( 'Domain' ) )
+            ->setRequired( true )
+            ->setAttrib( 'class', 'required add-on-input' )
+            ->addFilter( 'Digits' )
+            ->addValidator( 'InArray', true, array( array_keys( $domainList ) ) );
 
         $domain->getValidator( 'InArray' )->setMessage( _( 'You must select a domain.' ), Zend_Validate_InArray::NOT_IN_ARRAY);
 
-        $active = $this
-                        ->createElement( 'checkbox', 'active' )
-                        ->setLabel( _( 'Active' ) )
-                        ->addValidator('InArray', false, array( array( 0, 1 ) ) )
-                        ->setValue( 1 )
-                        ->addFilter( 'Digits' );
+        $active = $this->createElement( 'checkbox', 'active' )
+            ->setLabel( _( 'Active' ) )
+            ->addValidator('InArray', false, array( array( 0, 1 ) ) )
+            ->setValue( 1 )
+            ->addFilter( 'Digits' );
 
-        $goto = $this
-                    ->createElement( 'text', 'goto' )
-                    ->setLabel( _( 'Goto' ) )
-                    ->setRequired( false );
+        $goto = $this->createElement( 'text', 'goto' )
+            ->setLabel( _( 'Goto' ) )
+            ->setAttrib( 'autocomplete', 'off' )
+            ->setRequired( false );
 
-        $submit = $this
-                        ->createElement( 'submit' , 'save' )
-                        ->setLabel( _( 'Save' ) );
+        $submit = $this->createElement( 'submit' , 'save' )
+            ->setLabel( _( 'Save' ) );
 
-        $this
-            ->addElement( $localPart )
+        $this->addElement( $localPart )
             ->addElement( $domain )
             ->addElement( $active )
             ->addElement( $goto )

@@ -121,7 +121,7 @@ class MailboxController extends ViMbAdmin_Controller_Action
         $this->_mailbox->save();
 
         LogTable::log( 'MAILBOX_TOGGLE_ACTIVE',
-            "Set {$this->_mailbox['username']} set " . ( $this->_targetAdmin['active'] ? '' : 'de' ) . "active",
+            "Set {$this->_mailbox['username']} set " . ( $this->_mailbox['active'] ? '' : 'de' ) . "active",
             $this->getAdmin(), $this->_mailbox['domain']
         );
 
@@ -493,7 +493,10 @@ class MailboxController extends ViMbAdmin_Controller_Action
         }
 
         if( $this->_domain )
+        {
             $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
+            $this->view->domain = $this->_domain;
+        }
 
         $this->view->editForm = $editForm;
     }

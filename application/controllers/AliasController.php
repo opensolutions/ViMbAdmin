@@ -326,7 +326,10 @@ class AliasController extends ViMbAdmin_Controller_Action
         else
         {
             if( $this->_domain )
+            {
+                $this->view->domain = $this->_domain;
                 $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
+            }
 
             if( $this->_mailbox )
                 $this->view->defaultGoto = "{$this->_mailbox->local_part}@{$this->_mailbox->Domain->domain}";

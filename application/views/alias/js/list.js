@@ -20,8 +20,7 @@
                         });
 
         $('#ima').bind( 'click', function(e) {
-
-            if( $('#ima').hasClass( 'active' ) )
+            if( $('#ima > i').hasClass( 'icon-eye-close' ) )
                 document.location.href = "{genUrl controller='alias' action='list' did=$domain.id|int ima=0}";
             else
                 document.location.href = "{genUrl controller='alias' action='list' did=$domain.id|int ima=1}";

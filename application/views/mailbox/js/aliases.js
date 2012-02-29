@@ -18,8 +18,7 @@
                         });
 
         $('#ima').bind( 'click', function(e) {
-
-            if( $('#ima').hasClass( 'active' ) )
+            if( $('#ima > i').hasClass( 'icon-eye-close' ) )
                 document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=0}";
             else
                 document.location.href = "{genUrl controller='mailbox' action='aliases' mid=$mailboxModel.id ima=1}";

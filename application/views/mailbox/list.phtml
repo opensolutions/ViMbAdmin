@@ -13,7 +13,7 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_mailbox" href="{genUrl controller='mailbox' action='edit' modal=true}{if $domain}/did/{$domain.id}{/if}" title="Add Mailbox">
+        	        <a class="btn" id="modal-dialog-add_mailbox" onmouseover="vm_tooltip( 'modal-dialog-add_mailbox', 'Add Mailbox' );" href="{genUrl controller='mailbox' action='edit' modal=true}{if $domain}/did/{$domain.id}{/if}" title="Add Mailbox">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
@@ -23,7 +23,7 @@
         <h1>
             Mailboxes {if $domain}<small> for {$domain.domain} {if $domain.mailboxes neq 0}({$domain->countMailboxes()}/{$domain.mailboxes}){/if}</small>{/if}
             {if isset( $session->domain ) && $session->domain}
-                <a class="btn" title="Show All" href="{genUrl controller='mailbox' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+                <a class="btn" id="show_all_mailbox" onmouseover="vm_tooltip( 'show_all_mailbox', 'Show All' );" href="{genUrl controller='mailbox' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
             {/if}
         </h1>
     </div>
@@ -36,8 +36,8 @@
             <th>Email</th>
             <th>Name</th>
             <th>Domain</th>
-            <th>Active</th>
-            <th></th>
+            <th width="55">Active</th>
+            <th width="140"></th>
         </tr>
     </thead>
     <tbody>
@@ -51,11 +51,23 @@
                 <span id="toggle-active-{$oneMailbox.id}" onclick="toggleActive( 'toggle-active-{$oneMailbox.id}', {$oneMailbox.id} );" class="btn btn-mini {if $oneMailbox.active}btn-success{else}btn-danger{/if}">{$oneMailbox.active|yesno}</span>
             </td>
             <td>
-                <a class="btn btn-mini" href="{genUrl controller='mailbox' action='aliases' mid=$oneMailbox.id}">Aliases</a>
-                <a class="btn btn-mini" id="modal-dialog-wide-purge_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='purge' mid=$oneMailbox.id modal=true}">Purge</a>
-                <a class="btn btn-mini" id="modal-dialog-wide-password_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='password' mid=$oneMailbox.id modal=true}">Password</a>
-                <a class="btn btn-mini" id="modal-dialog-wide-edit_mailbox_{$oneMailbox.id}" href="{genUrl controller='mailbox' action='edit' mid=$oneMailbox.id modal=true}">Edit</a>
-                <span class="btn btn-mini" onclick="sendEmail( {$oneMailbox.id}, '{$oneMailbox.username}' );" id="send-email-{$oneMailbox.id}">Email Settings</span>
+                <div class="btn-group">
+                    <a class="btn btn-mini" id="modal-dialog-edit_mailbox_{$oneMailbox.id}" onmouseover="vm_tooltip( 'modal-dialog-edit_mailbox_{$oneMailbox.id}', 'Edit' );" href="{genUrl controller='mailbox' action='edit' mid=$oneMailbox.id modal=true}">
+                        <i class="icon-pencil"></i>
+                    </a>
+                    <a class="btn btn-mini" id="modal-dialog-password_{$oneMailbox.id}" onmouseover="vm_tooltip( 'modal-dialog-password_{$oneMailbox.id}', 'Password' );" href="{genUrl controller='mailbox' action='password' mid=$oneMailbox.id modal=true}">
+                        <i class="icon-lock"></i>
+                    </a>
+                    <a class="btn btn-mini" id="mailbox_aliases_{$oneMailbox.id}" onmouseover="vm_tooltip( 'mailbox_aliases_{$oneMailbox.id}', 'List Aliases' );" href="{genUrl controller='mailbox' action='aliases' mid=$oneMailbox.id}">
+                        <i class="icon-random"></i>
+                    </a>
+                    <span class="btn btn-mini" id="mailbox_settings_{$oneMailbox.id}" onmouseover="vm_tooltip( 'mailbox_settings_{$oneMailbox.id}', 'Send Settings' );" onclick="sendEmail( {$oneMailbox.id}, '{$oneMailbox.username}' );" id="send-email-{$oneMailbox.id}">
+                        <i class="icon-envelope"></i>
+                    </span>
+                    <a class="btn btn-mini" id="modal-dialog-wide-purge_{$oneMailbox.id}" onmouseover="vm_tooltip( 'modal-dialog-wide-purge_{$oneMailbox.id}', 'purge' );" href="{genUrl controller='mailbox' action='purge' mid=$oneMailbox.id modal=true}">
+                        <i class="icon-trash"></i>
+                    </a>
+                </div>
             </td>
         </tr>
 {/foreach}

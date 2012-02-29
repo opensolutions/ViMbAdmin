@@ -11,7 +11,7 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_admin" href="{genUrl controller='admin' action='add' modal=true}" title="Add Admin">
+        	        <a class="btn" id="modal-dialog-add_admin"  onmouseover="vm_tooltip( 'modal-dialog-add_admin', 'Add Admin' );" href="{genUrl controller='admin' action='add' modal=true}">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
@@ -27,14 +27,14 @@
     <thead>
         <tr>
             <th>Username</th>
-            <th>Active</th>
-            <th>Super</th>
-            <th></th>
+            <th width="55">Active</th>
+            <th width="55">Super</th>
+            <th width="115"></th>
         </tr>
     </thead>
     <tbody>
         {foreach $admins as $oneAdmin}
-            <tr id="admin_{$oneAdmin.id}" {if $identity.admin.id == $oneAdmin.id}class="bold"{/if}>
+            <tr id="admin_{$oneAdmin.id}">
                 <td>{$oneAdmin.username}</td>
                 <td>
                     <div id="throb-toggle-active-{$oneAdmin.id}" style="float: right;"></div>
@@ -53,14 +53,25 @@
                     {/if}
                 </td>
                 <td>
-                    <a class="btn btn-mini" id="modal-dialog-password-{$oneAdmin.id}" href="{genUrl controller='admin' action='password' modal=true aid=$oneAdmin.id}">Password</a>
-                    <a class="btn btn-mini" href="{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}">Log</a>
-                    {if not $oneAdmin.super}
-                        <a class="btn btn-mini" href="{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}">Domains</a>
-                    {/if}
-                    {if $identity.admin.id neq $oneAdmin.id}
-                        <span class="btn btn-mini" id="purge-admin-{$oneAdmin.id}"  onclick="purgeAdmin( {$oneAdmin.id}, '{$oneAdmin.username}' );">Purge</span>
-                    {/if}
+                    <div class="btn-group">
+                        <a class="btn btn-mini" id="modal-dialog-password-{$oneAdmin.id}" onmouseover="vm_tooltip( 'modal-dialog-password-{$oneAdmin.id}', 'Password' );" href="{genUrl controller='admin' action='password' modal=true aid=$oneAdmin.id}">
+                            <i class="icon-lock"></i>
+                        </a>
+                        <a class="btn btn-mini" id="admin_logs_{$oneAdmin.id}" onmouseover="vm_tooltip( 'admin_logs_{$oneAdmin.id}', 'Logs' );" href="{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}">
+                            <i class="icon-align-justify"></i>
+                        </a>
+
+                        {if $identity.admin.id neq $oneAdmin.id}
+                            <span class="btn btn-mini" id="purge-admin-{$oneAdmin.id}" onmouseover="vm_tooltip( 'purge-admin-{$oneAdmin.id}', 'Purge' );"  onclick="purgeAdmin( {$oneAdmin.id}, '{$oneAdmin.username}' );">
+                                <icon class="icon-trash"></i>
+                            </span>
+                        {/if}
+                        {if not $oneAdmin.super}
+                            <a class="btn btn-mini" id="admin_domains_{$oneAdmin.id}" onmouseover="vm_tooltip( 'admin_domains_{$oneAdmin.id}', 'List Domains' );" href="{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}">
+                                <i class="icon-screenshot"></i>
+                            </a>
+                        {/if}
+                    </div>
                 </td>
             </tr>
         {/foreach}

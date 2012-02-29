@@ -7,13 +7,15 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_alias" href="{genUrl controller='alias' action='edit' mid=$mailboxModel.id modal=true}" title="Add Alias">
+        	        <a class="btn" id="modal-dialog-add_alias" href="{genUrl controller='alias' action='edit' mid=$mailboxModel.id modal=true}" onmouseover="vm_tooltip( 'modal-dialog-add_alias', 'Add Alias' );">
             	        <i class="icon-plus"></i>
         	        </a>
-            	</span>
-        	    <span class="btn-group" data-toggle="buttons-checkbox">
-        	        <span class="btn {if $includeMailboxAliases}active{/if}" id="ima" title="Include mailbox aliases" >
-            	        Include mailbox aliases
+        	        <span class="btn" id="ima" onmouseover="vm_tooltip( 'ima', '{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases' );" >
+            	        {if $includeMailboxAliases}
+            	            <i class="icon-eye-close"></i>
+            	        {else}
+            	            <i class="icon-eye-open"></i>
+            	        {/if}
         	        </span>
             	</span>
         	</div>
@@ -29,16 +31,22 @@
             <tr>
                 <th>Address</th>
                 <th>Goto</th>
-                <th></th>
+                <th width="30"></th>
             </tr>
         </thead>
         <tbody>
         {foreach $aliases as $oneAlias}
             <tr id="alias_{$oneAlias.id}">
                 <td>{$oneAlias.address}</td>
-                <td>{$oneAlias.goto}</td>
+                <td id="alias-goto-{$oneAlias.id}" {if strlen( $oneAlias.goto ) > 50  } onmouseover="vm_tooltip( 'alias-goto-{$oneAlias.id}', '{$oneAlias.goto|regex_replace:"/[,]/":", "}' );" {/if}>
+                {$oneAlias.goto|shorten:50}
+            </td>
                 <td>
-                    <span class="btn btn-mini" onclick="deleteAlias( {$oneAlias.id}, {$mailboxModel.id}, '{$oneAlias.address}' );" id="delete-alias-{$oneAlias.id}">Remove</span>
+                    <div class="btn-group">
+                        <span class="btn btn-mini" onclick="deleteAlias( {$oneAlias.id}, {$mailboxModel.id}, '{$oneAlias.address}' );" id="delete-alias-{$oneAlias.id}" onmouseover="vm_tooltip( 'delete-alias-{$oneAlias.id}', 'Remove' );">
+                            <i class="icon-trash"></i>
+                        </span>
+                    </div>
                 </td>
             </tr>
         {/foreach}

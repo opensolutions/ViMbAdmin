@@ -352,6 +352,18 @@ function randPasword( len, id )
 }
 
 
+/**
+ * This function sets and shows tolltip.
+ *
+ * @param string id The id of element were we want to display tolltip.
+ * @param string msg The message to be displayer.
+ */
+function vm_tooltip( id, msg )
+{
+    $('#'+id).tooltip( { title: msg, placement: 'bottom', delay: { show: 1000, hide: 100 } } );
+}
+
+
 
 
 //****************************************************************************

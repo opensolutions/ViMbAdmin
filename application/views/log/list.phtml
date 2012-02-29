@@ -6,7 +6,7 @@
         <h1>
             Logs{if isset( $session->domain ) && $session->domain }<small> for {$session->domain.domain}</small>{/if}
             {if isset( $session->domain ) && $session->domain}
-                <a class="btn" title="Show All" href="{genUrl controller='log' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+                <a class="btn" id="show_all_logs" onmouseover="vm_tooltip( 'show_all_logs', 'Show All' );" href="{genUrl controller='log' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
             {/if}
         </h1>
     </div>
@@ -28,7 +28,9 @@
 {foreach $logEntries as $oneLog}
         <tr>
             <td>{$oneLog.action}</td>
-            <td class="OSSTooltip-tl-bl" title="{$oneLog.data}">{$oneLog.data|shorten:40}</td>
+            <td id="log-message-{$oneLog.id}" {if strlen( $oneLog.data ) > 40 } onmouseover="vm_tooltip( 'log-message-{$oneLog.id}', '{$oneLog.data|regex_replace:"/[\r\t\n]/":" "}' );" {/if}>
+                {$oneLog.data|shorten:40}
+            </td>
             <td>{$oneLog.Admin.username}</td>
             <td>{$oneLog.Domain.domain}</td>
             <td>{$oneLog.timestamp}</td>

@@ -308,7 +308,10 @@ class AliasController extends ViMbAdmin_Controller_Action
 
                         if( $this->_getParam( 'helper', true ) )
                         {
-                            $this->_redirect( 'alias/list' );
+                            if( $this->_domain )
+                                $this->_redirect( 'alias/list/did/' . $this->_domain['id'] );
+                            else
+                                $this->_redirect( 'alias/list' );
                         }
                         else
                         {

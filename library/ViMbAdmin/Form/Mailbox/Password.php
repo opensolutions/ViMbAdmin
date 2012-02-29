@@ -42,7 +42,7 @@
 class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
 {
 
-    public function __construct( $options = null )
+    public function __construct( $minPass = 8, $options = null )
     {
         parent::__construct( $options );
 
@@ -53,70 +53,63 @@ class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
             ->setAttrib( 'id', 'change_password_form' )
             ->setAttrib( 'name', 'change_password_form' );
 
-       $username = $this
-                        ->createElement( 'text', 'username' )
-                        ->setLabel( _( 'Username' ) )
-                        ->setAttrib( 'title', _( 'Username' ) )
-                        ->setAttrib( 'class', 'required' )
-                        ->setAttrib( 'autocomplete', 'off' )
-                        ->setRequired( true )
-                        ->addValidator( 'NotEmpty', true )
-                        ->addValidator( 'EmailAddress', true, array( 'mx' => true ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StripSlashes' );
+        $username = $this->createElement( 'text', 'username' )
+            ->setLabel( _( 'Username' ) )
+            ->setAttrib( 'title', _( 'Username' ) )
+            ->setAttrib( 'class', 'required' )
+            ->setAttrib( 'autocomplete', 'off' )
+            ->setRequired( true )
+            ->addValidator( 'NotEmpty', true )
+            ->addValidator( 'EmailAddress', true, array( 'mx' => true ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' );
 
         $username->getValidator( 'NotEmpty' )->setMessage( _( 'You must enter your email address' ), Zend_Validate_NotEmpty::IS_EMPTY );
 
-        $currentPassword = $this
-                                ->createElement( 'password', 'current_password' )
-                                ->setLabel( _( 'Current Password' ) )
-                                ->setAttrib( 'title', _( 'Current Password' ) )
-                                ->setAttrib( 'class', 'required' )
-                                ->setRequired( true )
-                                ->addValidator( 'NotEmpty', true )
-                                ->addValidator( 'StringLength', true, array( 8, 32 ) )
-                                ->addFilter( 'StringTrim' )
-                                ->addFilter( 'HtmlEntitiesDecode' )
-                                ->addFilter( 'StripSlashes' );
+        $currentPassword = $this->createElement( 'password', 'current_password' )
+            ->setLabel( _( 'Current Password' ) )
+            ->setAttrib( 'title', _( 'Current Password' ) )
+            ->setAttrib( 'class', 'required' )
+            ->setRequired( true )
+            ->addValidator( 'NotEmpty', true )
+            ->addValidator( 'StringLength', true, array( $minPass, 32 ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' );
 
-        $newPassword = $this
-                            ->createElement( 'password', 'new_password' )
-                            ->setLabel( _( 'New Password' ) )
-                            ->setAttrib( 'title', _( 'New Password' ) )
-                            ->setAttrib( 'class', 'required' )
-                            ->setRequired( true )
-                            ->addValidator( 'NotEmpty', true )
-                            ->addValidator( 'StringLength', true, array( 8, 32 ) )
-                            ->addFilter( 'StringTrim' )
-                            ->addFilter( 'HtmlEntitiesDecode' )
-                            ->addFilter( 'StripSlashes' );
+        $newPassword = $this ->createElement( 'password', 'new_password' )
+            ->setLabel( _( 'New Password' ) )
+            ->setAttrib( 'title', _( 'New Password' ) )
+            ->setAttrib( 'class', 'required' )
+            ->setRequired( true )
+            ->addValidator( 'NotEmpty', true )
+            ->addValidator( 'StringLength', true, array( $minPass, 32 ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' );
 
-        $confirmNewPassword = $this
-                                ->createElement( 'password', 'confirm_new_password' )
-                                ->setLabel( _( 'Confirm New Password' ) )
-                                ->setAttrib( 'title', _( 'Confirm New Password' ) )
-                                ->setAttrib( 'class', 'required' )
-                                ->setRequired( true )
-                                ->addValidator( 'NotEmpty', true )
-                                ->addValidator( 'IdenticalField', true, array( 'fieldName' => 'new_password', 'fieldTitle' => _( 'the new password' ) ) )
-                                ->addFilter( 'StringTrim' )
-                                ->addFilter( 'HtmlEntitiesDecode' )
-                                ->addFilter( 'StripSlashes' );
+        $confirmNewPassword = $this->createElement( 'password', 'confirm_new_password' )
+            ->setLabel( _( 'Confirm New Password' ) )
+            ->setAttrib( 'title', _( 'Confirm New Password' ) )
+            ->setAttrib( 'class', 'required' )
+            ->setRequired( true )
+            ->addValidator( 'NotEmpty', true )
+            ->addValidator( 'IdenticalField', true, array( 'fieldName' => 'new_password', 'fieldTitle' => _( 'the new password' ) ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' );
 
         $confirmNewPassword->getValidator( 'NotEmpty' )
             ->setMessage( _( 'The confirmation password is required and must match the new password' ), Zend_Validate_NotEmpty::IS_EMPTY);
 
-        $cancel = $this
-                        ->createElement( 'button' , 'cancel' )
-                        ->setLabel( _( 'Cancel' ) );
+        $cancel = $this->createElement( 'button' , 'cancel' )
+            ->setLabel( _( 'Cancel' ) );
 
-        $submit = $this
-                        ->createElement( 'submit' , 'change' )
-                        ->setLabel( _( 'Submit' ) );
+        $submit = $this->createElement( 'submit' , 'change' )
+            ->setLabel( _( 'Submit' ) );
 
-        $this
-            ->addElement( $username )
+        $this->addElement( $username )
             ->addElement( $currentPassword )
             ->addElement( $newPassword )
             ->addElement( $confirmNewPassword )

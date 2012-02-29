@@ -332,7 +332,7 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
         $domainList = DomainTable::getDomains( $this->getAdmin() );
 
-        $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList );
+        $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'] );
         $editForm->setDefaults( $this->_mailbox->toArray() );
 
         if( $this->_mailbox['id'] )
@@ -469,7 +469,10 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
                     if( $this->_getParam( 'helper', true ) )
                     {
-                        $this->_redirect( 'mailbox/list' );
+                        if( $this->_domain )
+                            $this->_redirect( 'mailbox/list/did/' . $this->_domain['id'] );
+                        else
+                            $this->_redirect( 'mailbox/list' );
                     }
                     else
                     {
@@ -570,7 +573,7 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
         $this->view->mailbox = $this->_mailbox;
 
-        $form = new ViMbAdmin_Form_Admin_Password();
+        $form = new ViMbAdmin_Form_Admin_Password( $this->_options['defaults']['mailbox']['min_password_length'] );
 
         if( $this->getRequest()->isPost() && !$modal )
         {

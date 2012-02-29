@@ -42,109 +42,98 @@
 class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
 {
 
-    public function __construct( $options = null, $domainList )
+    public function __construct( $options = null, $domainList, $minPass = 8 )
     {
         parent::__construct( $options );
 
         $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'mailbox/form/edit.phtml' ) ) ) );
 
-        $this
-            ->setMethod( 'post' )
+        $this->setMethod( 'post' )
             ->setAttrib( 'id', 'mailbox_edit_form' )
             ->setAttrib( 'name', 'mailbox_edit_form' );
 
-        $localPart = $this
-                        ->createElement( 'text', 'local_part' )
-                        ->setAttrib( 'size', 40 )
-                        ->setLabel( _( 'Local Part' ) )
-                        ->setAttrib( 'title', _( 'Local Part' ) )
-                        ->setAttrib( 'class', 'required span2' )
-                        ->setRequired( true )
-                        ->addValidator( 'NotEmpty', true )
-                        ->addValidator( 'StringLength', false, array( 1, 255 ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StringToLower' )
-                        ->addFilter( 'StripSlashes' );
+        $localPart = $this->createElement( 'text', 'local_part' )
+            ->setAttrib( 'size', 40 )
+            ->setLabel( _( 'Local Part' ) )
+            ->setAttrib( 'title', _( 'Local Part' ) )
+            ->setAttrib( 'class', 'required span2' )
+            ->setRequired( true )
+            ->addValidator( 'NotEmpty', true )
+            ->addValidator( 'StringLength', false, array( 1, 255 ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StringToLower' )
+            ->addFilter( 'StripSlashes' );
 
-        $domain = $this
-                        ->createElement( 'select', 'domain' )
-                        ->setOptions( array( 'multiOptions' => array( '' => '- select -' ) + $domainList ) ) // array('' => _( '- select -' ) ) + $domainList
-                        ->setLabel( _( 'Domain' ) )
-                        ->setAttrib( 'title', _( 'Domain' ) )
-                        ->setRequired( true )
-                        ->setAttrib( 'class', 'required add-on-input' )
-                        ->addValidator( 'NotEmpty', true )
-                        ->addValidator( 'StringLength', false, array( 1, 255 ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StripSlashes' )
-                        ->addValidator( 'InArray', true, array( array_keys( $domainList ) ) );
+        $domain = $this->createElement( 'select', 'domain' )
+            ->setOptions( array( 'multiOptions' => array( '' => '- select -' ) + $domainList ) ) // array('' => _( '- select -' ) ) + $domainList
+            ->setLabel( _( 'Domain' ) )
+            ->setAttrib( 'title', _( 'Domain' ) )
+            ->setRequired( true )
+            ->setAttrib( 'class', 'required add-on-input' )
+            ->addValidator( 'NotEmpty', true )
+            ->addValidator( 'StringLength', false, array( 1, 255 ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' )
+            ->addValidator( 'InArray', true, array( array_keys( $domainList ) ) );
 
         $domain->getValidator( 'InArray' )->setMessage( _( 'You must select a domain.' ), Zend_Validate_InArray::NOT_IN_ARRAY);
 
-        $name = $this
-                        ->createElement( 'text', 'name' )
-                        ->setAttrib( 'size', 40 )
-                        ->setLabel( _( 'Name' ) )
-                        ->setAttrib( 'title', _( 'Name' ) )
-                        ->setRequired( false )
-                        ->addValidator( 'StringLength', false, array( 0, 255 ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StripSlashes' );
+        $name = $this->createElement( 'text', 'name' )
+            ->setAttrib( 'size', 40 )
+            ->setLabel( _( 'Name' ) )
+            ->setAttrib( 'title', _( 'Name' ) )
+            ->setRequired( false )
+            ->addValidator( 'StringLength', false, array( 0, 255 ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' );
 
-        $password = $this
-                        ->createElement( 'text', 'password' )
-                        ->setLabel( _( 'Password' ) )
-                        ->setAttrib( 'title', _( 'Password' ) )
-                        ->setAttrib( 'size', 40 )
-                        ->setRequired( true )
-                        ->addValidator( 'NotEmpty', true )
-                        ->addValidator( 'StringLength', true, array( 8, 32 ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StripSlashes' );
+        $password = $this->createElement( 'text', 'password' )
+            ->setLabel( _( 'Password' ) )
+            ->setAttrib( 'title', _( 'Password' ) )
+            ->setAttrib( 'size', 40 )
+            ->setRequired( true )
+            ->addValidator( 'NotEmpty', true )
+            ->addValidator( 'StringLength', true, array( $minPass, 32 ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' );
 
-        $active = $this
-                        ->createElement( 'checkbox', 'active' )
-                        ->setLabel( _( 'Active' ) )
-                        ->addValidator( 'InArray', false, array( array( 0, 1 ) ) )
-                        ->addFilter( 'Digits' );
+        $active = $this->createElement( 'checkbox', 'active' )
+            ->setLabel( _( 'Active' ) )
+            ->addValidator( 'InArray', false, array( array( 0, 1 ) ) )
+            ->addFilter( 'Digits' );
 
-        $quota = $this
-                        ->createElement( 'text', 'quota' )
-                        ->setLabel( _( 'Quota' ) )
-                        ->setAttrib( 'title', _( 'Quota' ) )
-                        ->setAttrib( 'size', 5 )
-                        ->setRequired( false )
-                        ->addFilter( 'Digits' );
+        $quota = $this->createElement( 'text', 'quota' )
+            ->setLabel( _( 'Quota' ) )
+            ->setAttrib( 'title', _( 'Quota' ) )
+            ->setAttrib( 'size', 5 )
+            ->setRequired( false )
+            ->addFilter( 'Digits' );
 
-        $welcomeEmail = $this
-                        ->createElement( 'checkbox', 'welcome_email' )
-                        ->setAttrib( 'onclick', "$('#cc_welcome_email_tr').toggle('fast');" )
-                        ->setLabel( _( 'Welcome email' ) )
-                        ->addValidator( 'InArray', false, array( array( 0, 1 ) ) )
-                        ->addFilter( 'Digits' );
+        $welcomeEmail = $this->createElement( 'checkbox', 'welcome_email' )
+            ->setAttrib( 'onclick', "$('#cc_welcome_email_tr').toggle('fast');" )
+            ->setLabel( _( 'Welcome email' ) )
+            ->addValidator( 'InArray', false, array( array( 0, 1 ) ) )
+            ->addFilter( 'Digits' );
 
-        $ccWelcomeEmail = $this
-                            ->createElement( 'text', 'cc_welcome_email' )
-                            ->setAttrib( 'size', 40 )
-                            ->setLabel( _( 'CC welcome email' ) )
-                            ->setAttrib( 'title', _( 'CC welcome email' ) )
-                            //->setAttrib( 'autocomplete', 'off' )
-                            ->setRequired( false )
-                            ->addValidator( 'EmailAddress', true, array( 'mx' => true ) )
-                            ->addFilter( 'StringTrim' )
-                            ->addFilter( 'HtmlEntitiesDecode' )
-                            ->addFilter( 'StripSlashes' );
+        $ccWelcomeEmail = $this->createElement( 'text', 'cc_welcome_email' )
+            ->setAttrib( 'size', 40 )
+            ->setLabel( _( 'CC welcome email' ) )
+            ->setAttrib( 'title', _( 'CC welcome email' ) )
+            //->setAttrib( 'autocomplete', 'off' )
+            ->setRequired( false )
+            ->addValidator( 'EmailAddress', true, array( 'mx' => true ) )
+            ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
+            ->addFilter( 'StripSlashes' );
 
-        $submit = $this
-                        ->createElement( 'submit' , 'save' )
-                        ->setLabel( _( 'Save' ) );
+        $submit = $this->createElement( 'submit' , 'save' )
+            ->setLabel( _( 'Save' ) );
 
-        $this
-            ->addElement( $localPart )
+        $this->addElement( $localPart )
             ->addElement( $domain )
             ->addElement( $name )
             ->addElement( $password )

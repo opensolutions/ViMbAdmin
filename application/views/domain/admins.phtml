@@ -6,7 +6,7 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <span class="btn" id="open_add_admin" title="Add Admin">
+        	        <span class="btn" id="open_add_admin" onmouseover="vm_tooltip( 'open_add_admin', 'Add Admin' );">
             	        <i class="icon-plus"></i>
         	        </apan>
             	</span>
@@ -22,14 +22,18 @@
     <thead>
         <tr>
             <th>Username</th>
-            <th></th>
+            <th width="30"></th>
         </tr>
     </thead>
     <tbody>
 {foreach $domainModel.DomainAdmin as $oneAdmin}
     <tr id="admin_{$oneAdmin.Admin.id}">
         <td>{$oneAdmin.Admin.username}{if not $oneAdmin.Admin.active} <em>(inactive)</em>{/if}</td>
-        <td><span class="btn btn-mini" onclick="removeAdmin( {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}' );" id="remove-admin-{$oneAdmin.Admin.id}">Remove</span></td>
+        <td>
+            <span class="btn btn-mini" onclick="removeAdmin( {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}' );" id="remove-admin-{$oneAdmin.Admin.id}" onmouseover="vm_tooltip( 'remove-admin-{$oneAdmin.Admin.id}', 'Remove' );">
+                <i class="icon-trash"></i>
+            </span>
+        </td>
     </tr>
 {/foreach}
     </tbody>

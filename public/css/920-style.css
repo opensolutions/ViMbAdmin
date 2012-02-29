@@ -63,6 +63,10 @@ a.aplain, a:link.aplain, a:visited.aplain, a:hover.aplain, a:active.aplain {
     margin-left: -400px;
 }
 
+.tooltip-inner {
+    max-width: 760px;
+}
+
 
 .help-block
 {

@@ -28,7 +28,16 @@
 {foreach $logEntries as $oneLog}
         <tr>
             <td>{$oneLog.action}</td>
-            <td class="OSSTooltip-tl-bl" title="{$oneLog.data}">{$oneLog.data|shorten:40}</td>
+            <td id="log-message-{$oneLog.id}">
+                {$oneLog.data|shorten:40}
+                {if strlen( $oneLog.data ) > 40 }
+                    <script type="text/javascript">
+                        $( document ).ready( function(){
+                            $( "#log-message-{$oneLog.id}" ).tooltip({ trigger: 'hover', delay: { show: 2000, hide: 100 }, title: '{$oneLog.data|regex_replace:"/[\r\n]/":" "}' });
+                        });
+                    </script>
+                {/if}
+            </td>
             <td>{$oneLog.Admin.username}</td>
             <td>{$oneLog.Domain.domain}</td>
             <td>{$oneLog.timestamp}</td>

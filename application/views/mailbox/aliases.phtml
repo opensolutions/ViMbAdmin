@@ -36,7 +36,16 @@
         {foreach $aliases as $oneAlias}
             <tr id="alias_{$oneAlias.id}">
                 <td>{$oneAlias.address}</td>
-                <td>{$oneAlias.goto}</td>
+                <td id="alias-goto-{$oneAlias.id}">
+                {$oneAlias.goto|shorten:50}
+                {if strlen( $oneAlias.goto ) > 50 }
+                    <script type="text/javascript">
+                        $( document ).ready( function(){
+                            $( "#alias-goto-{$oneAlias.id}" ).tooltip({ trigger: 'hover', delay: { show: 2000, hide: 100 }, title: '{$oneAlias.goto|regex_replace:"/[,]/":", "}' });
+                        });
+                    </script>
+                {/if}
+            </td>
                 <td>
                     <span class="btn btn-mini" onclick="deleteAlias( {$oneAlias.id}, {$mailboxModel.id}, '{$oneAlias.address}' );" id="delete-alias-{$oneAlias.id}">Remove</span>
                 </td>

@@ -7,16 +7,16 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_alias" href="{genUrl controller='alias' action='edit' mid=$mailboxModel.id modal=true}" onmouseover="vm_tooltip( 'modal-dialog-add_alias', 'Add Alias' );">
-            	        <i class="icon-plus"></i>
-        	        </a>
-        	        <span class="btn" id="ima" onmouseover="vm_tooltip( 'ima', '{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases' );" >
+            	    <span class="btn" id="ima" onmouseover="vm_tooltip( 'ima', '{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases', 'bottom' );" >
             	        {if $includeMailboxAliases}
             	            <i class="icon-eye-close"></i>
             	        {else}
             	            <i class="icon-eye-open"></i>
             	        {/if}
         	        </span>
+        	        <a class="btn" id="modal-dialog-add_alias" href="{genUrl controller='alias' action='edit' mid=$mailboxModel.id modal=true}" onmouseover="vm_tooltip( 'modal-dialog-add_alias', 'Add Alias', 'bottom' );">
+            	        <i class="icon-plus"></i>
+        	        </a>
             	</span>
         	</div>
     	</div>
@@ -38,8 +38,15 @@
         {foreach $aliases as $oneAlias}
             <tr id="alias_{$oneAlias.id}">
                 <td>{$oneAlias.address}</td>
-                <td id="alias-goto-{$oneAlias.id}" {if strlen( $oneAlias.goto ) > 50  } onmouseover="vm_tooltip( 'alias-goto-{$oneAlias.id}', '{$oneAlias.goto|regex_replace:"/[,]/":", "}' );" {/if}>
+                <td id="alias-goto-{$oneAlias.id}">
                 {$oneAlias.goto|shorten:50}
+                {if strlen( $oneAlias.goto ) > 50  }
+                    <script type="text/javascript">
+                        $( document ).ready( function() {
+                            $( "#alias-goto-{$oneAlias.id}" ).tooltip( { title: '{$oneAlias.goto|regex_replace:"/[,]/":", "}', delay: { show: 500, hide: 0 } } );
+                        });
+                    </script>
+                {/if}
             </td>
                 <td>
                     <div class="btn-group">

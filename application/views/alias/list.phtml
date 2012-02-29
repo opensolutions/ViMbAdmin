@@ -8,17 +8,17 @@
 
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
-            	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_alias" onmouseover="vm_tooltip( 'modal-dialog-add_alias', 'Add Alias' );" href="{genUrl controller='alias' action='edit' modal=true}">
-            	        <i class="icon-plus"></i>
-        	        </a>
-        	        <span class="btn" id="ima" onmouseover="vm_tooltip( 'ima', '{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases' );" >
+                    <span class="btn-group">
+                    <span class="btn" id="ima" onmouseover="vm_tooltip( 'ima', '{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases', 'bottom' );" >
             	        {if $includeMailboxAliases}
             	            <i class="icon-eye-close"></i>
             	        {else}
             	            <i class="icon-eye-open"></i>
             	        {/if}
         	        </span>
+        	        <a class="btn" id="modal-dialog-add_alias" onmouseover="vm_tooltip( 'modal-dialog-add_alias', 'Add Alias', 'bottom' );" href="{genUrl controller='alias' action='edit' modal=true}">
+            	        <i class="icon-plus"></i>
+        	        </a>
             	</span>
         	</div>
     	</div>
@@ -27,7 +27,7 @@
             Aliases {if $domain}<small> for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}</small>{/if}
 
             {if isset( $session->domain ) && $session->domain}
-                <a class="btn" id="show_all_aliases" onmouseover="vm_tooltip( 'show_all_aliases', 'Show All' );" href="{genUrl controller='alias' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+                <a class="btn" id="show_all_aliases" onmouseover="vm_tooltip( 'show_all_aliases', 'Show All', 'bottom' );" href="{genUrl controller='alias' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
             {/if}
         </h1>
     </div>
@@ -55,9 +55,15 @@
                 <div id="throb-toggle-active-{$oneAlias.id}" style="float: right;"></div>
                 <span id="toggle-active-{$oneAlias.id}" onclick="toggleActive( 'toggle-active-{$oneAlias.id}', {$oneAlias.id} );" class="btn btn-mini {if $oneAlias.active}btn-success{else}btn-danger{/if}">{$oneAlias.active|yesno}</span>
             </td>
-            <td id="alias-goto-{$oneAlias.id}" {if strlen( $oneAlias.goto ) > 50  } onmouseover="vm_tooltip( 'alias-goto-{$oneAlias.id}', '{$oneAlias.goto|regex_replace:"/[,]/":", "}' );" {/if} >
+            <td id="alias-goto-{$oneAlias.id}" >
                 {$oneAlias.goto|shorten:50}
-
+                {if strlen( $oneAlias.goto ) > 50  }
+                    <script type="text/javascript">
+                        $( document ).ready( function() {
+                            $( "#alias-goto-{$oneAlias.id}" ).tooltip( { title: '{$oneAlias.goto|regex_replace:"/[,]/":", "}', delay: { show: 500, hide: 0 } } );
+                        });
+                    </script>
+                {/if}
             </td>
             <td>
                 <div class="btn-group">

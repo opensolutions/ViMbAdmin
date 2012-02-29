@@ -15,8 +15,13 @@
     	    <div id="div-controls-{$element->local_part->getId()}" class="controls">
     		    <div class="input-append btn-group">
     		        {$element->local_part}
-        		     <span class="btn add-midd">@</span>
-    		         {$element->domain}
+        		    {if !isset( $domain ) || !$domain }
+    		            <span class="btn add-midd">@</span>
+                        {$element->domain}
+		            {else}
+		                <span class="add-on">@{$domain->domain}</span>
+		                <div style="display: none;">{$element->domain}</div>
+		            {/if}
     		    </div>
 
 	        	{if $element->local_part->getMessages()}

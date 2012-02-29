@@ -1,3 +1,13 @@
+2.0.3   2012-02-29
+ - fix: Page titles made consistent with menu text
+ - add: Selecting a domain from the domain list (by clicking logs, mailboxes
+        and aliases for example) makes the domain 'sticky' as you browse
+        through the application with the option to clear it by going back to
+        domains or a page title clear button.
+ - add: Minimum mailbox password length can be specified in application.ini 
+        addressing issue #8
+ - fix: Fix issue #9 by skipping IP check if action is logout.
+
 2.0.2   2012-02-27
  Major UI overhaul. Frontend is now using Bootstrap from Twitter providing an altogether
  prettier, sleeker, consistent and more professional look and feel. A number of small new

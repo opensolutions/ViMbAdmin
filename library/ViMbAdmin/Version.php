@@ -46,7 +46,7 @@ final class ViMbAdmin_Version
     /**
      * Version identification - see compareVersion()
      */
-    const VERSION = '2.0.2';
+    const VERSION = '2.0.3';
 
     /**
      * The latest stable version Zend Framework available

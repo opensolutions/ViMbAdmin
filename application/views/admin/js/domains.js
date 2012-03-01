@@ -7,15 +7,22 @@
     $(document).ready( function()
     {
         oDataTable = $( '#admin_domain_list_table' ).dataTable({
-                            'iDisplayLength': {$options.defaults.table.entries},
-                            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-                            "sPaginationType": "bootstrap",
-                            'bStateSave': true,
-                            'aoColumns': [
-                                null,
-                                { 'bSortable': false, "bSearchable": false }
-                            ]
-                        });
+            "fnCookieCallback": function (sName, oData, sExpires, sPath) {
+                vm_prefs['data_table_rows'] = oData['iLength'];
+                $.jsonCookie( 'vm_prefs', vm_prefs, { 'expires': vm_cookie_expiry_days } );
+                oData = null;
+                return sName + "="+JSON.stringify(oData)+"; expires=" + sExpires +"; path=" + sPath;
+            },
+            'iDisplayLength': vm_prefs['data_table_rows']?vm_prefs['data_table_rows']:{$options.defaults.table.entries},
+            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            "sPaginationType": "bootstrap",
+            'bStateSave': true,
+            "sCookiePrefix": "ViMbAdmin_DataTables_",
+            'aoColumns': [
+                null,
+                { 'bSortable': false, "bSearchable": false }
+            ]
+        });
 
     }); // document onready
 

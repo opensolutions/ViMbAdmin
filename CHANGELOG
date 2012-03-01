@@ -4,6 +4,8 @@
  - add: Tooltips moved to Bootstrap and now only on table elements which
         have been shortened.
  - fix: Improvements to model dialogs.
+ - add: Cookie is now used to remember the number of items to show in 
+        DataTables.
 
 2.0.3   2012-02-29
  - fix: Page titles made consistent with menu text

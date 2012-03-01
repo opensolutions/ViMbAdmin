@@ -1,3 +1,12 @@
+2.0.4   2012-03-01
+ - add: Now using groups of icons for actions rather than buttons
+ - add: Tooltips added with small delay for all icon actions
+ - add: Tooltips moved to Bootstrap and now only on table elements which
+        have been shortened.
+ - fix: Improvements to model dialogs.
+ - add: Cookie is now used to remember the number of items to show in 
+        DataTables.
+
 2.0.3   2012-02-29
  - fix: Page titles made consistent with menu text
  - add: Selecting a domain from the domain list (by clicking logs, mailboxes

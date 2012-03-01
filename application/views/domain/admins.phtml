@@ -10,6 +10,11 @@
             	        <i class="icon-plus"></i>
         	        </apan>
             	</span>
+            	<script>
+                    $( document ).ready( function(){
+                        $( '#open_add_admin' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                    });
+                </script>
         	</div>
     	</div>
 
@@ -18,18 +23,27 @@
 
 {ViMbAdmin_Messages}
 
-<table id="admin_list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
+<table id="list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Username</th>
-            <th></th>
+            <th width="30"></th>
         </tr>
     </thead>
     <tbody>
 {foreach $domainModel.DomainAdmin as $oneAdmin}
     <tr id="admin_{$oneAdmin.Admin.id}">
         <td>{$oneAdmin.Admin.username}{if not $oneAdmin.Admin.active} <em>(inactive)</em>{/if}</td>
-        <td><span class="btn btn-mini" onclick="removeAdmin( {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}' );" id="remove-admin-{$oneAdmin.Admin.id}">Remove</span></td>
+        <td>
+            <span class="btn btn-mini" onclick="removeAdmin( {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}' );" id="remove-admin-{$oneAdmin.Admin.id}" title="Remove">
+                <i class="icon-trash"></i>
+            </span>
+            <script>
+                $( document ).ready( function(){
+                    $( '#remove-admin-{$oneAdmin.Admin.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                });
+            </script>
+        </td>
     </tr>
 {/foreach}
     </tbody>

@@ -13,11 +13,18 @@
 	    	    	Addres
 	    	</label>
     	    <div id="div-controls-{$element->local_part->getId()}" class="controls">
-    		    <div class="input-append btn-group">
+    		    <div class="input-append" style="float: left">
     		        {$element->local_part}
-        		     <span class="btn add-midd">@</span>
-    		         {$element->domain}
+        		    {if !isset( $domain ) || !$domain }
+    		            <span class="btn add-midd">@</span>
+		            {else}
+		                <span class="add-on">@{$domain->domain}</span>
+		                <div style="display: none;">{$element->domain}</div>
+		            {/if}
     		    </div>
+    		    {if !isset( $domain ) || !$domain}
+    		        {$element->domain}
+		        {/if}
 
 	        	{if $element->local_part->getMessages()}
 					<script type="text/javascript">
@@ -60,7 +67,7 @@
             </label>
             <div class="controls" id="div-controls-goto">
                 <div class="input-append btn-group" id="goto-div-0">
-    		        <input type="text" id="goto_empty" name="goto[]" value="" size="40" title="Goto" />
+    		        <input type="text" id="goto_empty" autocomplete="off" name="goto[]" value="" size="40" title="Goto" />
     		        <span id="goto-btn-0" title="Add go to" class="btn add-on" onclick="addGoto();" >
                         <i class="icon-plus"></i>
                     </span>

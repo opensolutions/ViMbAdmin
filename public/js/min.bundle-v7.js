@@ -1035,6 +1035,15 @@ Date.parse(a);if(isNaN(x)||x==="")x=Date.parse("01/01/1970 00:00:00");return x},
 var bDecimal=false;Char=sData.charAt(0);if(sValidFirstChars.indexOf(Char)==-1)return null;for(var i=1;i<sData.length;i++){Char=sData.charAt(i);if(sValidChars.indexOf(Char)==-1)return null;if(Char=="."){if(bDecimal)return null;bDecimal=true}}return"numeric"},function(sData){var iParse=Date.parse(sData);if(iParse!==null&&!isNaN(iParse)||typeof sData==="string"&&sData.length===0)return"date";return null},function(sData){if(typeof sData==="string"&&sData.indexOf("<")!=-1&&sData.indexOf(">")!=-1)return"html";
 return null}]);$.fn.DataTable=DataTable;$.fn.dataTable=DataTable;$.fn.dataTableSettings=DataTable.settings;$.fn.dataTableExt=DataTable.ext})(jQuery,window,document,undefined);
 jQuery.fn.dataTableExt.oSort["num-html-asc"]=function(a,b){var x=a.replace(/<.*?>/g,"");var y=b.replace(/<.*?>/g,"");x=parseFloat(x);y=parseFloat(y);return x<y?-1:x>y?1:0};jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b){var x=a.replace(/<.*?>/g,"");var y=b.replace(/<.*?>/g,"");x=parseFloat(x);y=parseFloat(y);return x<y?1:x>y?-1:0};
+(function($){var escapeable=/["\\\x00-\x1f\x7f-\x9f]/g,meta={"\u0008":"\\b","\t":"\\t","\n":"\\n","\u000c":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"};$.toJSON=typeof JSON==="object"&&JSON.stringify?JSON.stringify:function(o){if(o===null)return"null";var type=typeof o;if(type==="undefined")return undefined;if(type==="number"||type==="boolean")return""+o;if(type==="string")return $.quoteString(o);if(type==="object"){if(typeof o.toJSON==="function")return $.toJSON(o.toJSON());if(o.constructor===Date){var month=
+o.getUTCMonth()+1,day=o.getUTCDate(),year=o.getUTCFullYear(),hours=o.getUTCHours(),minutes=o.getUTCMinutes(),seconds=o.getUTCSeconds(),milli=o.getUTCMilliseconds();if(month<10)month="0"+month;if(day<10)day="0"+day;if(hours<10)hours="0"+hours;if(minutes<10)minutes="0"+minutes;if(seconds<10)seconds="0"+seconds;if(milli<100)milli="0"+milli;if(milli<10)milli="0"+milli;return'"'+year+"-"+month+"-"+day+"T"+hours+":"+minutes+":"+seconds+"."+milli+'Z"'}if(o.constructor===Array){var ret=[];for(var i=0;i<o.length;i++)ret.push($.toJSON(o[i])||
+"null");return"["+ret.join(",")+"]"}var name,val,pairs=[];for(var k in o){type=typeof k;if(type==="number")name='"'+k+'"';else if(type==="string")name=$.quoteString(k);else continue;type=typeof o[k];if(type==="function"||type==="undefined")continue;val=$.toJSON(o[k]);pairs.push(name+":"+val)}return"{"+pairs.join(",")+"}"}};$.evalJSON=typeof JSON==="object"&&JSON.parse?JSON.parse:function(src){return eval("("+src+")")};$.secureEvalJSON=typeof JSON==="object"&&JSON.parse?JSON.parse:function(src){var filtered=
+src.replace(/\\["\\\/bfnrtu]/g,"@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,"]").replace(/(?:^|:|,)(?:\s*\[)+/g,"");if(/^[\],:{}\s]*$/.test(filtered))return eval("("+src+")");else throw new SyntaxError("Error parsing JSON, source is not valid.");};$.quoteString=function(string){if(string.match(escapeable))return'"'+string.replace(escapeable,function(a){var c=meta[a];if(typeof c==="string")return c;c=a.charCodeAt();return"\\u00"+Math.floor(c/16).toString(16)+(c%16).toString(16)})+
+'"';return'"'+string+'"'}})(jQuery);
+(function($){$.cookie=function(key,value,options){if(arguments.length>1&&(!/Object/.test(Object.prototype.toString.call(value))||value===null||value===undefined)){options=$.extend({},options);if(value===null||value===undefined)options.expires=-1;if(typeof options.expires==="number"){var days=options.expires,t=options.expires=new Date;t.setDate(t.getDate()+days)}value=String(value);return document.cookie=[encodeURIComponent(key),"=",options.raw?value:encodeURIComponent(value),options.expires?"; expires="+
+options.expires.toUTCString():"",options.path?"; path="+options.path:"",options.domain?"; domain="+options.domain:"",options.secure?"; secure":""].join("")}options=value||{};var decode=options.raw?function(s){return s}:decodeURIComponent;var pairs=document.cookie.split("; ");for(var i=0,pair;pair=pairs[i]&&pairs[i].split("=");i++)if(decode(pair[0])===key)return decode(pair[1]||"");return null}})(jQuery);
+(function($){$.jsonCookie=function(key,value,options){if(arguments.length>1){options=$.extend({},options);if(value===null||value===undefined)options.expires=-1;if(typeof options.expires==="number"){var days=options.expires,t=options.expires=new Date;t.setDate(t.getDate()+days)}value=$.toJSON(value);return document.cookie=[key,"=",value,options.expires?"; expires="+options.expires.toUTCString():"",options.path?"; path="+options.path:"",options.domain?"; domain="+options.domain:"",options.secure?"; secure":
+""].join("")}options=value||{};var pairs=document.cookie.split("; ");for(var i=0,pair;pair=pairs[i]&&pairs[i].split("=");i++)if(pair[0]===key)return $.evalJSON(pair[1])||"";return null}})(jQuery);
 (function(){var SelectParser;SelectParser=function(){function SelectParser(){this.options_index=0;this.parsed=[]}SelectParser.prototype.add_node=function(child){if(child.nodeName==="OPTGROUP")return this.add_group(child);else return this.add_option(child)};SelectParser.prototype.add_group=function(group){var group_position,option,_i,_len,_ref,_results;group_position=this.parsed.length;this.parsed.push({array_index:group_position,group:true,label:group.label,children:0,disabled:group.disabled});_ref=
 group.childNodes;_results=[];for(_i=0,_len=_ref.length;_i<_len;_i++){option=_ref[_i];_results.push(this.add_option(option,group_position,group.disabled))}return _results};SelectParser.prototype.add_option=function(option,group_position,group_disabled){if(option.nodeName==="OPTION"){if(option.text!==""){if(group_position!=null)this.parsed[group_position].children+=1;this.parsed.push({array_index:this.parsed.length,options_index:this.options_index,value:option.value,text:option.text,html:option.innerHTML,
 selected:option.selected,disabled:group_disabled===true?group_disabled:option.disabled,group_array_index:group_position,classes:option.className,style:option.style.cssText})}else this.parsed.push({array_index:this.parsed.length,options_index:this.options_index,empty:true});return this.options_index+=1}};return SelectParser}();SelectParser.select_to_array=function(select){var child,parser,_i,_len,_ref;parser=new SelectParser;_ref=select.childNodes;for(_i=0,_len=_ref.length;_i<_len;_i++){child=_ref[_i];
@@ -1167,90 +1176,3 @@ function obfuscatedEmailLink(coded,key,linktext){shift=coded.length;link="";for(
 function getDialogButton(dialog_selector,button_name){var buttons=$(dialog_selector+" .ui-dialog-buttonpane button");for(var i=0;i<buttons.length;++i){var jButton=$(buttons[i]);if(jButton.text()==button_name)return jButton}return null}String.prototype.htmlEntity=function(){return $("<div/>").text(this.substr()).html()};String.prototype.htmlEntityDecode=function(){return $("<div/>").html(this.substr()).text()};
 String.prototype.ucwords=function(){var arr=this.split(" ");var str="";arr.forEach(function(v){str+=v.charAt(0).toUpperCase()+v.slice(1,v.length)+" "});return str};function htmlEntity(str){return $("<div />").text(str).html()}function htmlEntityDecode(str){return $("<div />").html(str).text()}(function($){$.unserialise=function(Data){var Data=Data.split("&");var Serialised=new Array;$.each(Data,function(){var Properties=this.split("=");Serialised[Properties[0]]=Properties[1]});return Serialised}})(jQuery);
 function randomPassword(pwdLength){var charSet="0123456789abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";var password="";while(true){for(var x=0;x<pwdLength;x++)password+=charSet.charAt(Math.floor(Math.random()*charSet.length));if(password.search("[a-z]")!=-1&&password.search("[A-Z]")!=-1&&password.search("[0-9]")!=-1)return password}}function isValidEmail(str){return/^([A-Za-z0-9_\-\+\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test(str)};
-/*
- http://www.opensource.org/licenses/mit-license.php The MIT License
- @author Open Source Solutions Limited <info _at_ opensolutions.ie>
- @author Roland Huszti <roland _at_ opensolutions.ie>
- @version 1.2
-
-
- When loaded and the document is ready, it appends a div to the document body
- with the id 'TooltipContainer'.
-
- It automatically binds itself to every element on the page which has a class
- 'OSSTooltip', using the mouseover and mouseout events (but does not hijack
- and monopolize them). The styling of the popup div can be easily done in CSS
- by having a #TooltipContainer entry. The content of the tooltip comes from the
- item's title attribute by default. (Note that it can contain HTML code, but
- take care of the double quotes!) It automatically empties the title attribute,
- so the browser's own built-in tooltip won't show up.
-
- The tooltip itself can be configured through appending strings to the end of the
- 'OSSTooltip' class name, separated by a dash (minus, "-"). The first parameter
- is the anchor point on the tooltip, the second is the anchor point on the caller
- element (usually an "i" or "?" icon or a text field). These anchor points will
- be matched. For example if the class says "OSSTooltip-lc-rc", then the vertical
- center point of the tooltip on the left will be set (exactly above) to the
- vertical center point of the caller element on the right. The valid values
- for these parameters are 'tl', 'tc', 'tr', 'rc', 'br', 'bc', 'bl', 'lc', where
- 't' is 'top', 'l' is left, 'r' is right, 'c' is center and 'b' is bottom. The
- default setting is "OSSTooltip-lc-rc".
-
- There is a fifth optional parameter, an ID of an element which contains the
- contents of the tooltip. This is usually an id of a hidden div, paragraph or
- span, but it can be pretty much anything. This ID cannot contain the dash
- (minus, "-") character, as that separates the parameters from each other. An
- example: "OSSTooltip-bl-tr---thecontentdivid123"
- If this parameter is set then it will be used as the content source and not
- the title attribute, even if that has content too.
-
- By default the size of the tooltip is automatic, it stretches with the content
- as needed. You can limit that in CSS by using width, min-width, max-width, height,
- min-height and max-height.
-
- The third and fourth optional parameters set the width and height of the tooltip,
- like '200px' or '9.5em'. These overwrite the width and height CSS properites.
-
- The tooltip automatically detects if it stretches out of the document borders and
- tries to re-position itself around the caller element to be inside and fully
- visible. So even if it was set up to appear on the top right side of the caller
- element, it might appear on the bottom left if it is needed.
-
- Any of these parameters can be skipped, but you still have to present the
- separator dash ("-"), like:
- "OSSTooltip-----thecontentdiv" or "OSSTooltip--br---thecontentdiv" or even "OSSTooltip------".
-
- OSSTooltip-[TooltipAnchor]-[CallerAnchor]-[Width]-[Height]-[TooltipContentID]
-
- Examples:
-
- <img class="OSSTooltip" alt="" src="help.png" title="This is a tooltip." />
- <img class="OSSTooltip" alt="" src="help.png" title="Line1<br />Line2<br />Line3" />
- <img class="OSSTooltip-tl-br" alt="" src="help.png" title="This is a tooltip." />
- <img class="OSSTooltip-tl--200px-10em" alt="" src="help.png" title="This is a tooltip." />
- <img class="OSSTooltip-bl-tr---thecontentdiv" alt="" src="help.png" title="does not matter" />
- <img class="OSSTooltip-----thecontentdiv" alt="" src="help.png" /> <!-- this is how you can skip parameters -->
-
-*/
-var OSSTooltipParameters=new Array;
-$(document).ready(function(){$("*[class*='OSSTooltip']").each(function(idx){$("body").append('<div id="TooltipContainer_'+idx+'" class="TooltipContainer"></div>');vContainerObject=$("#TooltipContainer_"+idx);vClasses=$(this).attr("class").split(" ");vClass="OSSTooltip";for(vIndex in vClasses)if(vClasses[vIndex].indexOf("OSSTooltip")!=-1)vClass=vClasses[vIndex];vParams=vClass.split("-");if(vParams[1]==undefined)vParams[1]="lc";if(vParams[2]==undefined)vParams[2]="rc";if(vParams[3]!=undefined)vParams[3]=
-jQuery.trim(vParams[3]);else vParams[3]="auto";if(vParams[4]!=undefined)vParams[4]=jQuery.trim(vParams[4]);else vParams[4]="auto";if(vParams[5]!=undefined)vParams[5]=jQuery.trim(vParams[5]);else vParams[5]="";if(vParams[3]!="auto")vContainerObject.css("width",vParams[3]);if(vParams[4]!="auto")vContainerObject.css("height",vParams[4]);OSSTooltipParameters[idx]=vParams;vContainerObject.html(vParams[5]!=""?$("#"+vParams[5]).html():$(this).attr("title"));$(this).attr("title","")});$("*[class*='OSSTooltip']").each(function(idx){$(this).bind("mouseover",
-function(){vContainerObject=$("#TooltipContainer_"+idx);vParams=OSSTooltipParameters[idx];vCallerPos=$(this).offset();vCallerWidth=$(this).outerWidth(true);vCallerHeight=$(this).outerHeight(true);vTooltipWidth=vContainerObject.outerWidth(true);vTooltipHeight=vContainerObject.outerHeight(true);switch(vParams[2]){case "tl":vTargetX=vCallerPos.left;vTargetY=vCallerPos.top;break;case "tc":vTargetX=vCallerPos.left+vCallerWidth/2;vTargetY=vCallerPos.top;break;case "tr":vTargetX=vCallerPos.left+vCallerWidth;
-vTargetY=vCallerPos.top;break;case "br":vTargetX=vCallerPos.left+vCallerWidth;vTargetY=vCallerPos.top+vCallerHeight;break;case "bc":vTargetX=vCallerPos.left+vCallerWidth/2;vTargetY=vCallerPos.top+vCallerHeight;break;case "bl":vTargetX=vCallerPos.left;vTargetY=vCallerPos.top+vCallerHeight;break;case "lc":vTargetX=vCallerPos.left;vTargetY=vCallerPos.top+vCallerHeight/2;break;case "rc":default:vTargetX=vCallerPos.left+vCallerWidth;vTargetY=vCallerPos.top+vCallerHeight/2;break}switch(vParams[1]){case "tl":vTooltipX=
-vTargetX;vTooltipY=vTargetY;break;case "tc":vTooltipX=vTargetX-vTooltipWidth/2;vTooltipY=vTargetY;break;case "tr":vTooltipX=vTargetX-vTooltipWidth;vTooltipY=vTargetY;break;case "rc":vTooltipX=vTargetX-vTooltipWidth;vTooltipY=vTargetY-vTooltipHeight/2;break;case "br":vTooltipX=vTargetX-vTooltipWidth;vTooltipY=vTargetY-vTooltipHeight;break;case "bc":vTooltipX=vTargetX-vTooltipWidth/2;vTooltipY=vTargetY-vTooltipHeight;break;case "bl":vTooltipX=vTargetX;vTooltipY=vTargetY-vTooltipHeight;break;case "lc":default:vTooltipX=
-vTargetX;vTooltipY=vTargetY-vTooltipHeight/2;break}if(vTooltipX+vTooltipWidth>$(window).width()+$(document).scrollLeft())vTooltipX=vCallerPos.left-vTooltipWidth;if(vTooltipY+vTooltipHeight>$(window).height()+$(document).scrollTop())vTooltipY=vCallerPos.top-vTooltipHeight;if(vTooltipX<0)vTooltipX=vCallerPos.left+vCallerWidth;if(vTooltipY<0)vTooltipY=vCallerPos.top;vContainerObject.css("top",vTooltipY);vContainerObject.css("left",vTooltipX);vContainerObject.fadeTo("fast",1)});$(this).bind("mouseout",
-function(){$("#TooltipContainer_"+idx).fadeTo("fast",0,function(){$(this).hide()})})})});
-$("document").ready(function(){$("a[id|='modal-dialog']").bind("click",tt_openModalDialog)});function tt_throbber(size,lines,strokewidth,fallback){if(!fallback)fallback="images/throbber_32px.gif";return new Throbber({"color":"black","size":size,"fade":750,"fallback":fallback,"rotationspeed":0,"lines":lines,"strokewidth":strokewidth,"alpha":1})}
-function ossToggle(e,Url,data,delElement){e.unbind();if(e.hasClass("disabled"))return;var on=true;if(e.hasClass("btn-danger"))e.removeClass("btn-danger").attr("disabled","disabled");else{on=false;e.removeClass("btn-success").attr("disabled","disabled")}var Throb=tt_throbber(18,10,1,"images/throbber_16px.gif").appendTo($("#throb-"+e.attr("id")).get(0)).start();var ok=false;$.ajax({url:Url,data:data,async:true,cache:false,type:"POST",timeout:1E4,success:function(data){if(data=="ok")ok=true;else ossAddMessage(data,
-"error")},error:ossAjaxErrorHandler,complete:function(){if(!ok)on=!on;if(on)e.html("Yes").addClass("btn-success").removeAttr("disabled");else e.html("No").addClass("btn-danger").removeAttr("disabled");$("#throb-"+e.attr("id")).html("");e.click(function(event){ossToggle(e,Url,data)});if(typeof delElement!=undefined)$(delElement).hide("slow",function(){$(delElement).remove()})}})}
-function tt_openModalDialog(event){event.preventDefault();if($(event.target).is("i"))element=$(event.target).parent();else element=$(event.target);id=element.attr("id").substr(element.attr("id").lastIndexOf("-")+1);if(id.substring(0,4)=="wide")$("#modal_dialog").addClass("modal-wide");else $("#modal_dialog").removeClass("modal-wide");$("#modal_dialog").html('<div id="throb" style="padding-left:230px; padding-top:175px; height:275px;"></div>');var Throb=tt_throbber(100,20,1.8).appendTo($("#throb").get(0)).start();
-dialog=$("#modal_dialog").modal({backdrop:true,keyboard:true,show:true});$.ajax({url:element.attr("href"),async:true,cache:false,type:"POST",timeout:1E4,success:function(data){$("#modal_dialog").html(data);$(".modal-body").scrollTop(0);$("#modal_dialog_cancel").bind("click",function(){dialog.modal("hide")})},error:ossAjaxErrorHandler})}
-function ossAjaxErrorHandler(XMLHttpRequest,textStatus,errorThrown){if($("#modal_dialog:visible").length)if($("#modal_dialog_save").length){$("#modal_dialog_save").removeAttr("disabled").removeClass("disabled");$("#modal_dialog_cancel").removeAttr("disabled").removeClass("disabled")}else if(dialog)dialog.modal("hide");if($("canvas").length)$("canvas").remove();ossAddMessage("An unexpected error occured.","error",true)}
-function ossAddMessage(msg,type,handled){rand=Math.floor(Math.random()*1E6);msgbox='<div id="oss-message-'+rand+'" class="alert alert-'+type+' fade in">                                <a class="close" href="#" data-dismiss="alert">\u00d7</a>                                    '+msg+"</div>";if($(".modal-body:visible").length&&handled)$(".modal-body").prepend(msgbox);else if($(".page-header").length)$(".page-header").after(msgbox);else if($(".page-content").length)$(".page-header").after(msgbox);else if($(".container").length)$(".container").before(msgbox);
-else if($("#main").length)$("#main").prepend(msgbox);$("#oss-message-"+rand).alert()}function ossJscriptFieldValidator(fieldName,email){if($("#"+fieldName).val()!="")if(email){if(ossValidateEmail($("#"+fieldName).val())){$("#div-form-"+fieldName).removeClass("error");$("#help-"+fieldName).html("")}}else{$("#div-form-"+fieldName).removeClass("error");$("#help-"+fieldName).html("")}}
-function ossValidateEmail(email){var emailReg=/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;if(emailReg.test(email))return true;else return false}function randPasword(len,id){$("#"+id).val(randomPassword(len));$("#"+id).trigger("blur")}$.extend($.fn.dataTableExt.oStdClasses,{"sWrapper":"dataTables_wrapper form-inline"});
-$.fn.dataTableExt.oApi.fnPagingInfo=function(oSettings){return{"iStart":oSettings._iDisplayStart,"iEnd":oSettings.fnDisplayEnd(),"iLength":oSettings._iDisplayLength,"iTotal":oSettings.fnRecordsTotal(),"iFilteredTotal":oSettings.fnRecordsDisplay(),"iPage":Math.ceil(oSettings._iDisplayStart/oSettings._iDisplayLength),"iTotalPages":Math.ceil(oSettings.fnRecordsDisplay()/oSettings._iDisplayLength)}};
-$.extend($.fn.dataTableExt.oPagination,{"bootstrap":{"fnInit":function(oSettings,nPaging,fnDraw){var oLang=oSettings.oLanguage.oPaginate;var fnClickHandler=function(e){e.preventDefault();if(oSettings.oApi._fnPageChange(oSettings,e.data.action))fnDraw(oSettings)};$(nPaging).addClass("pagination").append("<ul>"+'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+"</a></li>"+'<li class="next disabled"><a href="#">'+oLang.sNext+" &rarr; </a></li>"+"</ul>");var els=$("a",nPaging);$(els[0]).bind("click.DT",
-{action:"previous"},fnClickHandler);$(els[1]).bind("click.DT",{action:"next"},fnClickHandler)},"fnUpdate":function(oSettings,fnDraw){var iListLength=5;var oPaging=oSettings.oInstance.fnPagingInfo();var an=oSettings.aanFeatures.p;var i,j,sClass,iStart,iEnd,iHalf=Math.floor(iListLength/2);if(oPaging.iTotalPages<iListLength){iStart=1;iEnd=oPaging.iTotalPages}else if(oPaging.iPage<=iHalf){iStart=1;iEnd=iListLength}else if(oPaging.iPage>=oPaging.iTotalPages-iHalf){iStart=oPaging.iTotalPages-iListLength+
-1;iEnd=oPaging.iTotalPages}else{iStart=oPaging.iPage-iHalf+1;iEnd=iStart+iListLength-1}for(i=0,iLen=an.length;i<iLen;i++){$("li:gt(0)",an[i]).filter(":not(:last)").remove();for(j=iStart;j<=iEnd;j++){sClass=j==oPaging.iPage+1?'class="active"':"";$("<li "+sClass+'><a href="#">'+j+"</a></li>").insertBefore($("li:last",an[i])[0]).bind("click",function(e){e.preventDefault();oSettings._iDisplayStart=(parseInt($("a",this).text(),10)-1)*oPaging.iLength;fnDraw(oSettings)})}if(oPaging.iPage===0)$("li:first",
-an[i]).addClass("disabled");else $("li:first",an[i]).removeClass("disabled");if(oPaging.iPage===oPaging.iTotalPages-1||oPaging.iTotalPages===0)$("li:last",an[i]).addClass("disabled");else $("li:last",an[i]).removeClass("disabled")}}}});

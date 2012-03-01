@@ -6,22 +6,27 @@
 
     $(document).ready( function()
     {
-        oDataTable = $( '#domain_aliases_table' ).dataTable({
-                            'iDisplayLength': {$options.defaults.table.entries},
-                            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-                            "sPaginationType": "bootstrap",
-                            'aoColumns': [
-                                null,
-                                null,
-                                null,
-                                null,
-                                { 'bSortable': false, "bSearchable": false }
-                            ]
-                        });
+        oDataTable = $( '#list_table' ).dataTable({
+            'fnDrawCallback': function() {
+                if( vm_prefs['iLength'] !=  $( "select[name|='list_table_length']" ).val() )
+                    vm_prefs['iLength'] = $( "select[name|='list_table_length']" ).val();
+
+                $.jsonCookie( 'vm_prefs', vm_prefs, vm_cookie_options );
+            },
+            'iDisplayLength': vm_prefs['iLength']? vm_prefs['iLength']: {$options.defaults.table.entries},
+            "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+            "sPaginationType": "bootstrap",
+            'aoColumns': [
+                null,
+                null,
+                null,
+                null,
+                { 'bSortable': false, "bSearchable": false }
+            ]
+        });
 
         $('#ima').bind( 'click', function(e) {
-
-            if( $('#ima').hasClass( 'active' ) )
+            if( $('#ima > i').hasClass( 'icon-eye-close' ) )
                 document.location.href = "{genUrl controller='alias' action='list' did=$domain.id|int ima=0}";
             else
                 document.location.href = "{genUrl controller='alias' action='list' did=$domain.id|int ima=1}";

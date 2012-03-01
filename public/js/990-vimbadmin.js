@@ -41,8 +41,27 @@ $( 'document' ).ready( function(){
 });
 
 //****************************************************************************
+// ViMbAdmin cookies
+//****************************************************************************
+
+var vm_cookie_options = {
+    'expires': 90,
+    'path': "/"
+}
+
+var vm_prefs = {
+	'iLength' : 10,
+};
+
+cprefs = $.jsonCookie( 'vm_prefs' );
+if( cprefs != null )
+	vm_prefs = cprefs;
+
+
+//****************************************************************************
 // ViMbAdmin global js functions
 //****************************************************************************
+
 
 /**
  * This function creates throbber with some default parameters and return the throbber object.

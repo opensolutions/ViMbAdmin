@@ -6,14 +6,18 @@
 
     $(document).ready( function()
     {
-        oDataTable = $( '#admin_list_table' ).dataTable({
-	        "fnCookieCallback": function (sName, oData, sExpires, sPath) {
-                vm_prefs['data_table_rows'] = oData['iLength'];
-                $.jsonCookie( 'vm_prefs', vm_prefs, { 'expires': vm_cookie_expiry_days } );
-                oData = null;
-                return sName + "="+JSON.stringify(oData)+"; expires=" + sExpires +"; path=" + sPath;
+        oDataTable = $( '#list_table' ).dataTable({
+            'fnStateLoadParams': function (oSettings, oData) {
+                oData.sFilter = "";
+                oData.iStart=-1;
+                oData.iEnd=-1;
+                oData.aaSorting=oSettings.aaSorting;
+                delete oData.sFilterEsc;
+                delete oData.aaSearchCols;
             },
-	        'iDisplayLength': vm_prefs['data_table_rows']?vm_prefs['data_table_rows']:{$options.defaults.table.entries},
+            'bStateSave': 1,   
+            'sCookiePrefix': 'ViMbAdmin_DataTables_',
+	        'iDisplayLength': {$options.defaults.table.entries},
 	        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
 	        "sPaginationType": "bootstrap",
 	        'aoColumns': [

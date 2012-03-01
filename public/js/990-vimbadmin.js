@@ -54,15 +54,6 @@ $( 'document' ).ready( function(){
  * @return Throbber The throbber object
  */
 
-var vm_cookie_expiry_days = 30;
-var vm_prefs = {
-	'data_table_rows' : false
-};
-
-cprefs = $.jsonCookie( 'vm_prefs' );
-if( cprefs != null )
-	vm_prefs = cprefs;
-
 function tt_throbber( size, lines, strokewidth, fallback )
 {
     if( !fallback )

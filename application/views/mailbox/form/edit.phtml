@@ -22,7 +22,9 @@
 		                <div style="display: none;">{$element->domain}</div>
 		            {/if}
     		    </div>
-    		        {$element->domain}
+		        {if !isset( $domain ) || !$domain}
+		            {$element->domain}
+		        {/if}
 
 	        	{if $element->local_part->getMessages()}
 					<script type="text/javascript">

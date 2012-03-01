@@ -11,10 +11,15 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_admin"  onmouseover="vm_tooltip( 'modal-dialog-add_admin', 'Add Admin', 'bottom' );" href="{genUrl controller='admin' action='add' modal=true}">
+        	        <a class="btn" id="modal-dialog-add_admin"  title="Add Admin" href="{genUrl controller='admin' action='add' modal=true}">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
+            	<script>
+                    $( document ).ready( function(){
+                        $( '#modal-dialog-add_admin' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                    });
+                </script>
         	</div>
     	</div>
 
@@ -54,24 +59,36 @@
                 </td>
                 <td>
                     <div class="btn-group">
-                        <a class="btn btn-mini" id="modal-dialog-password-{$oneAdmin.id}" onmouseover="vm_tooltip( 'modal-dialog-password-{$oneAdmin.id}', 'Password' );" href="{genUrl controller='admin' action='password' modal=true aid=$oneAdmin.id}">
+                        <a class="btn btn-mini" id="modal-dialog-password-{$oneAdmin.id}" title="Password" href="{genUrl controller='admin' action='password' modal=true aid=$oneAdmin.id}">
                             <i class="icon-lock"></i>
                         </a>
-                        <a class="btn btn-mini" id="admin_logs_{$oneAdmin.id}" onmouseover="vm_tooltip( 'admin_logs_{$oneAdmin.id}', 'Logs' );" href="{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}">
+                        <a class="btn btn-mini" id="admin_logs_{$oneAdmin.id}" title="Logs" href="{genUrl controller='log' action='list'}/aid/{$oneAdmin.id}">
                             <i class="icon-align-justify"></i>
                         </a>
 
                         {if $identity.admin.id neq $oneAdmin.id}
-                            <span class="btn btn-mini" id="purge-admin-{$oneAdmin.id}" onmouseover="vm_tooltip( 'purge-admin-{$oneAdmin.id}', 'Purge' );"  onclick="purgeAdmin( {$oneAdmin.id}, '{$oneAdmin.username}' );">
+                            <span class="btn btn-mini" id="purge-admin-{$oneAdmin.id}" title="Purge"  onclick="purgeAdmin( {$oneAdmin.id}, '{$oneAdmin.username}' );">
                                 <icon class="icon-trash"></i>
                             </span>
                         {/if}
                         {if not $oneAdmin.super}
-                            <a class="btn btn-mini" id="admin_domains_{$oneAdmin.id}" onmouseover="vm_tooltip( 'admin_domains_{$oneAdmin.id}', 'List Domains' );" href="{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}">
+                            <a class="btn btn-mini" id="admin_domains_{$oneAdmin.id}" title="List Domains" href="{genUrl controller='admin' action='domains'}/aid/{$oneAdmin.id}">
                                 <i class="icon-screenshot"></i>
                             </a>
                         {/if}
                     </div>
+                    <script>
+                    $( document ).ready( function(){
+                        $( '#modal-dialog-password-{$oneAdmin.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                        $( '#admin_logs_{$oneAdmin.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                        {if $identity.admin.id neq $oneAdmin.id}
+                            $( '#purge-admin-{$oneAdmin.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                        {/if}
+                        {if not $oneAdmin.super}
+                            $( '#admin_domains_{$oneAdmin.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                        {/if}
+                    });
+                </script>
                 </td>
             </tr>
         {/foreach}

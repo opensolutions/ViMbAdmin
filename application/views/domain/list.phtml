@@ -10,10 +10,15 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	    <a class="btn" id="modal-dialog-wide_add_domain" onmouseover="vm_tooltip( 'modal-dialog-wide_add_domain', 'Add Domain', 'bottom' );" href="{genUrl controller='domain' action='edit' modal=1}" >
+        	    <a class="btn" id="modal-dialog-wide_add_domain" title="Add Domain" href="{genUrl controller='domain' action='edit' modal=1}" >
             	        <i class="icon-plus"></i>
         	    </a>
             	</span>
+            	<script>
+                    $( document ).ready( function(){
+                        $( '#modal-dialog-wide_add_domain' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                    });
+                </script>
             </div>
     	</div>
     	{/if}
@@ -41,11 +46,11 @@
             <tr id="domain_{$oneDomain.id}">
                 <td>{$oneDomain.domain}</td>
                 <td>
-                    <a class="btn btn-mini" id="modal-dialog-add_mailbox_{$oneDomain.id}" onmouseover="vm_tooltip( 'modal-dialog-add_mailbox_{$oneDomain.id}', 'Add Mailbox' );" href="{genUrl controller='mailbox' action='edit' did=$oneDomain.id modal=1}"><i class="icon-plus"></i></a>&nbsp;&nbsp;
+                    <a class="btn btn-mini" id="modal-dialog-add_mailbox_{$oneDomain.id}" title="Add Mailbox" href="{genUrl controller='mailbox' action='edit' did=$oneDomain.id modal=1}"><i class="icon-plus"></i></a>&nbsp;&nbsp;
                     <a class="ul" href="{genUrl controller='mailbox' action='list' did=$oneDomain.id}">{$oneDomain->countMailboxes()}{if $oneDomain.mailboxes}/{$oneDomain.mailboxes}{/if}</a>
                 </td>
                 <td>
-                    <a class="btn btn-mini" id="modal-dialog-add_alias_{$oneDomain.id}" onmouseover="vm_tooltip( 'modal-dialog-add_alias_{$oneDomain.id}', 'Add Alias' );" href="{genUrl controller='alias' action='edit' did=$oneDomain.id modal=1}"><i class="icon-plus"></i></a>&nbsp;&nbsp;
+                    <a class="btn btn-mini" id="modal-dialog-add_alias_{$oneDomain.id}" title="Add Alias" href="{genUrl controller='alias' action='edit' did=$oneDomain.id modal=1}"><i class="icon-plus"></i></a>&nbsp;&nbsp;
                     <a class="ul" href="{genUrl controller='alias' action='list' did=$oneDomain.id}">{$oneDomain->countAliases( true )}{if $oneDomain.aliases}/{$oneDomain.aliases}{/if}</a>
                 </td>
                 <td>
@@ -57,23 +62,33 @@
                 <td>{$oneDomain.created}</td>
                 <td>
                     <div class="btn-group">
-                        <a class="btn btn-mini" id="modal-dialog-wide_edit_domain_{$oneDomain.id}" onmouseover="vm_tooltip( 'modal-dialog-wide_edit_domain_{$oneDomain.id}', 'Edit' );" href="{genUrl controller='domain' action='edit' did=$oneDomain.id modal=true}">
+                        <a class="btn btn-mini" id="modal-dialog-wide_edit_domain_{$oneDomain.id}" title="Edit" href="{genUrl controller='domain' action='edit' did=$oneDomain.id modal=true}">
                             <i class="icon-pencil"></i>
                         </a>
                         {if $identity.admin.super}
-                            <a class="btn btn-mini" id="domain_admins_{$oneDomain.id}" onmouseover="vm_tooltip( 'domain_admins_{$oneDomain.id}', 'List Admins' );" href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">
+                            <a class="btn btn-mini" id="domain_admins_{$oneDomain.id}" title="List Admins" href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">
                                 <i class="icon-user"></i>
                             </a>
                         {/if}
-                        <a class="btn btn-mini" id="domain_logs_{$oneDomain.id}" onmouseover="vm_tooltip( 'domain_logs_{$oneDomain.id}', 'Logs' );" href="{genUrl controller='log' action='list' did=$oneDomain.id}">
+                        <a class="btn btn-mini" id="domain_logs_{$oneDomain.id}" title="Logs" href="{genUrl controller='log' action='list' did=$oneDomain.id}">
                             <i class="icon-align-justify"></i>
                         </a>
                         {if $identity.admin.super}
-                            <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" onmouseover="vm_tooltip( 'purge-domain-{$oneDomain.id}', 'Purge' );" onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">
+                            <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" title="Purge" onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">
                                 <i class="icon-trash"></i>
                             </span>
                         {/if}
                     </div>
+                    <script>
+                        $( document ).ready( function(){
+                            $( '#modal-dialog-wide_edit_domain_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                            $( '#domain_admins_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                            $( '#domain_logs_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                            $( '#purge-domain-{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                            $( '#modal-dialog-add_mailbox_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                            $( '#modal-dialog-add_alias_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                        });
+                    </script>
                 </td>
             </tr>
         {/foreach}

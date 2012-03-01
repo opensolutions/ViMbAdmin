@@ -6,10 +6,15 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <span class="btn" id="open_add_admin" onmouseover="vm_tooltip( 'open_add_admin', 'Add Admin', 'bottom' );">
+        	        <span class="btn" id="open_add_admin" title="Add Admin">
             	        <i class="icon-plus"></i>
         	        </apan>
             	</span>
+            	<script>
+                    $( document ).ready( function(){
+                        $( '#open_add_admin' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                    });
+                </script>
         	</div>
     	</div>
 
@@ -30,9 +35,14 @@
     <tr id="admin_{$oneAdmin.Admin.id}">
         <td>{$oneAdmin.Admin.username}{if not $oneAdmin.Admin.active} <em>(inactive)</em>{/if}</td>
         <td>
-            <span class="btn btn-mini" onclick="removeAdmin( {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}' );" id="remove-admin-{$oneAdmin.Admin.id}" onmouseover="vm_tooltip( 'remove-admin-{$oneAdmin.Admin.id}', 'Remove' );">
+            <span class="btn btn-mini" onclick="removeAdmin( {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}' );" id="remove-admin-{$oneAdmin.Admin.id}" title="Remove">
                 <i class="icon-trash"></i>
             </span>
+            <script>
+                $( document ).ready( function(){
+                    $( '#remove-admin-{$oneAdmin.Admin.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                });
+            </script>
         </td>
     </tr>
 {/foreach}

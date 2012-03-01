@@ -9,25 +9,36 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
                     <span class="btn-group">
-                    <span class="btn" id="ima" onmouseover="vm_tooltip( 'ima', '{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases', 'bottom' );" >
+                    <span class="btn" id="ima" title="{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases" >
             	        {if $includeMailboxAliases}
             	            <i class="icon-eye-close"></i>
             	        {else}
             	            <i class="icon-eye-open"></i>
             	        {/if}
         	        </span>
-        	        <a class="btn" id="modal-dialog-add_alias" onmouseover="vm_tooltip( 'modal-dialog-add_alias', 'Add Alias', 'bottom' );" href="{genUrl controller='alias' action='edit' modal=true}">
+        	        <a class="btn" id="modal-dialog-add_alias" title="Add Alias" href="{genUrl controller='alias' action='edit' modal=true}">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
         	</div>
+        	<script>
+                $( document ).ready( function(){
+                    $( '#ima' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                    $( '#modal-dialog-add_alias' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                });
+            </script>
     	</div>
 
         <h1>
             Aliases {if $domain}<small> for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}</small>{/if}
 
             {if isset( $session->domain ) && $session->domain}
-                <a class="btn" id="show_all_aliases" onmouseover="vm_tooltip( 'show_all_aliases', 'Show All', 'bottom' );" href="{genUrl controller='alias' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+                <a class="btn" id="show_all_aliases" title="Show All" href="{genUrl controller='alias' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+                <script>
+                    $( document ).ready( function(){
+                        $( '#show_all_aliases' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                    });
+                </script>
             {/if}
         </h1>
     </div>
@@ -60,20 +71,26 @@
                 {if strlen( $oneAlias.goto ) > 50  }
                     <script type="text/javascript">
                         $( document ).ready( function() {
-                            $( "#alias-goto-{$oneAlias.id}" ).tooltip( { title: '{$oneAlias.goto|regex_replace:"/[,]/":", "}', delay: { show: 500, hide: 0 } } );
+                            $( "#alias-goto-{$oneAlias.id}" ).tooltip( { title: '{$oneAlias.goto|regex_replace:"/[,]/":", "}' } );
                         });
                     </script>
                 {/if}
             </td>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-mini" id="modal-dialog-edit_alias_{$oneAlias.id}" onmouseover="vm_tooltip( 'modal-dialog-edit_alias_{$oneAlias.id}', 'Edit' );" href="{genUrl controller='alias' action='edit' alid=$oneAlias.id modal=true}">
+                    <a class="btn btn-mini" id="modal-dialog-edit_alias_{$oneAlias.id}" title="Edit" href="{genUrl controller='alias' action='edit' alid=$oneAlias.id modal=true}">
                         <i class="icon-pencil"></i>
                     </a>
-                    <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}" onmouseover="vm_tooltip( 'delete-alias-{$oneAlias.id}', 'Delete' );" onclick="deleteAlias( {$oneAlias.id} );">
+                    <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}" title="Delete" onclick="deleteAlias( {$oneAlias.id} );">
                         <i class="icon-trash"></i>
                     </span>
                 </div>
+                <script>
+                    $( document ).ready( function(){
+                        $( '#modal-dialog-edit_alias_{$oneAlias.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                        $( '#delete-alias-{$oneAlias.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                    });
+                </script>
             </td>
         </tr>
     {/foreach}

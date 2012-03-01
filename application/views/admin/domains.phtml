@@ -8,10 +8,15 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_domain" href="{genUrl controller='admin' action='add-domain' aid=$targetAdmin.id modal=true}" onmouseover="vm_tooltip( 'modal-dialog-add_domain', 'Add Domain', 'bottom' );">
+        	        <a class="btn" id="modal-dialog-add_domain" href="{genUrl controller='admin' action='add-domain' aid=$targetAdmin.id modal=true}" title="Add Domain" >
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
+            	<script>
+                    $( document ).ready( function(){
+                        $( '#modal-dialog-add_domain' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                    });
+                </script>
         	</div>
     	</div>
     	{/if}
@@ -34,9 +39,14 @@
         <tr id="domain_{$domainAdmin.Domain.id}">
             <td>{$domainAdmin.Domain.domain}</td>
             <td>
-                <span class="btn btn-mini" id="domain-remove-{$domainAdmin.Domain.id}" onclick="domainRemove( {$domainAdmin.Domain.id}, '{$domainAdmin.Domain.domain}');" onmouseover="vm_tooltip( 'domain-remove-{$domainAdmin.Domain.id}', 'Remove' );">
+                <span class="btn btn-mini" id="domain-remove-{$domainAdmin.Domain.id}" onclick="domainRemove( {$domainAdmin.Domain.id}, '{$domainAdmin.Domain.domain}');" title="Remove">
                     <i class="icon-trash"></i>
                 </span>
+                <script>
+                    $( document ).ready( function(){
+                        $( '#domain-remove-{$domainAdmin.Domain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+                    });
+                </script>
             </td>
         </tr>
 {/foreach}

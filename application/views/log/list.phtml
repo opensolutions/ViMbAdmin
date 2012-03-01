@@ -6,7 +6,14 @@
         <h1>
             Logs{if isset( $session->domain ) && $session->domain }<small> for {$session->domain.domain}</small>{/if}
             {if isset( $session->domain ) && $session->domain}
-                <a class="btn" id="show_all_logs" onmouseover="vm_tooltip( 'show_all_logs', 'Show All', 'bottom' );" href="{genUrl controller='log' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
+                <a class="btn" id="show_all_logs" title="Show All" href="{genUrl controller='log' action='list' unset=1}">
+                    <i class="icon-remove-circle"></i>
+                </a>
+                <script>
+                    $( document ).ready( function(){
+                        $( '#show_all_logs' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                    });
+                </script>
             {/if}
         </h1>
     </div>
@@ -33,7 +40,7 @@
                 {if strlen( $oneLog.data ) > 40 }
                     <script type="text/javascript">
                         $( document ).ready( function() {
-                            $( "#log-message-{$oneLog.id}" ).tooltip( { title: '{$oneLog.data|regex_replace:"/[\r\t\n]/":" "}', delay: { show: 500, hide: 0 } } );
+                            $( "#log-message-{$oneLog.id}" ).tooltip( { title: '{$oneLog.data|regex_replace:"/[\r\t\n]/":" "}' } );
                         });
                     </script>
                 {/if}

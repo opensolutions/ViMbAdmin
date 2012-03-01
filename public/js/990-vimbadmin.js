@@ -352,25 +352,6 @@ function randPasword( len, id )
 }
 
 
-/**
- * This function sets and shows tolltip.
- *
- * @param string id The id of element were we want to display tolltip.
- * @param string msg The message to be displayer.
- * @param string msg default top The the position of the tooltip left/right/top/bottom.
- */
-function vm_tooltip( id, msg, pos )
-{
-    if( pos == undefined )
-        pos = "top";
-
-    $('#'+id).tooltip( { title: msg, placement: pos } );
-    $('#'+id).tooltip( 'show' );
-}
-
-
-
-
 //****************************************************************************
 // DataTables http://datatables.net/blog/Twitter_Bootstrap_2
 //****************************************************************************

@@ -14,8 +14,6 @@
                 $.jsonCookie( 'vm_prefs', vm_prefs, vm_cookie_options );
             },
             'iDisplayLength': vm_prefs['iLength']? vm_prefs['iLength']: {$options.defaults.table.entries},
-            'bStateSave': 1,
-            'sCookiePrefix': 'ViMbAdmin_DataTables_',
 	        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
 	        "sPaginationType": "bootstrap",
 	        'aoColumns': [

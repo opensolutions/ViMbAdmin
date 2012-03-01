@@ -13,16 +13,16 @@
 	    	    	Addres
 	    	</label>
     	    <div id="div-controls-{$element->local_part->getId()}" class="controls">
-    		    <div class="input-append btn-group">
+    		    <div class="input-append" style="float: left">
     		        {$element->local_part}
         		    {if !isset( $domain ) || !$domain }
     		            <span class="btn add-midd">@</span>
-                        {$element->domain}
 		            {else}
 		                <span class="add-on">@{$domain->domain}</span>
 		                <div style="display: none;">{$element->domain}</div>
 		            {/if}
     		    </div>
+    		    {$element->domain}
 
 	        	{if $element->local_part->getMessages()}
 					<script type="text/javascript">

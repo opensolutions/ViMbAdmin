@@ -7,17 +7,15 @@
     $(document).ready( function()
     {
         oDataTable = $( '#list_table' ).dataTable({
-            'fnStateLoadParams': function (oSettings, oData) {
-                oData.sFilter = "";
-                oData.iStart=-1;
-                oData.iEnd=-1;
-                oData.aaSorting=oSettings.aaSorting;
-                delete oData.sFilterEsc;
-                delete oData.aaSearchCols;
+            'fnDrawCallback': function() {
+                if( vm_prefs['iLength'] !=  $( "select[name|='list_table_length']" ).val() )
+                    vm_prefs['iLength'] = $( "select[name|='list_table_length']" ).val();
+
+                $.jsonCookie( 'vm_prefs', vm_prefs, vm_cookie_options );
             },
-            'bStateSave': 1,   
+            'iDisplayLength': vm_prefs['iLength']? vm_prefs['iLength']: {$options.defaults.table.entries},
+            'bStateSave': 1,
             'sCookiePrefix': 'ViMbAdmin_DataTables_',
-	        'iDisplayLength': {$options.defaults.table.entries},
 	        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
 	        "sPaginationType": "bootstrap",
 	        'aoColumns': [

@@ -6,17 +6,16 @@
 
     $(document).ready( function()
     {
-        oDataTable = $( '#mailbox_list_table' ).dataTable({
-            "fnCookieCallback": function (sName, oData, sExpires, sPath) {
-                vm_prefs['data_table_rows'] = oData['iLength'];
-                $.jsonCookie( 'vm_prefs', vm_prefs, { 'expires': vm_cookie_expiry_days } );
-                oData = null;
-                return sName + "="+JSON.stringify(oData)+"; expires=" + sExpires +"; path=" + sPath;
+        oDataTable = $( '#list_table' ).dataTable({
+            'fnDrawCallback': function() {
+                if( vm_prefs['iLength'] !=  $( "select[name|='list_table_length']" ).val() )
+                    vm_prefs['iLength'] = $( "select[name|='list_table_length']" ).val();
+
+                $.jsonCookie( 'vm_prefs', vm_prefs, vm_cookie_options );
             },
-            'iDisplayLength': vm_prefs['data_table_rows']?vm_prefs['data_table_rows']:{$options.defaults.table.entries},
+            'iDisplayLength': vm_prefs['iLength']? vm_prefs['iLength']: {$options.defaults.table.entries},
             "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
             "sPaginationType": "bootstrap",
-            'bStateSave': true,
             "sCookiePrefix": "ViMbAdmin_DataTables_",
             'aoColumns': [
                 null,
@@ -26,7 +25,6 @@
                 { 'bSortable': false, "bSearchable": false }
             ]
         });
-
     }); // document onready
 
 

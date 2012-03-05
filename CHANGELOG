@@ -1,4 +1,4 @@
-2.0.7
+2.0.7   2012-03-05
  - add: https://github.com/opensolutions/Minify used instead of local
         version
  - fix: Removed trunk Smarty 3 and replaced it with tagged 3.0.9 as 3.1 

@@ -41,14 +41,14 @@ $whatToCompress = 'all';
 $verbose = true;
 
 // We use APPLICATION_PATH as per the Zend framework. Feel free to remove as it's only used for the paths defined below here
-defined( 'APPLICATION_PATH' ) || define( 'APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../application' ) );
+defined( 'APPLICATION_PATH' ) || define( 'APPLICATION_PATH', realpath( SCRIPTDIR . '/../../application' ) );
 
 
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 //
 // JS Configuration
-$js_compiler = "java -jar " . dirname( __FILE__ ) . "/compiler.jar --compilation_level WHITESPACE_ONLY --warning_level QUIET";
+$js_compiler = "java -jar " . SCRIPTDIR . "/compiler.jar --compilation_level WHITESPACE_ONLY --warning_level QUIET";
 
 
 // JavaScript files to compress
@@ -98,7 +98,7 @@ $del_old_js_bundles = true;
 /////////////////////////////////////////////////////////////////////////////////
 //
 // CSS Configuration
-$css_compiler = "java -jar " . dirname( __FILE__ ) . "/yuicompressor.jar -v --charset utf-8";
+$css_compiler = "java -jar " . SCRIPTDIR . "/yuicompressor.jar -v --charset utf-8";
 
 // JavaScript files to compress
 //

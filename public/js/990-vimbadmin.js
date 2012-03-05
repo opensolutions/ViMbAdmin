@@ -33,13 +33,6 @@
  */
 
 
-$( 'document' ).ready( function(){
-
-	// Activate the modal dialog pop up
-    $( "a[id|='modal-dialog']" ).bind( 'click', tt_openModalDialog );
-
-});
-
 //****************************************************************************
 // ViMbAdmin cookies
 //****************************************************************************
@@ -47,15 +40,40 @@ $( 'document' ).ready( function(){
 var vm_cookie_options = {
     'expires': 90,
     'path': "/"
-}
-
-var vm_prefs = {
-	'iLength' : 10,
 };
 
-cprefs = $.jsonCookie( 'vm_prefs' );
+var vm_prefs = {
+	'iLength' : 10
+};
+
+var cprefs = $.jsonCookie( 'vm_prefs' );
+
 if( cprefs != null )
 	vm_prefs = cprefs;
+
+
+
+
+
+
+
+
+
+
+
+//****************************************************************************
+//****************************************************************************
+
+
+
+$( 'document' ).ready( function(){
+
+	// Activate the modal dialog pop up
+    $( "a[id|='modal-dialog']" ).bind( 'click', tt_openModalDialog );
+
+});
+
+
 
 
 //****************************************************************************

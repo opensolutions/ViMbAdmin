@@ -29,6 +29,14 @@ if [[ $? -eq 127 ]]; then
     echo ERROR: SVN not installed or not in the path
     exit
 fi
+
+git &>/dev/null
+
+if [[ $? -eq 127 ]]; then
+    echo ERROR: Git not installed or not in the path
+    exit
+fi
+        
                                                                                                                                                                                                                              
 LIBDIR=`dirname "$0"`/../library                                                                                                                                                              
                                                                                                                                                                                               
@@ -54,7 +62,8 @@ fi
 if [[ -e $LIBDIR/Smarty ]]; then                                                                                                                                                              
     echo Smarty exists - skipping!                                                                                                                                                            
 else                                                                                                                                                                                          
-    svn co http://smarty-php.googlecode.com/svn/trunk/distribution/libs/ $LIBDIR/Smarty                                                                                                       
+    http://smarty-php.googlecode.com/svn/tags/Smarty_3_0_9/distribution/libs
+    #svn co http://smarty-php.googlecode.com/svn/trunk/distribution/libs/ $LIBDIR/Smarty                                                                                                       
 fi                                                                                                                                                                                            
                                                                                                                                                                                               
 # ZFDebug                                                                                                                                                                                     
@@ -65,3 +74,13 @@ else
     svn co http://zfdebug.googlecode.com/svn/trunk/library/ZFDebug $LIBDIR/ZFDebug                                                                                                            
 fi                                                                                                                                                                                            
 
+
+# Minifier
+if [[ -e $LIBDIR/Minify ]]; then
+    echo Minify exists - skipping!
+else
+    git clone git://github.com/opensolutions/Minify.git $LIBDIR/Minify
+fi
+        
+        
+        

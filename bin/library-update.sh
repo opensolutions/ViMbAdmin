@@ -30,7 +30,14 @@ if [[ $? -eq 127 ]]; then
     exit
 fi
           
-          
+
+git &>/dev/null
+
+if [[ $? -eq 127 ]]; then
+    echo ERROR: Git not installed or not in the path
+    exit
+fi
+                  
 LIBDIR=`dirname "$0"`/../library                                                                                                                                                              
                                                                                                                                                                                               
 for name in Doctrine Zend Smarty ZFDebug; do                                                                                                                                                  
@@ -39,3 +46,9 @@ for name in Doctrine Zend Smarty ZFDebug; do
     svn up                                                                                                                                                                                    
     cd -                                                                                                                                                                                      
 done                                                                                                                                                                                          
+
+
+cd $LIBDIR/Minify
+git pull
+cd -
+

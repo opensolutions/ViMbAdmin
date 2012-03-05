@@ -1,3 +1,12 @@
+2.0.7   2012-03-05
+ - add: https://github.com/opensolutions/Minify used instead of local
+        version
+ - fix: Removed trunk Smarty 3 and replaced it with tagged 3.0.9 as 3.1 
+        has incompatibilities. You may need to execute the following:
+
+        $ cd library/Smarty
+        $ svn switch http://smarty-php.googlecode.com/svn/tags/Smarty_3_0_9/distribution/libs 
+
 2.0.6
  - add: Remove the horrible changed IP die() message and just present the
         login screen

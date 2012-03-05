@@ -44,12 +44,12 @@ $( 'document' ).ready( function(){
 // ViMbAdmin cookies
 //****************************************************************************
 
-var vm_cookie_options = {
+vm_cookie_options = {
     'expires': 90,
     'path': "/"
 }
 
-var vm_prefs = {
+vm_prefs = {
 	'iLength' : 10,
 };
 

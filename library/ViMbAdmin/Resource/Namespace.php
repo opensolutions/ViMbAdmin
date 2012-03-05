@@ -89,8 +89,14 @@ class ViMbAdmin_Resource_Namespace extends Zend_Application_Resource_ResourceAbs
                         _( 'IP address changed - possible session hijack attempt.')
                         . ' ' . _( 'old' ) . ": {$ApplicationNamespace->clientIP} " . _( 'new' ) . ": {$_SERVER['REMOTE_ADDR']}"
                     );
-                    Zend_Session::destroy( true, true );
-                    die( _( 'Your IP address has changed, indicating a possible session hijack attempt. Your session has been destroyed for your own security.' ) );
+                    
+                    // clear session variables
+                    $ApplicationNamespace->unsetAll();
+                    
+                    if( !isset( $_SESSION['Zend_Auth'] ) )
+                        die( _( 'Your IP address has changed, indicating a possible session hijack attempt. Your session has been destroyed for your own security.' ) );
+                        
+                    $_SESSION['Zend_Auth'] = null;
                 }
             }
 

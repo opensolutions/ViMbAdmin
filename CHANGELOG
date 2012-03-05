@@ -1,3 +1,7 @@
+2.0.6
+ - add: Remove the horrible changed IP die() message and just present the
+        login screen
+
 2.0.5   2012-03-05
  - fix: Some issues in JS causing errors and also affeting dialogs.
 

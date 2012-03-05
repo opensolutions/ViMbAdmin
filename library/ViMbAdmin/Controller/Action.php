@@ -186,6 +186,7 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
             $this->view->auth        = $this->_auth;
             $this->view->hasIdentity = $this->_auth->hasIdentity();
             $this->view->identity    = $this->_identity;
+            $this->view->inColorBox  = false;
         }
         catch( Zend_Exception $e )
         {

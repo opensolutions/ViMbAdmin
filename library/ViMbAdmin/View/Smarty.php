@@ -309,4 +309,10 @@ class ViMbAdmin_View_Smarty extends Zend_View_Abstract
         return true;
     }
 
+    public function getTemplateDir()                                                                                                                                                        
+    {                                                                                                                                                                                       
+        $a = $this->_smarty->getTemplateDir();                                                                                                                                              
+        return $a[0];                                                                                                                                                                       
+    }
+
 }

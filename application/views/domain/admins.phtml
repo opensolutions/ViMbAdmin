@@ -10,12 +10,12 @@
             	        <i class="icon-plus"></i>
         	        </apan>
             	</span>
-            	<script>
-                    $( document ).ready( function(){
-                        $( '#open_add_admin' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                    });
-                </script>
         	</div>
+    	    <script>
+                $( document ).ready( function(){
+                    $( '#open_add_admin' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+                });
+            </script>
     	</div>
 
         <h1>Domain Admins <small>for {$domainModel.domain}</small></h1>
@@ -74,7 +74,7 @@
         <a href="#" class="close" data-dismiss="modal">&times;</a>
         <h3>Add Admin</h3>
     </div>
-    <div class="modal-body" style="min-height: 50px;">
+        <div class="modal-body" style="min-height: 75px;">
         {if count( $adminList ) == 0 }
             <div id="vimbadmin-message-900" class="alert alert-info fade in">
                 <a class="close" data-dismiss="alert" href="#">×</a>

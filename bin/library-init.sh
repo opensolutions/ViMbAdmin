@@ -29,6 +29,14 @@ if [[ $? -eq 127 ]]; then
     echo ERROR: SVN not installed or not in the path
     exit
 fi
+
+git &>/dev/null
+
+if [[ $? -eq 127 ]]; then
+    echo ERROR: Git not installed or not in the path
+    exit
+fi
+        
                                                                                                                                                                                                                              
 LIBDIR=`dirname "$0"`/../library                                                                                                                                                              
                                                                                                                                                                                               
@@ -65,3 +73,13 @@ else
     svn co http://zfdebug.googlecode.com/svn/trunk/library/ZFDebug $LIBDIR/ZFDebug                                                                                                            
 fi                                                                                                                                                                                            
 
+
+# Minifier
+if [[ -e $LIBDIR/Minify ]]; then
+    echo Minify exists - skipping!
+else
+    git clone git://github.com/opensolutions/Minify.git $LIBDIR/Minify
+fi
+        
+        
+        

@@ -10,7 +10,8 @@
 
           <fieldset class="control-group" id="div-form-password">
     	    <label for="local_part" class="control-label">
-	    	    	Addres
+	    	    	Address
+                    <span class="label" rel="popover" data-content="You can alias an entire domain by leaving the address field / local part blank." data-title="Domain Aliases" data-placement="left">?</span>
 	    	</label>
     	    <div id="div-controls-{$element->local_part->getId()}" class="controls">
     		    <div class="input-append" style="float: left">
@@ -103,6 +104,16 @@
     $(document).ready(function()
     {
         $( '#domain' ).chosen();
+
+        if( $( '#domain_chzn' ).css( "width" ).length < 5 )
+        {
+            $( '#domain_chzn' ).css( "width", "150px" );
+            $( '.chzn-drop' ).css( "width", "148px" );
+            $( '.chzn-search >input' ).css( "width", "110px" );
+        }
+
+        $("[rel=popover]").popover();
+
     }); // document onready
 
     </script>

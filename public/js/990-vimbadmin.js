@@ -70,6 +70,8 @@ $( 'document' ).ready( function(){
 
 	// Activate the modal dialog pop up
     $( "a[id|='modal-dialog']" ).bind( 'click', tt_openModalDialog );
+    
+    $("[rel=popover]").popover();
 
 });
 

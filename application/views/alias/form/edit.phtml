@@ -103,6 +103,14 @@
     $(document).ready(function()
     {
         $( '#domain' ).chosen();
+
+        if( $( '#domain_chzn' ).css( "width" ).length < 5 )
+        {
+            $( '#domain_chzn' ).css( "width", "150px" );
+            $( '.chzn-drop' ).css( "width", "148px" );
+            $( '.chzn-search >input' ).css( "width", "110px" );
+        }
+
     }); // document onready
 
     </script>

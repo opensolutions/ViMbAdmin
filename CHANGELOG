@@ -2,6 +2,8 @@
  - fix: Accidently commited testing code causing issue #10. Fixed.
  - fix: Better Smarty 3.1 integration.
  - fix: Options in bin/minify-options.php to work with updated version
+ - add: Popover to add alias to explain / highlight domain aliases
+ - fix: issue with Add Alias dialog with no domain selected
 
 2.0.7   2012-03-05
  - add: https://github.com/opensolutions/Minify used instead of local

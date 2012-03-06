@@ -1,3 +1,8 @@
+2.0.8   2012-03-06
+ - fix: Accidently commited testing code causing issue #10. Fixed.
+ - fix: Better Smarty 3.1 integration.
+ - fix: Options in bin/minify-options.php to work with updated version
+
 2.0.7   2012-03-05
  - add: https://github.com/opensolutions/Minify used instead of local
         version

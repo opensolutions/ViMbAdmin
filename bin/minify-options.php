@@ -68,13 +68,25 @@ $js_dest = APPLICATION_PATH . '/../public/js';
 $http_js = '{genUrl}/js';
 
 // In our application, we define a var as 0 or 1 where 1 means use the bundle and 0
-// means use the individual uncompress files. I.e. production vs development. The
-// script then spits out a Smarty template file we can include which is aware of the
-// var variable meaning we don't need to keep our list of JS files up to date manually
-// and also it means that versioned bundles get updated automatically.
+// means use the individual uncompressed files. I.e. production vs development. The
+// script then spits out a Smarty (in this case) template file we can include which
+// is aware of the var and uses the individual files or the bundle as appropriate.
+//
+// For this, we need the components of an if/else clause. I.e.
+//
+// if( use bundle )
+//    <include bundle file>
+// else
+//    <include original file1>
+//    <include original file2>
+//    ....
+// endif
+//
+// For Smarty, the follow works so long as you set $config.use_minified_js
 
-// define the var to be tested for 0 or 1:
-$mini_js_var = '$options.mini_js';
+$mini_js_conditional_if   = '{if isset( $config.use_minified_js ) and $config.use_minified_js}';
+$mini_js_conditional_else = '{else}';
+$mini_js_conditional_end  = '{/if}';
 
 //
 // set the following to false to not use this functionality and maintain it yourself
@@ -116,14 +128,11 @@ $css_dest = APPLICATION_PATH . '/../public/css';
 // automatically. You can just as easily put '/myapp/js/' here for example
 $http_css = '{genUrl}/css';
 
-// In our application, we define a var as 0 or 1 where 1 means use the bundle and 0
-// means use the individual uncompress files. I.e. production vs development. The
-// script then spits out a Smarty template file we can include which is aware of the
-// var variable meaning we don't need to keep our list of CSS files up to date manually
-// and also it means that versioned bundles get updated automatically.
+// See $mini_js_conditional_ above for an explanation
 
-// define the var to be tested for 0 or 1:
-$mini_css_var = '$options.mini_css';
+$mini_css_conditional_if   = '{if isset( $config.use_minified_css ) and $config.use_minified_css}';
+$mini_css_conditional_else = '{else}';
+$mini_css_conditional_end  = '{/if}';
 
 //
 // set the following to false to not use this functionality and maintain it yourself

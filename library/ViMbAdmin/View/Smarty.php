@@ -119,7 +119,7 @@ class ViMbAdmin_View_Smarty extends Zend_View_Abstract
      */
     public function getScriptPaths()
     {
-        return array($this->_smarty->template_dir);
+        return $this->_smarty->template_dir;
     }
 
     /**

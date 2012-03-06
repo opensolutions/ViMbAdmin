@@ -62,8 +62,7 @@ fi
 if [[ -e $LIBDIR/Smarty ]]; then                                                                                                                                                              
     echo Smarty exists - skipping!                                                                                                                                                            
 else                                                                                                                                                                                          
-    http://smarty-php.googlecode.com/svn/tags/Smarty_3_0_9/distribution/libs
-    #svn co http://smarty-php.googlecode.com/svn/trunk/distribution/libs/ $LIBDIR/Smarty                                                                                                       
+    svn co http://smarty-php.googlecode.com/svn/trunk/distribution/libs/ $LIBDIR/Smarty                                                                                                       
 fi                                                                                                                                                                                            
                                                                                                                                                                                               
 # ZFDebug                                                                                                                                                                                     

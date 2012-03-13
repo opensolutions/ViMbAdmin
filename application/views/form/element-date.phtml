@@ -8,9 +8,9 @@
     	    	{/if}
 	    	</label>
     	    <div id="div-controls-{$ielement->getId()}" class="controls">
-    		    <div class="input-append btn-group">
+    		    <div class="input-append">
     		        {$ielement}
-    		        <span id="{$ielement->getId()}_date_pick" title="{$ielement->getLabel()} date picker" class="btn add-on" >
+    		        <span id="{$ielement->getId()}_date_pick" title="{$ielement->getLabel()} date picker" class="btn add-on" style="margin-left: -5px;" >
                         <i class="icon-calendar"></i>
                     </span>
     		    </div>
@@ -24,15 +24,13 @@
 						$( '#{$ielement->getId()}' ).addClass( 'error' );
 						$( '#div-form-{$ielement->getId()}' ).addClass( 'error' );
 					</script>
-				{/if}
-				<p id="help-{$ielement->getId()}" class="help-block">
-				    {if $ielement->getMessages()}
+					<p id="help-{$ielement->getId()}" class="help-block">
     					{foreach from=$ielement->getMessages() item=messages}
         					{foreach from=$messages item=msg}
             					{$msg}<br />
         					{/foreach}
     					{/foreach}
-				    {/if}
-				</p>
+					</p>
+				{/if}
     	    </div>
     	</fieldset>

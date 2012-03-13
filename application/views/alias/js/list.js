@@ -79,7 +79,7 @@
                             {
                                 $('#alias_' + id).hide('fast');
                                 delDialog.modal('hide');
-                                ossAddMessage( 'Alias has bean removed successfully', 'succsess' );
+                                ossAddMessage( 'Alias has bean removed successfully', 'success' );
                             }
                         },
             error: ossAjaxErrorHandler,

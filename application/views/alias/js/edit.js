@@ -34,9 +34,9 @@
 
     function insertGoto( address )
     {
-        str = '<div class="input-append btn-group" id="goto-div-' + gotoId + '">' + "\n"
+        str = '<div class="input-append" id="goto-div-' + gotoId + '" style="margin-bottom: 5px;">' + "\n"
 		      + '<input type="text" name="goto[]" value="' + address + '" size="40" title="Goto" readonly="readonly"/>' + "\n"
-    		  + '<span title="Remove got to" class="btn add-on" onclick="removeGoto(' + gotoId + ');" >' + "\n"
+    		  + '<span title="Remove got to" class="btn add-on" onclick="removeGoto(' + gotoId + ');" style="margin-left: -5px;" >' + "\n"
               + '<i class="icon-minus"></i>' + "\n"
               + '</span>' + "\n"
     		  + '</div>';

@@ -16,9 +16,9 @@
     		    <div class="input-append" style="float: left;">
     		        {$element->local_part}
     		        {if !isset( $domain ) || !$domain}
-    		            <span class="btn add-midd">@</span>
+    		            <span class="btn" style="margin-left: -5px; -webkit-border-radius: 0 0 0 0; -moz-border-radius: 0 0 0 0; border-radius: 0 0 0 0;">@</span>
 		            {else}
-		                <span class="add-on">@{$domain->domain}</span>
+		                <span class="add-on" style="margin-left: -5px;">@{$domain->domain}</span>
 		                <div style="display: none;">{$element->domain}</div>
 		            {/if}
     		    </div>
@@ -67,10 +67,10 @@
 	    	    	{$element->password->getLabel()}
 	    	</label>
     	    <div id="div-controls-{$element->password->getId()}" class="controls">
-    		    <div class="input-append btn-group">
+    		    <div class="input-append">
     		        {$element->password}
     		        {if $element->password->getAttrib('disabled') != 'disabled'}
-        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" class="btn add-on" >
+        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" class="btn add-on" style="margin-left: -5px;">
                             <i class="icon-refresh"></i>
                         </span>
                     {/if}

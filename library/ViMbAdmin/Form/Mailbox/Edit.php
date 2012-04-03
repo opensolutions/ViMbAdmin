@@ -138,9 +138,9 @@ class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
         $access_restriction = $this->createElement( 'select', 'access_restriction' )
             ->setOptions( array( 'multiOptions' => Mailbox::$MAILBOX_ACCESS_RESTR_TEXT ) ) // array('' => _( '- select -' ) ) + $domainList
             ->setRequired( true )
-            ->setAttrib( 'class', 'required span1' )
+            ->setAttrib( 'class', 'required span2' )
             ->addValidator( 'NotEmpty', true )
-            ->setValue( Mailbox::ACCESS_RESTR_BOTH )
+            ->setValue( Mailbox::ACCESS_RESTR_IMAP )
             ->addValidator( 'InArray', true, array( array_keys( Mailbox::$MAILBOX_ACCESS_RESTR_TEXT ) ) );
 
         $domain->getValidator( 'InArray' )->setMessage( _( 'You must select a access restriction.' ), Zend_Validate_InArray::NOT_IN_ARRAY);

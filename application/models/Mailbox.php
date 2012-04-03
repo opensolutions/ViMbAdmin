@@ -51,9 +51,8 @@ class Mailbox extends BaseMailbox
      * which defining access restriction
      */
     public static $MAILBOX_ACCESS_RESTR_TEXT = array(
-        Mailbox::ACCESS_RESTR_BOTH => 'BOTH',
-        Mailbox::ACCESS_RESTR_IMAP => 'IMAP',
-        Mailbox::ACCESS_RESTR_POP3 => 'POP3'
+        Mailbox::ACCESS_RESTR_IMAP => 'IMAP ONLY',
+        Mailbox::ACCESS_RESTR_POP3 => 'POP3 ONLY'
     );
 
     /**

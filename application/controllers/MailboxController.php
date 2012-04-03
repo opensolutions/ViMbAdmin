@@ -449,7 +449,10 @@ class MailboxController extends ViMbAdmin_Controller_Action
                         }
                     }
 
-                    $this->_mailbox['access_restriction'] = $editForm->getValue( 'access_restriction' );
+                    if( $editForm->getValue( 'access_restr' ) )
+                        $this->_mailbox['access_restriction'] = $editForm->getValue( 'access_restriction' );
+                    else
+                        $this->_mailbox['access_restriction'] = Mailbox::ACCESS_RESTR_BOTH;
 
                     $this->_mailbox->save();
 
@@ -499,6 +502,9 @@ class MailboxController extends ViMbAdmin_Controller_Action
             $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
             $this->view->domain = $this->_domain;
         }
+
+        if( $this->_mailbox['access_restriction'] != Mailbox::ACCESS_RESTR_BOTH )
+            $editForm->getElement( 'access_restr' )->setAttrib( "checked", "checked" );
 
         $this->view->editForm = $editForm;
     }

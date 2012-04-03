@@ -96,18 +96,17 @@
     	</fieldset>
         {/if}
 
+        {include file='form/element-input.phtml' ielement=$element->quota}
+        {include file='form/element-checkbox.phtml' ielement=$element->active}
         {include file='form/element-checkbox.phtml' ielement=$element->access_restr}
-        <div id="access_restriction_div" style="display:none; margin-top: -20px; margin-left: 20px;">
+        <div id="access_restriction_div" style="display:none; margin-top: -25px; margin-left: 20px;">
             <fieldset class="control-group">
                 <label class="control-label">&nbsp;</label>
-                <div class="controls" style="">
+                <div id="ar_controls" class="controls" style="position: fixed; z-index: 2;">
                     {$element->access_restriction}
                 </div>
             </fieldset>
         </div>
-
-        {include file='form/element-input.phtml' ielement=$element->quota}
-        {include file='form/element-checkbox.phtml' ielement=$element->active}
 
         {if $element->local_part->getValue() == ''}
             {include file='form/element-checkbox.phtml' ielement=$element->welcome_email}
@@ -131,10 +130,6 @@
             $( '#domain' ).chosen();
             $( '#access_restriction' ).chosen();
 
-            {if $element->access_restriction->getValue() != "BOTH"}
-                $( "#access_restr" ).attr( "checked", "checked" );
-            {/if}
-
             if( $( "#access_restr" ).attr( "checked" ) == "checked" )
                 $( "#access_restriction_div" ).show();
 
@@ -146,14 +141,16 @@
             }
 
             $('#welcome_email').bind( 'change', function() {
-                $('#div_welcome_email').toggle('slow');
+                $('#div_welcome_email').toggle('slow', function(){
+                    if( $( "#welcome_email" ).attr( "checked" ) )
+                        $( "#ar_controls" ).removeAttr( "style" );
+                    else
+                        $( "#ar_controls" ).attr( "style", "position: fixed; z-index: 2;" );
+                });
             });
 
             $( "#access_restr" ).change( function(){
-                $( "#access_restriction_div" ).toggle( "slow", function(){
-                    if( $( "#access_restr" ).val() )
-                        $( "#access_restriction" ).val( "BOTH" ).trigger( "liszt:updated" );
-                });
+                $( "#access_restriction_div" ).toggle( "slow" );
             });
         }); // document onready
 

@@ -269,3 +269,18 @@ Token:
     Timestampable:
       updated:
         disabled: true
+MigrationVersion:  
+  connection: 0
+  tableName: migration_version
+  columns:
+    id:
+      type: integer(8) 
+      autoincrement: true
+      primary: true
+    version:
+      type: integer(4) 
+      fixed: false
+      unsigned: false
+      primary: false 
+      notnull: false   
+      autoincrement: false

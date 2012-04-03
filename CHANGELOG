@@ -4,6 +4,7 @@
          See:  https://github.com/opensolutions/ViMbAdmin/wiki/Update-Instructions
 
  - add: Mailbox access restriction allowing for POP3 only / IMAP only / both
+         See: https://github.com/opensolutions/ViMbAdmin/wiki/POP3-IMAP-Access-Restriction
  - add: "allow_access_restriction" to application.ini to enable access
         restiction options
  - add: "migration_version" to application.ini.dist - only used for new

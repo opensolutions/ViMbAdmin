@@ -70,7 +70,7 @@ $( 'document' ).ready( function(){
 
 	// Activate the modal dialog pop up
     $( "a[id|='modal-dialog']" ).bind( 'click', tt_openModalDialog );
-    
+
     $("[rel=popover]").popover();
 
 });
@@ -208,9 +208,20 @@ function tt_openModalDialog(event) {
     id = element.attr( 'id' ).substr( element.attr( 'id' ).lastIndexOf( '-' ) + 1 );
 
     if( id.substring( 0, 4 ) == "wide" )
+    {
         $( '#modal_dialog' ).addClass( 'modal-wide' );
-    else
+        $( '#modal_dialog' ).removeClass( 'modal-email' );
+    }
+    else if( id.substring( 0, 5 ) == "email" )
+    {
+        $( '#modal_dialog' ).addClass( 'modal-email' );
         $( '#modal_dialog' ).removeClass( 'modal-wide' );
+    }
+    else
+    {
+        $( '#modal_dialog' ).removeClass( 'modal-wide' );
+        $( '#modal_dialog' ).removeClass( 'modal-email' );
+    }
 
     $('#modal_dialog').html( '<div id="throb" style="padding-left:230px; padding-top:175px; height:275px;"></div>' );
 

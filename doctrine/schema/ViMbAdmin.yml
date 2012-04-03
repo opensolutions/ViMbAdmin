@@ -133,6 +133,11 @@ Mailbox:
     domain:
       type: string(255)
       notnull: true
+    access_restriction:
+      type: enum
+      values: [BOTH, IMAP, POP3]
+      default: BOTH
+      notnull: true
     active:
       default: 1
       type: boolean

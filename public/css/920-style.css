@@ -56,9 +56,14 @@ a.aplain, a:link.aplain, a:visited.aplain, a:hover.aplain, a:active.aplain {
  *
  *********************************************************************************************/
 
-/* FIXME it need to be fixed by layout */
 .modal-wide {
     width: 800px;
+    left: 50%;
+    margin-left: -400px;
+}
+
+.modal-email {
+    width: 600px;
     left: 50%;
     margin-left: -400px;
 }

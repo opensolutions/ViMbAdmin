@@ -13,6 +13,7 @@
  * @property integer $quota
  * @property string $local_part
  * @property string $domain
+ * @property enum $access_restriction
  * @property boolean $active
  * @property string $homedir
  * @property integer $uid
@@ -68,6 +69,17 @@ abstract class BaseMailbox extends Doctrine_Record
              'type' => 'string',
              'notnull' => true,
              'length' => '255',
+             ));
+        $this->hasColumn('access_restriction', 'enum', null, array(
+             'type' => 'enum',
+             'values' => 
+             array(
+              0 => 'BOTH',
+              1 => 'IMAP',
+              2 => 'POP3',
+             ),
+             'default' => 'BOTH',
+             'notnull' => true,
              ));
         $this->hasColumn('active', 'boolean', null, array(
              'default' => 1,

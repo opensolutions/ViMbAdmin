@@ -16,9 +16,9 @@
     		    <div class="input-append" style="float: left;">
     		        {$element->local_part}
     		        {if !isset( $domain ) || !$domain}
-    		            <span class="btn add-midd">@</span>
+    		            <span class="btn" style="margin-left: -5px; -webkit-border-radius: 0 0 0 0; -moz-border-radius: 0 0 0 0; border-radius: 0 0 0 0;">@</span>
 		            {else}
-		                <span class="add-on">@{$domain->domain}</span>
+		                <span class="add-on" style="margin-left: -5px;">@{$domain->domain}</span>
 		                <div style="display: none;">{$element->domain}</div>
 		            {/if}
     		    </div>
@@ -67,10 +67,10 @@
 	    	    	{$element->password->getLabel()}
 	    	</label>
     	    <div id="div-controls-{$element->password->getId()}" class="controls">
-    		    <div class="input-append btn-group">
+    		    <div class="input-append">
     		        {$element->password}
     		        {if $element->password->getAttrib('disabled') != 'disabled'}
-        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" class="btn add-on" >
+        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" class="btn add-on" style="margin-left: -5px;">
                             <i class="icon-refresh"></i>
                         </span>
                     {/if}
@@ -98,6 +98,18 @@
 
         {include file='form/element-input.phtml' ielement=$element->quota}
         {include file='form/element-checkbox.phtml' ielement=$element->active}
+        {if isset( $element->access_restr ) }
+            {include file='form/element-checkbox.phtml' ielement=$element->access_restr}
+            <div id="access_restriction_div" style="display:none; margin-top: -25px; margin-left: 20px;">
+                <fieldset class="control-group">
+                    <label class="control-label">&nbsp;</label>
+                    <div id="ar_controls" class="controls" style="position: fixed; z-index: 2;">
+                        {$element->access_restriction}
+                    </div>
+                </fieldset>
+            </div>
+        {/if}
+
         {if $element->local_part->getValue() == ''}
             {include file='form/element-checkbox.phtml' ielement=$element->welcome_email}
             <div id="div_welcome_email" class="dontdisplay">
@@ -118,16 +130,29 @@
         $(document).ready(function()
         {
             $( '#domain' ).chosen();
+            $( '#access_restriction' ).chosen();
+
+            if( $( "#access_restr" ).attr( "checked" ) == "checked" )
+                $( "#access_restriction_div" ).show();
 
             if( $( '#domain_chzn' ).css( "width" ).length < 5 )
             {
                 $( '#domain_chzn' ).css( "width", "150px" );
-                $( '.chzn-drop' ).css( "width", "148px" );
-                $( '.chzn-search >input' ).css( "width", "110px" );
+                $( '#domain_chzn > .chzn-drop' ).css( "width", "148px" );
+                $( '#domain_chzn > .chzn-drop .chzn-search > input' ).css( "width", "110px" );
             }
 
             $('#welcome_email').bind( 'change', function() {
-                $('#div_welcome_email').toggle('slow');
+                $('#div_welcome_email').toggle('slow', function(){
+                    if( $( "#welcome_email" ).attr( "checked" ) )
+                        $( "#ar_controls" ).removeAttr( "style" );
+                    else
+                        $( "#ar_controls" ).attr( "style", "position: fixed; z-index: 2;" );
+                });
+            });
+
+            $( "#access_restr" ).change( function(){
+                $( "#access_restriction_div" ).toggle( "slow" );
             });
         }); // document onready
 

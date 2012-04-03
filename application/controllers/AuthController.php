@@ -309,12 +309,17 @@ class AuthController extends ViMbAdmin_Controller_Action
                 }
                 else
                 {
-                    $admin = new Admin;
+                    $admin = new Admin();
                     $admin['username'] = $form->getValue( 'username' );
                     $admin->setPassword( $form->getValue( 'password' ), $this->_options['securitysalt'], false );
                     $admin->super  = true;
                     $admin->active = true;
                     $admin->save();
+                    
+                    // we need to populate the Doctine migration table
+                    $migration = new MigrationVersion();
+                    $migration['version'] = $this->_options['migration_version'];
+                    $migration->save();
 
                     try
                     {

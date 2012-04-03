@@ -42,7 +42,7 @@
 class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
 {
 
-    public function __construct( $options = null, $domainList, $minPass = 8 )
+    public function __construct( $options = null, $domainList, $minPass = 8, $allow_access_restriction = false )
     {
         parent::__construct( $options );
 
@@ -130,6 +130,24 @@ class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );
 
+        if( $allow_access_restriction )
+        {
+            $access_restr = $this->createElement( 'checkbox', 'access_restr' )
+                ->setLabel( _( 'Access Restriction' ) )
+                ->addValidator( 'InArray', false, array( array( 0, 1 ) ) )
+                ->addFilter( 'Digits' );
+
+            $access_restriction = $this->createElement( 'select', 'access_restriction' )
+                ->setOptions( array( 'multiOptions' => Mailbox::$MAILBOX_ACCESS_RESTR_TEXT ) ) // array('' => _( '- select -' ) ) + $domainList
+                ->setRequired( true )
+                ->setAttrib( 'class', 'required span2' )
+                ->addValidator( 'NotEmpty', true )
+                ->setValue( Mailbox::ACCESS_RESTR_IMAP )
+                ->addValidator( 'InArray', true, array( array_keys( Mailbox::$MAILBOX_ACCESS_RESTR_TEXT ) ) );
+
+            $access_restriction->getValidator( 'InArray' )->setMessage( _( 'You must select a access restriction.' ), Zend_Validate_InArray::NOT_IN_ARRAY);
+        }
+
         $submit = $this->createElement( 'submit' , 'save' )
             ->setLabel( _( 'Save' ) );
 
@@ -142,6 +160,12 @@ class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
             ->addElement( $welcomeEmail )
             ->addElement( $ccWelcomeEmail )
             ->addElement( $submit );
+
+        if( $allow_access_restriction )
+        {
+            $this->addElement( $access_restr )
+            ->addElement( $access_restriction );
+        }
 
         $this->setElementDecorators( array( 'ViewHelper' ) );
     }

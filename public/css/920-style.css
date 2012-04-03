@@ -90,7 +90,7 @@ a.aplain, a:link.aplain, a:visited.aplain, a:hover.aplain, a:active.aplain {
   border-radius: 0 3px 3px 0;
 }
 
-.add-midd{
+.add-on-input{
   float: left;
   display: block;
   width: auto;
@@ -99,18 +99,14 @@ a.aplain, a:link.aplain, a:visited.aplain, a:hover.aplain, a:active.aplain {
   padding: 4px 5px;
   font-weight: normal;
   line-height: 18px;
-  text-align: center;
+  text-align: left;
 
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-
-  margin-right: -1px;
+  margin-right: 0;
   margin-left: -1px;
-  -webkit-border-radius: 0 0 0 0;
-  -moz-border-radius: 0 0 0 0;
-  border-radius: 0 0 0 0;
+  -webkit-border-radius: 0 3px 3px 0;
+  -moz-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
 }
-
 
 opacity_70
 {

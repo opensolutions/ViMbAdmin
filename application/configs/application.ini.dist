@@ -10,6 +10,8 @@
 
 [user]
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Enter a random string here to add salt to admin accounts
 securitysalt = ""
@@ -34,6 +36,13 @@ defaults.domain.mailboxes = 0
 ; This sets the uid and gid columns in the mailbox table to the below valies
 defaults.mailbox.uid = 2000
 defaults.mailbox.gid = 2000
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Allow admins to dictate whether a user can use BOTH, IMAP ONLY, POP3 ONLY when creating mailboxes
+;
+; Must be supported by your POP3/IMAP server. See FIXME
+;
+allow_access_restriction = false
 
 ; Set the homedir and maildir values in the mailbox table where the
 ; following substitutions apply:
@@ -255,6 +264,10 @@ resources.doctrine.sql_path = APPLICATION_PATH "/../doctrine/data/sql"
 resources.doctrine.yaml_schema_path = APPLICATION_PATH "/../doctrine/schema"
 resources.doctrine.generate_models_options.generateTableClasses = true
 resources.doctrine.extensions_path = APPLICATION_PATH "/../library/DoctrineExtensions"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Database schema migration version - DO NOT CHANGE
+migration_version = 1
 
 resources.namespace.checkip = 1
 

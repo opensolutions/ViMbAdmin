@@ -69,7 +69,7 @@ class ViMbAdmin_Form_Admin_Edit extends ViMbAdmin_Form
         $username = $this
                         ->createElement( 'text', 'username' )
                         ->setAttrib( 'size', 30 )
-                        ->setLabel( _( 'Username' ) )
+                        ->setLabel( _( 'Email' ) )
                         ->setAttrib( 'title', _( 'Username' ) )
                         ->setAttrib( 'class', 'required' )
                         ->setAttrib( 'autocomplete', 'off' )

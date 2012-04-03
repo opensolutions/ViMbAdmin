@@ -17,17 +17,17 @@
     		    <div class="input-append" style="float: left">
     		        {$element->local_part}
         		    {if !isset( $domain ) || !$domain }
-    		            <span class="btn add-midd">@</span>
+    		            <span class="btn" style="margin-left: -5px; -webkit-border-radius: 0 0 0 0; -moz-border-radius: 0 0 0 0; border-radius: 0 0 0 0;">@</span>
 		            {else}
-		                <span class="add-on">@{$domain->domain}</span>
+		                <span class="add-on" style="margin-left: -5px;">@{$domain->domain}</span>
 		                <div style="display: none;">{$element->domain}</div>
 		            {/if}
     		    </div>
     		    {if !isset( $domain ) || !$domain}
     		        {$element->domain}
 		        {/if}
-
-	        	{if $element->local_part->getMessages()}
+    	    </div>
+    	    {if $element->local_part->getMessages()}
 					<script type="text/javascript">
 						$( '#{$element->local_part->getId()}' ).addClass( 'error' );
 						$( '#div-form-{$element->local_part->getId()}' ).addClass( 'error' );
@@ -58,7 +58,6 @@
     					{/foreach}
 					{/if}
 				</p>
-    	    </div>
     	</fieldset>
     	{include file='form/element-checkbox.phtml' ielement=$element->active}
 
@@ -67,9 +66,9 @@
                 {$element->goto->getLabel()}
             </label>
             <div class="controls" id="div-controls-goto">
-                <div class="input-append btn-group" id="goto-div-0">
+                <div class="input-append" id="goto-div-0">
     		        <input type="text" id="goto_empty" autocomplete="off" name="goto[]" value="" size="40" title="Goto" />
-    		        <span id="goto-btn-0" title="Add go to" class="btn add-on" onclick="addGoto();" >
+    		        <span id="goto-btn-0" title="Add go to" class="btn add-on" onclick="addGoto();" style="margin-left: -5px;">
                         <i class="icon-plus"></i>
                     </span>
     		    </div>

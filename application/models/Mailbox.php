@@ -39,6 +39,21 @@
  */
 class Mailbox extends BaseMailbox
 {
+    /**
+     * Const values to defines access restriction options.
+     */
+    const ACCESS_RESTR_BOTH = 'BOTH';
+    const ACCESS_RESTR_IMAP = 'IMAP';
+    const ACCESS_RESTR_POP3 = 'POP3';
+
+    /**
+     * Array for define the names of const variables
+     * which defining access restriction
+     */
+    public static $MAILBOX_ACCESS_RESTR_TEXT = array(
+        Mailbox::ACCESS_RESTR_IMAP => 'IMAP ONLY',
+        Mailbox::ACCESS_RESTR_POP3 => 'POP3 ONLY'
+    );
 
     /**
      * Set the maildir
@@ -109,7 +124,7 @@ class Mailbox extends BaseMailbox
 
                 $this['password'] = crypt( $password, $s );
                 break;
-                
+
             case 'sha1':
                 $this['password'] = sha1( $password );
                 break;
@@ -121,7 +136,7 @@ class Mailbox extends BaseMailbox
             case 'plain':
                 $this['password'] = $password;
                 break;
-                
+
             // Standard DES hash compatible with MySQL ENCRYPT()
             case 'crypt':
                 if( strlen( $salt ) >= 2 )

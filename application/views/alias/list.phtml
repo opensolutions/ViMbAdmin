@@ -16,7 +16,7 @@
             	            <i class="icon-eye-open"></i>
             	        {/if}
         	        </span>
-        	        <a class="btn" id="modal-dialog-add_alias" title="Add Alias" href="{genUrl controller='alias' action='edit' modal=true}">
+        	        <a class="btn" id="modal-dialog-email_add_alias" title="Add Alias" href="{genUrl controller='alias' action='edit' modal=true}">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
@@ -78,7 +78,7 @@
             </td>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-mini" id="modal-dialog-edit_alias_{$oneAlias.id}" title="Edit" href="{genUrl controller='alias' action='edit' alid=$oneAlias.id modal=true}">
+                    <a class="btn btn-mini" id="modal-dialog-email_edit_alias_{$oneAlias.id}" title="Edit" href="{genUrl controller='alias' action='edit' alid=$oneAlias.id modal=true}">
                         <i class="icon-pencil"></i>
                     </a>
                     <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}" title="Delete" onclick="deleteAlias( {$oneAlias.id} );">

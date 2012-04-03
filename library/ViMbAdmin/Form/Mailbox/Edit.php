@@ -130,6 +130,21 @@ class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );
 
+        $access_restr = $this->createElement( 'checkbox', 'access_restr' )
+            ->setLabel( _( 'Access Restriction' ) )
+            ->addValidator( 'InArray', false, array( array( 0, 1 ) ) )
+            ->addFilter( 'Digits' );
+
+        $access_restriction = $this->createElement( 'select', 'access_restriction' )
+            ->setOptions( array( 'multiOptions' => Mailbox::$MAILBOX_ACCESS_RESTR_TEXT ) ) // array('' => _( '- select -' ) ) + $domainList
+            ->setRequired( true )
+            ->setAttrib( 'class', 'required span1' )
+            ->addValidator( 'NotEmpty', true )
+            ->setValue( Mailbox::ACCESS_RESTR_BOTH )
+            ->addValidator( 'InArray', true, array( array_keys( Mailbox::$MAILBOX_ACCESS_RESTR_TEXT ) ) );
+
+        $domain->getValidator( 'InArray' )->setMessage( _( 'You must select a access restriction.' ), Zend_Validate_InArray::NOT_IN_ARRAY);
+
         $submit = $this->createElement( 'submit' , 'save' )
             ->setLabel( _( 'Save' ) );
 
@@ -141,6 +156,8 @@ class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
             ->addElement( $quota )
             ->addElement( $welcomeEmail )
             ->addElement( $ccWelcomeEmail )
+            ->addElement( $access_restr )
+            ->addElement( $access_restriction )
             ->addElement( $submit );
 
         $this->setElementDecorators( array( 'ViewHelper' ) );

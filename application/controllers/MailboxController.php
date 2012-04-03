@@ -449,6 +449,8 @@ class MailboxController extends ViMbAdmin_Controller_Action
                         }
                     }
 
+                    $this->_mailbox['access_restriction'] = $editForm->getValue( 'access_restriction' );
+
                     $this->_mailbox->save();
 
                     if( $editForm->getValue( 'welcome_email' ) )

@@ -96,8 +96,19 @@
     	</fieldset>
         {/if}
 
+        {include file='form/element-checkbox.phtml' ielement=$element->access_restr}
+        <div id="access_restriction_div" style="display:none; margin-top: -20px; margin-left: 20px;">
+            <fieldset class="control-group">
+                <label class="control-label">&nbsp;</label>
+                <div class="controls" style="">
+                    {$element->access_restriction}
+                </div>
+            </fieldset>
+        </div>
+
         {include file='form/element-input.phtml' ielement=$element->quota}
         {include file='form/element-checkbox.phtml' ielement=$element->active}
+
         {if $element->local_part->getValue() == ''}
             {include file='form/element-checkbox.phtml' ielement=$element->welcome_email}
             <div id="div_welcome_email" class="dontdisplay">
@@ -118,16 +129,31 @@
         $(document).ready(function()
         {
             $( '#domain' ).chosen();
+            $( '#access_restriction' ).chosen();
+
+            {if $element->access_restriction->getValue() != "BOTH"}
+                $( "#access_restr" ).attr( "checked", "checked" );
+            {/if}
+
+            if( $( "#access_restr" ).attr( "checked" ) == "checked" )
+                $( "#access_restriction_div" ).show();
 
             if( $( '#domain_chzn' ).css( "width" ).length < 5 )
             {
                 $( '#domain_chzn' ).css( "width", "150px" );
-                $( '.chzn-drop' ).css( "width", "148px" );
-                $( '.chzn-search >input' ).css( "width", "110px" );
+                $( '#domain_chzn > .chzn-drop' ).css( "width", "148px" );
+                $( '#domain_chzn > .chzn-drop .chzn-search > input' ).css( "width", "110px" );
             }
 
             $('#welcome_email').bind( 'change', function() {
                 $('#div_welcome_email').toggle('slow');
+            });
+
+            $( "#access_restr" ).change( function(){
+                $( "#access_restriction_div" ).toggle( "slow", function(){
+                    if( $( "#access_restr" ).val() )
+                        $( "#access_restriction" ).val( "BOTH" ).trigger( "liszt:updated" );
+                });
             });
         }); // document onready
 

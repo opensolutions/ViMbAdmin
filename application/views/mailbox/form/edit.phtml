@@ -98,15 +98,17 @@
 
         {include file='form/element-input.phtml' ielement=$element->quota}
         {include file='form/element-checkbox.phtml' ielement=$element->active}
-        {include file='form/element-checkbox.phtml' ielement=$element->access_restr}
-        <div id="access_restriction_div" style="display:none; margin-top: -25px; margin-left: 20px;">
-            <fieldset class="control-group">
-                <label class="control-label">&nbsp;</label>
-                <div id="ar_controls" class="controls" style="position: fixed; z-index: 2;">
-                    {$element->access_restriction}
-                </div>
-            </fieldset>
-        </div>
+        {if isset( $element->access_restr ) }
+            {include file='form/element-checkbox.phtml' ielement=$element->access_restr}
+            <div id="access_restriction_div" style="display:none; margin-top: -25px; margin-left: 20px;">
+                <fieldset class="control-group">
+                    <label class="control-label">&nbsp;</label>
+                    <div id="ar_controls" class="controls" style="position: fixed; z-index: 2;">
+                        {$element->access_restriction}
+                    </div>
+                </fieldset>
+            </div>
+        {/if}
 
         {if $element->local_part->getValue() == ''}
             {include file='form/element-checkbox.phtml' ielement=$element->welcome_email}

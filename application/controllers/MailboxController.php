@@ -332,7 +332,12 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
         $domainList = DomainTable::getDomains( $this->getAdmin() );
 
-        $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'] );
+        if( isset( $this->_options['allow_access_restriction'] ) )
+            $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'], $this->_options['allow_access_restriction'] );
+        else
+            $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'] );
+
+
         $editForm->setDefaults( $this->_mailbox->toArray() );
 
         if( $this->_mailbox['id'] )
@@ -449,10 +454,13 @@ class MailboxController extends ViMbAdmin_Controller_Action
                         }
                     }
 
-                    if( $editForm->getValue( 'access_restr' ) )
-                        $this->_mailbox['access_restriction'] = $editForm->getValue( 'access_restriction' );
-                    else
-                        $this->_mailbox['access_restriction'] = Mailbox::ACCESS_RESTR_BOTH;
+                    if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
+                    {
+                        if( $editForm->getValue( 'access_restr' ) )
+                            $this->_mailbox['access_restriction'] = $editForm->getValue( 'access_restriction' );
+                        else
+                            $this->_mailbox['access_restriction'] = Mailbox::ACCESS_RESTR_BOTH;
+                    }
 
                     $this->_mailbox->save();
 
@@ -503,8 +511,9 @@ class MailboxController extends ViMbAdmin_Controller_Action
             $this->view->domain = $this->_domain;
         }
 
-        if( $this->_mailbox['access_restriction'] != Mailbox::ACCESS_RESTR_BOTH )
-            $editForm->getElement( 'access_restr' )->setAttrib( "checked", "checked" );
+        if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
+            if( $this->_mailbox['access_restriction'] != Mailbox::ACCESS_RESTR_BOTH )
+                $editForm->getElement( 'access_restr' )->setAttrib( "checked", "checked" );
 
         $this->view->editForm = $editForm;
     }

@@ -9,6 +9,8 @@
  - add: "migration_version" to application.ini.dist - only used for new
         installs
  - add: Doctrine migration tables now that we have had out first migration
+ - upd: freshly pressed CSS/JS (version 12)
+ - fix: formatting in add/edit mailbox dialog
 
 2.0.8   2012-03-06
  - fix: Accidently commited testing code causing issue #10. Fixed.

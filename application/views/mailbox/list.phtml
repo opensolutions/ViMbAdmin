@@ -13,7 +13,7 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <a class="btn" id="modal-dialog-add_mailbox" title="Add Mailbox" href="{genUrl controller='mailbox' action='edit' modal=true}{if $domain}/did/{$domain.id}{/if}" title="Add Mailbox">
+        	        <a class="btn" id="modal-dialog-email_add_mailbox" title="Add Mailbox" href="{genUrl controller='mailbox' action='edit' modal=true}{if $domain}/did/{$domain.id}{/if}" title="Add Mailbox">
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
@@ -64,7 +64,7 @@
             </td>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-mini" id="modal-dialog-edit_mailbox_{$oneMailbox.id}" title="Edit" href="{genUrl controller='mailbox' action='edit' mid=$oneMailbox.id modal=true}">
+                    <a class="btn btn-mini" id="modal-dialog-email_edit_mailbox_{$oneMailbox.id}" title="Edit" href="{genUrl controller='mailbox' action='edit' mid=$oneMailbox.id modal=true}">
                         <i class="icon-pencil"></i>
                     </a>
                     <a class="btn btn-mini" id="modal-dialog-password_{$oneMailbox.id}" title="Password" href="{genUrl controller='mailbox' action='password' mid=$oneMailbox.id modal=true}">

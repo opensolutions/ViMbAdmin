@@ -134,9 +134,8 @@ Mailbox:
       type: string(255)
       notnull: true
     access_restriction:
-      type: enum
-      values: [BOTH, IMAP, POP3]
-      default: BOTH
+      type: string(100)
+      default: ALL
       notnull: true
     active:
       default: 1
@@ -269,18 +268,18 @@ Token:
     Timestampable:
       updated:
         disabled: true
-MigrationVersion:  
+MigrationVersion:
   connection: 0
   tableName: migration_version
   columns:
     id:
-      type: integer(8) 
+      type: integer(8)
       autoincrement: true
       primary: true
     version:
-      type: integer(4) 
+      type: integer(4)
       fixed: false
       unsigned: false
-      primary: false 
-      notnull: false   
+      primary: false
+      notnull: false
       autoincrement: false

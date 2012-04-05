@@ -45,6 +45,8 @@ defaults.mailbox.gid = 2000
 ; See https://github.com/opensolutions/ViMbAdmin/wiki/POP3-IMAP-Access-Restriction for documentation
 ;
 allow_access_restriction = false
+
+; specify the options which should be allowed for access restrictions
 access_restriction_type.smtp = "SMTP"
 access_restriction_type.imap = "IMAP"
 access_restriction_type.pop3 = "POP3"

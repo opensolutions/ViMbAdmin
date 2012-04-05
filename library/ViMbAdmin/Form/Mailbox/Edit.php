@@ -42,11 +42,35 @@
 class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
 {
 
-    public function __construct( $options = null, $domainList, $minPass = 8, $allow_access_restriction = false )
+    public function __construct( $options = null, $domainList, $minPass = 8, $allow_access_restriction = false, $restriction_types = null )
     {
         parent::__construct( $options );
 
-        $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'mailbox/form/edit.phtml' ) ) ) );
+        if( is_array( $restriction_types ) )
+        {
+            $group1 = array();
+            $group2 = array();
+            $group3 = array();
+            $cnt = 0;
+            foreach( $restriction_types as $key => $val )
+            {
+                if( $cnt == 0 )
+                    $group1[] = array( "id" => $key , "name" => $val );
+                else if( $cnt == 1 )
+                    $group2[] = array( "id" => $key , "name" => $val );
+                else if( $cnt == 2 )
+                {
+                    $group3[] = array( "id" => $key , "name" => $val );
+                    $cnt = -1;
+                }
+                $cnt ++;
+            }
+            $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'mailbox/form/edit.phtml', 'group1' => $group1, 'group2' => $group2, 'group3' => $group3 ) ) ) );
+        }
+        else
+        {
+            $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'mailbox/form/edit.phtml' ) ) ) );
+        }
 
         $this->setMethod( 'post' )
             ->setAttrib( 'id', 'mailbox_edit_form' )
@@ -133,19 +157,9 @@ class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
         if( $allow_access_restriction )
         {
             $access_restr = $this->createElement( 'checkbox', 'access_restr' )
-                ->setLabel( _( 'Access Restriction' ) )
+                ->setLabel( _( 'Access Restriction <span id="allow_to" class="dontdisplay"> - Allow Access To</span>' ) )
                 ->addValidator( 'InArray', false, array( array( 0, 1 ) ) )
                 ->addFilter( 'Digits' );
-
-            $access_restriction = $this->createElement( 'select', 'access_restriction' )
-                ->setOptions( array( 'multiOptions' => Mailbox::$MAILBOX_ACCESS_RESTR_TEXT ) ) // array('' => _( '- select -' ) ) + $domainList
-                ->setRequired( true )
-                ->setAttrib( 'class', 'required span2' )
-                ->addValidator( 'NotEmpty', true )
-                ->setValue( Mailbox::ACCESS_RESTR_IMAP )
-                ->addValidator( 'InArray', true, array( array_keys( Mailbox::$MAILBOX_ACCESS_RESTR_TEXT ) ) );
-
-            $access_restriction->getValidator( 'InArray' )->setMessage( _( 'You must select a access restriction.' ), Zend_Validate_InArray::NOT_IN_ARRAY);
         }
 
         $submit = $this->createElement( 'submit' , 'save' )
@@ -162,10 +176,7 @@ class ViMbAdmin_Form_Mailbox_Edit extends ViMbAdmin_Form
             ->addElement( $submit );
 
         if( $allow_access_restriction )
-        {
-            $this->addElement( $access_restr )
-            ->addElement( $access_restriction );
-        }
+            $this->addElement( $access_restr );
 
         $this->setElementDecorators( array( 'ViewHelper' ) );
     }

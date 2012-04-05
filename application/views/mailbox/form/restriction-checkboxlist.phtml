@@ -1,0 +1,17 @@
+<fieldset>
+    <div class="action">
+    	<dl class="inputs-list">
+             {foreach from=$ielements item=ielement}
+    		    <dt>
+        			<label>
+        				<input id="type_{$ielement.id}" type="checkbox"
+        					checked="checked"
+        					value="{$ielement.id}" name="type[{$ielement.id}]"
+    					/>
+    					{$ielement.name}
+			        </label>
+                </dt>
+            {/foreach}
+        </dl>
+    </div>
+</fieldset>

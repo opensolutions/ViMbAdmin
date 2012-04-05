@@ -100,12 +100,26 @@
         {include file='form/element-checkbox.phtml' ielement=$element->active}
         {if isset( $element->access_restr ) }
             {include file='form/element-checkbox.phtml' ielement=$element->access_restr}
-            <div id="access_restriction_div" style="display:none; margin-top: -25px; margin-left: 20px;">
+            <div id="access_restriction_div" class="dontdisplay" style="margin-top: -30px;">
                 <fieldset class="control-group">
-                    <label class="control-label">&nbsp;</label>
-                    <div id="ar_controls" class="controls" style="position: fixed; z-index: 2;">
-                        {$element->access_restriction}
-                    </div>
+            	    <label class="control-label" style="margin-right: 40px;">&nbsp;</label>
+            	        <div class="row-fluid" >
+                            <div class="offset2 span2">
+                                {if isset( $group1 ) && count( $group1 ) > 0 }
+                                    {include file='mailbox/form/restriction-checkboxlist.phtml' ielements=$group1}
+                                {/if}
+                            </div>
+                            <div class="offset2 span2">
+                                {if isset( $group2 ) && count( $group2 ) > 0 }
+                                    {include file='mailbox/form/restriction-checkboxlist.phtml' ielements=$group2}
+                                {/if}
+                            </div>
+                            <div class="offset2 span2">
+                                {if isset( $group3 ) && count( $group3 ) > 0 }
+                                    {include file='mailbox/form/restriction-checkboxlist.phtml' ielements=$group3}
+                                {/if}
+                            </div>
+                        </div>
                 </fieldset>
             </div>
         {/if}
@@ -129,11 +143,36 @@
 
         $(document).ready(function()
         {
+            {if isset( $restrictions ) && is_array( $restrictions ) }
+                {if isset( $group1 ) && count( $group1 ) > 0 }
+                    {foreach from=$group1 item=g}
+                        {if !in_array($g.id, $restrictions ) }
+                            $( '#type_{$g.id}' ).removeAttr( "checked" );
+                        {/if}
+                    {/foreach}
+                {/if}
+                {if isset( $group2 ) && count( $group2 ) > 0 }
+                    {foreach from=$group2 item=g}
+                        {if !in_array($g.id, $restrictions ) }
+                            $( '#type_{$g.id}' ).removeAttr( "checked" );
+                        {/if}
+                    {/foreach}
+                {/if}
+                {if isset( $group3 ) && count( $group3 ) > 0 }
+                    {foreach from=$group3 item=g}
+                        {if !in_array($g.id, $restrictions ) }
+                            $( '#type_{$g.id}' ).removeAttr( "checked" );
+                        {/if}
+                    {/foreach}
+                {/if}
+            {/if}
             $( '#domain' ).chosen();
-            $( '#access_restriction' ).chosen();
 
             if( $( "#access_restr" ).attr( "checked" ) == "checked" )
+            {
                 $( "#access_restriction_div" ).show();
+                $( "#allow_to").show();
+            }
 
             if( $( '#domain_chzn' ).css( "width" ).length < 5 )
             {
@@ -143,16 +182,12 @@
             }
 
             $('#welcome_email').bind( 'change', function() {
-                $('#div_welcome_email').toggle('slow', function(){
-                    if( $( "#welcome_email" ).attr( "checked" ) )
-                        $( "#ar_controls" ).removeAttr( "style" );
-                    else
-                        $( "#ar_controls" ).attr( "style", "position: fixed; z-index: 2;" );
-                });
+                $('#div_welcome_email').toggle('slow');
             });
 
             $( "#access_restr" ).change( function(){
                 $( "#access_restriction_div" ).toggle( "slow" );
+                $( "#allow_to").toggle( "fast" );
             });
         }); // document onready
 

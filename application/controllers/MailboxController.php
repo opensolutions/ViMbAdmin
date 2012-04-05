@@ -332,10 +332,10 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
         $domainList = DomainTable::getDomains( $this->getAdmin() );
 
-        if( isset( $this->_options['allow_access_restriction'] ) )
-            $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'], $this->_options['allow_access_restriction'] );
+        if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
+            $this->view->editForm = $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'], $this->_options['allow_access_restriction'], $this->_options['access_restriction_type'] );
         else
-            $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'] );
+            $this->view->editForm = $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'] );
 
 
         $editForm->setDefaults( $this->_mailbox->toArray() );
@@ -351,6 +351,28 @@ class MailboxController extends ViMbAdmin_Controller_Action
         {
             if( $editForm->isValid( $_POST ) )
             {
+                if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
+                {
+                    if( $editForm->getValue( 'access_restr' ) && !isset( $_POST['type'] ) )
+                    {
+                        $editForm->getElement( 'access_restr' )->addError( "You must select type if you allowing access restrictions." );
+                        if( $this->_mailbox['id'] )
+                         $editForm->getElement( 'local_part' )->setValue( $this->_mailbox['local_part'] );
+                        $this->view->restrictions = array();
+
+                        if( $this->_domain )
+                        {
+                            $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
+                            $this->view->domain = $this->_domain;
+                        }
+
+                        if( !$this->_getParam( 'helper', true ) )
+                            $this->view->modal = true;
+
+                        return;
+                    }
+                }
+
                 do
                 {
                     // do we have a domain
@@ -448,7 +470,8 @@ class MailboxController extends ViMbAdmin_Controller_Action
                         {
                             $this->_mailbox['quota'] = $this->_domain['quota'];
                             $this->addMessage(
-                                _( "Mailbox quota set to " ) . $this->_domain['quota'],
+                                _( "Mailbox qif( !$this->_getParam( 'helper', true ) )
+                    $this->view->modal = trueuota set to " ) . $this->_domain['quota'],
                                 ViMbAdmin_Message::ALERT
                             );
                         }
@@ -457,10 +480,12 @@ class MailboxController extends ViMbAdmin_Controller_Action
                     if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
                     {
                         if( $editForm->getValue( 'access_restr' ) )
-                            $this->_mailbox['access_restriction'] = $editForm->getValue( 'access_restriction' );
+                            $this->_mailbox['access_restriction'] = implode(",", $_POST['type']);
                         else
-                            $this->_mailbox['access_restriction'] = Mailbox::ACCESS_RESTR_BOTH;
+                            $this->_mailbox['access_restriction'] = "ALL";
                     }
+                    else
+                        $this->_mailbox['access_restriction'] = "ALL";
 
                     $this->_mailbox->save();
 
@@ -498,10 +523,9 @@ class MailboxController extends ViMbAdmin_Controller_Action
             }
             else
             {
+                $this->view->restrictions = $_POST["type"];
                 if( !$this->_getParam( 'helper', true ) )
-                {
                     $this->view->modal = true;
-                }
             }
         }
 
@@ -512,10 +536,15 @@ class MailboxController extends ViMbAdmin_Controller_Action
         }
 
         if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
-            if( $this->_mailbox['access_restriction'] != Mailbox::ACCESS_RESTR_BOTH )
+            if( $this->_mailbox && $this->_mailbox['access_restriction'] != "ALL" && $this->_mailbox['access_restriction'] != "BOTH" )
+            {
                 $editForm->getElement( 'access_restr' )->setAttrib( "checked", "checked" );
 
-        $this->view->editForm = $editForm;
+                if( strpos( $this->_mailbox['access_restriction'], "," ) )
+                    $this->view->restrictions = explode( ",", $this->_mailbox['access_restriction'] );
+                else
+                    $this->view->restrictions = array( $this->_mailbox['access_restriction'] );
+            }
     }
 
 

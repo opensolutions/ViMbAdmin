@@ -272,7 +272,7 @@ resources.doctrine.extensions_path = APPLICATION_PATH "/../library/DoctrineExten
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Database schema migration version - DO NOT CHANGE
-migration_version = 1
+migration_version = 2
 
 resources.namespace.checkip = 1
 

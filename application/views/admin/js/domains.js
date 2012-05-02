@@ -7,7 +7,6 @@
     $(document).ready( function()
     {
         oDataTable = $( '#list_table' ).dataTable({
-            "fnCookieCallback": function (sName, oData, sExpires, sPath) {
             'fnDrawCallback': function() {
                 if( vm_prefs['iLength'] !=  $( "select[name|='list_table_length']" ).val() )
                     vm_prefs['iLength'] = $( "select[name|='list_table_length']" ).val();

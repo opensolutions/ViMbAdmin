@@ -1,4 +1,3 @@
-
 Contents:
 =================
 
@@ -99,7 +98,7 @@ tar zxf vimbadmin-0.2.2.tar.gz
 
 Now, copy over your configuration file:
 
-cp vimbadmin-0.1.2/application/config/application.ini vimbadmin-0.2.2/application/config/application.ini
+cp vimbadmin-0.1.2/application/configs/application.ini vimbadmin-0.2.2/application/configs/application.ini
 
 and ensure you make the changes to the config file as required below.
  

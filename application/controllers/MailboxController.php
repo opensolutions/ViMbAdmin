@@ -470,12 +470,12 @@ class MailboxController extends ViMbAdmin_Controller_Action
                         {
                             $this->_mailbox['quota'] = $this->_domain['quota'];
                             $this->addMessage(
-                                _( "Mailbox qif( !$this->_getParam( 'helper', true ) )
-                    $this->view->modal = trueuota set to " ) . $this->_domain['quota'],
+                                _("Mailbox quota set to ") . $this->_domain['quota'],
                                 ViMbAdmin_Message::ALERT
                             );
                         }
                     }
+
 
                     if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
                     {

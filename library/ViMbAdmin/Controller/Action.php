@@ -166,6 +166,7 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
 
         // load up the options
         $this->_options = $this->_bootstrap->getOptions();
+        Zend_Registry::set( 'options', $this->_options );
 
         // and from the bootstrap, we can get other resources:
         $this->_config   = $this->_bootstrap->getResource( 'config' );
@@ -389,11 +390,11 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
         if( ViMbAdmin_Version::compareVersion( ViMbAdmin_Version::getLatest() ) == 1 )
         {
             $this->addMessage(
-                sprintf( 
+                sprintf(
                     _( 'Current version is: %s. There is a new version available: %s. See the <a href="https://github.com/opensolutions/ViMbAdmin/blob/master/CHANGELOG">change log</a>.' ),
                     ViMbAdmin_Version::VERSION,
                     ViMbAdmin_Version::getLatest()
-                ), 
+                ),
                 ViMbAdmin_Message::INFO
             );
         }

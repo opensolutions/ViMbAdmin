@@ -64,22 +64,39 @@ defaults.mailbox.homedir = "/home/vmail/"
 ;minimum mailbox password length
 defaults.mailbox.min_password_length = 8
 
-; The password hashing function to use
-; one of:
-;   "plain"       - password stored as clearttext
-;   "md5"         - password hashed using MD5 without salt
-;   "md5.salted"  - password hashed using MD5 without salt
-;   "crypt"       - standard des hash (compatible with MySQL ENCRYPT and courier - set a two character hash below)
-;   "md5.crypt"   - MD5 based salted password hash nowadays commonly used in /etc/shadow. (compatible with Dovecot) Requires min 8 character hash below.
+; The password hashing function to use. Set to one of:
+;
+;   "plain"       - password stored as clear text 
+;   "md5"         - password hashed using MD5 without salt (PHP md5())
+;   "md5.salted"  - password hashed using MD5 with salt (see below)
+;   "crypt"       - standard DES hash (compatible with MySQL ENCRYPT and courier - be sure to
+;                      set a two character hash below
+;   "md5.crypt"   - MD5 based salted password hash nowadays commonly used in /etc/shadow. 
+;                      (compatible with Dovecot) Requires min 8 character hash below.
 ;   "sha1"        - password hashed using sha1 without salt
-;   "sha1.salted" - password hashed using sha1 with salt defined below
+;   "sha1.salted" - password hashed using sha1 with salt defined below 
+;   "dovecot:XXX" - call the Dovecot password generator (see next option below) and use the 
+;                      scheme specified by XXX. To see available schemes, use 'dovecotpw -l' 
+;                      or 'doveadm pw -l'
+
 defaults.mailbox.password_scheme = "md5"
 
-; a hash to use when storing passwords. Typically used with "crypt"
+
+; The path to (and initial option(s) if necessary) the Dovecot password generator. Typical 
+; values may be something like:
+;
+; "/usr/bin/doveadm pw"
+; "/usr/bin/dovecotpw"
+
+defaults.mailbox.dovecot_pw_binary = "/usr/bin/doveadm pw"
+
+; A hash to use when storing passwords. Typically used with "crypt"
 ; which only uses the first two characters and includes this in the
 ; final hash. For other schemes such as md5.salted then your mail system
-; will also need to know and use this hash
+; will also need to know and use this hash (or use Dovecot for authentication)
+
 defaults.mailbox.password_hash = "ChangeMePlease"
+
 
 ; The number of rows displayed in the tables
 ; must be one of these: 10, 25, 50, 100

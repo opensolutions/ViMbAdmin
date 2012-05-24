@@ -1,3 +1,10 @@
+2.2.1   2012-05-24
+ - add: Full support for Dovecot passwords via Dovecot admin binary.
+         See: https://github.com/opensolutions/ViMbAdmin/wiki/Password-Schemes
+ - upd: JQuery, Bootstrap and Chosen
+ - fix: Data table bug
+ - fix: typo (from dustinfarris)
+
 2.2.0   2012-04-05
  - fix: access restrictions - previous implementation would have broken SMTP
          auth if one was using it. Added access_restriction_type to 

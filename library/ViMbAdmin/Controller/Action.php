@@ -339,7 +339,9 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
         $vView->pagebase = '';
 
         if( isset( $_SERVER['SERVER_NAME'] ) )
-            $vView->pagebase = 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://'
+            $vView->pagebase = 'http' 
+                . ( ( isset( $_SERVER['HTTPS'] && !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ) || ( isset( $_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == 443 ) ) ? 's' : '' ) 
+                . '://'
                 . $_SERVER['SERVER_NAME']
                 . Zend_Controller_Front::getInstance()->getBaseUrl();
 

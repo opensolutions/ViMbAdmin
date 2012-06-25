@@ -245,12 +245,7 @@ class AuthController extends ViMbAdmin_Controller_Action
             {
                 $cPassword = $mailbox['password'];
 
-                if( $cPassword == $mailbox->hashPassword(
-                            $this->_options['defaults']['mailbox']['password_scheme'],
-                            $form->getValue( 'current_password' ),
-                            $this->_options['defaults']['mailbox']['password_hash']
-                        )
-                    )
+		if($mailbox->checkPassword($form->getValue('current_password')) === TRUE)
                 {
                     $mailbox->hashPassword(
                         $this->_options['defaults']['mailbox']['password_scheme'],

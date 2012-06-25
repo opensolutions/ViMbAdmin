@@ -145,4 +145,30 @@ class Mailbox extends BaseMailbox
         return $this['password'];
     }
 
+    /**
+     * checkPassword
+     * 
+     * checks the given password for current mailbox. this is a way of checking passwords
+     * for mailstacks, that use e.g. dovecot's SSHA512 password scheme, which produces a
+     * new passwordhash at every call for the same password (thats what salting is all about...)
+     * 
+     * i have also tried to use doveadm auth - but this file is proteceted and root read/write
+     * only for secure mailstack configurations. i know that this is not the "best" way of doing
+     * this job - i liked the old approach but at least i got it working this way.
+     * 
+     * talking 'bout security: some guy familiar with that imap implementation should check that
+     * nowbody could inject some nasty stuff here.
+     */ 
+    function checkPassword($password)
+    {
+	/*
+	 * @TODO: Integrate in configuration.
+         */
+        if(($mbox =imap_open("{localhost:143/novalidate-cert}INBOX", $this->username, $password)) === FALSE)
+	{
+                return false;
+        }
+        imap_close($mbox);
+        return true;
+    }
 }

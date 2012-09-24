@@ -1,3 +1,6 @@
+2.2.2   2012-xx-xx
+ - upd: Better detection of HTTPS on Nginx (see issue #19, thanks @f8bar)
+
 2.2.1   2012-05-24
  - add: Full support for Dovecot passwords via Dovecot admin binary.
          See: https://github.com/opensolutions/ViMbAdmin/wiki/Password-Schemes

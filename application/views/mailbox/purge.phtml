@@ -1,4 +1,4 @@
-{if !isset( $modal) || !$modal }
+{if !isset( $modal) || !$modal}
     {include file="header.phtml"}
     <div class="page-content" >
         <div class="page-header" >
@@ -64,7 +64,7 @@ You are about to delete the mailbox <b>{$mailboxModel.username}</b>
 
 <br />
 <br />
-{if !isset( $modal) || !$modal }
+{if !isset( $modal) || !$modal}
 <form name="purge_mailbox_form" id="purge_mailbox_form" method="post" action="">
     <fieldset class="form-actions">
         <a class="btn" href="{genUrl controller='mailbox' action='list'}">Cancel</a>

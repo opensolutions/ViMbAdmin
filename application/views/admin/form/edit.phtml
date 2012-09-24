@@ -57,7 +57,7 @@
     {include file='form/element-input.phtml' ielement=$element->welcome_email}
 {/if}
 
-{if !isset($modal) || !$modal }
+{if !isset($modal) || !$modal}
 <fieldset class="form-actions">
     {if $controller eq 'auth' and $action eq 'setup'}
         <input type="submit" class="btn btn-success" value="Activate My Account &raquo;" />

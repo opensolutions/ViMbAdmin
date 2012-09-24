@@ -1,5 +1,6 @@
 2.2.2   2012-xx-xx
  - upd: Better detection of HTTPS on Nginx (see issue #19, thanks @f8bar)
+ - fix: issue #24 Smarty tag issue with trailing spaces
 
 2.2.1   2012-05-24
  - add: Full support for Dovecot passwords via Dovecot admin binary.

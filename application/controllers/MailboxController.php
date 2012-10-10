@@ -564,7 +564,7 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
     private function _sendSettingsEmail( $cc = false, $password = '', $isWelcome = false )
     {
-        $mailer = new Zend_Mail();
+        $mailer = new Zend_Mail( 'UTF-8' );
 
         if( $isWelcome )
             $mailer->setSubject( _( "Welcome to your new mailbox on" ) . " {$this->_mailbox['domain']}" );
@@ -639,7 +639,7 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
                 if( $form->getValue( 'email' ) )
                 {
-                    $mailer = new Zend_Mail;
+                    $mailer = new Zend_Mail( 'UTF-8' );
                     $mailer->setSubject( _( 'New Password for ' . $this->_mailbox['username'] ) );
                     $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
                     $mailer->addTo( $this->_mailbox['username'], $this->_mailbox['name'] );

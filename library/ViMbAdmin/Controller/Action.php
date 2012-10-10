@@ -219,8 +219,8 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
             if( !( isset( $this->_options['skipVersionCheck'] ) && $this->_options['skipVersionCheck'] ) )
                 if( $this->getAdmin()->isSuper() )
                     $this->checkVersion();
-            
-            
+
+
             // SECURITY
             $params = $this->_getAllParams();
 
@@ -330,24 +330,22 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
     */
     public function createView()
     {
-        $vView = (
-                    $this->_bootstrap->getResource( 'view' ) === null
-                        ? $this->_bootstrap->getResource( 'smarty' )
-                        : $this->_bootstrap->getResource( 'view' )
-        );
+        $view = $this->_bootstrap->getResource( 'smarty' );
+        $view->pagebase = '';
 
-        $vView->pagebase = '';
+        // are we using ssl?
+        if( ( isset( $_SERVER['HTTPS'] ) && !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' )
+                || ( isset( $_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == 443 ) )
+            $ssl = 's';
+        else
+            $ssl = '';
 
         if( isset( $_SERVER['SERVER_NAME'] ) )
-            $vView->pagebase = 'http' 
-                . ( ( isset( $_SERVER['HTTPS'] && !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' ) || ( isset( $_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == 443 ) ) ? 's' : '' ) 
-                . '://'
-                . $_SERVER['SERVER_NAME']
-                . Zend_Controller_Front::getInstance()->getBaseUrl();
+            $view->pagebase = "http{$ssl}://{$_SERVER['SERVER_NAME']}" . Zend_Controller_Front::getInstance()->getBaseUrl();
 
-        $vView->basepath = Zend_Controller_Front::getInstance()->getBaseUrl();
+        $view->basepath = Zend_Controller_Front::getInstance()->getBaseUrl();
 
-        return $vView;
+        return $view;
     }
 
 
@@ -373,13 +371,13 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
         return $this->_config[ $key ];
     }
 
-    
+
     public function checkVersion()
     {
         // only check once per 24 hours per session
         if( isset( $this->_session->versionChecked ) && $this->_session->versionChecked > ( time() - 86400 ) )
             return;
-            
+
         // only check once in a 24h period for each user
         $lastCheck = ConfigTable::getValue( 'version_last_check_at.' . $this->getAdmin()->id );
         if( $lastCheck && $lastCheck > time() - 86400 )
@@ -387,7 +385,7 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
             $this->_session->versionChecked = $lastCheck;
             return;
         }
-               
+
         // is there a new version available?
         if( ViMbAdmin_Version::compareVersion( ViMbAdmin_Version::getLatest() ) == 1 )
         {
@@ -400,7 +398,7 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
                 ViMbAdmin_Message::INFO
             );
         }
-        
+
         $this->_session->versionChecked = time();
         ConfigTable::setValue( 'version_last_check_at.' . $this->getAdmin()->id, $this->_session->versionChecked );
     }

@@ -159,7 +159,7 @@ class AuthController extends ViMbAdmin_Controller_Action
                 {
                     $tokenModel = TokenTable::addToken( $adminModel, 'PASSWORD_RESET', null, null );
 
-                    $mailer = new Zend_Mail;
+                    $mailer = new Zend_Mail( 'UTF-8' );
                     $mailer->setSubject( _( 'ViMbAdmin :: Password Reset' ) );
                     $mailer->addTo( $adminModel->username );
                     $mailer->setFrom(
@@ -199,7 +199,7 @@ class AuthController extends ViMbAdmin_Controller_Action
 
                 $tokenModel->Admin->setPassword( $password, $this->_options['securitysalt'], true );
 
-                $mailer = new Zend_Mail;
+                $mailer = new Zend_Mail( 'UTF-8' );
                 $mailer->setSubject( _( 'ViMbAdmin :: Password Reset' ) );
                 $mailer->setFrom(
                     $this->_options['server']['email']['address'],
@@ -323,7 +323,7 @@ class AuthController extends ViMbAdmin_Controller_Action
 
                     try
                     {
-                        $mailer = new Zend_Mail();
+                        $mailer = new Zend_Mail( 'UTF-8' );
                         $mailer->setSubject( _( 'ViMbAdmin :: Your New Administrator Account' ) );
                         $mailer->addTo( $admin['username'] );
                         $mailer->setFrom(

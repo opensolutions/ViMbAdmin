@@ -341,7 +341,7 @@ class AdminController extends ViMbAdmin_Controller_Action
 
                     if( $form->getValue( 'email' ) )
                     {
-                        $mailer = new Zend_Mail;
+                        $mailer = new Zend_Mail( 'UTF-8' );
                         $mailer->setSubject( _( 'ViMbAdmin :: New Password' ) );
                         $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
                         $mailer->addTo( $this->_targetAdmin->username );
@@ -434,7 +434,7 @@ class AdminController extends ViMbAdmin_Controller_Action
                 {
                     try
                     {
-                        $mailer = new Zend_Mail();
+                        $mailer = new Zend_Mail( 'UTF-8' );
                         $mailer->setSubject( _( 'ViMbAdmin :: Your New Administrator Account' ) );
                         $mailer->addTo( $adminModel->username );
                         $mailer->setFrom(

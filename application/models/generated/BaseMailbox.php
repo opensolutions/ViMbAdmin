@@ -8,6 +8,7 @@
  * @property integer $id
  * @property string $username
  * @property string $password
+ * @property string $password_scheme
  * @property string $name
  * @property string $maildir
  * @property integer $quota
@@ -45,6 +46,12 @@ abstract class BaseMailbox extends Doctrine_Record
              'type' => 'string',
              'notnull' => true,
              'length' => '255',
+             ));
+        $this->hasColumn('password_scheme', 'string', 30, array(
+             'type' => 'string',
+             'notnull' => true,
+             'default' => '',
+             'length' => '30',
              ));
         $this->hasColumn('name', 'string', 255, array(
              'type' => 'string',

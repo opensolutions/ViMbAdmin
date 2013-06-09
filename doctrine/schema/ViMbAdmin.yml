@@ -119,6 +119,10 @@ Mailbox:
     password:
       type: string(255)
       notnull: true
+    password_scheme:
+      type: string(30)
+      notnull: true
+      default: ''
     name:
       type: string(255)
     maildir:

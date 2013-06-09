@@ -92,6 +92,7 @@ class Mailbox extends BaseMailbox
         if( substr( $scheme, 0, 8 ) == 'dovecot:' )
         {
             $this['password'] = ViMbAdmin_Dovecot::password( substr( $scheme, 8 ), $password, $this['username'] );
+            $this['password_scheme'] = strtoupper(substr($scheme, 8));
         }
         else
         {
@@ -99,10 +100,12 @@ class Mailbox extends BaseMailbox
             {
                 case 'md5':
                     $this['password'] = md5( $password );
+                    $this['password_scheme'] = 'PLAIN-MD5';
                     break;
     
                 case 'md5.salted':
                     $this['password'] = md5( $password . $salt );
+                    $this['password_scheme'] = 'SMD5';
                     break;
     
                 // MD5 based salted password hash nowadays commonly used in /etc/shadow.
@@ -113,18 +116,22 @@ class Mailbox extends BaseMailbox
                         throw new ViMbAdmin_Exception( sprintf( _( 'This hashing function requires a hash of at least %d character(s) to be defined in application.ini (defaults.mailbox.password_hash)' ), 8 ) );
     
                     $this['password'] = crypt( $password, $s );
+                    $this['password_scheme'] = 'MD5-CRYPT';
                     break;
     
                 case 'sha1':
                     $this['password'] = sha1( $password );
+                    $this['password_scheme'] = 'SHA';
                     break;
     
                 case 'sha1.salted':
                     $this['password'] = sha1( $password . $salt );
+                    $this['password_scheme'] = 'SSHA';
                     break;
     
                 case 'plain':
                     $this['password'] = $password;
+                    $this['password_scheme'] = 'PLAIN';
                     break;
     
                 // Standard DES hash compatible with MySQL ENCRYPT()
@@ -135,6 +142,7 @@ class Mailbox extends BaseMailbox
                         throw new ViMbAdmin_Exception( sprintf( _( 'This hashing function requires a hash of at least %d character(s) to be defined in application.ini (defaults.mailbox.password_hash)' ), 2 ) );
     
                     $this['password'] = crypt( $password, $s );
+                    $this['password_scheme'] = 'CRYPT';
                     break;
     
                 default:

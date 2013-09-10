@@ -466,11 +466,19 @@ class MailboxController extends ViMbAdmin_Controller_Action
                     // check quota
                     if( $this->_domain['quota'] != 0 )
                     {
-                        if( $this->_mailbox['quota'] <= 0 || $this->_mailbox['quota'] > $this->_domain['quota'] )
+                        if( $this->_mailbox['quota'] <= 0 || ( $this->_domain['maxquota'] != 0 && $this->_mailbox['quota'] > $this->_domain['maxquota'] ) )
                         {
-                            $this->_mailbox['quota'] = $this->_domain['quota'];
+                            if ( $this->_mailbox['quota'] <= 0 )
+                            {
+                                $this->_mailbox['quota'] = $this->_domain['quota'];
+                            }
+                            else
+                            {
+                                $this->_mailbox['quota'] = $this->_domain['maxquota'];
+                            }
+
                             $this->addMessage(
-                                _("Mailbox quota set to ") . $this->_domain['quota'],
+                                _("Mailbox quota set to ") . $this->_mailbox['quota'],
                                 ViMbAdmin_Message::ALERT
                             );
                         }

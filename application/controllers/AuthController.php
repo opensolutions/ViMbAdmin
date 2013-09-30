@@ -316,7 +316,7 @@ class AuthController extends ViMbAdmin_Controller_Action
                     $admin->active = true;
                     $admin->save();
                     
-                    // we need to populate the Doctine migration table
+                    // we need to populate the Doctrine migration table
                     $migration = new MigrationVersion();
                     $migration['version'] = $this->_options['migration_version'];
                     $migration->save();
@@ -346,7 +346,7 @@ class AuthController extends ViMbAdmin_Controller_Action
 
                 if( !( isset( $this->_options['skipInstallPingback'] ) && $this->_options['skipInstallPingback'] ) )
                 {
-                    // Try and track new installs to see if it is worthwhile continueing development
+                    // Try and track new installs to see if it is worthwhile continuing development
                     include_once( APPLICATION_PATH . '/../public/PiwikTracker.php' );
 
                     if( class_exists( 'PiwikTracker' ) )

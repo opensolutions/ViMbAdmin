@@ -34,7 +34,7 @@
  */
 
 /*
- * Returns with a shortened string, preceeded with '...', or with the input string if it was short enough.
+ * Returns with a shortened string, with '...' appended, or with the input string if it was short enough.
  *
  * @param string $str
  * @param int $length

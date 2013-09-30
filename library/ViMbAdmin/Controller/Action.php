@@ -35,7 +35,7 @@
 
 /**
  * ViMbAdmin's version of Zend_Controller_Action, implementing custom functionality.
- * All application controlers subclass this rather than Zend's version directly.
+ * All application controllers subclass this rather than Zend's version directly.
  *
  * @package ViMbAdmin
  * @subpackage Library
@@ -589,7 +589,7 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
      *    - is a superadmin or, if not:
      *    -  is allowed to access a specific domain.
      *
-     * This function performs a _redirect() (and die()) if the authisation conditions are not met.
+     * This function performs a _redirect() (and die()) if the authorisation conditions are not met.
      *
      * @param boolean $super Set to true to check if the user is a super admin
      * @param int|string|Domain $domain Set to the domain object, domain name or domain ID to check. Defaults to null.

@@ -46,7 +46,7 @@ class ViMbAdmin_Dovecot
      * @param string $pass The password
      * @param string $user The username (required by some schemes)
      * @throws ViMbAdmin_Exception
-     * @return string The encrypted / hased password
+     * @return string The encrypted / hashed password
      */
     public static function password( $scheme, $pass, $user )
     {

@@ -33,7 +33,7 @@ defaults.domain.mailboxes = 0
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Default values for creating mailboxes
 
-; This sets the uid and gid columns in the mailbox table to the below valies
+; This sets the uid and gid columns in the mailbox table to the below values
 defaults.mailbox.uid = 2000
 defaults.mailbox.gid = 2000
 
@@ -106,7 +106,7 @@ defaults.table.entries = 25
 ;;
 ;; Settings email default values.
 ;;
-;; Smae substituions apply as for maildir above. See (and edit) the
+;; Same substitutions apply as for maildir above. See (and edit) the
 ;; following file to see how the below are used:
 ;;
 ;;     views/mailbox/email/settings.phtml
@@ -137,7 +137,7 @@ server.webmail.user  = "%m"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; All mails and correspondance will come from the following;;
+;; All mails and correspondence will come from the following;;
 
 server.email.name = "ViMbAdmin Administrator"
 server.email.address = "vimbadmin@example.com"

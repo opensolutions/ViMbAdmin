@@ -42,7 +42,7 @@
 
 
     /**
-     * Iterates through a form or subform object and analyzes it, and fills up the $validationRules array with the
+     * Iterates through a form or subform object and analyses it, and fills up the $validationRules array with the
      * supported validators and their properties.
      *
      * @param object $formObj

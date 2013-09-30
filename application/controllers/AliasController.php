@@ -271,6 +271,8 @@ class AliasController extends ViMbAdmin_Controller_Action
                     {
                         $this->_alias->fromArray( $postValues );
 
+                        $this->_alias['goto'] = implode( ',', array_unique( $postValues['goto'] ) );
+
                         if( !$this->_alias['id'] ) // NOT editing
                         {
                             // do we have available mailboxes?
@@ -299,8 +301,6 @@ class AliasController extends ViMbAdmin_Controller_Action
                                 $this->getAdmin(), $this->_alias['domain']
                             );
                         }
-
-                        $this->_alias['goto'] = implode( ',', array_unique( $postValues['goto'] ) );
 
                         $this->_alias->save();
 

@@ -91,7 +91,7 @@ class Mailbox extends BaseMailbox
     {
         if( substr( $scheme, 0, 8 ) == 'dovecot:' )
         {
-            $this['password'] = ViMbAdmin_Dovecot::password( substr( $scheme, 8 ), $password, $this['username'] );
+            $this['password'] = ViMbAdmin_Dovecot::generate_password_hash( substr( $scheme, 8 ), $password, $this['username'] );
         }
         else
         {
@@ -143,6 +143,68 @@ class Mailbox extends BaseMailbox
         }
         
         return $this['password'];
+    }
+    
+    public function checkPassword( $scheme, $password, $password_hash, $salt = '')
+    {
+    	if( substr( $scheme, 0, 8 ) == 'dovecot:' )
+    	{
+    		return ViMbAdmin_Dovecot::check_password( substr( $scheme, 8 ), $password, $this['username'], $password_hash);
+    	}
+    	else
+    	{
+    		$pw_hashed = null;
+    		switch( $scheme )
+    		{
+    			case 'md5':
+    				$pw_hashed = md5( $password );
+    				break;
+    
+    			case 'md5.salted':
+    				$pw_hashed = md5( $password . $salt );
+    				break;
+    
+    				// MD5 based salted password hash nowadays commonly used in /etc/shadow.
+    			case 'md5.crypt':
+    				if( strlen( $salt ) >= 8 )
+    					$s = '$1$' . substr( $salt, 0, 8 ) . '$';
+    				else
+    					throw new ViMbAdmin_Exception( sprintf( _( 'This hashing function requires a hash of at least %d character(s) to be defined in application.ini (defaults.mailbox.password_hash)' ), 8 ) );
+    
+    				$pw_hashed = crypt( $password, $s );
+    				break;
+    
+    			case 'sha1':
+    				$pw_hashed = sha1( $password );
+    				break;
+    
+    			case 'sha1.salted':
+    				$this['password'] = sha1( $password . $salt );
+    				break;
+    
+    			case 'plain':
+    				$pw_hashed = $password;
+    				break;
+    
+    				// Standard DES hash compatible with MySQL ENCRYPT()
+    			case 'crypt':
+    				if( strlen( $salt ) >= 2 )
+    					$s = substr( $salt, 0, 2 );
+    				else
+    					throw new ViMbAdmin_Exception( sprintf( _( 'This hashing function requires a hash of at least %d character(s) to be defined in application.ini (defaults.mailbox.password_hash)' ), 2 ) );
+    
+    				$pw_hashed = crypt( $password, $s );
+    				break;
+    
+    			default:
+    				die( 'Invalid password hash scheme in models/Mailbox.php hashPassword()' );
+    		}
+    		
+    		if($pw_hashed == $password_hash){
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
 }

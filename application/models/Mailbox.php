@@ -93,6 +93,35 @@ class Mailbox extends BaseMailbox
         {
             $this['password'] = ViMbAdmin_Dovecot::password( substr( $scheme, 8 ), $password, $this['username'] );
         }
+        else if ( substr( $scheme, 0, 6) == 'crypt:' )
+        {
+            $indicator = '';
+            $salt_len = 2;
+            switch ($scheme)
+            {
+              case 'crypt:md5':
+                  $salt_len = 8;
+                  $indicator = '$1$';
+                  break;
+              case 'crypt:blowfish':
+                  $salt_len = 22;
+                  $indicator = '$2a$';
+                  break;
+              case 'crypt:sha256':
+                  $salt_len = 16;
+                  $indicator = '$5$';
+                  break;
+              case 'crypt:sha512':
+                  $salt_len = 16;
+                  $indicator = '$6$';
+                  break;
+            }
+            $seedchars = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            for ($i = 0; $i < $salt_len ; $i++) {
+                $salt .= $seedchars[rand(0, 63)];
+            }
+            $this['password'] = crypt( $password, $indicator . $salt );
+        }
         else
         {
             switch( $scheme )

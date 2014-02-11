@@ -66,16 +66,20 @@ defaults.mailbox.min_password_length = 8
 
 ; The password hashing function to use. Set to one of:
 ;
-;   "plain"       - password stored as clear text 
-;   "md5"         - password hashed using MD5 without salt (PHP md5())
-;   "md5.salted"  - password hashed using MD5 with salt (see below)
-;   "crypt"       - standard DES hash (compatible with MySQL ENCRYPT and courier - be sure to
+;   "plain"          - password stored as clear text 
+;   "md5"            - password hashed using MD5 without salt (PHP md5())
+;   "md5.salted"     - password hashed using MD5 with salt (see below)
+;   "crypt"          - standard DES hash (compatible with MySQL ENCRYPT and courier - be sure to
 ;                      set a two character hash below
-;   "md5.crypt"   - MD5 based salted password hash nowadays commonly used in /etc/shadow. 
+;   "crypt:md5"      - standard MD5 hash with random seed
+;   "crypt:blowfish" - Blowfish hash with random seed (not in mainline glibc; added in some Linux distributions)
+;   "crypt:sha256"   - standard sha-256 hash (requires glibc 2.7 or newer). Equivalent to dovecot:SHA256-CRYPT
+;   "crypt:sha512"   - standard sha-512 hash (requires glibc 2.7 or newer). Equivalent to dovecot:SHA256-CRYPT
+;   "md5.crypt"      - MD5 based salted password hash nowadays commonly used in /etc/shadow. 
 ;                      (compatible with Dovecot) Requires min 8 character hash below.
-;   "sha1"        - password hashed using sha1 without salt
-;   "sha1.salted" - password hashed using sha1 with salt defined below 
-;   "dovecot:XXX" - call the Dovecot password generator (see next option below) and use the 
+;   "sha1"           - password hashed using sha1 without salt
+;   "sha1.salted"    - password hashed using sha1 with salt defined below 
+;   "dovecot:XXX"    - call the Dovecot password generator (see next option below) and use the 
 ;                      scheme specified by XXX. To see available schemes, use 'dovecotpw -l' 
 ;                      or 'doveadm pw -l'
 

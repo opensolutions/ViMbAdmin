@@ -395,7 +395,7 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
                        . 'See the <a href="https://github.com/opensolutions/ViMbAdmin/blob/master/CHANGELOG">change log</a>. '
                        . '<br /><br />'
                        . 'ViMbAdmin V3 has also been released - please see '
-                       . '<a href="https://github.com/opensolutions/ViMbAdmin3/wiki">the ViMbAdmin V3 project page</a>.'
+                       . '<a href="https://github.com/opensolutions/ViMbAdmin/wiki/Announcing-ViMbAdmin-v3.0.0">the ViMbAdmin v3.0.0 announcement</a>.'
                     ),
                     ViMbAdmin_Version::VERSION,
                     ViMbAdmin_Version::getLatest()

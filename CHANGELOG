@@ -1,3 +1,11 @@
+Please see CHANGELOG.md for the change log from >= v3.0.0.
+
+2.2.3   2014-02-11
+ - upd: Add support for modern crypt() algorithms, with random salt.
+         Merge pull request #57 from andrewd-sterling/local-mod
+ - fix: Setting the quota for a mailbox will consider a set maxquota of the
+         domain; Merge pull request #38 from peterschen/master
+
 2.2.2   2012-10-10
  - upd: Better detection of HTTPS on Nginx (see issue #19, thanks @f8bar)
  - fix: issue #24 Smarty tag issue with trailing spaces

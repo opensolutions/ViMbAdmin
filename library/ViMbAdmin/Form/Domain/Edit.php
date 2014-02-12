@@ -61,7 +61,7 @@ class ViMbAdmin_Form_Domain_Edit extends ViMbAdmin_Form
                         ->setAttrib( 'class', 'required' )
                         ->setRequired( true )
                         ->addValidator( 'NotEmpty', true )
-                        ->addValidator( 'Hostname', true, array( 'allow' => Zend_Validate_Hostname::ALLOW_DNS ) )
+//                        ->addValidator( 'Hostname', true, array( 'allow' => Zend_Validate_Hostname::ALLOW_DNS ) )
                         ->addValidator( 'DoctrineUniqueness', true, array( 'table' => 'Domain', 'column' => 'domain' ) )
                         ->addFilter( 'StringTrim' )
                         ->addFilter( 'HtmlEntitiesDecode' )

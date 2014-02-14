@@ -1,4 +1,214 @@
 
-# Version 3 - A Work in Progress
+For V3 change logs, please see the GitHub releases tab at:
 
-Please see version 2 for now: https://github.com/opensolutions/ViMbAdmin
+https://github.com/opensolutions/ViMbAdmin/releases
+
+===========================================
+
+The below is the changelog for V2.x.x.
+
+2.2.3   2014-02-11
+ - upd: Add support for modern crypt() algorithms, with random salt.
+         Merge pull request #57 from andrewd-sterling/local-mod
+ - fix: Setting the quota for a mailbox will consider a set maxquota of the
+         domain; Merge pull request #38 from peterschen/master
+
+2.2.2   2012-10-10
+ - upd: Better detection of HTTPS on Nginx (see issue #19, thanks @f8bar)
+ - fix: issue #24 Smarty tag issue with trailing spaces
+ - fix: issue #26 regarding character encoding
+ - fix: issue #27 which reports a syntax error
+
+2.2.1   2012-05-24
+ - add: Full support for Dovecot passwords via Dovecot admin binary.
+         See: https://github.com/opensolutions/ViMbAdmin/wiki/Password-Schemes
+ - upd: JQuery, Bootstrap and Chosen
+ - fix: Data table bug
+ - fix: typo (from dustinfarris)
+
+2.2.0   2012-04-05
+ - fix: access restrictions - previous implementation would have broken SMTP
+         auth if one was using it. Added access_restriction_type to 
+         application.ini.dist. 
+         See: https://github.com/opensolutions/ViMbAdmin/wiki/POP3-IMAP-Access-Restriction
+
+ - IMPORTANT: this update requires a database migration
+         See: https://github.com/opensolutions/ViMbAdmin/wiki/Update-Instructions
+
+2.1.0   2012-04-03
+
+ IMPORTANT: this update requires a database migration 
+         See:  https://github.com/opensolutions/ViMbAdmin/wiki/Update-Instructions
+
+ - add: Mailbox access restriction allowing for POP3 only / IMAP only / both
+         See: https://github.com/opensolutions/ViMbAdmin/wiki/POP3-IMAP-Access-Restriction
+ - add: "allow_access_restriction" to application.ini to enable access
+        restiction options
+ - add: "migration_version" to application.ini.dist - only used for new
+        installs
+ - add: Doctrine migration tables now that we have had out first migration
+ - upd: freshly pressed CSS/JS (version 12)
+ - fix: formatting in add/edit mailbox dialog
+
+2.0.8   2012-03-06
+ - fix: Accidently commited testing code causing issue #10. Fixed.
+ - fix: Better Smarty 3.1 integration.
+ - fix: Options in bin/minify-options.php to work with updated version
+ - add: Popover to add alias to explain / highlight domain aliases
+ - fix: issue with Add Alias dialog with no domain selected
+
+2.0.7   2012-03-05
+ - add: https://github.com/opensolutions/Minify used instead of local
+        version
+ - fix: Removed trunk Smarty 3 and replaced it with tagged 3.0.9 as 3.1 
+        has incompatibilities. You may need to execute the following:
+
+        $ cd library/Smarty
+        $ svn switch http://smarty-php.googlecode.com/svn/tags/Smarty_3_0_9/distribution/libs 
+
+2.0.6
+ - add: Remove the horrible changed IP die() message and just present the
+        login screen
+
+2.0.5   2012-03-05
+ - fix: Some issues in JS causing errors and also affeting dialogs.
+
+2.0.4   2012-03-01
+ - add: Now using groups of icons for actions rather than buttons
+ - add: Tooltips added with small delay for all icon actions
+ - add: Tooltips moved to Bootstrap and now only on table elements which
+        have been shortened.
+ - fix: Improvements to model dialogs.
+ - add: Cookie is now used to remember the number of items to show in 
+        DataTables.
+
+2.0.3   2012-02-29
+ - fix: Page titles made consistent with menu text
+ - add: Selecting a domain from the domain list (by clicking logs, mailboxes
+        and aliases for example) makes the domain 'sticky' as you browse
+        through the application with the option to clear it by going back to
+        domains or a page title clear button.
+ - add: Minimum mailbox password length can be specified in application.ini 
+        addressing issue #8
+ - fix: Fix issue #9 by skipping IP check if action is logout.
+
+2.0.2   2012-02-27
+ Major UI overhaul. Frontend is now using Bootstrap from Twitter providing an altogether
+ prettier, sleeker, consistent and more professional look and feel. A number of small new
+ features and bugs fixes. No database schema changes.
+
+0.3.5   2011-09-28
+ - add: allow new installers to opt out of the 'new install' developer
+        pingback and display a message that it exists on the setup page
+
+0.3.4   2011-09-06
+ - fix: https://github.com/opensolutions/ViMbAdmin/issues/3
+ - add: Support new mailbox password hashes: crypt, sha1 and salted sha1 and md5
+        (old issue 9 from Google Code: http://code.google.com/p/vimbadmin/issues/detail?id=9)
+ - fix: Changes in 0.3.2 prevented wildcard aliases
+ - add: MD5-CRYPT hashing used by, for example, Dovecot. This addresses:
+        http://code.google.com/p/vimbadmin/issues/detail?id=6
+       
+0.3.3   2011-09-02
+ - fix: Critical regression introduced in 0.3.2 preventing the editing of
+        aliases
+
+0.3.2   2011-09-01
+ - fix: https://github.com/opensolutions/ViMbAdmin/issues/1
+ - add: optional parameter in application.ini (skipVersionCheck) to
+        tell ViMbAdmin to skip the version check on login
+        See: https://github.com/opensolutions/ViMbAdmin/issues/2
+ - fix: we now check for duplicate mailboxes (and aliases) rather
+        than letting Doctrine throw exceptions for uniqueness 
+        constraints. Thanks maysara for the bug report.
+ - fix: validate new aliases and mailboxes which was not being done
+        previously
+
+0.3.1   2011-08-23
+ - Forgot to update changelog got 0.3 release.
+
+0.3     2011-08-23
+ - Changes required for the migration to GitHub. No new features / bugfixes 
+   or functionality.
+
+0.2.6   2011-08-08
+ - fix: trim passwords at login and when entered by an admin
+ - fix: could not edit aliases
+
+0.2.5   2011-05-23
+ - add: CSS code for demo system at http://www.opensolutions.ie/vimbadmin/
+ - add: new favicon based on logo from Limeworks Australia - http://www.limeworks.com.au
+ - fix: issue #5 in vimbadmin: mktime throws a strict error (r61)
+ - fix: issue #8 in vimbadmin: Cannot add alias from Mailbox view (r66)
+ - fix: the autocomplete functionality (used on the Edit / Add Alias page) (r63)
+ - fix: the possible "Fatal error: spl_autoload() ... Class Doctrine_Event could not be loaded in Doctrine_Record ..." (r64)
+ - fix: the "inArray" JavaScript validator functionality was broken (r65)
+ - upd: jQuery 1.5.2
+ - upd: jQuery Validation 1.8.0
+ - fix: add StringToLower filter to domain, mailbox and alias forms
+
+
+0.2.4   2011-04-07
+ - add: new logo thanks to Limeworks Australia - http://www.limeworks.com.au
+ - upd: new login screen design with new logo
+
+
+0.2.3   2011-03-30
+ - fix: critical bug fix preventing email being sent during first use set up
+        (will only have affected those choosing a random password)
+
+
+0.2.2   2011-03-29
+ - add: version checking (once per day per super) and alerting
+ - add: version displayed in the footer
+ - fix: adding mailbox alias
+ - fix: edit alias
+ - fix: fatal error when listing aliases
+
+
+0.2.1   2011-03-25
+ - upd: it is possible now to add domains to admins through the
+        Administrators->Domains screen
+ - upd: checkbox to include/exclude mailbox aliases on the Maliboxes->Aliases
+        and Aliases pages
+ - fix: the DataTables search was searching in the columns of the buttons too,
+        providing fake results
+
+
+0.2     2011-03-24
+ - upd: IMPORTANT!!! IN THE APPLICATION.INI YOU HAVE TO RENAME THE OPTION
+        "likeForLikeAliases" TO "mailboxAliases"!
+ - add: display the link to mailbox password change on the login page
+ - add: "defaults.table.entries" in application.ini controls the default number
+        of rows displayed in tables
+        IMPORTANT!!! IN THE APPLICATION.INI YOU HAVE TO ADD THE NEW OPTION
+        "defaults.table.entries" and set it to one of 10, 25, 50, 100
+        See application.ini.dist for an example.
+ - add: when adding a new mailbox, the domain is pre-selected
+ - add: when adding an email alias, it can pre-fill the "local part" and "domain"
+        fields, depending on which page the "Add Alias" button was clicked on
+ - add: a few extra checks added when adding a new email alias
+ - add: can add a new email alias in the "Aliases of [emailaddress]" popup window
+ - fix: DataTables was floating above the page header on page scroll
+ - fix: on the Domain List page the sorting by Mailboxes and Aliases did not use
+        the numeric values, fixed by using Allan Jardine's DataTables sorting plugin
+ - fix: some typos in texts
+ - fix: clicking the "Add xyz" buttons at the top of the tables caused a sorting
+        on that coulumn, which didn't make any sense at all
+ - upd: less text in the footer, so ViMbAdmin hopefully fits on an 1024x768 screen
+ - upd: jQuery UI 1.8.11
+ - upd: ColorBox v1.3.16
+ - upd: DataTables 1.7.6
+
+
+0.1.2   2011-03-22
+ - fix: issue #3 https://code.google.com/p/vimbadmin/issues/detail?id=3
+
+
+0.1.1   2011-03-15
+ - fix: issue with single quotes vs double quotes in application.ini
+ - add: allow for more informative display of errors
+
+
+0.1     2011-03-10
+ - initial release

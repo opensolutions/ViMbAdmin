@@ -160,8 +160,7 @@ class ViMbAdmin_Controller_Action extends OSS_Controller_Action
             $this->addMessage(
                 sprintf(
                     _( 'Current version is: %s. There is a new version available: %s. '
-                        . 'See the <a href="https://github.com/opensolutions/ViMbAdmin3/blob/master/CHANGELOG">change log</a> '
-                        . 'and <a href="https://github.com/opensolutions/ViMbAdmin3/releases">releases list</a>.' 
+                        . 'See the <a href="https://github.com/opensolutions/ViMbAdmin/releases list</a>.' 
                     ),
                     ViMbAdmin_Version::VERSION,
                     ViMbAdmin_Version::getLatest()

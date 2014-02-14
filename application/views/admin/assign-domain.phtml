@@ -1,0 +1,14 @@
+{tmplinclude file="header.phtml"}
+<div class="page-content" >
+    <div class="page-header" >
+        <h1>
+            Assign Domain<small> to {$targetAdmin->getUsername()}</small>
+        </h1>
+    </div>
+    {OSS_Message}
+
+    {$form}
+    {addJSValidator form=$form}
+
+</div>
+{tmplinclude file="footer.phtml"}

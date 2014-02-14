@@ -7,7 +7,7 @@
  * project which provides an easily manageable web based virtual
  * mailbox administration system.
  *
- * Copyright (c) 2011 Open Source Solutions Limited
+ * Copyright (c) 2011 - 2014 Open Source Solutions Limited
  *
  * ViMbAdmin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  *   147 Stepaside Park, Stepaside, Dublin 18, Ireland.
  *   Barry O'Donovan <barry _at_ opensolutions.ie>
  *
- * @copyright Copyright (c) 2011 Open Source Solutions Limited
+ * @copyright Copyright (c) 2011 - 2014 Open Source Solutions Limited
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPLv3)
  * @author Open Source Solutions Limited <info _at_ opensolutions.ie>
  * @author Barry O'Donovan <barry _at_ opensolutions.ie>
@@ -52,43 +52,18 @@ class LogController extends ViMbAdmin_Controller_Action
      */
     public function preDispatch()
     {
-        if( $adminId = $this->_getParam( 'admin', false ) )
-        {
-            if( $this->getAdmin()->id != $adminId )
-                $this->authorise( true ); // super only
-
-            if( !( $this->_targetAdmin = $this->loadAdmin( $adminId ) ) )
-            {
-                // id parameter specified but invalid or non-existent
-                $this->addMessage( _( 'Invalid or non-existent admin.' ), ViMbAdmin_Message::ERROR );
-                $this->_redirect( 'domain/list' );
-            }
-
-            $this->view->targetAdmin = $this->_targetAdmin;
-        }
-        else if( !$this->getAdmin()->isSuper() )
+        if( !$this->getTargetAdmin() && !$this->getAdmin()->isSuper() )
             $this->_targetAdmin = $this->getAdmin();
 
-        if( $this->_getParam( 'unset', false ) )
-            unset( $this->_session->domain );
+        if( $this->getParam( 'unset', false ) )
+            unset( $this->getSessionNamespace()->domain );
         else
         {
-            if( isset( $this->_session->domain) && $this->_session->domain )
-            $this->_domain = $this->_session->domain;
+            if( isset( $this->getSessionNamespace()->domain ) && $this->getSessionNamespace()->domain )
+                $this->_domain = $this->getSessionNamespace()->domain;
+            else if( $this->getDomain() )
+                $this->getSessionNamespace()->domain = $this->getDomain();
         }
-
-        if( $domainId = $this->_getParam( 'domain', false ) )
-        {
-            if( !( $this->_domain = $this->loadDomain( $domainId ) ) )
-            {
-                // id parameter specified but invalid or non-existent
-                $this->addMessage( _( 'Invalid or non-existent domain.' ), ViMbAdmin_Message::ERROR );
-                $this->_redirect( 'domain/list' );
-            }
-
-            $this->authorise( false, $this->_domain );
-        }
-
     }
 
 
@@ -97,7 +72,7 @@ class LogController extends ViMbAdmin_Controller_Action
      */
     public function indexAction()
     {
-        $this->_forward( 'list' );
+        $this->forward( 'list' );
     }
 
 
@@ -107,18 +82,7 @@ class LogController extends ViMbAdmin_Controller_Action
      */
     public function listAction()
     {
-        $query = Doctrine_Query::create()
-                    ->from( 'Log' );
-
-        if( $this->_targetAdmin )
-            $query->andWhere( 'username = ?', $this->_targetAdmin['username'] );
-
-        if( $this->_domain )
-            $query->andWhere( 'domain = ?', $this->_domain['domain'] );
-
-        $this->view->logEntries = $query
-            ->orderBy( 'id asc' )
-            ->execute();
+        $this->view->logs = $this->getD2EM()->getRepository( "\\Entities\\Log" )->loadForLogList( $this->getTargetAdmin(), $this->getDomain() );
     }
 
 }

@@ -52,15 +52,6 @@ if( cprefs != null )
 	vm_prefs = cprefs;
 
 
-
-
-
-
-
-
-
-
-
 //****************************************************************************
 //****************************************************************************
 
@@ -71,7 +62,13 @@ $( 'document' ).ready( function(){
 	// Activate the modal dialog pop up
     $( "a[id|='modal-dialog']" ).bind( 'click', tt_openModalDialog );
 
-    $("[rel=popover]").popover();
+    $("[rel=popover]").popover( { html: true } );
+
+    $( '.have-tooltip' ).tooltip( { html: true, delay: { show: 500, hide: 2 }, trigger: 'hover' } );
+    $( '.have-tooltip-below' ).tooltip( { html: true, delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
+    $( '.have-tooltip-long' ).tooltip( { html: true, trigger: 'hover', placement: 'top' } );
+    
+    $( '.oss-dropdown' ).each( ossDropdown );
 
 });
 
@@ -183,6 +180,8 @@ function ossToggle( e, Url, data, delElement )
 
         }
     });
+
+    return on;
 }
 
 /**
@@ -371,6 +370,118 @@ function ossJscriptFieldValidator( fieldName, email )
 
 
 /**
+ * Add tab for plugin tabs.
+ * 
+ * If there was no plugins it will not show tabas menu at all, until first tab will be added.
+ *
+ * @param string title Title of the tab.
+ * @parm string id Id of tab contet to show.
+ */
+function addPluginTab( title, id )
+{    
+        if( id.substr( 0, 4 ) != "tab_" )
+            id = "tab_" + id;
+
+	    var tab = "<li><a data-toggle=\"tab\""; 
+	    
+	    if( $( "#" + id ).has( ".error" ).length )
+	        tab += " class=\"text-error\"";
+	    
+	    tab += " href=\"#" + id + "\">" + title + "</a></li>\n";
+	    $( "#plugin_tabs" ).show().append( tab );
+}
+
+
+/**
+ * Changes default input select to ossDropdown Select.
+ * 
+ * @param int index Index of input.
+ */
+function ossDropdown( index ){
+    if( !$( this ).is( 'select' ) )
+        return false;
+    
+    $( this ).css( "display", "none" );
+    var id = $( this ).attr( "id" );
+    var width = $( this ).width();
+    var label = $( this ).find(":selected").text();
+
+    var elcode = "<span class=\"btn-group\">";
+    elcode += "<a href=\"#\" class=\"btn btn-mini dropdown-toggle";
+    if( $( this ).attr( "disabled" ) == "disabled" )
+        elcode += " disabled";
+    elcode += "\" style=\"width: " + width + "px; min-height:26px; \" id=\"drop-dwn-" + id + "\" data-toggle=\"dropdown\" >";
+    elcode += "<span style=\"float: left; font-size: 13px; line-height:24px;\" id=\"label-drop-" + id + "\">" + label + "</span>";
+    elcode += "<span style=\"float: right; margin-top: 10px;\" class=\"caret\"></span>";
+    elcode += "</a><ul id=\"opts-" + id + "\" class=\"dropdown-menu\" >";
+    $( "#" + id + " option" ).each( function(idx){
+        elcode += "<li> <a id=\"drop-" + id + "-" + $( this ).val() +"\" href=\"#\">" + $( this ).html() + "</a> </li>";
+    });
+    elcode += "</ul>";
+    elcode += "</span>";
+
+    $( this ).parent().append( elcode );
+    var list = $( "#opts-" + id + " > li" );
+    var focus = false;
+
+    $( "#drop-dwn-" + id ).on( 'click', function( event ){
+        if( focus )
+        {
+            $( this ).parent().removeClass( 'open' );
+            focus = false;
+        }
+    });
+
+    $( "#drop-dwn-" + id ).on( 'focus', function( event ){
+        focus = true;
+        $( this ).parent().addClass( 'open' );
+        $( this ).unbind( 'keydown' ).bind( 'keydown', function( event ){
+            if( event.which == 38 || event.which == 40 )
+                list.eq( 1 ).find('a').trigger( 'focus' );
+        });
+    });
+
+    $( "a[id|='drop-" + id + "']" ).bind( 'click', function( event ){
+        event.preventDefault();
+
+        var opt = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+        $( "#" + id ).val( opt ).trigger( 'change' );
+        $( "#label-drop-" + id ).html( $( "#" + id ).find(":selected").text() );
+
+    });
+
+    $( "a[id|='drop-" + id + "']" ).bind( 'focus', function( event ){
+
+        var idx = list.index( $( this ).parent() );
+        $( this ).unbind( 'keydown' ).bind( 'keydown', function( event ){
+            if( event.which == 38 && idx > 0 )
+            {
+                event.preventDefault();
+                list.eq( idx - 1 ).find('a').trigger( 'focus' );
+            }
+            else if( event.which == 40 && idx < list.length - 1 )
+            {
+                event.preventDefault();
+                list.eq( idx + 1 ).find('a').trigger( 'focus' );
+            }
+            else if( event.which == 13 )
+            {
+                event.preventDefault();
+                var opt = $( event.target ).attr( 'id' ).substr( $( event.target ).attr( 'id' ).lastIndexOf( '-' ) + 1 );
+                $( "#" + id ).val( opt ).trigger( 'change' );
+                $( "#label-drop-" + id ).html( $( "#" + id ).find(":selected").text() );
+                $( "#drop-dwn-" + id ).parent().removeClass( 'open' );
+            }
+            else if( event.which == 9 && idx == list.length - 1 )
+                $( "#drop-dwn-" + id ).parent().removeClass( 'open' );
+                //event.preventDefault();
+        });
+    });
+
+};
+
+
+/**
  * This function is simply checks regular expresion of given string, and return if it is email addres, otherwise return false.
  *
  * @param string email The string witch is validating as email address.
@@ -501,4 +612,20 @@ $.extend( $.fn.dataTableExt.oPagination, {
                         }
                 }
         }
+} );
+
+//Adding more sort filters
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "num-html-pre": function ( a ) {
+        var x = String(a).replace( /<[\s\S]*?>/g, "" );
+        return parseFloat( x );
+    },
+
+    "num-html-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "num-html-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
 } );

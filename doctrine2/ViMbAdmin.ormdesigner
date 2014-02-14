@@ -1,0 +1,316 @@
+<?xml version="1.0"?>
+<orm-designer version="2.2.10.815" name="ViMbAdmin3" mvc="Without MVC" orm="Doctrine2" uuid="15328530-f75f-43e2-a906-a8eead4a5924">
+  <module name="ViMbAdmin" import-format="Doctrine2Xml" import-path="xml" uuid="2c6ca297-a962-4b31-a81c-0d852efeec06">
+    <entity name="DirectoryEntry" description="Follows inetOrgPerson" uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="0e246371-4e8d-4c23-9adf-f22f6a371299"/>
+      <field name="mailbox_id" type="bigint" required="true" unique="true" uuid="6f5bde75-8d05-4af3-b43c-de94e44621a5"/>
+      <field name="businessCategory" type="string" size="255" uuid="b1cedd94-86f3-4332-9c9e-96a4c87a5449"/>
+      <field name="carLicense" type="string" size="255" uuid="47a55298-ffdf-4183-8cef-74a4fab70bcb"/>
+      <field name="departmentNumber" type="string" size="255" uuid="ce39692d-72b4-499a-b6b6-3da5f163b95b"/>
+      <field name="displayName" type="string" size="255" uuid="85a15ef8-d6f8-4295-883e-73e2e1f37422"/>
+      <field name="employeeNumber" type="string" size="255" uuid="8a53a6c7-ca92-4194-bb6d-20f338984ae2"/>
+      <field name="employeeType" type="string" size="255" uuid="db684a21-4104-450e-8726-f08038fade8d"/>
+      <field name="homePhone" type="string" size="255" uuid="785e3f1c-8701-406f-b495-ccb980822650"/>
+      <field name="homePostalAddress" type="text" uuid="f2542dca-27bf-4ecd-b911-ff47a5f833ed"/>
+      <field name="initials" type="string" size="10" uuid="5e0e08a8-8575-46b6-bbd2-200af636fd32"/>
+      <field name="jpegPhoto" type="object" uuid="fa0713b2-3f0c-47b4-a89a-99c643872e72"/>
+      <field name="labeledURI" type="text" uuid="5063bf13-1025-4860-b5f9-b32d657bdafe"/>
+      <field name="mail" type="string" size="255" uuid="a2f48f1b-60d9-4dd0-bca9-20397dd43233"/>
+      <field name="manager" type="string" size="255" uuid="85b0faeb-a2e8-47f9-8537-bcc8b232a542"/>
+      <field name="mobile" type="string" size="255" uuid="e0b2defb-a338-4960-b962-35250a3e0692"/>
+      <field name="o" type="string" size="255" uuid="1d818ba2-58f6-4513-a42c-9fe72b61e174"/>
+      <field name="pager" type="string" size="255" uuid="f608d069-95e0-4e3d-a966-78c27d8081fd"/>
+      <field name="preferredLanguage" type="string" size="255" uuid="536a8395-15e9-4c35-acd7-05bcdc408bb4"/>
+      <field name="roomNumber" type="string" size="255" uuid="e059c44c-b900-4ee2-b441-def23b499ff9"/>
+      <field name="secretary" type="string" size="255" uuid="32f6385e-4f1c-4470-9a93-c8da93511ff4"/>
+      <field name="personalTitle" type="string" size="255" uuid="165b1888-943e-4a51-b337-237af746be7e"/>
+      <field name="sn" type="string" size="255" uuid="917b1cf3-9091-4e5f-9676-f4fa4022708b"/>
+      <field name="ou" type="string" size="255" uuid="0af7faed-5f74-4331-8903-83b206a3940a"/>
+      <field name="title" type="string" size="255" uuid="af32b384-9f2a-4c7d-be56-a44dc884f6bf"/>
+      <field name="facsimileTelephoneNumber" type="string" size="255" uuid="7fcb1e72-dc5f-4948-b67f-5effda347200"/>
+      <field name="givenName" type="string" size="255" uuid="0d3a57c2-48f1-4841-b02d-de311fab3c86"/>
+      <field name="telephoneNumber" type="string" size="255" uuid="b71797da-d87a-4818-a13e-06ee804257df"/>
+      <field name="vimb_created" type="datetime" required="true" uuid="5745aa1c-cc55-476e-a015-897575a7b25e"/>
+      <field name="vimb_update" type="datetime" required="true" uuid="f377e655-f312-49a4-874e-c707f4503391"/>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\DirectoryEntry</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="DirectoryEntry" to="Mailbox" owner-alias="DirectoryEntry" inverse-alias="Mailbox" uuid="f2a36410-021a-4421-a75e-94b4f4abf10d">
+      <association-field from="mailbox_id" to="id"/>
+    </association>
+    <entity name="Admin" uuid="6db3acbf-c2bd-412e-93ad-401290455c57">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="c6af807b-6f27-46b7-9f33-c052fbda2c9d"/>
+      <field name="username" type="string" size="255" uuid="5ce51461-5ed6-4ffb-9243-59559e96afac"/>
+      <field name="password" type="string" size="255" required="true" uuid="e255a9e1-6ba5-4244-8b7f-8d58bdc18862"/>
+      <field name="super" type="boolean" default="0" required="true" uuid="ac18281b-8bc5-43ab-8b1e-4afec9f23248"/>
+      <field name="active" type="boolean" default="1" required="true" uuid="e7edc5a1-a302-489a-bfbc-b65f16dd1e73"/>
+      <field name="created" type="datetime" required="true" uuid="9c9200e4-08e2-4428-a653-c4bd38745977"/>
+      <field name="modified" type="datetime" uuid="720dced4-fc3e-44c4-8a53-9c64eb3ae872"/>
+      <index name="IX_Username_1" unique="true">
+        <index-field name="username"/>
+      </index>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\Admin</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Domain" uuid="1fc7527f-ff62-49c5-99ba-d03644a71d3c">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="4878bf64-6087-42c4-a1f7-9871cf48d729"/>
+      <field name="domain" type="string" size="255" required="true" uuid="6c20cc2b-18d7-49a9-b27a-691d81285694"/>
+      <field name="description" type="string" size="255" uuid="e1faf04e-a0e8-4977-affe-3536a7b34742"/>
+      <field name="max_aliases" type="integer" size="0" default="0" required="true" uuid="29d206a2-a22a-44bf-9ca7-5e7c59923e27"/>
+      <field name="alias_count" type="bigint" default="0" required="true" uuid="eca0bbee-635c-4d35-813c-5d348753ba7a"/>
+      <field name="max_mailboxes" type="integer" size="0" default="0" required="true" uuid="a1fedc9d-e874-48fe-aa5e-d7ac8cde6fec"/>
+      <field name="mailbox_count" type="bigint" default="0" required="true" uuid="6a429220-a136-404d-975d-30ed32a2e019"/>
+      <field name="max_quota" type="bigint" default="0" required="true" uuid="3bf4387e-3c28-4789-ad08-040d43624e52"/>
+      <field name="quota" type="bigint" default="0" required="true" uuid="8a860d4e-bfa3-473b-a43c-922ff846de71"/>
+      <field name="transport" type="string" size="255" default="virtual" required="true" uuid="ec76a312-7042-444b-bc31-77ac551e7e79"/>
+      <field name="backupmx" type="boolean" default="0" required="true" uuid="b07e21bb-a6a9-44cb-8027-4df7ff96c1bd"/>
+      <field name="active" type="boolean" default="1" required="true" uuid="502a90d4-5d0e-4868-bf7a-00e831cfe80a"/>
+      <field name="homedir" type="string" size="255" uuid="aa68efcc-9b1e-4252-aeb8-a0fb8e9d5286"/>
+      <field name="maildir" type="string" size="255" uuid="fc12263f-c858-41aa-8b89-20ffc2dfd1cd"/>
+      <field name="uid" type="integer" uuid="299a1ec1-e56d-47f6-97d5-065886535e87"/>
+      <field name="gid" type="integer" uuid="351ca896-f257-4992-bc20-ea13471f6365"/>
+      <field name="created" type="datetime" required="true" uuid="3fe7b46d-0a88-41b7-8a04-a7aa7e4bf16b"/>
+      <field name="modified" type="datetime" uuid="22011386-6055-47ce-be8d-9b4da9347e37"/>
+      <index name="IX_Domain_1" unique="true">
+        <index-field name="domain"/>
+      </index>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\Domain</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="Mailbox" uuid="90282946-8af8-4824-8fbf-ed0c8cd75321">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="f7e54ea5-462e-4ae0-b16e-dea6bc6ac460"/>
+      <field name="Domain_id" type="bigint" uuid="14f07f91-8a79-4d80-b600-4108b4ba0c50"/>
+      <field name="username" type="string" size="255" required="true" uuid="6fd2cb24-8b38-42ff-a562-d4629d959495"/>
+      <field name="password" type="string" required="true" uuid="6f3f6673-2f7c-4c70-b398-a05024de013d"/>
+      <field name="name" type="string" size="255" uuid="8369c89f-2565-4fce-8625-518b85fca0c1"/>
+      <field name="alt_email" type="string" size="255" uuid="4760fd44-739a-4749-a401-624f3709f246"/>
+      <field name="quota" type="bigint" default="0" required="true" uuid="b20c4c94-145c-4f39-895c-6a5a2614fd54"/>
+      <field name="local_part" type="string" size="255" required="true" uuid="54bc987f-4ed3-4b05-8fbb-bc1c5e6c5fb3"/>
+      <field name="active" type="boolean" default="0" required="true" uuid="2a1092c4-e2e4-4bc1-9000-0dfc7ebd4648"/>
+      <field name="access_restriction" type="string" size="100" default="ALL" required="true" uuid="e5f804f3-965c-43a3-8e55-f2e9be75dfbb"/>
+      <field name="homedir" type="string" size="255" uuid="e15e2f01-1f3f-4f27-8580-d859a928788a"/>
+      <field name="maildir" type="string" size="255" uuid="75138859-d6e5-493f-a1f5-4737af8834f7"/>
+      <field name="uid" type="bigint" uuid="16897187-e4a6-4ebf-9e80-cfcb049fb3c6"/>
+      <field name="gid" type="bigint" uuid="6363c31d-1d63-4e82-9f59-c0c5823efdfc"/>
+      <field name="homedir_size" type="bigint" uuid="ea27fd79-6172-4212-9e13-70b1e9f558ba"/>
+      <field name="maildir_size" type="bigint" uuid="b61c1475-d6de-42b0-9dbd-180aef3e6021"/>
+      <field name="size_at" type="datetime" uuid="9b330d15-9dd6-456a-aaf6-6e08be50fdc1"/>
+      <field name="delete_pending" type="boolean" default="0" uuid="16e993da-cd8c-4482-9471-7a50b5944d35"/>
+      <field name="created" type="datetime" required="true" uuid="77e55477-47ef-4730-8174-9910658e6e66"/>
+      <field name="modified" type="datetime" uuid="49cc4ebf-41ec-4c50-8be5-204d49c2ee62"/>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\Mailbox</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Mailbox" to="Domain" owner-alias="Mailboxes" inverse-alias="Domain" uuid="3dcdcc32-6681-45c6-baa1-b511e38e6bf4">
+      <association-field from="Domain_id" to="id"/>
+    </association>
+    <entity name="DomainToAdmin" uuid="84795b6a-58cd-4d9c-846a-63e9a6cfa2f5">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="f3c43f92-ef80-4c5f-903e-b08064e078f8"/>
+      <field name="Admin_id" type="bigint" required="true" uuid="e330527c-204b-4d39-a0c1-b767c74d84f5"/>
+      <field name="Domain_id" type="bigint" required="true" uuid="f8e47e00-3250-46d5-8bb7-013197d89c30"/>
+      <field name="created" type="datetime" required="true" uuid="f058d51b-158b-4dcc-b6ff-2a02f6ae1b42"/>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\DomainToAdmin</attribute>
+      </orm-attributes>
+    </entity>
+    <many-to-many mn-entity="DomainToAdmin" uuid="a3996cbf-3e92-4503-b40f-d4b4c19f058d">
+      <many-to-many-entity name="Admin" owning-side="true" alias="Admins" uuid="ba238e4b-8f8f-4c48-a645-63af24da9fcc">
+        <many-to-many-field from="Admin_id" to="id"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="Domain" owning-side="false" alias="Domains" uuid="4bae0b0f-d306-417f-beb3-434dcd6486a7">
+        <many-to-many-field from="Domain_id" to="id"/>
+      </many-to-many-entity>
+    </many-to-many>
+    <entity name="Alias" uuid="0a3139bc-67e7-41cf-82b1-2f53337bcbaf">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="9133b2b1-3d00-4c33-a7d2-bb90cf57697b"/>
+      <field name="Domain_id" type="bigint" uuid="07acc490-8608-41fd-be9b-50ab41eb64c1"/>
+      <field name="address" type="string" size="255" required="true" unique="true" uuid="f6edd122-d15c-43fc-adf3-32c0a62925cf"/>
+      <field name="goto" type="text" required="true" uuid="d0555e51-186b-4ce1-a6ca-1315bbf82645"/>
+      <field name="active" type="boolean" default="1" required="true" uuid="ada71496-bd4c-4423-b7cd-5078e84323f2"/>
+      <field name="created" type="datetime" required="true" uuid="9e15ec20-adda-4283-9071-37883f01a470"/>
+      <field name="modified" type="datetime" uuid="a2413fa9-b287-43f4-8958-4e612589f717"/>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\Alias</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Alias" to="Domain" owner-alias="Aliases" inverse-alias="Domain" uuid="d08becc7-dbf1-4b10-8806-d795a2e9f6f2">
+      <association-field from="Domain_id" to="id"/>
+    </association>
+    <entity name="AdminPreference" uuid="87c23ef4-98f0-4273-a54f-92ca6c3e63a5">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="263db75b-a629-4ffc-8eef-020f68b9fec1"/>
+      <field name="Admin_id" type="bigint" uuid="0b1d335b-9e76-451b-ab00-f5d3b52b75aa"/>
+      <field name="attribute" type="string" size="255" required="true" uuid="e064671a-da99-4f19-9fb4-ec866c61da69"/>
+      <field name="ix" type="integer" default="0" required="true" uuid="f02f2ca1-b46b-4aee-b9ce-d80ff7e59c57"/>
+      <field name="op" type="string" size="2" default=":=" required="true" uuid="ee41101f-fa22-47ad-b3e5-171b8fc02054"/>
+      <field name="value" type="text" required="true" uuid="2b086f34-f98a-45cf-8e63-db6d342880e1"/>
+      <field name="expire" type="bigint" default="0" required="true" uuid="926d7033-981b-4c05-bc53-e37ad0a39670"/>
+      <index name="IX_AdminPreference_1" unique="true">
+        <index-field name="Admin_id"/>
+        <index-field name="attribute"/>
+        <index-field name="ix"/>
+      </index>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\AdminPreference</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="AdminPreference" to="Admin" owner-alias="Preferences" inverse-alias="Admin" uuid="3d6ca7db-eb93-4c11-93a7-896b4367b73d">
+      <association-field from="Admin_id" to="id"/>
+    </association>
+    <entity name="Log" uuid="f46119d2-f62e-4fda-8886-352c2c7cd7d0">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="0ab38d9b-5dcb-4314-89a3-e1fe0338ae77"/>
+      <field name="action" type="string" size="100" required="true" uuid="82a3a3a0-42f6-4011-af40-23e26cc6b751"/>
+      <field name="data" type="text" uuid="5b317afb-72dc-406d-8ef5-2597824f9f78"/>
+      <field name="timestamp" type="datetime" required="true" uuid="c7e82f18-6c5f-49f3-b778-7a560d29e0d5"/>
+      <field name="Admin_id" type="bigint" uuid="e960391d-f376-43ce-8764-17c3e3c7f342"/>
+      <field name="Domain_id" type="bigint" uuid="037295b5-8477-4840-a348-6c40dae851f1"/>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\Log</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Log" to="Admin" owner-alias="Logs" inverse-alias="Admin" uuid="69d5d550-3a45-44fc-8ff4-813a919c9099">
+      <association-field from="Admin_id" to="id"/>
+    </association>
+    <association from="Log" to="Domain" owner-alias="Logs" inverse-alias="Domain" uuid="143ff4af-0b7f-453a-a55e-ffd3d272d1be">
+      <association-field from="Domain_id" to="id"/>
+    </association>
+    <entity name="MailboxPreference" uuid="45ebe1d0-ea7e-4c68-a3a9-094441328f02">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="737089b5-1cfc-4863-a656-07156b5dcde3"/>
+      <field name="Mailbox_id" type="bigint" uuid="f73ce68f-0d64-4888-870d-ca10f7503a2f"/>
+      <field name="attribute" type="string" size="255" required="true" uuid="06697f83-cda0-4e8a-820f-8fb7f4dfcb52"/>
+      <field name="ix" type="integer" default="0" required="true" uuid="f7561bad-369f-4383-9a67-142c39b49835"/>
+      <field name="op" type="string" size="2" default=":=" required="true" uuid="6954aa37-efb9-472f-8553-19deaff6341c"/>
+      <field name="value" type="text" required="true" uuid="91a98a90-32a3-44e8-b352-5bf1afc4d573"/>
+      <field name="expire" type="bigint" default="0" required="true" uuid="bcfeb0bf-ffe3-42c6-a181-52af5133cdd5"/>
+      <index name="IX_MailboxPreference_1">
+        <index-field name="Mailbox_id"/>
+        <index-field name="attribute"/>
+        <index-field name="ix"/>
+      </index>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\MailboxPreference</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="MailboxPreference" to="Mailbox" owner-alias="Preferences" inverse-alias="Mailbox" uuid="f73bcaea-bd83-488d-b32b-0e73e847a592">
+      <association-field from="Mailbox_id" to="id"/>
+    </association>
+    <entity name="DatabaseVersion" uuid="76f412af-3d29-4b1d-a209-a407ba2e89c5">
+      <field name="id" type="integer" required="true" primary="true" auto-increment="true" uuid="039dbbb7-4c62-4b25-9143-44f4a4502b00"/>
+      <field name="version" type="integer" required="true" uuid="21ef34ac-8cf1-46a8-98ca-127a48a5b221"/>
+      <field name="name" type="string" size="255" required="true" uuid="be678113-429d-4bbd-af51-1e71434a19ac"/>
+      <field name="applied_on" type="datetime" required="true" uuid="ab43cef7-0f14-4ff2-80eb-a672a3d933de"/>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\DatabaseVersion</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="RememberMe" uuid="b7a13608-6503-4ba5-bb7c-602ec44b5401">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="20655b62-d548-4eec-a5dd-8dd875d0f817"/>
+      <field name="Admin_id" type="bigint" uuid="917eb151-8490-4d47-b750-7ecd229b50bb"/>
+      <field name="userhash" type="string" size="40" required="true" uuid="4a2c7416-c9b6-4255-9669-a8d2377ac685"/>
+      <field name="ckey" type="string" size="40" required="true" uuid="1bdadf0f-96ae-4832-add2-cd1e17fd19d9"/>
+      <field name="original_ip" type="string" size="40" required="true" uuid="377342b2-8427-47b6-88f3-19deb5b2e6b5"/>
+      <field name="expires" type="datetime" required="true" uuid="a466dfb3-fade-4fbd-bc41-161e1d8b2165"/>
+      <field name="last_used" type="datetime" required="true" uuid="351b8f21-b57b-411b-9101-4e3ae538e3bd"/>
+      <field name="created" type="datetime" required="true" uuid="b009751c-d5b4-4207-be6d-1fdee10f7f20"/>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\RememberMe</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="RememberMe" to="Admin" owner-alias="RememberMes" inverse-alias="User" uuid="51b420f6-298b-4f39-9eac-e076838c78a9">
+      <association-field from="Admin_id" to="id"/>
+    </association>
+    <entity name="AliasPreference" uuid="ecb7d3bf-095b-4207-93be-0645ca2fb077">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="dfbcaa8c-b8a3-432b-b280-aff4f496caec"/>
+      <field name="Alias_id" type="bigint" uuid="73a86289-7aa3-48e7-90c4-c25af97ee269"/>
+      <field name="attribute" type="string" size="255" required="true" uuid="b4db6ad1-340c-4727-a1ea-0a48c9ef098c"/>
+      <field name="ix" type="integer" default="0" required="true" uuid="013929bc-e981-4e47-96e9-830c53483bf4"/>
+      <field name="op" type="string" size="2" default=":=" required="true" uuid="c4d0f66c-7d09-4982-a84d-f0151eb75db9"/>
+      <field name="value" type="text" required="true" uuid="5b7d3292-9df0-4193-9743-10180780eaec"/>
+      <field name="expire" type="bigint" default="0" required="true" uuid="7ea94f28-a50a-4b71-80aa-cb8ed4f81831"/>
+      <index name="IX_AliasPreference_1">
+        <index-field name="Alias_id"/>
+        <index-field name="attribute"/>
+        <index-field name="ix"/>
+      </index>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\AliasPreference</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="AliasPreference" to="Alias" owner-alias="Preferences" inverse-alias="Alias" uuid="99c5eb69-ac2d-4df5-8cd7-fcdf042b39e9">
+      <association-field from="Alias_id" to="id"/>
+    </association>
+    <entity name="DomainPreference" uuid="6f2a163e-900a-4bf5-af83-eb13191ff10e">
+      <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="d967b9e7-7c0f-42ce-9064-48b029ee5907"/>
+      <field name="Domain_id" type="bigint" uuid="4a052a0f-f14b-46ed-be97-49b79dfeddfc"/>
+      <field name="attribute" type="string" size="255" required="true" uuid="24c3dd68-d392-4ee2-a737-e5c8fad08a0c"/>
+      <field name="ix" type="integer" default="0" required="true" uuid="6eb0875c-45ad-4947-8e78-2d754b5145fd"/>
+      <field name="op" type="string" size="2" default=":=" required="true" uuid="f5f0284e-6b4c-4569-9255-b7a0cc15f5bb"/>
+      <field name="value" type="text" required="true" uuid="d286cd76-42b2-4695-96b4-0bd03d853b44"/>
+      <field name="expire" type="bigint" default="0" required="true" uuid="8d41cc0f-4c5a-4213-9cdc-28a3ee60cddf"/>
+      <index name="IX_AliasPreference_1">
+        <index-field name="Domain_id"/>
+        <index-field name="attribute"/>
+        <index-field name="ix"/>
+      </index>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\DomainPreference</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="DomainPreference" to="Domain" owner-alias="Preferences" inverse-alias="Domain" uuid="d8aee4c0-6040-4643-9367-ae76ef07978d">
+      <association-field from="Domain_id" to="id"/>
+    </association>
+    <entity name="Archive" uuid="2159b835-0acc-4444-89f1-e30fb1a6558f">
+      <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="4c5b4c9c-821f-43e0-b7da-80de0afcfb14"/>
+      <field name="Admin_id" type="bigint" uuid="330b2423-a229-4258-bad0-7ae9048e1c47"/>
+      <field name="Domain_id" type="bigint" uuid="8cf39cf6-6052-47fc-b31d-b72b5bcf8daa"/>
+      <field name="username" type="string" required="true" unique="true" uuid="0cfd12ef-1183-4a12-804d-784247f4fe10"/>
+      <field name="status" type="string" enum-values="PENDING_ARCHIVE,ARCHIVING,ARCHIVED,PENDING_RESTORE,RESTORING,PENDING_DELETE,DELETING" required="true" uuid="1c921d1f-5d27-4baa-b9e8-2da061f92efe"/>
+      <field name="archived_at" type="datetime" required="true" uuid="c7efc379-67bc-4a4d-a1df-a37de50ff5b4"/>
+      <field name="status_changed_at" type="datetime" required="true" uuid="4287b13b-3f6c-42a0-b059-272918e51998"/>
+      <field name="homedir_server" type="string" size="255" uuid="5bce83a4-4698-4bdd-b4ff-9799624a0b9a"/>
+      <field name="homedir_file" type="string" size="255" uuid="a0b57a50-8290-4037-b3f1-7c2a48858ed6"/>
+      <field name="homedir_orig_size" type="bigint" uuid="c48a5605-d96c-445f-ad44-a0e50f93e9ee"/>
+      <field name="homedir_size" type="bigint" uuid="07086e4b-e994-49ae-a3b9-9cb356fe5827"/>
+      <field name="maildir_server" type="string" size="255" uuid="5983366c-4c5f-47ab-99b2-c89aa1eb4e76"/>
+      <field name="maildir_file" type="string" size="255" uuid="5230eea0-59cf-4f72-b971-ee05e35868af"/>
+      <field name="maildir_orig_size" type="bigint" uuid="1f92bb2b-4de1-4ddf-b35d-bb923698b21f"/>
+      <field name="maildir_size" type="bigint" uuid="3c236c3d-152a-47d3-a480-c2a1c7d6f583"/>
+      <field name="data" type="text" required="true" uuid="36e1893d-3362-4b67-b610-f8d7553a939b"/>
+      <orm-attributes>
+        <attribute name="repository-class">Repositories\Archive</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="Archive" to="Domain" owner-alias="Archives" inverse-alias="Domain" uuid="f02325fc-33d1-4066-9c91-eb835d9f85bc">
+      <association-field from="Domain_id" to="id"/>
+    </association>
+    <association from="Archive" to="Admin" owner-alias="Archives" inverse-alias="ArchivedBy" uuid="5ec08d3d-4ea2-405d-832f-92f6341aa457">
+      <association-field from="Admin_id" to="id"/>
+    </association>
+    <orm-attributes>
+      <attribute name="namespace">Entities</attribute>
+    </orm-attributes>
+  </module>
+  <visual-data>
+    <entity uuid="0a3139bc-67e7-41cf-82b1-2f53337bcbaf" position-x="493" position-y="509" size-x="0" size-x2="111" size-y="0" size-y2="115"/>
+    <project uuid="15328530-f75f-43e2-a906-a8eead4a5924" size-x="30" size-x2="1421" size-y="35" size-y2="826"/>
+    <entity uuid="1fc7527f-ff62-49c5-99ba-d03644a71d3c" position-x="486" position-y="6" size-x="0" size-x2="127" size-y="0" size-y2="269"/>
+    <entity uuid="2159b835-0acc-4444-89f1-e30fb1a6558f" position-x="300" position-y="337" size-x="0" size-x2="149" size-y="0" size-y2="241"/>
+    <module uuid="2c6ca297-a962-4b31-a81c-0d852efeec06" bk-color="16054771" position-x="20" position-y="15" size-x="0" size-x2="1143" size-y="0" size-y2="647"/>
+    <entity uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a" position-x="1029" position-y="214" size-x="0" size-x2="190" size-y="0" size-y2="437"/>
+    <entity uuid="45ebe1d0-ea7e-4c68-a3a9-094441328f02" position-x="1062" position-y="37" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <association uuid="5ec08d3d-4ea2-405d-832f-92f6341aa457" caption1-position-x="1" caption1-position-y="0" center-position-x="0" center-position-y="0"/>
+    <entity uuid="6db3acbf-c2bd-412e-93ad-401290455c57" position-x="30" position-y="72" size-x="0" size-x2="122" size-y="0" size-y2="115"/>
+    <entity uuid="6f2a163e-900a-4bf5-af83-eb13191ff10e" position-x="645" position-y="303" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <entity uuid="76f412af-3d29-4b1d-a209-a407ba2e89c5" position-x="810" position-y="400" size-x="0" size-x2="114" size-y="0" size-y2="73"/>
+    <entity uuid="84795b6a-58cd-4d9c-846a-63e9a6cfa2f5" position-x="272" position-y="24" size-x="0" size-x2="108" size-y="0" size-y2="88"/>
+    <entity uuid="87c23ef4-98f0-4273-a54f-92ca6c3e63a5" position-x="12" position-y="416" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <entity uuid="90282946-8af8-4824-8fbf-ed0c8cd75321" position-x="783" position-y="0" size-x="0" size-x2="154" size-y="0" size-y2="283"/>
+    <entity uuid="b7a13608-6503-4ba5-bb7c-602ec44b5401" position-x="155" position-y="370" size-x="0" size-x2="114" size-y="0" size-y2="129"/>
+    <entity uuid="ecb7d3bf-095b-4207-93be-0645ca2fb077" position-x="703" position-y="510" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <association uuid="f2a36410-021a-4421-a75e-94b4f4abf10d" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0"/>
+    <entity uuid="f46119d2-f62e-4fda-8886-352c2c7cd7d0" position-x="230" position-y="134" size-x="0" size-x2="114" size-y="0" size-y2="101"/>
+  </visual-data>
+</orm-designer>

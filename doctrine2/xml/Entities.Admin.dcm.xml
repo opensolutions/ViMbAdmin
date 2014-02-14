@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Entities\Admin" repository-class="Repositories\Admin">
+    <id name="id" type="bigint">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="username" type="string" length="255" nullable="true"/>
+    <field name="password" type="string" length="255" nullable="false"/>
+    <field name="super" type="boolean" nullable="false"/>
+    <field name="active" type="boolean" nullable="false"/>
+    <field name="created" type="datetime" nullable="false"/>
+    <field name="modified" type="datetime" nullable="true"/>
+    <unique-constraints>
+      <unique-constraint name="IX_Username_1" columns="username"/>
+    </unique-constraints>
+    <one-to-many field="Preferences" target-entity="Entities\AdminPreference" mapped-by="Admin"/>
+    <one-to-many field="Logs" target-entity="Entities\Log" mapped-by="Admin"/>
+    <one-to-many field="RememberMes" target-entity="Entities\RememberMe" mapped-by="User"/>
+    <one-to-many field="Archives" target-entity="Entities\Archive" mapped-by="ArchivedBy"/>
+    <many-to-many field="Domains" target-entity="Entities\Domain" inversed-by="Admins">
+      <join-table name="DomainToAdmin">
+        <join-columns>
+          <join-column name="Admin_id" referenced-column-name="id" nullable="false"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="Domain_id" referenced-column-name="id" nullable="false"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

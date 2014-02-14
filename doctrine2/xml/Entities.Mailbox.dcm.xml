@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Entities\Mailbox" repository-class="Repositories\Mailbox">
+    <id name="id" type="bigint">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="username" type="string" length="255" nullable="false"/>
+    <field name="password" type="string" nullable="false"/>
+    <field name="name" type="string" length="255" nullable="true"/>
+    <field name="alt_email" type="string" length="255" nullable="true"/>
+    <field name="quota" type="bigint" nullable="false"/>
+    <field name="local_part" type="string" length="255" nullable="false"/>
+    <field name="active" type="boolean" nullable="false"/>
+    <field name="access_restriction" type="string" length="100" nullable="false"/>
+    <field name="homedir" type="string" length="255" nullable="true"/>
+    <field name="maildir" type="string" length="255" nullable="true"/>
+    <field name="uid" type="bigint" nullable="true"/>
+    <field name="gid" type="bigint" nullable="true"/>
+    <field name="homedir_size" type="bigint" nullable="true"/>
+    <field name="maildir_size" type="bigint" nullable="true"/>
+    <field name="size_at" type="datetime" nullable="true"/>
+    <field name="delete_pending" type="boolean" nullable="true"/>
+    <field name="created" type="datetime" nullable="false"/>
+    <field name="modified" type="datetime" nullable="true"/>
+    <many-to-one field="Domain" target-entity="Entities\Domain" inversed-by="Mailboxes">
+      <join-columns>
+        <join-column name="Domain_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-one field="DirectoryEntry" target-entity="Entities\DirectoryEntry" mapped-by="Mailbox"/>
+    <one-to-many field="Preferences" target-entity="Entities\MailboxPreference" mapped-by="Mailbox"/>
+  </entity>
+</doctrine-mapping>

@@ -47,6 +47,8 @@ class TestController extends ViMbAdmin_Controller_Action
      */
     public function indexAction()
     {
+        //var_dump( $this->getResource( 'Doctrine2' )->getConnection()->fetchAssoc( 'select * from Admin where id = 10' ) );
+        //die();
     }
 
 }

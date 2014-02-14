@@ -331,3 +331,9 @@ ul.ui-autocomplete li
 {
     cursor: pointer;
 }
+
+dl.inputs-list
+{
+    margin-left: 180px;
+    margin-top: 5px;
+}

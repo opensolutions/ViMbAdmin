@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Entities\DirectoryEntry" repository-class="Repositories\DirectoryEntry">
+    <id name="id" type="bigint">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="businessCategory" type="string" length="255" nullable="true"/>
+    <field name="carLicense" type="string" length="255" nullable="true"/>
+    <field name="departmentNumber" type="string" length="255" nullable="true"/>
+    <field name="displayName" type="string" length="255" nullable="true"/>
+    <field name="employeeNumber" type="string" length="255" nullable="true"/>
+    <field name="employeeType" type="string" length="255" nullable="true"/>
+    <field name="homePhone" type="string" length="255" nullable="true"/>
+    <field name="homePostalAddress" type="text" nullable="true"/>
+    <field name="initials" type="string" length="10" nullable="true"/>
+    <field name="jpegPhoto" type="object" nullable="true"/>
+    <field name="labeledURI" type="text" nullable="true"/>
+    <field name="mail" type="string" length="255" nullable="true"/>
+    <field name="manager" type="string" length="255" nullable="true"/>
+    <field name="mobile" type="string" length="255" nullable="true"/>
+    <field name="o" type="string" length="255" nullable="true"/>
+    <field name="pager" type="string" length="255" nullable="true"/>
+    <field name="preferredLanguage" type="string" length="255" nullable="true"/>
+    <field name="roomNumber" type="string" length="255" nullable="true"/>
+    <field name="secretary" type="string" length="255" nullable="true"/>
+    <field name="personalTitle" type="string" length="255" nullable="true"/>
+    <field name="sn" type="string" length="255" nullable="true"/>
+    <field name="ou" type="string" length="255" nullable="true"/>
+    <field name="title" type="string" length="255" nullable="true"/>
+    <field name="facsimileTelephoneNumber" type="string" length="255" nullable="true"/>
+    <field name="givenName" type="string" length="255" nullable="true"/>
+    <field name="telephoneNumber" type="string" length="255" nullable="true"/>
+    <field name="vimb_created" type="datetime" nullable="false"/>
+    <field name="vimb_update" type="datetime" nullable="false"/>
+    <one-to-one field="Mailbox" target-entity="Entities\Mailbox" inversed-by="DirectoryEntry">
+      <join-columns>
+        <join-column name="mailbox_id" referenced-column-name="id" nullable="false" unique="true"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

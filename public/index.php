@@ -6,7 +6,10 @@ defined('APPLICATION_PATH')
 
 // Define application environment
 defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
+
+// composer autoloader
+require_once( APPLICATION_PATH . '/../vendor/autoload.php' );
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(

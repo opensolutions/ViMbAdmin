@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Entities\Domain" repository-class="Repositories\Domain">
+    <id name="id" type="bigint">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="domain" type="string" length="255" nullable="false"/>
+    <field name="description" type="string" length="255" nullable="true"/>
+    <field name="max_aliases" type="integer" length="0" nullable="false"/>
+    <field name="alias_count" type="bigint" nullable="false"/>
+    <field name="max_mailboxes" type="integer" length="0" nullable="false"/>
+    <field name="mailbox_count" type="bigint" nullable="false"/>
+    <field name="max_quota" type="bigint" nullable="false"/>
+    <field name="quota" type="bigint" nullable="false"/>
+    <field name="transport" type="string" length="255" nullable="false"/>
+    <field name="backupmx" type="boolean" nullable="false"/>
+    <field name="active" type="boolean" nullable="false"/>
+    <field name="homedir" type="string" length="255" nullable="true"/>
+    <field name="maildir" type="string" length="255" nullable="true"/>
+    <field name="uid" type="integer" nullable="true"/>
+    <field name="gid" type="integer" nullable="true"/>
+    <field name="created" type="datetime" nullable="false"/>
+    <field name="modified" type="datetime" nullable="true"/>
+    <unique-constraints>
+      <unique-constraint name="IX_Domain_1" columns="domain"/>
+    </unique-constraints>
+    <one-to-many field="Mailboxes" target-entity="Entities\Mailbox" mapped-by="Domain"/>
+    <one-to-many field="Aliases" target-entity="Entities\Alias" mapped-by="Domain"/>
+    <one-to-many field="Logs" target-entity="Entities\Log" mapped-by="Domain"/>
+    <one-to-many field="Preferences" target-entity="Entities\DomainPreference" mapped-by="Domain"/>
+    <one-to-many field="Archives" target-entity="Entities\Archive" mapped-by="Domain"/>
+    <many-to-many field="Admins" target-entity="Entities\Admin" mapped-by="Domains"/>
+  </entity>
+</doctrine-mapping>

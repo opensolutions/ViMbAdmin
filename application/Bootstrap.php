@@ -53,4 +53,36 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $autoloader->registerNamespace( 'ViMbAdmin' );
     }
 
+
+    /**
+     * Register the OSS library autoloader
+     *
+     * This function ensures that classes from library/OSS are automatically
+     * loaded from the subdirectories where subdirectories are indicated by
+     * underscores in the same manner as Zend.
+     *
+     */
+    protected function _initOSSAutoLoader()
+    {
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        $autoloader->registerNamespace( 'OSS' );
+    }
+
+    /**
+     * Load the database resource before the session resource is loaded.
+     *
+     * We're currently using the Zend session handler for storing sessions
+     * in MySQL. For this, we need to ensure the DB is initialised before
+     * the session resource is loaded.
+     */
+     protected function _initDbAutoForSessions()
+     {
+         // load the DB resource if it is required by the session
+         if( isset( $this->getOptions()['resources']['session']['saveHandler']['class'] )
+             && $this->getOptions()['resources']['session']['saveHandler']['class'] == 'Zend_Session_SaveHandler_DbTable' )
+         {
+             $this->bootstrap('db');
+         }
+    }
+
 }

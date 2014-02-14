@@ -1,0 +1,76 @@
+<div id="form_div_edit_admin">
+
+<form action="{$element->getAction()}"
+      method="{$element->getMethod()}"
+      enctype="{$element->getAttrib('enctype')}"
+      id="{$element->getId()}"
+      name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+      {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+      class="form-horizontal">
+
+{if isset( $element->salt )}
+    {include file='form/element-input.phtml' ielement=$element->salt}
+{/if}
+
+{include file='form/element-input.phtml' ielement=$element->username}
+
+
+	<fieldset class="control-group" id="div-form-password">
+    	    <label for="passowrd" class="control-label">
+	    	    	{$element->password->getLabel()}
+	    	</label>
+    	    <div id="div-controls-{$element->password->getId()}" class="controls">
+    		    <div class="input-append">
+    		        {$element->password}
+        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" style="margin-left: -5px;" class="btn add-on" >
+                            <i class="icon-refresh"></i>
+                        </span>
+    		    </div>
+
+	        	{if $element->password->getMessages()}
+					<script type="text/javascript">
+						$( '#{$element->password->getId()}' ).addClass( 'error' );
+						$( '#div-form-{$element->password->getId()}' ).addClass( 'error' );
+					</script>
+				{/if}
+				<p id="help-{$element->password->getId()}" class="help-block">
+				    {if $element->password->getMessages()}
+    					{foreach from=$element->password->getMessages() item=messages}
+        					{foreach from=$messages item=msg}
+            					{$msg}<br />
+        					{/foreach}
+    					{/foreach}
+    				{/if}
+				</p>
+
+    	    </div>
+    	</fieldset>
+
+
+{if isset( $element->active )}
+    {include file='form/element-checkbox.phtml' ielement=$element->active}
+{/if}
+{if isset( $element->super )}
+    {include file='form/element-checkbox.phtml' ielement=$element->super}
+{/if}
+{if isset( $element->welcome_email )}
+    {include file='form/element-checkbox.phtml' ielement=$element->welcome_email}
+{/if}
+
+{if !isset($modal) || !$modal}
+<fieldset class="form-actions">
+    {if $controller eq 'auth' and $action eq 'setup'}
+        <input type="submit" class="btn btn-success" value="Activate My Account &raquo;" />
+    {else}
+        <a class="btn btn" href="{genUrl controller='admin' action='list'}">{$element->cancel->getLabel()}</a>
+        &nbsp;
+        <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+
+    {/if}
+</fieldset>
+{/if}
+
+
+</form>
+
+</div> <!-- #form_div_edit_mailbox -->

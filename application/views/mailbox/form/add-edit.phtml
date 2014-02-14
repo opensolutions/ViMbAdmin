@@ -1,0 +1,186 @@
+<div id="form_div_edit_mailbox">
+
+    <form action="{$element->getAction()}"
+          method="{$element->getMethod()}"
+          enctype="{$element->getAttrib('enctype')}"
+          id="{$element->getId()}"
+          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+          class="form-horizontal">
+
+          <div class="tabbable">
+          
+              <ul id="plugin_tabs" class="nav nav-tabs hide">
+                  <li class="active"><a data-toggle="tab" href="#tab-main">Home</a></li>
+              </ul>
+              
+              <div class="tab-content">
+              
+                    <div class="tab-pane active" id="tab-main">
+                        
+    
+                          {if isset( $element->local_part ) && isset( $element->domain )}
+                          
+                              <fieldset class="control-group" id="div-form-address">
+                        	    <label for="local_part" class="control-label">
+                    	    	    	Address
+                    	    	</label>
+                        	    <div id="div-controls-{$element->local_part->getId()}" class="controls">
+                        		    <div class="input-append btn-group" style="float: left;">
+                        		        {$element->local_part}
+                        		        {if !isset( $domain ) || !$domain}
+                        		            <span class="btn">@</span>
+                        		            {$element->domain}
+                		                {else}
+                		                    <div style="display: none;">{$element->domain}</div>
+                		                    <span class="add-on">@{$domain->getDomain()}</span>
+                		                {/if}
+                        		    </div>
+                                    <br/>
+                                    <br/>
+                    	        	{if $element->local_part->getMessages()}
+                    					<script type="text/javascript">
+                    						$( '#{$element->local_part->getId()}' ).addClass( 'error' );
+                    						$( '#div-form-{$element->local_part->getId()}' ).addClass( 'error' );
+                    					</script>
+                    				{/if}
+                    				<p id="help-{$element->local_part->getId()}" class="help-block">
+                    					{if $element->local_part->getMessages()}
+                    					    <br />
+                        					{foreach from=$element->local_part->getMessages() item=messages}
+                            					{foreach from=$messages item=msg}
+                                					<br />{$msg}
+                            					{/foreach}
+                        					{/foreach}
+                    					{/if}
+                    				</p>
+                    				{if $element->domain->getMessages()}
+                    					<script type="text/javascript">
+                    						$( '#{$element->domain->getId()}' ).addClass( 'error' );
+                    						$( '#div-form-{$element->domain->getId()}' ).addClass( 'error' );
+                    					</script>
+                    				{/if}
+                    				<p id="help-{$element->domain->getId()}" class="help-block">
+                    					{if $element->domain->getMessages()}
+                    					    <br />
+                        					{foreach from=$element->domain->getMessages() item=messages}
+                            					{foreach from=$messages item=msg}
+                                					<br />{$msg}
+                            					{/foreach}
+                        					{/foreach}
+                    					{/if}
+                    				</p>
+                        	    </div>
+                        	</fieldset>
+                    	{/if}
+                    	<div class="row-fluid">
+                            <div class="span6">
+        	
+                        {include file='form/element-input.phtml' ielement=$element->name}
+                
+                        {if isset($element->password)}
+                            <fieldset class="control-group" id="div-form-password">
+                    	    <label for="passowrd" class="control-label">
+                	    	    	{$element->password->getLabel()}
+                	    	</label>
+                    	    <div id="div-controls-{$element->password->getId()}" class="controls">
+                    		    <div class="input-append">
+                    		        {$element->password}
+                    		        {if $element->password->getAttrib('disabled') != 'disabled'}
+                        		        <span id="password_rand" onclick="randPasword( 12, 'password' );" title="Random Password" class="btn add-on" style="margin-left: -5px;">
+                                            <i class="icon-refresh"></i>
+                                        </span>
+                                    {/if}
+                    		    </div>
+                
+                	        	{if $element->password->getMessages()}
+                					<script type="text/javascript">
+                						$( '#{$element->password->getId()}' ).addClass( 'error' );
+                						$( '#div-form-{$element->password->getId()}' ).addClass( 'error' );
+                					</script>
+                					{/if}
+                					<p id="help-{$element->password->getId()}" class="help-block">
+                					{if $element->password->getMessages()}
+                    					{foreach from=$element->password->getMessages() item=messages}
+                        					{foreach from=$messages item=msg}
+                            					{$msg}<br />
+                        					{/foreach}
+                    					{/foreach}
+                    					{/if}
+                					</p>
+                
+                    	    </div>
+                    	</fieldset>
+                        {/if}
+
+                        {if !$isEdit}
+                            {include file='form/element-checkbox.phtml' ielement=$element->welcome_email}
+                        {/if}
+                        
+                        </div>
+                        <div class="span6">
+                            {* include file='form/element-input.phtml' ielement=$element->quota *}
+                            <div class="control-group {if $element->quota->hasErrors()}error{/if}">
+                                <label class="control-label required" for="{$element->quota->getId()}">{$element->quota->getLabel()}</label>
+                                <div class="controls">
+                                    <input type="text" {if $element->quota->isRequired()}class="required"{/if} title="{$element->quota->getAttrib('title')}"
+                                        value="{$element->quota->getValue()}" id="{$element->quota->getId()}" name="{$element->quota->getName()}" />
+
+                                    <span id="popover_{$element->quota->getId()}" rel="popover" class="btn btn-mini"
+                                        data-placement="top"
+                                        data-content="<p>Default unit is: {$quota_multiplier}<br/>You can append B (for Bytes), KB (KiloBytes), MB (MegaBytes) or GB (GigaBytes) to the number. E.g. 10GB</p>"
+                                        data-original-title="{$element->quota->getAttrib('title')}">?</span>
+
+                                    {if $element->quota->hasErrors()}
+                                        <span id="help-{$element->quota->getId()}" class="help-block">
+                                            {foreach $element->quota->getMessages() as $messages}
+                                                {foreach $messages as $msg}
+                                                    {$msg}<br />
+                                                {/foreach}
+                                            {/foreach}
+                                        </span>
+                                    {/if}
+                                </div>
+                            </div>
+                            {include file='form/element-input.phtml' ielement=$element->alt_email}
+
+                            {if !$isEdit}
+                                <div id="div_welcome_email" {if !$element->welcome_email->isChecked()}class="dontdisplay"{/if}>
+                                    {include file='form/element-input.phtml' ielement=$element->cc_welcome_email}
+                                </div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+       
+                {* any plugin elements? *}
+                {foreach $element->getSubForms() as $name => $sf}
+                    {if substr( $name, 0, 9 ) eq 'pluginsf_'}
+                        {$sf}
+                    {/if}
+                {/foreach}
+        
+            </div>
+            
+        </div>
+        
+        <fieldset class="form-actions">
+            <a class="btn" type="button" href="{genUrl controller='mailbox' action='list'}">Cancel</a>
+            <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+        </field>
+    </form>
+
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $( '#domain' ).bind( 'change',  function() {
+                $( '#help-domain' ).html( '' );
+            });
+
+            $('#welcome_email').bind( 'change', function() {
+                $('#div_welcome_email').toggle('slow');
+            });
+        }); // document onready
+    </script>
+    
+</div> <!-- #form_div_edit_mailbox -->

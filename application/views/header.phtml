@@ -18,8 +18,8 @@
     <link rel="shortcut icon" type="image/ico" href="{genUrl}/favicon.ico" />
     <link rel="icon" type="image/x-icon" href="{genUrl}/favicon.ico" />
 
-    {include file='header-js.phtml'}
-    {include file='header-css.phtml'}
+    {tmplinclude file='header-js.phtml'}
+    {tmplinclude file='header-css.phtml'}
 
 {if isset($inColorBox) && $inColorBox}
     {if !$options.mini_css}
@@ -34,13 +34,13 @@
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    {include file="colorbox.css.phtml"}
+    {tmplinclude file="colorbox.css.phtml"}
 </head>
 
 <body>
 
 {if !isset($inColorBox) || !$inColorBox}
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
                 <a class="brand" href="{genUrl}">ViMbAdmin{if not $hasIdentity} :: <em>Virtual Mailbox Administration</em>{/if}</a>
@@ -49,43 +49,51 @@
                         {if $hasIdentity}
                             <ul class="nav">
                                 <li {if $controller eq 'domain'}class="active"{/if}>
-                                    <a href="{genUrl controller='domain'}" title="Domains">Domains</a>
+                                    <a href="{genUrl controller='domain'}">Domains</a>
                                 </li>
-                                <li {if $controller eq 'mailbox'}class="active"{/if}>
-                                    <a href="{genUrl controller='mailbox'}" title="Mailboxes">Mailboxes</a>
+                                <li {if $controller == 'mailbox' || $controller == 'calendar'}class="active"{/if}>
+                                    <a href="{genUrl controller='mailbox'}">Mailboxes</a>
                                 </li>
                                 <li {if $controller eq 'alias'}class="active"{/if}>
-                                    <a href="{genUrl controller='alias'}" title="Domains">Aliases</a>
+                                    <a href="{genUrl controller='alias'}">Aliases</a>
+                                </li>
+                                <li {if $controller eq 'archive'}class="active"{/if}>
+                                    <a href="{genUrl controller='archive'}">Archives</a>
                                 </li>
                                 <li {if $controller eq 'log'}class="active"{/if}>
-                                    <a href="{genUrl controller='log'}" title="Logs">Logs</a>
+                                    <a href="{genUrl controller='log'}">Logs</a>
                                 </li>
-                                {if $hasIdentity and $identity.admin->isSuper()}
+                                {if $hasIdentity and $user->isSuper()}
                                     <li {if $controller eq 'admin'}class="active"{/if}>
-                                        <a href="{genUrl controller='admin'}" title="Administrators">Administrators</a>
+                                        <a href="{genUrl controller='admin'}" >Administrators</a>
                                     </li>
                                 {/if}
+
+                                    {* <li {if $controller == 'shared-calendar' && $module == "davical" }class="active"{/if}>
+                                        <a href="{genUrl module='davical' controller='shared-calendar'}">Shared Calendar</a>
+                                    </li> *}
+
                                 <li>
-                                    <a id="modal-dialog-your_password" href="{genUrl controller='admin' action='password' aid=$identity.admin.id modal=true}">Password</a>
+                                    <a id="your_password" href="{genUrl controller='admin' action='password' aid=$user->getId()}">Password</a>
                                 </li>
                                  <li {if $action eq 'about'}class="active"{/if}>
-                                    <a href="{genUrl controller='index' action='about'}" title="About">About</a>
+                                    <a href="http://www.vimbadmin.net/" target="_blank">About</a>
                                 </li>
                             </ul>
                             <ul class="nav pull-right">
                                 <li>
-                                    <a href="{genUrl controller='auth' action='logout'}" title="Logout">Logout</a>
+                                    <a href="{genUrl controller='auth' action='logout'}">Logout</a>
                                 </li>
                             </ul>
                         {else}
                             <ul class="nav">
                                 <li {if $action eq 'about'}class="active"{/if}>
-                                    <a href="{genUrl controller='index' action='about'}" title="About">About</a>
+                                    <a href="http://www.vimbadmin.net/">About</a>
                                 </li>
                             </ul>
                             <ul class="nav pull-right">
                                 <li>
-                                    <a href="{genUrl controller='auth' action='login'}" title="Login">Login</a>
+                                    <a href="{genUrl controller='auth' action='login'}">Login</a>
                                 </li>
                             </ul>
                         {/if}

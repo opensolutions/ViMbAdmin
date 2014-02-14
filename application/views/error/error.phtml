@@ -1,4 +1,4 @@
-{include file="header.phtml"}
+{tmplinclude file="header.phtml"}
 
 
 <div class="page-content" >
@@ -8,7 +8,7 @@
     </div>
 
 
-{ViMbAdmin_Messages}
+{OSS_Message}
 
 <p align="center">
 
@@ -16,35 +16,53 @@
 <tr>
     <td valign="top" align="center">
         <br />
-        <h3>An Error has Occurred</h3>
+        <h3>Uh oh! Unexpected Error!</h3>
 
-        <p>We apologise but an unexpected server error has occured.</p>
+        <p>We're very sorry but something we didn't expect has just happened.</p>
+        <p>We've alerted the web monkeys and, after a severe flogging, they will get it fixed as soon as possible.</p>
+        <p>Please feel free to email the {mailto address=$options.identity.email encode='javascript' text=$options.identity.name}</p>
     </td>
 </tr>
 </table>
 
 </p>
 
-{if $exception}
+{if isset( $options.phpSettings.display_errors ) and $options.phpSettings.display_errors}
 
-    <dl>
-        <dt>File</dt>
-        <dd>{$exception->getFile()}</dd>
+    <div class="alert alert-warning">
+        <p>
+            <strong>Development Platform Detected!</strong> Display errors enabled via <code>application.ini</code>. Disable in production!
+        </p>
+    </div>
+    
+    {if isset( $exceptions )}
 
-        <dt>Line</dt>
-        <dd>{$exception->getLine()}</dd>
+        {foreach $exceptions as $exception}
+        
+            <h2>{get_class( $exception )}</h2>
+            
+            <dl>
+                <dt>File</dt>
+                <dd>{$exception->getFile()}</dd>
+        
+                <dt>Line</dt>
+                <dd>{$exception->getLine()}</dd>
+        
+                <dt>Message</dt>
+                <dd>{$exception->getMessage()}</dd>
+        
+                <dt>Code</dt>
+                <dd>{$exception->getCode()}</dd>
+            </dl>
+        
+            <h3>Trace</h3>
+        
+            <pre>{$exception->getTraceAsString()}</pre>
 
-        <dt>Message</dt>
-        <dd>{$exception->getMessage()}</dd>
-
-        <dt>Code</dt>
-        <dd>{$exception->getCode()}</dd>
-    </dl>
-
-    <h3>Trace</h3>
-
-    <pre>{$exception->getTraceAsString()}</pre>
-
+        {/foreach}
+    
+    {/if}
 {/if}
+
 </div>
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

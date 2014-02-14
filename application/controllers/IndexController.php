@@ -7,7 +7,7 @@
  * project which provides an easily manageable web based virtual
  * mailbox administration system.
  *
- * Copyright (c) 2011 Open Source Solutions Limited
+ * Copyright (c) 2011 - 2014 Open Source Solutions Limited
  *
  * ViMbAdmin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  *   147 Stepaside Park, Stepaside, Dublin 18, Ireland.
  *   Barry O'Donovan <barry _at_ opensolutions.ie>
  *
- * @copyright Copyright (c) 2011 Open Source Solutions Limited
+ * @copyright Copyright (c) 2011 - 2014 Open Source Solutions Limited
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPLv3)
  * @author Open Source Solutions Limited <info _at_ opensolutions.ie>
  * @author Barry O'Donovan <barry _at_ opensolutions.ie>

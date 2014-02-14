@@ -1,0 +1,18 @@
+{tmplinclude file="header.phtml"}
+<div class="page-content" >
+    <div class="page-header" >
+        <h1>
+            {if $isEdit}Edit{else}Add {/if} Alias {if isset( $alias ) && $alias }<small>{$alias->getAddress()}</small>{/if}
+        </h1>
+    </div>
+    {OSS_Message}
+
+
+    {$form}
+
+    {addJSValidator form=$form}
+
+    <script type="text/javascript">{tmplinclude file='alias/js/add.js'}</script>
+
+</div>
+{tmplinclude file="footer.phtml"}

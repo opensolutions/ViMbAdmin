@@ -1,14 +1,25 @@
-{include file="header.phtml"}
+{tmplinclude file="header.phtml"}
 
 <div class="page-content" >
 
     <div class="page-header" >
-        <h1>An Error Has Occurred</h1>
+        <h1>Insufficient Permissions</h1>
     </div>
 
 
-{ViMbAdmin_Messages}
+{OSS_Message}
 
-<p>You don't have the required permissions to access the page.</p>
+<p>
+    You don't have the required permissions to access the requested page or object.
+</p>
+
+<p>
+    This request has been logged.
+</p>
+
+<p>
+    If you believe this is an error, please contact your administrator.
+</p>
+
 </div>
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

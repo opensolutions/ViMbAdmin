@@ -1,0 +1,27 @@
+<div id="form_div_assign_admin">
+
+    <form action="{$element->getAction()}"
+          method="{$element->getMethod()}"
+          enctype="{$element->getAttrib('enctype')}"
+          id="{$element->getId()}"
+          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+          class="form-horizontal">
+
+        {$element->admin}
+
+        <fieldset class="form-actions">
+            <a class="btn" href="{genUrl controller='domain' action='admins' did=$domain->getId()}">Cancel</a>
+            <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+        </fieldset>
+
+    </form>
+    <script type="text/javascript">
+
+        $(document).ready(function()
+        {
+            $( '#admin' ).chosen();
+        }); // document onready
+
+    </script>
+</div> <!-- #form_div_edit_mailbox -->

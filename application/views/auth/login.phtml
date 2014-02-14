@@ -1,4 +1,4 @@
-{include file="header.phtml"}
+{tmplinclude file="header.phtml"}
 
 <div class="page-content" >
 
@@ -6,14 +6,14 @@
         <h1>Login to ViMbAdmin</h1>
     </div>
 
-{ViMbAdmin_Messages}
+{OSS_Message}
 
 
 {if isset( $loggedOut ) and $loggedOut}
 
 <div id="vimbadmin-message-999" class="alert alert-success fade in">
     <a class="close" data-dismiss="alert" href="#">×</a>
-    You have been logged out.
+    There is no admin to assign to this domain.
 </div>
 
 {/if}
@@ -28,7 +28,7 @@
         Welcome to <em>ViMbAdmin</em>, a web application for managing your virtual mailboxes, domains and aliases.
         </p>
 
-        {$loginForm}
+        {$form}
 
 
         <div class="well">
@@ -37,7 +37,7 @@
                 Are you a user (mailbox owner) looking to change your <br />
                 password? If so, please click on this button:
 
-                <a style="float: right;" class="btn btn-primary" href="{genUrl}/change-password">Mailbox Password Change</a>
+                <a style="float: right;" class="btn btn-primary" href="{genUrl controller="auth" action="change-password"}">Mailbox Password Change</a>
             </p>
 
         </div>
@@ -48,4 +48,4 @@
 
 </div>
 
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

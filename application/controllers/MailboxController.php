@@ -7,7 +7,7 @@
  * project which provides an easily manageable web based virtual
  * mailbox administration system.
  *
- * Copyright (c) 2011 Open Source Solutions Limited
+ * Copyright (c) 2011 - 2014 Open Source Solutions Limited
  *
  * ViMbAdmin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  *   147 Stepaside Park, Stepaside, Dublin 18, Ireland.
  *   Barry O'Donovan <barry _at_ opensolutions.ie>
  *
- * @copyright Copyright (c) 2011 Open Source Solutions Limited
+ * @copyright Copyright (c) 2011 - 2014 Open Source Solutions Limited
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPLv3)
  * @author Open Source Solutions Limited <info _at_ opensolutions.ie>
  * @author Barry O'Donovan <barry _at_ opensolutions.ie>
@@ -37,10 +37,16 @@
  * The mailbox controller.
  *
  * @package ViMbAdmin
- * @subpackage Controllers
+ * @subpackage Controllers`
  */
-class MailboxController extends ViMbAdmin_Controller_Action
+class MailboxController extends ViMbAdmin_Controller_PluginAction
 {
+
+    /**
+     * Local store for the form
+     * @var ViMbAdmin_Form_Mailbox_AddEdit
+     */
+    private $mailboxForm = null;
 
     /**
      * Most actions in this object will require a domain object to edit / act on.
@@ -53,19 +59,22 @@ class MailboxController extends ViMbAdmin_Controller_Action
      */
     public function preDispatch()
     {
-        if( !$this->_mailbox && !$this->_domain )
+        if( $this->getRequest()->getActionName() != 'cli-get-sizes' 
+                && $this->getRequest()->getActionName() != 'cli-delete-pending' 
+                && !$this->getMailbox() && !$this->getDomain() )
             $this->authorise();
 
-        // if an ajax request, remove the view help
-        if( substr( $this->getRequest()->getParam( 'action' ), 0, 4 ) == 'ajax' )
-            $this->_helper->viewRenderer->setNoRender( true );
-
-        if( $this->_getParam( 'unset', false ) )
-            unset( $this->_session->domain );
-        else
+        if( $this->getRequest()->getActionName() == "list-search" ||$this->getRequest()->getActionName() == "list" || $this->getRequest()->getActionName() == "index" )
         {
-            if( isset( $this->_session->domain) && $this->_session->domain )
-            $this->_domain = $this->_session->domain;
+            if( $this->getParam( 'unset', false ) )
+                unset( $this->getSessionNamespace()->domain );
+            else
+            {
+                if( isset( $this->getSessionNamespace()->domain ) && $this->getSessionNamespace()->domain )
+                    $this->_domain = $this->getSessionNamespace()->domain;
+                else if( $this->getDomain() )
+                    $this->getSessionNamespace()->domain = $this->getDomain();
+            }
         }
     }
 
@@ -75,57 +84,330 @@ class MailboxController extends ViMbAdmin_Controller_Action
      */
     public function indexAction()
     {
-        $this->_forward( 'list' );
+        $this->forward( 'list' );
     }
 
 
     /**
      * Lists all mailboxes available to the admin (superadmin sees all) or to the specified domain.
+     *
+     * $this->view->mailbox_actions allow to append mailbox list action buttons. %id% will be replaced by
+     * mailbox id form the list. below is example array which creates edit mailbox button, and another button
+     * with drop down options for purge or edit mailbox. Only one drop down button can be defined per button group, 
+     * and it always be appended at the end.
+     * $actions = [
+     *       [                          //Simple link button
+     *           'tagName' => 'a',     //Mandatory parameter for element type. 
+     *           'href' => OSS_Utils::genUrl( "mailbox", "edit" ) . "/mid/%id%", //Url for action
+     *           'title' => "Edit",
+     *           'class' => "btn btn-mini have-tooltip",  //Class for css options.
+     *           'id' => "test-%id%",      //If setting id id must have %id% which will be replaced by original mailbox id to avoid same ids.
+     *           'child' => [             //Mandatory element if is not array it will be shown as text.
+     *               'tagName' => "i",    //Mandatory option if child is array to define element type
+     *               'class' => "icon-pencil"  //Icon class
+     *           ],
+     *       ],
+     *       [                              //Drop down button
+     *           'tagName' => 'span',       //Mandatory parameter for element type
+     *           'title' => "Settings",
+     *           'class' => "btn btn-mini have-tooltip dropdown-toggle", //Class dropdown-toggle is mandatory for drop down button
+     *           'data-toggle' => "dropdown",          //data-toggle attribute is mandatory for drop down button
+     *           'id' => "cog-%id%",
+     *           'style' => "max-height: 15px;",
+     *           'child' => [
+     *               'tagName' => "i",
+     *               'class' => "icon-cog"
+     *           ],
+     *           'menu' => [        //menu array is mandatory then defining drop down button
+     *               [ 
+     *                   'id' => "menu-edit-%id%",   //Not mandatory attribute but if is set %id% should be use to avoid same ids.
+     *                   'text' => "<i class=\"icon-pencil\"></i> Edit",                 //Mandatory for display action text
+     *                   'url' =>  OSS_Utils::genUrl( "mailbox", "edit" ) . "/mid/%id%"  //Mandatory to redirect the action.
+     *               ],
+     *               [ 'text' => "<i class=\"icon-trash\"></i> Purge", 'url' =>  OSS_Utils::genUrl( "mailbox", "purge" ) . "/mid/%id%" ],
+     *           ]
+     *       ]
+     *   ];
+     * 
      */
     public function listAction()
     {
-        $query = Doctrine_Query::create()
-                    ->from( 'Mailbox m' );
-
-        if( !$this->_domain )
+        if( isset( $this->_options['defaults']['server_side']['pagination']['enable'] ) && $this->_options['defaults']['server_side']['pagination']['enable'] )
+            $this->view->mailboxes = [];
+        else
+            $this->view->mailboxes = $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->loadForMailboxList( $this->getAdmin(), $this->getDomain() );
+        
+        if( isset( $this->_options['defaults']['list_size']['disabled'] ) && !$this->_options['defaults']['list_size']['disabled'] )
         {
-            if( !$this->getAdmin()->isSuper() )
-            {
-                $query
-                    ->leftJoin( 'm.Domain d' )
-                    ->leftJoin( 'd.DomainAdmin da' )
-                    ->andWhere( 'da.username = ?', $this->getAdmin()->username );
-            }
+            if( isset( $this->_options['defaults']['list_size']['multiplier'] ) && isset( OSS_Filter_FileSize::$SIZE_MULTIPLIERS[ $this->_options['defaults']['list_size']['multiplier'] ] ) )
+                $size_multiplier = $this->_options['defaults']['list_size']['multiplier'];
+            else
+                $size_multiplier = OSS_Filter_FileSize::SIZE_KILOBYTES;
 
-            $this->view->domain = 0;
+            $this->view->size_multiplier = $size_multiplier;
+            $this->view->multiplier      = OSS_Filter_FileSize::$SIZE_MULTIPLIERS[ $size_multiplier ];
+        }
+        $this->notify( 'mailbox', 'list', 'listPostProcess', $this );
+    }
+
+    public function listSearchAction()
+    {
+        Zend_Controller_Action_HelperBroker::removeHelper( 'viewRenderer' );
+        if( !isset( $this->_options['defaults']['server_side']['pagination']['enable'] ) || !$this->_options['defaults']['server_side']['pagination']['enable'] )
+            echo "ko";
+        else
+        {
+            $strl_len = isset( $this->_options['defaults']['server_side']['pagination']['min_search_str'] ) ? $this->_options['defaults']['server_side']['pagination']['min_search_str'] : 3;
+            $search = $this->_getParam( "search", false );
+            if( $search && strlen( $search ) >= $strl_len )
+            {
+                $mboxes = $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->filterForMailboxList( $search, $this->getAdmin(), $this->getDomain() );
+                $max_cnt = isset( $this->_options['defaults']['server_side']['pagination']['max_result_cnt'] ) ? $this->_options['defaults']['server_side']['pagination']['max_result_cnt'] : false;
+                if( $mboxes && ( !$max_cnt || $max_cnt >= count( $mboxes ) ) )
+                    echo json_encode( $mboxes );
+                else
+                    echo "ko";
+            }
+            else
+                echo "ko";    
+        }
+    }
+
+    /**
+     * Instantiate / get the mailbox add-edit form
+     * @return ViMbAdmin_Form_Mailbox_AddEdit
+     */
+    public function getMailboxForm()
+    {
+        if( $this->mailboxForm == null )
+        {
+            $form = new ViMbAdmin_Form_Mailbox_AddEdit();
+
+            if( isset( $this->_options['defaults']['quota']['multiplier'] ) )
+                $form->setFilterFileSizeMultiplier( $this->_options['defaults']['quota']['multiplier'] );
+
+            if( isset( $this->_options['defaults']['mailbox']['min_password_length'] ) )
+                $form->setMinPasswordLength( $this->_options['defaults']['mailbox']['min_password_length'] );
+
+            // populate the domain dropdown with the possible domains for this user
+            $form->getElement( "domain" )->setMultiOptions(
+                [ "" => "" ] + $this->getD2EM()->getRepository( "\\Entities\\Domain" )->loadForAdminAsArray( $this->getAdmin(), true )
+            );
+
+            // if we have a default / preferred domain, set it as selected in the form
+            if( $this->getDomain() )
+                $form->getElement( 'domain' )->setValue( $this->getDomain()->getId() );
+
+
+            if( $this->isEdit() )
+            {
+                $form->removeElement( 'password' );
+                $form->removeElement( 'local_part' );
+                $form->removeElement( 'domain'     );
+            }
+            else
+                $form->getElement( "quota"  )->setValue( 0 );
+
+            $this->view->form = $this->mailboxForm = $form;
+
+            // call plugins
+            $this->notify( 'mailbox', 'add', 'formPostProcess', $this );
+        }
+
+        return $this->mailboxForm;
+    }
+
+    /**
+     * Add a mailbox.
+     */
+    public function addAction()
+    {
+        if( !$this->getMailbox() )
+        {
+            $this->isEdit = $this->view->isEdit = false;
+            $form = $this->getMailboxForm();
+
+            $this->_mailbox = new \Entities\Mailbox();
+            $this->getD2EM()->persist( $this->getMailbox() );
         }
         else
         {
-            $this->view->domain = $this->_session->domain = $this->_domain;
-            $query->andWhere( 'm.domain = ?', $this->_domain['domain'] );
+            $this->isEdit = $this->view->isEdit = true;
+            $this->view->mailbox = $this->getMailbox();
+
+            $form = $this->getMailboxForm();
+            $form->assignEntityToForm( $this->getMailbox(), $this, $this->isEdit() );
         }
 
-        $this->view->mailboxes = $query->execute();
+        $this->view->quota_multiplier = $form->getFilterFileSizeMultiplier();
+
+        if( $this->getDomain() )
+        {
+            $this->view->domain = $this->getDomain();
+            if( $form->getElement( 'domain' ) )
+                $form->getElement( 'domain' )->setValue( $this->getDomain()->getId() );
+        }
+
+        $this->notify( 'mailbox', 'add', 'addPrepare', $this );
+
+        if( $this->getRequest()->isPost() )
+        {
+            $this->notify( 'mailbox', 'add', 'addPrevalidate', $this );
+
+            if( $form->isValid( $_POST ) )
+            {
+                $this->notify( 'mailbox', 'add', 'addPostvalidate', $this );
+
+                if( !$this->isEdit() )
+                {
+                    // do we have available mailboxes?
+                    if( !$this->getAdmin()->isSuper() && $this->getDomain->getMaxMailoboxes() != 0 && $this->getDomain()->getMailboxCount() >= $this->getDomain()->getMaxMailboxes() )
+                    {
+                        $this->addMessage( _( 'You have used all of your allocated mailboxes.' ), OSS_Message::ERROR );
+                        return;
+                    }
+
+                    if( !$this->getDomain() || $this->getDomain()->getId() != $form->getElement( 'domain' )->getValue() )
+                        $this->_domain = $this->loadDomain( $form->getElement( 'domain' )->getValue() );
+
+                    // is the mailbox address valid?
+                    $username = sprintf( "%s@%s", $form->getValue( 'local_part' ), $this->_domain->getDomain() );
+                    if( !Zend_Validate::is( $username, 'EmailAddress', array( 1, null ) ) )
+                    {
+                        $form->getElement( 'local_part' )->addError( 'Invalid email address.' );
+                        return;
+                    }
+
+                    // does a mailbox of the same name exist?
+                    if( !$this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->isUnique( $username ) )
+                    {
+                        $this->addMessage(
+                            _( 'Mailbox already exists for' ) . " {$username}",
+                            OSS_Message::ERROR
+                        );
+                        return;
+                    }
+
+                    $this->getMailbox()->setUsername( $username );
+
+                    $form->assignFormToEntity( $this->getMailbox(), $this, $this->isEdit() );
+
+                    $this->getMailbox()->setDomain( $this->getDomain() );
+                    $this->getMailbox()->setHomedir( $this->_options['defaults']['mailbox']['homedir'] );
+                    $this->getMailbox()->setUid( $this->_options['defaults']['mailbox']['uid'] );
+                    $this->getMailbox()->setGid( $this->_options['defaults']['mailbox']['gid'] );
+                    $this->getMailbox()->formatHomedir( $this->_options['defaults']['mailbox']['homedir'] );
+                    $this->getMailbox()->formatMaildir( $this->_options['defaults']['mailbox']['maildir'] );
+                    $this->getMailbox()->setActive( 1 );
+                    $this->getMailbox()->setDeletePending( false );
+                    $this->getMailbox()->setCreated( new \DateTime () );
+
+                    $password = $this->getMailbox()->getPassword();
+                    $this->getMailbox()->setPassword(
+                         OSS_Auth_Password::hash(
+                            $password,
+                            [ 
+                                'pwhash' => $this->_options['defaults']['mailbox']['password_scheme'],
+                                'pwsalt' => isset( $this->_options['defaults']['mailbox']['password_salt'] )
+                                                ? $this->_options['defaults']['mailbox']['password_salt'] : null, 
+                                'pwdovecot' => isset( $this->_options['defaults']['mailbox']['dovecot_pw_binary'] )
+                                                ? $this->_options['defaults']['mailbox']['dovecot_pw_binary'] : null, 
+                                'username' => $username
+                            ]
+                        )
+                    );
+
+                    if( $this->_options['mailboxAliases'] == 1 )
+                    {
+                        $alias = new \Entities\Alias();
+                        $alias->setAddress( $this->getMailbox()->getUsername() );
+                        $alias->setGoto( $this->getMailbox()->getUsername() );
+                        $alias->setDomain( $this->getDomain() );
+                        $alias->setActive( 1 );
+                        $alias->setCreated( new \DateTime () );
+                        $this->getD2EM()->persist( $alias );
+                    }
+
+                    $this->getDomain()->setMailboxCount( $this->getDomain()->getMailboxCount() + 1 );
+
+                }
+                else
+                {
+                    $form->removeElement( "local_part" );
+                    $form->assignFormToEntity( $this->getMailbox(), $this, $this->isEdit() );
+                    $this->getMailbox()->setModified( new \DateTime() );
+                }
+
+                //check quota
+                if( $this->getDomain()->getMaxQuota() != 0 )
+                {
+                    if( $this->getMailbox()->getQuota() <= 0 || $this->getMailbox()->getQuota() > $this->getDomain()->getMaxQuota() )
+                    {
+                        $this->getMailbox()->setQuota( $this->getDomain()->getQuota() );
+                        $this->addMessage(
+                            _( "Mailbox quota set to ") . $this->getDomain()->getQuota(),
+                            OSS_Message::ALERT
+                        );
+                    }
+                }
+
+                $this->log(
+                    $this->isEdit() ? \Entities\Log::ACTION_MAILBOX_EDIT : \Entities\Log::ACTION_MAILBOX_ADD,
+                    "{$this->getAdmin()->getFormattedName()} " . ( $this->isEdit() ? ' edited' : ' added' ) . " mailbox {$this->getMailbox()->getUsername()}"
+                );
+
+                $this->notify( 'mailbox', 'add', 'addPreflush', $this );
+                $this->getD2EM()->flush();
+                $this->notify( 'mailbox', 'add', 'addPostflush', $this, [ 'options' => $this->_options ] );
+
+                if( $form->getValue( 'welcome_email' ) )
+                {
+                    if( !$this->_sendSettingsEmail(
+                            ( $form->getValue( 'cc_welcome_email' ) ? $form->getValue( 'cc_welcome_email' ) : false ),
+                            $password, true )
+                    )
+                        $this->addMessage( _( 'Could not sent welcome email' ), OSS_Message::ALERT );
+                }
+
+                if( $this->getParam( "did", false ) )
+                    $this->getSessionNamespace()->domain = $this->getDomain();
+
+                $this->notify( 'mailbox', 'add', 'addFinish', $this );
+                $this->addMessage( _( "You have successfully added/edited the mailbox record." ), OSS_Message::SUCCESS );
+                $this->redirect( 'mailbox/list' );
+            }
+        }
+
     }
 
+    /**
+     * Edit a mailbox.
+     */
+    public function editAction()
+    {
+        $this->forward( 'add' );
+    }
 
     /**
      * Toggles the active property of the current mailbox. Prints 'ok' on success or 'ko' otherwise to stdout.
      */
     public function ajaxToggleActiveAction()
     {
-        if( !$this->_mailbox )
-            return print 'ko';
+        if( !$this->getMailbox() )
+            print 'ko';
 
-        $this->_mailbox['active'] = !$this->_mailbox['active'];
-        $this->_mailbox->save();
+        $this->getMailbox()->setActive( !$this->getMailbox()->getActive() );
+        $this->getMailbox()->setModified( new \DateTime() );
 
-        LogTable::log( 'MAILBOX_TOGGLE_ACTIVE',
-            "Set {$this->_mailbox['username']} set " . ( $this->_mailbox['active'] ? '' : 'de' ) . "active",
-            $this->getAdmin(), $this->_mailbox['domain']
+        $this->log(
+            $this->getMailbox()->getActive() ? \Entities\Log::ACTION_MAILBOX_ACTIVATE : \Entities\Log::ACTION_MAILBOX_DEACTIVATE,
+            "{$this->getAdmin()->getFormattedName()} " . ( $this->getMailbox()->getActive() ? 'activated' : 'deactivated' ) . " mailbox {$this->getMailbox()->getUsername()}"
         );
 
-        return print 'ok';
+        $this->notify( 'mailbox', 'toggleActive', 'postflush', $this, [ 'active' => $this->getMailbox()->getActive() ] );
+        $this->getD2EM()->flush();
+        $this->notify( 'mailbox', 'toggleActive', 'postflush', $this, [ 'active' => $this->getMailbox()->getActive() ] );
+        print 'ok';
     }
 
 
@@ -134,100 +416,39 @@ class MailboxController extends ViMbAdmin_Controller_Action
      */
     public function purgeAction()
     {
-        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+        if( !$this->getMailbox() )
+            return $this->forward( 'list' );
 
-        if( !$this->_mailbox )
-            return $this->_forward( 'list' );
-
-        $this->view->mailboxModel = $this->_mailbox;
-
-        $this->view->aliases = Doctrine_Query::create()
-                                    ->from( 'Alias a' )
-                                    ->where( 'a.goto = ?', $this->_mailbox['username'] )
-                                    ->andWhere( 'a.address != a.goto' );
-
-        if( !$this->getAdmin()->isSuper() )
-        {
-            $this->view->aliases
-                            ->leftJoin( 'a.Domain d' )
-                            ->leftJoin( 'd.DomainAdmin da' )
-                            ->andWhere( 'da.username = ?', $this->getAdmin()->username );
-        }
-
-        $this->view->aliases = $this->view->aliases->execute();
-
-        $this->view->inAliases = Doctrine_Query::create()
-                                    ->from( 'Alias a' )
-                                    ->where( 'a.address != a.goto' )
-                                    ->andWhere( 'a.goto != ?', $this->_mailbox['username'] )
-                                    ->andWhere( 'a.goto like ?', '%' . $this->_mailbox['username'] . '%' );
-
-        if( !$this->getAdmin()->isSuper() )
-        {
-            $this->view->inAliases
-                            ->leftJoin( 'a.Domain d' )
-                            ->leftJoin( 'd.DomainAdmin da' )
-                            ->andWhere( 'da.username = ?', $this->getAdmin()->username );
-        }
-
-        $this->view->inAliases = $this->view->inAliases->execute();
+        $this->view->mailbox = $this->getMailbox();
+        $this->view->aliases = $aliases = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->loadForMailbox( $this->getMailbox(), $this->getAdmin() );
+        $this->view->inAliases = $inAliases = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->loadWithMailbox( $this->getMailbox(), $this->getAdmin() );
 
         if( isset( $_POST['purge'] ) && ( $_POST['purge'] == 'purge' ) )
         {
-            // this won't delete the alias entry where address == goto
-            foreach( $this->view->aliases as $oneAlias )
-                $oneAlias->delete();
+            
+            $this->notify( 'mailbox', 'purge', 'preRemove', $this );
 
-            // this delete fixes issue #3 : https://code.google.com/p/vimbadmin/issues/detail?id=3
-
-            Doctrine_Query::create()
-                ->delete()
-                ->from( 'Alias' )
-                ->where( 'address = ?', $this->_mailbox['username'] )
-                ->execute();
-
-            foreach( $this->view->inAliases as $key => $oneAlias )
-            {
-                $gotoArray = explode( ',', $oneAlias->goto );
-
-                foreach( $gotoArray as $key => $item )
-                {
-                    $gotoArray[ $key ] = $item = trim( $item );
-
-                    if( ( $item == $this->_mailbox['username'] ) || ( $item == '' ) )
-                        unset( $gotoArray[ $key ] );
-                }
-
-                if( sizeof( $gotoArray ) == 0 )
-                {
-                    $oneAlias->delete();
-                }
-                else
-                {
-                    $oneAlias->goto = implode( ',', $gotoArray );
-                    $oneAlias->save();
-                }
-            }
-
-            $domain = $this->_mailbox['domain'];
-            $this->_mailbox->delete();
-
-            LogTable::log( 'MAILBOX_PURGE',
-                "Purged mailbox and aliases for {$this->_mailbox['username']}",
-                $this->getAdmin(), $domain
+            $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->purgeMailbox( $this->getMailbox(), $this->getAdmin(), !$this->getParam( 'delete_files', false ) );
+            $this->log(
+                \Entities\Log::ACTION_MAILBOX_PURGE,
+                "{$this->getAdmin()->getFormattedName()} purged mailbox {$this->getMailbox()->getUsername()}"
             );
+            
+            $this->notify( 'mailbox', 'purge', 'preFlush', $this );
 
-            $this->addMessage( _( 'You have successfully purged the mailbox.' ), ViMbAdmin_Message::SUCCESS );
-
-            if( !$modal )
+            if( $this->getParam( 'delete_files', false ) )
             {
-                $this->_redirect( 'mailbox/list' );
+                $this->getMailbox()->setDeletePending( true );
+                $this->getMailbox()->setActive( false );
             }
             else
-            {
-                $this->_helper->viewRenderer->setNoRender( true );
-                print "ok";
-            }
+                $this->getD2EM()->remove( $this->getMailbox() );
+
+            $this->getD2EM()->flush();
+            $this->notify( 'mailbox', 'purge', 'postFlush', $this );
+
+            $this->addMessage( _( 'You have successfully purged the mailbox.' ), OSS_Message::SUCCESS );
+            $this->_redirect( 'mailbox/list' );
 
         }
     }
@@ -238,358 +459,273 @@ class MailboxController extends ViMbAdmin_Controller_Action
      */
     public function aliasesAction()
     {
-        if( !$this->_mailbox )
-            return $this->_forward( 'list' );
+        if( !$this->getMailbox() )
+            return $this->forward( 'list' );
 
-        $includeMailboxAliases = $this->_getParam( 'ima', 0 );
-        $this->view->includeMailboxAliases = $includeMailboxAliases;
-        $this->view->mailboxModel = $this->_mailbox;
+        //include maiblox aliases
+        $this->view->ima = $ima = $this->getParam( 'ima', 0 );
+        $this->view->mailbox = $this->getMailbox();
 
-        $this->view->aliases = Doctrine_Query::create()
-                                    ->select( '*' )
-                                    ->from( 'Alias a' );
+        $aliases = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->loadForMailbox( $this->getMailbox(), $this->getAdmin(), $ima );
+        $inAliases = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->loadWithMailbox( $this->getMailbox(), $this->getAdmin() );
 
-        if( !$includeMailboxAliases )
-            $this->view->aliases->where( 'a.address != a.goto' );
-
-        $this->view->aliases
-                        ->andWhere(
-                            '( a.address = ? ) or ( a.goto like ? )',
-                            array( $this->_mailbox['username'], "%{$this->_mailbox['username']}%" )
-                        );
-
-        if( !$this->getAdmin()->isSuper() )
-        {
-            $this->view->aliases
-                            ->leftJoin( 'a.Domain d' )
-                            ->leftJoin( 'd.DomainAdmin da' )
-                            ->andWhere( 'da.username = ?', $this->getAdmin()->username );
-        }
-
-        $this->view->aliases = $this->view->aliases->fetchArray();
+        $this->view->aliases = array_merge( $aliases, $inAliases );
     }
 
 
     /**
      * Deletes a mailbox alias. Prints 'ok' on success or 'ko' otherwise to stdout.
      */
-    public function ajaxDeleteAliasAction()
+    public function deleteAliasAction()
     {
-        if( !$this->_mailbox || !$this->_alias )
-            return print 'ko';
-
-        if( $this->_mailbox['username'] == $this->_alias['goto'] )
+        if( $this->getMailbox()->getUsername() == $this->getAlias()->getGoto() )
         {
-            $this->_alias->delete();
+            $this->getD2EM()->remove( $this->getAlias() );
 
-            LogTable::log( 'ALIAS_DELETE',
-                "Deleted alias {$this->_alias['address']} -> {$this->_mailbox['username']}",
-                $this->getAdmin(), $this->_mailbox['domain']
+            $this->log(
+                \Entities\Log::ACTION_ALIAS_DELETE,
+                "{$this->getAdmin()->getFormattedName()} removed alias {$this->getAlias()->getAddress()}"
             );
+            $this->getDomain()->setAliasCount( $this->getDomain()->getAliasCount() -1 );
+            $this->addMessage( "You have successfully removed the alias." , OSS_Message::SUCCESS );
         }
         else
         {
-            $gotoArray = explode( ',', $this->_alias->goto );
+            $gotos = explode( ',', $this->getAlias()->getGoto() );
 
-            foreach( $gotoArray as $key => $item )
+            if( count( $gotos ) > 0 )
             {
-                $gotoArray[ $key ] = $item = trim( $item );
-
-                if( ( $item == $this->_mailbox['username'] ) || ( $item == '' ) )
-                    unset( $gotoArray[ $key ] );
-            }
-
-            $this->_alias['goto'] = implode( ',', $gotoArray );
-            $this->_alias->save();
-
-            LogTable::log( 'ALIAS_DELETE',
-                "Removed destination {$this->_mailbox['username']} from alias {$this->_alias['address']}",
-                $this->getAdmin(), $this->_mailbox['domain']
-            );
-        }
-
-        $this->addMessage( _( 'You have successfully removed' ) . " {$this->_mailbox['username']} " . _( 'from the alias.') , ViMbAdmin_Message::SUCCESS );
-
-        return print 'ok';
-    }
-
-
-    /**
-     * Edit a mailbox.
-     */
-    public function editAction()
-    {
-        $this->view->modal = $modal = $this->_getParam( 'modal', false );
-
-        $this->view->operation = 'Edit';
-        if( !$this->_mailbox )
-        {
-            $this->_mailbox = new Mailbox();
-            $this->view->operation = 'Add';
-        }
-
-        $this->view->mailboxModel = $this->_mailbox;
-
-        $domainList = DomainTable::getDomains( $this->getAdmin() );
-
-        if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
-            $this->view->editForm = $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'], $this->_options['allow_access_restriction'], $this->_options['access_restriction_type'] );
-        else
-            $this->view->editForm = $editForm = new ViMbAdmin_Form_Mailbox_Edit( null, $domainList, $this->_options['defaults']['mailbox']['min_password_length'] );
-
-
-        $editForm->setDefaults( $this->_mailbox->toArray() );
-
-        if( $this->_mailbox['id'] )
-        {
-            $editForm->removeElement( 'password' );
-            $editForm->getElement( 'local_part' )->setAttrib( 'disabled', 'disabled' )->setRequired( false );
-            $editForm->getElement( 'domain' )->setAttrib( 'disabled', 'disabled' )->setRequired( false );
-        }
-
-        if( $this->getRequest()->isPost() && !$modal )
-        {
-            if( $editForm->isValid( $_POST ) )
-            {
-                if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
+                foreach( $gotos as $key => $item )
                 {
-                    if( $editForm->getValue( 'access_restr' ) && !isset( $_POST['type'] ) )
-                    {
-                        $editForm->getElement( 'access_restr' )->addError( "You must select type if you allowing access restrictions." );
-                        if( $this->_mailbox['id'] )
-                         $editForm->getElement( 'local_part' )->setValue( $this->_mailbox['local_part'] );
-                        $this->view->restrictions = array();
+                    $gotos[ $key ] = $item = trim( $item );
 
-                        if( $this->_domain )
-                        {
-                            $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
-                            $this->view->domain = $this->_domain;
-                        }
-
-                        if( !$this->_getParam( 'helper', true ) )
-                            $this->view->modal = true;
-
-                        return;
-                    }
+                    if( ( $item == $this->getMailbox()->getUsername() ) || ( $item == '' ) )
+                        unset( $gotos[ $key ] );
                 }
+                $this->log(
+                    \Entities\Log::ACTION_ALIAS_DELETE,
+                    "{$this->getAdmin()->getFormattedName()} removed destination {$this->getMailbox()->getUsername()} from alias {$this->getAlias()->getAddress()}"
+                );
 
-                do
-                {
-                    // do we have a domain
-                    if( !$this->_domain )
-                    {
-                        $this->_domain = Doctrine::getTable( 'Domain' )->find( $editForm->getElement( 'domain' )->getValue() );
-
-                        if( !$this->_domain || !$this->authorise( false, $this->_domain, false ) )
-                        {
-                            $this->addMessage( _( "Invalid, unauthorised or non-existent domain." ), ViMbAdmin_Message::ERROR );
-                            $this->_redirect( 'domain/list' );
-                        }
-                    }
-
-                    if( $this->_mailbox['id'] )
-                    {
-                        $this->_domain = $this->_mailbox->Domain;
-
-                        $editForm->removeElement( 'local_part' );
-                        $editForm->removeElement( 'domain' );
-                        $editForm->removeElement( 'password' );
-
-                        $this->_mailbox->fromArray( $editForm->getValues() );
-                        $op = 'edit';
-                    }
-                    else
-                    {
-                        // do we have available mailboxes?
-                        if( !$this->getAdmin()->isSuper() && $this->_domain['mailboxes'] != 0 && $this->_domain->countMailboxes() >= $this->_domain['mailboxes'] )
-                        {
-                            $this->_helper->viewRenderer->setNoRender( true );
-                            $this->addMessage( _( 'You have used all of your allocated mailboxes.' ), ViMbAdmin_Message::ERROR );
-                            break;
-                        }
-
-                        $this->_mailbox->fromArray( $editForm->getValues() );
-
-                        $this->_mailbox['domain']    = $this->_domain['domain'];
-                        $this->_mailbox['username']  = "{$this->_mailbox['local_part']}@{$this->_mailbox['domain']}";
-
-                        $this->_mailbox['homedir']   = $this->_options['defaults']['mailbox']['homedir'];
-                        $this->_mailbox['uid']       = $this->_options['defaults']['mailbox']['uid'];
-                        $this->_mailbox['gid']       = $this->_options['defaults']['mailbox']['gid'];
-
-                        $this->_mailbox->formatMaildir( $this->_options['defaults']['mailbox']['maildir'] );
-
-                        $plainPassword = $this->_mailbox['password'];
-                        $this->_mailbox->hashPassword(
-                            $this->_options['defaults']['mailbox']['password_scheme'],
-                            $this->_mailbox['password'],
-                            $this->_options['defaults']['mailbox']['password_hash']
-                        );
-
-                        // is the mailbox address valid?
-                        if( !Zend_Validate::is( "{$this->_mailbox['local_part']}@{$this->_mailbox['domain']}", 'EmailAddress', array( 1, null ) ) )
-                        {
-                            $editForm->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
-                            break;
-                        }
-
-
-                        // does a mailbox of the same name exist?
-                        $dup = Doctrine_Query::create()
-                            ->from( 'Mailbox m' )
-                            ->where( 'm.local_part = ?', $this->_mailbox['local_part'] )
-                            ->andWhere( 'm.domain = ?', $this->_mailbox['domain'] )
-                            ->execute( null, Doctrine_Core::HYDRATE_ARRAY );
-
-                        if( count( $dup ) )
-                        {
-                            $this->addMessage(
-                                _( 'Mailbox already exists for' ) . " {$this->_mailbox['local_part']}@{$this->_mailbox['domain']}",
-                                ViMbAdmin_Message::ERROR
-                            );
-                            break;
-                        }
-
-                        if( $this->_options['mailboxAliases'] == 1 )
-                        {
-                            $aliasModel = new Alias();
-                            $aliasModel->address   = $this->_mailbox['username'];
-                            $aliasModel->goto      = $this->_mailbox['username'];
-                            $aliasModel->domain    = $this->_domain['domain'];
-                            $aliasModel->active    = 1;
-                            $aliasModel->save();
-                        }
-
-                        $op = 'add';
-                    }
-
-                    // check quota
-                    if( $this->_domain['quota'] != 0 )
-                    {
-                        if( $this->_mailbox['quota'] <= 0 || ( $this->_domain['maxquota'] != 0 && $this->_mailbox['quota'] > $this->_domain['maxquota'] ) )
-                        {
-                            if ( $this->_mailbox['quota'] <= 0 )
-                            {
-                                $this->_mailbox['quota'] = $this->_domain['quota'];
-                            }
-                            else
-                            {
-                                $this->_mailbox['quota'] = $this->_domain['maxquota'];
-                            }
-
-                            $this->addMessage(
-                                _("Mailbox quota set to ") . $this->_mailbox['quota'],
-                                ViMbAdmin_Message::ALERT
-                            );
-                        }
-                    }
-
-
-                    if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
-                    {
-                        if( $editForm->getValue( 'access_restr' ) )
-                            $this->_mailbox['access_restriction'] = implode(",", $_POST['type']);
-                        else
-                            $this->_mailbox['access_restriction'] = "ALL";
-                    }
-                    else
-                        $this->_mailbox['access_restriction'] = "ALL";
-
-                    $this->_mailbox->save();
-
-                    if( $editForm->getValue( 'welcome_email' ) )
-                    {
-                        if( !$this->_sendSettingsEmail(
-                                ( $editForm->getValue( 'cc_welcome_email' ) ? $editForm->getValue( 'cc_welcome_email' ) : false ),
-                                $plainPassword, true )
-                        )
-                            $this->addMessage( _( 'Could not sent welcome email' ), ViMbAdmin_Message::ALERT );
-                    }
-
-                    LogTable::log( 'MAILBOX_' . ( $op == 'add' ? 'ADD' : 'EDIT' ),
-                        print_r( $this->_mailbox->toArray(), true ),
-                        $this->getAdmin(), $this->_mailbox['domain']
-                    );
-
-                    $this->addMessage( _( "You have successfully added/edited the mailbox record." ), ViMbAdmin_Message::SUCCESS );
-
-                    if( $this->_getParam( 'helper', true ) )
-                    {
-                        if( $this->_domain )
-                            $this->_redirect( 'mailbox/list/did/' . $this->_domain['id'] );
-                        else
-                            $this->_redirect( 'mailbox/list' );
-                    }
-                    else
-                    {
-                        $this->_helper->viewRenderer->setNoRender( true );
-                        print "ok";
-                        return;
-                    }
-
-                }while( false ); // break-able clause
+                $this->getAlias()->setGoto( implode( ',', $gotos ) );
+                $this->addMessage( "You have successfully removed {$this->getMailbox()->getUsername()}from the alias {$this->getAlias()->getAddress()}." , OSS_Message::SUCCESS );
             }
             else
             {
-                $this->view->restrictions = $_POST["type"];
-                if( !$this->_getParam( 'helper', true ) )
-                    $this->view->modal = true;
+                $this->getD2EM()->remove( $this->getAlias() );
+                $this->log(
+                    \Entities\Log::ACTION_ALIAS_DELETE,
+                    "{$this->getAdmin()->getFormattedName()} removed alias {$this->getAlias()->getAddress()}"
+                );
+                $this->getDomain()->setAliasCount( $this->getDomain()->getAliasCount() -1 );
+                $this->addMessage( "You have successfully removed the alias." , OSS_Message::SUCCESS );
             }
         }
 
-        if( $this->_domain )
-        {
-            $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
-            $this->view->domain = $this->_domain;
-        }
-
-        if( isset( $this->_options['allow_access_restriction'] ) && $this->_options['allow_access_restriction'] )
-            if( $this->_mailbox && $this->_mailbox['access_restriction'] != "ALL" && $this->_mailbox['access_restriction'] != "BOTH" )
-            {
-                $editForm->getElement( 'access_restr' )->setAttrib( "checked", "checked" );
-
-                if( strpos( $this->_mailbox['access_restriction'], "," ) )
-                    $this->view->restrictions = explode( ",", $this->_mailbox['access_restriction'] );
-                else
-                    $this->view->restrictions = array( $this->_mailbox['access_restriction'] );
-            }
+        $this->getD2EM()->flush();
+        $this->redirect( "mailbox/aliases/mid/" . $this->getMailbox()->getId() );
     }
-
 
     public function emailSettingsAction()
     {
-        if( $this->_mailbox )
+        $form = $this->view->form = new ViMbAdmin_Form_Mailbox_EmailSettings();
+        $mailbox = $this->getMailbox( $this->getParam( "mid", false ), false );
+        
+        if( !$mailbox )
         {
-            if( $this->_sendSettingsEmail() )
-                $this->addMessage( _( 'Settings email successfully sent' ), ViMbAdmin_Message::SUCCESS );
-            else
-                $this->addMessage( _( 'Could not send settings email' ), ViMbAdmin_Message::ERROR );
+            $this->addMessage( _( 'Unable to load mailbox.' ), OSS_Message::ERROR );
+            echo 'error';
+            die();
         }
-
-        $this->_redirect( 'mailbox/list' );
+        $this->view->mailbox = $mailbox;
+        
+        $emails = [ 'username' => $mailbox->getUsername() ];
+        if( $mailbox->getAltEmail() )
+            $emails[ 'alt_email'] = $mailbox->getAltEmail();
+            
+        $emails['other']  = "Other";        
+        $form->getElement( 'type' )->setMultiOptions( $emails );
+        
+        if( $this->getRequest()->isPost() && $this->getParam( 'send', false ))
+        {
+            $form->isValid( $_POST );
+            if( $form->getValue( 'type' ) == 'other' )
+                $form->getElement( 'email' )->setRequired( true );
+            
+            $error = false;    
+            if( $form->isValid( $_POST ) )
+            {
+                if( $form->getValue( 'type' ) == 'other' )
+                {
+                    $emails = explode( ",", $form->getValue( 'email' ) );
+                    $email = [];
+                    foreach( $emails as $em )
+                    {
+                        if( !Zend_Validate::is( $em, 'EmailAddress', array( 1, null ) ) )
+                        {
+                            $form->getElement( 'email' )->addError( "Not valid email address(es)" );
+                            $error = true;
+                            break;
+                        }
+                        else
+                            $email[] = trim( $em );                            
+                    }
+                }
+                else if( $form->getValue( 'type' ) == 'username' )
+                    $email = $mailbox->getUsername();
+                else if( $form->getValue( 'type' ) == 'alt_email' )
+                    $email = $mailbox->getAltEmail();
+                else
+                {
+                    $this->getLogger()->err( "Unknown email type." );
+                    echo "Unknown email type.";
+                    die();
+                }
+                
+                if( !$error )
+                {
+                    if( $this->_sendSettingsEmail( false, '', false, $email ) )
+                        $this->addMessage( _( 'Settings email successfully sent' ), OSS_Message::SUCCESS );
+                    else
+                        $this->addMessage( _( 'Could not send settings email' ), OSS_Message::ERROR );
+                    
+                    print "ok";
+                    die();
+                }
+            }
+        }
     }
 
-
-    private function _sendSettingsEmail( $cc = false, $password = '', $isWelcome = false )
+    public function cliGetSizesAction()
     {
-        $mailer = new Zend_Mail( 'UTF-8' );
+        if( !isset( $this->_options['defaults']['list_size']['disabled'] ) || $this->_options['defaults']['list_size']['disabled'] )
+        {
+            $this->getLogger()->info( "MailboxController::cliGetSizesAction: List size option is disabled in application.ini." );
+            echo "List size option is disabled in application.ini.\n";
+            return;
+        }
+       
+        foreach( $this->getD2EM()->getRepository( "\\Entities\\Domain" )->findAll() as $domain )
+        {
+            $cnt = 0;
+            
+            if( $this->getParam( 'verbose' ) )
+                echo "Processing {$domain->getDomain()}...\n";
+                
+            foreach( $domain->getMailboxes() as $mailbox )
+            {
+                if( $this->getParam( 'debug' ) ) echo "    - {$mailbox->getUsername()}";
+                
+                $msize = OSS_DiskUtils::du( $mailbox->getCleanedMaildir() );
+                if( $msize !== false )
+                {
+                    if( $this->getParam( 'debug' ) ) echo " [Mail Size: {$msize}]";
+                    $mailbox->setMaildirSize( $msize );
+                    $hsize = OSS_DiskUtils::du( $mailbox->getHomedir() );
+                    if( $hsize !== false )
+                    {
+                        $mailbox->setHomedirSize( $hsize - $msize );
+                        if( $this->getParam( 'debug' ) ) echo " [Home Size: {$hsize}]";
+                    }
+                    else
+                        if( $this->getParam( 'debug' ) ) echo " [Unknown Home Size]";
+                }
+                else
+                {
+                    $mailbox->setMaildirSize( null );
+                    $mailbox->setHomedirSize( null );
+                    if( $this->getParam( 'debug' ) ) echo " [Unknown Mail Size]";
+                }
 
+                $mailbox->setSizeAt( new \DateTime() );
+                
+                if( $this->getParam( 'debug' ) ) echo "\n";
+                
+                $cnt++;
+                if( $cnt % 200 == 0)
+                    $this->getD2EM()->flush();
+                    
+            } // mailboxes
+            
+            $this->getD2EM()->flush();
+            
+        } // domains
+    }
+
+    public function cliDeletePendingAction()
+    {
+        $mailboxes = $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->pendingDelete();
+
+        if( !count( $mailboxes ) )
+        {
+            if( $this->getParam( 'verbose' ) ) echo "No mailboxes pending deleteion\n";
+            return;
+        }
+
+        if( $this->getParam( 'verbose' ) ) echo "Deleting " . count( $mailboxes ) . " mailboxes:\n";
+
+        foreach( $mailboxes as $mailbox )
+        {
+            if( $this->getParam( 'verbose' ) ) echo " - " . $mailbox->getUsername() . "... ";
+            
+            $homedir = $mailbox->getHomedir();
+            $maildir = $mailbox->getCleanedMaildir();
+
+            if( !isset( $this->_options['binary']['path']['rm_rf'] ) )
+            {
+                echo "ERROR: Deleting mailboxes - you must set 'binary.path.rm_rf' in application.ini\n";
+                continue;
+            }
+
+            foreach( [ $maildir, $homedir ] as $dir )
+            {
+                $command = sprintf( "%s %s", $this->_options['binary']['path']['rm_rf'], $dir );
+                if( file_exists( $dir ) )
+                {
+                    exec( $command, $output, $result );
+                    if( $result !== 0 )
+                        echo "ERROR: Could not delete $dir when deleting mailbox " . $mailbox->getUsername() . "\n";
+                }
+            }
+          
+            $this->getD2EM()->remove( $mailbox );  
+            $this->getD2EM()->flush();
+            if( $this->getParam( 'verbose' ) ) echo "DONE\n";
+        } 
+    }
+
+    /**
+     * Sends email with settings
+     *
+     * Send Email with settings for $this->_mailbox.
+     * If cc is set When additional email is set, then it sends additional emails to cc.
+     * If password is set, then password is shown in email.
+     * if isWelcome is set to true, adding welcome subject and welcome text to email.
+     *
+     * @param bool $cc Additional email.
+     * @param string $password Password to send for mailbox owner
+     * @param bool $isWelcome Defines email is welcome email or not.
+     * @return bool
+     */
+    private function _sendSettingsEmail( $cc = false, $password = '', $isWelcome = false, $email = false )
+    {
+        $mailer = $this->getMailer();
+        
         if( $isWelcome )
-            $mailer->setSubject( _( "Welcome to your new mailbox on" ) . " {$this->_mailbox['domain']}" );
+            $mailer->setSubject( sprintf( _( "Welcome to your new mailbox on %s" ), $this->getMailbox()->getDomain()->getDomain() ) );
         else
-            $mailer->setSubject( _( "Settings for your mailbox on" ) . " {$this->_mailbox['domain']}" );
+            $mailer->setSubject( sprintf( _( "Settings for your mailbox on %s" ), $this->getMailbox()->getDomain()->getDomain() ) );
 
-        $mailer->setFrom(
-            $this->_options['server']['email']['address'],
-            $this->_options['server']['email']['name']
-        );
+        $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
+        
+        if( !$email )
+            $mailer->addTo( $this->getMailbox()->getUsername(), $this->getMailbox()->getName() );
+        else
+            $mailer->addTo( $email );
+        
+        if( $cc ) $mailer->addCc( $cc );
 
-        $mailer->addTo( $this->_mailbox['username'], $this->_mailbox['name'] );
-
-        if( $cc )
-            $mailer->addCc( $cc );
-
-        $this->view->mailbox  = $this->_mailbox;
+        $this->view->mailbox  = $this->getMailbox();
         $this->view->welcome  = $isWelcome;
         $this->view->password = $password;
 
@@ -597,21 +733,20 @@ class MailboxController extends ViMbAdmin_Controller_Action
 
         foreach( $settings as $tech => $params )
             foreach( $params as $k => $v )
-                $settings[$tech][$k] = Mailbox::substitute( $this->_mailbox['username'], $v );
+                $settings[$tech][$k] = \Entities\Mailbox::substitute( $this->getMailbox()->getUsername(), $v );
 
         $this->view->settings = $settings;
 
+        $this->notify( 'mailbox', 'sendSettingsEmail', 'preSetBody', $this );
         $mailer->setBodyText( $this->view->render( 'mailbox/email/settings.phtml' ) );
 
-        try
-        {
+        try {
             $mailer->send();
-            return true;
+        } catch( Exception $e ) {
+            return false;
         }
-        catch( Exception $e )
-        {}
 
-        return false;
+        return true;
     }
 
     /**
@@ -619,89 +754,72 @@ class MailboxController extends ViMbAdmin_Controller_Action
      */
     public function passwordAction()
     {
-        $this->view->modal = $modal = $this->_getParam( 'modal', false );
-
-        if( !$this->_mailbox )
+        if( !$this->getMailbox() )
         {
-            $this->_helper->viewRenderer->setNoRender( true );
-            $this->addMessage( _( 'No mailbox id passed.' ), ViMbAdmin_Message::ERROR );
-            return print $this->view->render( 'close_colorbox_reload_parent.phtml' );
+            $this->addMessage( _( 'No mailbox id passed.' ), OSS_Message::ERROR );
+            $this->redirect( 'list' );
         }
 
         $this->view->mailbox = $this->_mailbox;
 
-        $form = new ViMbAdmin_Form_Admin_Password( $this->_options['defaults']['mailbox']['min_password_length'] );
+        $this->view->form = $form = new ViMbAdmin_Form_Admin_Password();
+        if( isset( $this->_options['defaults']['mailbox']['min_password_length'] ) )
+            $form->setMinPasswordLength( $this->_options['defaults']['mailbox']['min_password_length'] );
 
-        if( $this->getRequest()->isPost() && !$modal )
+        if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
         {
-            if( $form->isValid( $_POST ) )
+            $this->notify( 'mailbox', 'password', 'postValidation', $this );
+
+            $this->getMailbox()->setPassword(
+                OSS_Auth_Password::hash(
+                    $form->getValue( 'password' ),
+                    [ 
+                        'pwhash' => $this->_options['defaults']['mailbox']['password_scheme'],
+                        'pwsalt' => isset( $this->_options['defaults']['mailbox']['password_salt'] )
+                                        ? $this->_options['defaults']['mailbox']['password_salt'] : null, 
+                        'pwdovecot' => isset( $this->_options['defaults']['mailbox']['dovecot_pw_binary'] )
+                                        ? $this->_options['defaults']['mailbox']['dovecot_pw_binary'] : null,
+                        'username' => $this->getMailbox()->getUsername()
+                    ]
+                )
+            );
+
+            $this->log(
+                \Entities\Log::ACTION_MAILBOX_PW_CHANGE,
+                "{$this->getAdmin()->getFormattedName()} changed password for mailbox {$this->getMailbox()->getUsername()}"
+            );
+
+
+            $this->notify( 'mailbox', 'password', 'preFlush', $this );
+            $this->getD2EM()->flush();
+            $this->notify( 'mailbox', 'password', 'postFlush', $this, [ 'options' => $this->_options ] );
+
+            if( $form->getValue( 'email' ) )
             {
-                $plainPassword = $form->getValue( 'password' );
-                $this->_mailbox->hashPassword(
-                    $this->_options['defaults']['mailbox']['password_scheme'],
-                    $plainPassword,
-                    $this->_options['defaults']['mailbox']['password_hash']
-                );
+                $mailer = $this->getMailer();
+                $mailer->setSubject( _( 'New Password for ' . $this->getMailbox()->getUsername() ) );
+                $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
+                $mailer->addTo( $this->getMailbox()->getUsername(), $this->getMailbox()->getName() );
 
-                $this->_mailbox->save();
+                $this->view->admin = $this->getAdmin();
+                $this->view->newPassword = $form->getValue( 'password' );
+                $mailer->setBodyText( $this->view->render( 'mailbox/email/change_password.phtml' ) );
 
-                if( $form->getValue( 'email' ) )
+                try
                 {
-                    $mailer = new Zend_Mail( 'UTF-8' );
-                    $mailer->setSubject( _( 'New Password for ' . $this->_mailbox['username'] ) );
-                    $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
-                    $mailer->addTo( $this->_mailbox['username'], $this->_mailbox['name'] );
-
-                    $this->view->newPassword = $form->getValue( 'password' );
-                    $mailer->setBodyText( $this->view->render( 'mailbox/email/change_password.phtml' ) );
-
-                    try
-                    {
-                        $mailer->send();
-                    }
-                    catch( Zend_Mail_Exception $vException )
-                    {
-                        $this->getLogger()->debug( $vException->getTraceAsString() );
-                        $this->addMessage( _( 'Could not send email.' ), ViMbAdmin_Message::ALERT );
-                        if( $this->_getParam( 'helper', true ) )
-                        {
-                            $this->_redirect( 'mailbox/list' );
-                        }
-                        else
-                        {
-                            $this->_helper->viewRenderer->setNoRender( true );
-                            print "ok";
-                        }
-                    }
+                    $mailer->send();
                 }
-
-                LogTable::log( 'MAILBOX_PW_CHANGE',
-                    "Changed password for {$this->_mailbox['username']}",
-                    $this->getAdmin(), $this->_mailbox['domain']
-                );
-
-
-                $this->addMessage( _( "Password has been sucessfully changed." ), ViMbAdmin_Message::SUCCESS );
-                if( $this->_getParam( 'helper', true ) )
+                catch( Zend_Mail_Exception $vException )
                 {
+                    $this->getLogger()->debug( $vException->getTraceAsString() );
+                    $this->addMessage( _( 'Could not send email.' ), OSS_Message::ALERT );
                     $this->_redirect( 'mailbox/list' );
                 }
-                else
-                {
-                    $this->_helper->viewRenderer->setNoRender( true );
-                    print "ok";
-                }
             }
-            else
-            {
-                if( !$this->_getParam( 'helper', true ) )
-                {
-                    $this->view->modal = true;
-                }
-            }
-        }
 
-        $this->view->form = $form;
+            $this->addMessage( _( "Password has been sucessfully changed." ), OSS_Message::SUCCESS );
+            $this->_redirect( 'mailbox/list' );
+        }
     }
 
 }

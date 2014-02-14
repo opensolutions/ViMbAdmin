@@ -1,0 +1,59 @@
+
+{* **************************************************************************
+
+ ===============================
+ THINKING OF EDITING THE FOOTER?
+ ===============================
+
+Open Solutions and our staff have put a lot of time and effort into both
+developing this web application and making it fit for public release under
+the GPL license.
+
+As such, we would appreciate and request you leave our copyright message and
+link to our site intact in the footer so that we may in some small way
+benefit from this application.
+
+*************************************************************************** *}
+
+{if !isset($inColorBox) || !$inColorBox}
+
+    <div id="modal_dialog" class="modal hide fade"> </div>
+    <footer>
+        <p>
+            Copyright &copy; 2011 - {$smarty.now|date_format:"%Y"} <a href="http://www.opensolutions.ie/" target="_blank" title="Open Source Solutions Limited">Open Source Solutions Limited</a>.
+            This Program is provided AS IS, without warranty.
+        </p>
+        <p>
+            <a href="https://github.com/opensolutions/ViMbAdmin/wiki">ViMbAdmin V{ViMbAdmin_Version::VERSION}</a>.
+            Licensed under the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html" target="_blank" title="GNU GPL v3">
+                GNU General Public License V3
+            </a>.
+        </p>
+
+        <p>
+            Keep up with
+            <span class="label label-info">
+                <a class="aplain" href="http://www.opensolutions.ie/blog/category/vimbadmin/">ViMbAdmin</a>
+            </span>
+        	&nbsp;|&nbsp;
+            Get the source at
+            <span class="label label-info">
+                <a class="aplain" href="https://github.com/opensolutions/ViMbAdmin">GitHub</a>
+            </span>
+        	&nbsp;|&nbsp;
+        	Learn more about
+            <span class="label label-info">
+                <a class="aplain" href="http://www.opensolutions.ie/">Open Solutions</a>
+            </span>
+    	</p>
+
+
+    </footer>
+
+{/if}
+
+</div> <!-- .container -->
+
+</body>
+
+</html>

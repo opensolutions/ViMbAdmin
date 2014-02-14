@@ -1,0 +1,71 @@
+;;
+;; Address Book plugin configuration
+;;
+
+[production]
+
+;;ldap connection parameters
+ldap_uri  = "ldap://10.20.30.40"
+ldap_rdn  = "cn=admin,dc=example,dc=com"
+ldap_pass = "xxx"
+ldap_dir  = "ou=people,dc=example,dc=com"
+
+;;organisation name
+organisation = "Example Organisation Name"
+
+;;objectClass name
+;; also it can be an arrays if needed
+;;
+objectClass  = "inetOrgPerson"
+
+;;
+;;Fields witch be included in dn formating for user ldap entry
+dn.items.0     = "mail"
+
+;;
+;;it will appended in user dn
+;; 
+;;So it will create dn such as:
+;; cn=Joe Bloggs,ou=Development,dc=example,dc=com
+default.dn.end = "ou=people,dc=example,dc=com"
+
+;; Parameters mapping
+;; 
+mapping.department    = "ou"
+mapping.department_id = "departmentNumber"
+mapping.ext_no        = "telephoneNumber"
+mapping.d_dial        = "telephoneNumber"
+mapping.mobile        = "mobile"
+mapping.grade         = "title"
+mapping.section       = "title"
+mapping.grade_id      = "employeeType"
+mapping.id            = "uid"
+
+;;
+;; if separator isset then paramter will be string seprated by seprator
+;; but not an array
+separator.title = ","
+
+;;
+;; Configurations for making LDAP settings details.
+;;
+settings.hostname = "abook.example.com"
+settings.name = "Example Corporate Directory"
+settings.use_ssl = true
+settings.advanced.maxHit = 10000
+settings.advanced.scope = "Subtree"
+settings.advanced.filter = "(objectclass=*)"
+settings.advanced.login = "Simple"
+
+;;;;;;;;;;
+;; Configurations for DavMail syncronization script
+;;
+maildav.server.url            = "http://davmail.example.com"
+maildav.server.port           = 1080
+maildav.tmp.path              = "~/tmp"
+maildav.domain.src            = "example.com"
+maildav.domain.dst            = "example.net"
+maildav.davical.server        = "cal.example.com"
+maildav.default.addressbook_name = "address-book"
+
+[development : production]

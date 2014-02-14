@@ -1,10 +1,10 @@
-Dear {$mailbox.name},
+Dear {$mailbox->getName()},
 
 {if $welcome}
 Welcome to your new email account.
 {/if}
 
-Your email address is: {$mailbox.username}
+Your email address is: {$mailbox->getUsername()}
 
 {if $welcome}
 Your password is: {$password}
@@ -14,7 +14,7 @@ Access to your mail can be configured using the settings below.
 
 If you want to change your password, you may do so at:
 
-    {genUrl controller='change-password'}
+    {genUrl controller='auth' action='change-password'}
 
 For assistance, please contact:
 
@@ -41,7 +41,7 @@ Log in with the password above.
 Sending Email / SMTP Access
 ==============================
 
-To send email from your mail client such as Outlook or Thunderbird, 
+To send email from your mail client such as Outlook or Thunderbird,
 please configure it with the following settings:
 
 SMTP Server:  {$settings.smtp.host}
@@ -57,8 +57,8 @@ Log in with the password above.
 Receiving Email via IMAP
 ==============================
 
-To receive email from your mail client such as Outlook 
-or Thunderbird using IMAP, please configure it with the 
+To receive email from your mail client such as Outlook
+or Thunderbird using IMAP, please configure it with the
 following settings:
 
 IMAP Server:  {$settings.imap.host}
@@ -75,8 +75,8 @@ Log in with the password above.
 Receiving Email via POP3
 ==============================
 
-To receive email from your mail client such as Outlook 
-or Thunderbird using POP3, please configure it with the 
+To receive email from your mail client such as Outlook
+or Thunderbird using POP3, please configure it with the
 following settings:
 
 POP3 Server:  {$settings.pop3.host}
@@ -86,6 +86,13 @@ Username:     {$settings.pop3.user}
 
 Log in with the password above.
 
+{/if}
+
+{if isset( $vimbadminPlugins ) }
+    {foreach $vimbadminPlugins as $vimbadminPluginName => $vimbadminPluginText}
+
+{$vimbadminPluginText}
+    {/foreach}
 {/if}
 
 

@@ -1,0 +1,24 @@
+{
+	"name": "opensolutions/vimbadmin3",
+	"description": "ViMdAdmin :: Virtual Mailbox Administration v3",
+	"keywords": ["vimdadmin", "postfix", "postfixadmin"],
+	"license": "GPLv3",
+	"repositories": [
+        	{
+            		"type": "vcs",
+            		"url": "https://github.com/opensolutions/Bootstrap-Zend-Framework"
+        	}
+    	],	
+	"require": {
+        	"php": ">=5.3.0",
+        	"doctrine/orm": "2.*",
+		"opensolutions/oss-framework": "dev-master",        
+		"zendframework/zendframework1": "~1.12",
+                "smarty/smarty": "~3.1.0",
+		"opensolutions/minify": "1.*",
+		"komola/bootstrap-zend-framework": "dev-master"
+	},
+	"autoload": {
+	},
+	"minimum-stability": "dev"
+}

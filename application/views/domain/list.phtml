@@ -1,24 +1,17 @@
-{include file="header.phtml"}
-
-{assign var='addDomainParams' value="open: true, iframe: true, transition: 'elastic', width: '800px', height: '480px'"}
+{tmplinclude file="header.phtml"}
 
 <div class="page-content" >
 
     <div class="page-header" >
 
-        {if $identity.admin.super}
+        {if $user->isSuper()}
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	    <a class="btn" id="modal-dialog-wide_add_domain" title="Add Domain" href="{genUrl controller='domain' action='edit' modal=1}" >
+        	    <a class="btn have-tooltip-below" id="add_domain" title="Add Domain" href="{genUrl controller='domain' action='add'}" >
             	        <i class="icon-plus"></i>
         	    </a>
             	</span>
-            	<script>
-                    $( document ).ready( function(){
-                        $( '#modal-dialog-wide_add_domain' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                    });
-                </script>
             </div>
     	</div>
     	{/if}
@@ -26,7 +19,7 @@
         <h1>Domains</h1>
     </div>
 
-    {ViMbAdmin_Messages}
+    {OSS_Message}
 
 <table id="list_table"  cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
@@ -34,6 +27,9 @@
             <th>Domain</th>
             <th>Mailboxes</th>
             <th>Aliases</th>
+            {if isset($options.defaults.list_size.disabled) && !$options.defaults.list_size.disabled}
+                <th>Size ({$size_multiplier})</th>
+            {/if}
             <th width="55">Active</th>
             <th>Transport</th>
             <th>Backup MX</th>
@@ -42,61 +38,91 @@
         </tr>
     </thead>
     <tbody>
-        {foreach $domains as $oneDomain}
-            <tr id="domain_{$oneDomain.id}">
-                <td>{$oneDomain.domain}</td>
+        {foreach $domains as $domain}
+            <tr id="domain_{$domain.id}">
+                <td>{$domain.name}</td>
                 <td>
-                    <a class="btn btn-mini" id="modal-dialog-add_mailbox_{$oneDomain.id}" title="Add Mailbox" href="{genUrl controller='mailbox' action='edit' did=$oneDomain.id modal=1}"><i class="icon-plus"></i></a>&nbsp;&nbsp;
-                    <a class="ul" href="{genUrl controller='mailbox' action='list' did=$oneDomain.id}">{$oneDomain->countMailboxes()}{if $oneDomain.mailboxes}/{$oneDomain.mailboxes}{/if}</a>
+                    <a class="btn btn-mini have-tooltip" id="add_mailbox_{$domain.id}" title="Add Mailbox" href="{genUrl controller='mailbox' action='add' did=$domain.id}"><i class="icon-plus"></i></a>&nbsp;&nbsp;
+                    <a class="ul" href="{genUrl controller='mailbox' action='list' did=$domain.id}">{$domain.mailboxes}{if $domain.maxmailboxes}/{$domain.maxmailboxes}{/if}</a>
                 </td>
                 <td>
-                    <a class="btn btn-mini" id="modal-dialog-add_alias_{$oneDomain.id}" title="Add Alias" href="{genUrl controller='alias' action='edit' did=$oneDomain.id modal=1}"><i class="icon-plus"></i></a>&nbsp;&nbsp;
-                    <a class="ul" href="{genUrl controller='alias' action='list' did=$oneDomain.id}">{$oneDomain->countAliases( true )}{if $oneDomain.aliases}/{$oneDomain.aliases}{/if}</a>
+                    <a class="btn btn-mini have-tooltip" id="add_alias_{$domain.id}" title="Add Alias" href="{genUrl controller='alias' action='add' did=$domain.id}"><i class="icon-plus"></i></a>&nbsp;&nbsp;
+                    <a class="ul" href="{genUrl controller='alias' action='list' did=$domain.id}">{$domain.aliases}{if $domain.maxaliases}/{$domain.maxaliases}{/if}</a>
                 </td>
+                {if isset($options.defaults.list_size.disabled) && !$options.defaults.list_size.disabled}
+                    <td>
+                        {if $domain.mailboxes_size}
+                            {($domain.mailboxes_size/$multiplier)|string_format:"%.3f"}
+                        {else}
+                            0
+                        {/if}
+                    </td>
+                {/if}
                 <td>
-                    <div id="throb-toggle-active-{$oneDomain.id}" style="float: right;"></div>
-                    <span id="toggle-active-{$oneDomain.id}" onclick="toggleActive( 'toggle-active-{$oneDomain.id}', {$oneDomain.id} );" class="btn btn-mini {if $oneDomain.active}btn-success{else}btn-danger{/if}">{$oneDomain.active|yesno}</span>
+                    <div id="throb-toggle-active-{$domain.id}" style="float: right;"></div>
+                    <span id="toggle-active-{$domain.id}" onclick="toggleActive( 'toggle-active-{$domain.id}', {$domain.id}, ".", "" );" class="btn btn-mini {if $domain.active}btn-success{else}btn-danger{/if}">{$domain.active|yesno}</span>
                 </td>
-                <td>{$oneDomain.transport}</td>
-                <td>{$oneDomain.backupmx|yesno}</td>
-                <td>{$oneDomain.created}</td>
+                <td>{$domain.transport}</td>
+                <td>{$domain.backupmx|yesno}</td>
+                <td>{$domain.created->format( 'Y-m-d' )}</td>
                 <td>
                     <div class="btn-group">
-                        <a class="btn btn-mini" id="modal-dialog-wide_edit_domain_{$oneDomain.id}" title="Edit" href="{genUrl controller='domain' action='edit' did=$oneDomain.id modal=true}">
+                        <a class="btn btn-mini have-tooltip" id="edit_domain_{$domain.id}" title="Edit" href="{genUrl controller='domain' action='edit' did=$domain.id}">
                             <i class="icon-pencil"></i>
                         </a>
-                        {if $identity.admin.super}
-                            <a class="btn btn-mini" id="domain_admins_{$oneDomain.id}" title="List Admins" href="{genUrl controller='domain' action='admins' did=$oneDomain.id}">
+                        {if isset( $domain_actions ) }
+                            {assign var=oid value=$mbox.id}
+                            {foreach $domain_actions as $action}
+                                {if isset( $action.menu ) }
+                                    {assign var="action_list_menu" value=$action}
+                                {else}
+                                    <{$action.tagName} {foreach $action as $attrib => $value}{if !in_array( $attrib, [ "tagName", "child"] )}{$attrib}="{$value|replace:'%id%':$oid}" {/if}{/foreach}>
+                                    {if !is_array( $action.child ) }
+                                        {$action.child}
+                                    {else}
+                                        <{$action.child.tagName} {foreach $action.child as $attrib => $value}{if $attrib != "tagName"}{$attrib}="{$value}" {/if}{/foreach} {if $action.child.tagName != "img"}></{$action.child.tagName}>{else}/>{/if}
+                                    {/if}
+                                    </{$action.tagName}>
+                                {/if}
+                            {/foreach}
+                        {/if}
+                        {if $user->isSuper()}
+                            <a class="btn btn-mini have-tooltip" id="domain_admins_{$domain.id}" title="Administrators" href="{genUrl controller='domain' action='admins' did=$domain.id}">
                                 <i class="icon-user"></i>
                             </a>
                         {/if}
-                        <a class="btn btn-mini" id="domain_logs_{$oneDomain.id}" title="Logs" href="{genUrl controller='log' action='list' did=$oneDomain.id}">
+                        <a class="btn btn-mini have-tooltip" id="domain_logs_{$domain.id}" title="Logs" href="{genUrl controller='log' action='list' did=$domain.id}">
                             <i class="icon-align-justify"></i>
                         </a>
-                        {if $identity.admin.super}
-                            <span  class="btn btn-mini"  id="purge-domain-{$oneDomain.id}" title="Purge" onclick="purgeDomain({$oneDomain.id}, '{$oneDomain.domain}');">
+                        {if $user->isSuper()}
+                            <span  class="btn btn-mini have-tooltip"  id="purge-domain-{$domain.id}" title="Purge" onclick="purgeDomain({$domain.id}, '{$domain.name}');">
                                 <i class="icon-trash"></i>
                             </span>
                         {/if}
+                        {if isset( $action_list_menu)}
+                        {assign var="action" value=$action_list_menu}
+                        <{$action.tagName} {foreach $action as $attrib => $value}{if !in_array( $attrib, [ "tagName", "child", "menu" ] )}{$attrib}="{$value|replace:'%id%':$oid}" {/if}{/foreach}>
+                        {if !is_array( $action.child ) }
+                            {$action.child}
+                        {else}
+                            <{$action.child.tagName} {foreach $action.child as $attrib => $value}{if $attrib != "tagName"}{$attrib}="{$value}" {/if}{/foreach} {if $action.child.tagName != "img"}></{$action.child.tagName}>{else}/>{/if}
+                        {/if}
+                        <span class="caret"></span>
+                        </{$action.tagName}>
+                        <ul class="dropdown-menu pull-right">
+                        {foreach $action.menu as $item}
+                            <li><a {if isset( $item.id)}id="{$item.id|replace:'%id%':$oid}" {/if}href="{$item.url|replace:'%id%':$oid}">{$item.text}</a></li>
+                        {/foreach}
+                        </ul>
+                    {/if}
                     </div>
-                    <script>
-                        $( document ).ready( function(){
-                            $( '#modal-dialog-wide_edit_domain_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                            $( '#domain_admins_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                            $( '#domain_logs_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                            $( '#purge-domain-{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                            $( '#modal-dialog-add_mailbox_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                            $( '#modal-dialog-add_alias_{$oneDomain.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                        });
-                    </script>
                 </td>
             </tr>
         {/foreach}
     </tbody>
 </table>
 
-
-{include file='domain/js/list.js'}
+<script>{tmplinclude file='domain/js/list.js'}</script>
 
 <div id="purge_dialog" class="modal hide fade">
     <div class="modal-header">
@@ -113,11 +139,11 @@
         <br>
     </div>
     <div id="pdfooter" class="modal-footer">
-        <span class="btn btn-danger" id="purge_dialog_delete">Purge</span>
+        <a class="btn btn-danger" id="purge_dialog_delete" href="">Purge</a>
         <button id="purge_dialog_cancel" class="btn">Cancel</button>
     </div>
 </div>
 
 </div>
 
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

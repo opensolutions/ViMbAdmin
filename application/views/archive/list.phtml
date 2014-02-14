@@ -1,0 +1,96 @@
+{tmplinclude file="header.phtml"}
+
+{if isset( $session->domain ) && $session->domain }
+    {assign var=domain value=$session->domain}
+{/if}
+
+<div class="page-content" >
+
+    <div class="page-header" >
+        <h1>
+            Archives {if isset( $domain ) && $domain}<small> for {$domain->getDomain()} {if $domain->getMaxMailboxes() != 0}({$domain->getMailboxCount()}/{$domain->getMaxMailboxes()}){/if}</small>
+                <a class="btn have-tooltip-below" id="show_all_archives" title="Show All" href="{genUrl controller='archive' action='list' unset=1}">
+                    <i class="icon-remove-circle"></i>
+                </a>
+            {/if}
+        </h1>
+    </div>
+
+{OSS_Message}
+
+<table id="list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Status</th>
+            <th>Domain</th>
+            <th width="140"></th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach $archives as $archive}
+        <tr>
+            <td>{$archive.username}</td>
+            <td>{$statuses[$archive.status]}</td>
+            <td>{$archive.domain}</td>
+            <td>
+                <div class="btn-group">
+                    {if in_array( $archive.status, $allowCancel )}
+                        <a class="btn btn-mini have-tooltip" id="cancel-archive-{$archive.id}" title="Cancel pending" href="{genUrl controller='archive' action='cancel' arid=$archive.id}">
+                            <i class="icon-remove"></i>
+                        </a>
+                    {/if}
+                    {if in_array( $archive.status == "ARCHIVED", $allowRestore )}
+                        <a class="btn btn-mini have-tooltip" id="restore-archive-{$archive.id}" title="Restore" href="{genUrl controller='archive' action='restore' arid=$archive.id}">
+                            <i class="icon-retweet"></i>
+                        </a>
+                    {/if}
+                    {if in_array( $archive.status, $allowDelete )}
+                        <a class="btn btn-mini have-tooltip" id="delete-archive-{$archive.id}" title="Delete archive" href="{genUrl controller='archive' action='delete' arid=$archive.id}">
+                            <i class="icon-trash"></i>
+                        </a>
+                    {/if}
+                </div>
+            </td>
+        </tr>
+{/foreach}
+    </tbody>
+</table>
+
+<br />
+<br />
+
+<script type="text/javascript">{tmplinclude file='archive/js/list.js'}</script>
+
+
+<div id="cancel_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body" id="cbody">
+        Are you sure you want to cancel pending status?
+    </div>
+    <div id="cfooter" class="modal-footer">
+        <a href="#" class="btn btn-primary" id="cancel_dialog_confirm">Confirm</a>
+        <button id="cancel_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
+
+<div id="delete_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Are you sure?</h3>
+    </div>
+    <div class="modal-body" id="dbody">
+        Are you want to delete this archive?
+    </div>
+    <div id="dfooter" class="modal-footer">
+        <a href="#" class="btn btn-danger" id="delete_dialog_delete">Delete</a>
+        <button id="delete_dialog_cancel" class="btn">Cancel</button>
+    </div>
+</div>
+
+</div>
+
+{tmplinclude file="footer.phtml"}

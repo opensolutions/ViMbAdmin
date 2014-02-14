@@ -1,0 +1,47 @@
+;;
+;; davical plugin configuration
+;;
+
+[production]
+
+servers.davicalsrv1.name  = "https://cal.example.com"
+servers.davicalsrv1.dbname   = "davical"
+servers.davicalsrv1.user     = "davical_app"
+servers.davicalsrv1.password = "xxx"
+servers.davicalsrv1.host     = "127.0.0.1"
+servers.davicalsrv1.port     = "5432"
+servers.davicalsrv1.driver   = "pdo_pgsql"
+
+;; The following is for creating shared calanders 
+;;
+;; It will be created automatically
+
+shared_resource.username = "davical-shared-resources@example.com"
+shared_resource.password = "xxx"
+shared_resource.fullname = "Example Shared Resources"
+shared_resource.email    = "admin@example.com"
+shared_resource.active   = 1
+shared_resource.updated  = "now()"
+
+
+;; Calanders are created and named in the UI
+;;
+;; If true, the UI will be preset to create the following named calanders:
+
+auto_create = true
+auto.work = "Work"
+
+;;;;;;;;;;
+;; Configurations for DavMail syncronization script
+;;
+maildav.server.url            = "http://example.com"
+maildav.server.port           = 1080
+maildav.tmp.path              = "/var/tmp"
+maildav.default.calendar_name = "work"
+maildav.domain.src            = "example.com"
+maildav.domain.dst            = "example.net"
+
+
+[development : production]
+
+

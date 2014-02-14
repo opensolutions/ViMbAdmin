@@ -1,0 +1,30 @@
+;;
+;; Jabber plugin configuration
+;;
+
+[production]
+
+servers.1.name              = "Exampple Staff Instant Messaging Server"
+servers.1.auto              = true
+servers.1.useSQLview        = true
+servers.1.dbal.dbname       = "jabberd2"
+servers.1.dbal.user         = "jabberd2"
+servers.1.dbal.password     = "xxx"
+servers.1.dbal.host         = "localhost"
+servers.1.dbal.driver       = "pdo_mysql"
+
+
+servers.1.settingsPreBlurb  = "You should be able to configure most clients with just your
+Jabber ID as above. If not, you can try manually setting the 
+following:"
+
+servers.1.settingsPostBlurb = "Contact us for assistance if you have any difficulty."
+
+servers.1.server            = "im.example.com"
+servers.1.port              = 5222
+servers.1.ssl               = false
+servers.1.tls               = true
+servers.1.resource          = "Thunderbird"
+
+
+[development : production]

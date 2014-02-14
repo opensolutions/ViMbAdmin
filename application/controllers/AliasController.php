@@ -7,7 +7,7 @@
  * project which provides an easily manageable web based virtual
  * mailbox administration system.
  *
- * Copyright (c) 2011 Open Source Solutions Limited
+ * Copyright (c) 2011 - 2014 Open Source Solutions Limited
  *
  * ViMbAdmin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  *   147 Stepaside Park, Stepaside, Dublin 18, Ireland.
  *   Barry O'Donovan <barry _at_ opensolutions.ie>
  *
- * @copyright Copyright (c) 2011 Open Source Solutions Limited
+ * @copyright Copyright (c) 2011 - 2014 Open Source Solutions Limited
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPLv3)
  * @author Open Source Solutions Limited <info _at_ opensolutions.ie>
  * @author Barry O'Donovan <barry _at_ opensolutions.ie>
@@ -39,8 +39,14 @@
  * @package ViMbAdmin
  * @subpackage Controllers
  */
-class AliasController extends ViMbAdmin_Controller_Action
+class AliasController extends ViMbAdmin_Controller_PluginAction
 {
+
+    /**
+     * Local store for the form
+     * @var ViMbAdmin_Form_Alias_AddEdit
+     */
+    private $aliasForm = null;
 
     /**
      * Most actions in this object will require a domain object to edit / act on.
@@ -55,16 +61,17 @@ class AliasController extends ViMbAdmin_Controller_Action
     {
         $this->authorise();
 
-        // if an ajax request, remove the view help
-        if( substr( $this->getRequest()->getParam( 'action' ), 0, 4 ) == 'ajax' )
-            $this->_helper->viewRenderer->setNoRender( true );
-
-        if( $this->_getParam( 'unset', false ) )
-            unset( $this->_session->domain );
-        else
+        if( $this->getRequest()->getActionName() == "list" || $this->getRequest()->getActionName() == "index" )
         {
-            if( isset( $this->_session->domain) && $this->_session->domain )
-            $this->_domain = $this->_session->domain;
+            if( $this->getParam( 'unset', false ) )
+                unset( $this->getSessionNamespace()->domain );
+            else
+            {
+                if( isset( $this->getSessionNamespace()->domain ) && $this->getSessionNamespace()->domain )
+                    $this->_domain = $this->getSessionNamespace()->domain;
+                else if( $this->getDomain() )
+                    $this->getSessionNamespace()->domain = $this->getDomain();
+            }
         }
     }
 
@@ -80,37 +87,224 @@ class AliasController extends ViMbAdmin_Controller_Action
 
     /**
      * Lists the aliases available to the admin and/or domain. Superadmin can see all.
+     *
+     * $this->view->alias_actions allow to append aliases list action buttons. %id% will be replaced by
+     * alias id form the list. below is example array which creates edit alias button, and another button
+     * with drop down options for edit alias. Only one drop down button can be defined per button group, 
+     * and it always be appended at the end.
+     * $actions = [
+     *       [                          //Simple link button
+     *           'tagName' => 'a',     //Mandatory parameter for element type. 
+     *           'href' => OSS_Utils::genUrl( "alias", "edit" ) . "/alid/%id%", //Url for action
+     *           'title' => "Edit",
+     *           'class' => "btn btn-mini have-tooltip",  //Class for css options.
+     *           'id' => "test-%id%",      //If setting id id must have %id% which will be replaced by original mailbox id to avoid same ids.
+     *           'child' => [             //Mandatory element if is not array it will be shown as text.
+     *               'tagName' => "i",    //Mandatory option if child is array to define element type
+     *               'class' => "icon-pencil"  //Icon class
+     *           ],
+     *       ],
+     *       [                              //Drop down button
+     *           'tagName' => 'span',       //Mandatory parameter for element type
+     *           'title' => "Settings",
+     *           'class' => "btn btn-mini have-tooltip dropdown-toggle", //Class dropdown-toggle is mandatory for drop down button
+     *           'data-toggle' => "dropdown",          //data-toggle attribute is mandatory for drop down button
+     *           'id' => "cog-%id%",
+     *           'style' => "max-height: 15px;",
+     *           'child' => [
+     *               'tagName' => "i",
+     *               'class' => "icon-cog"
+     *           ],
+     *           'menu' => [        //menu array is mandatory then defining drop down button
+     *               [ 
+     *                   'id' => "menu-edit-%id%",   //Not mandatory attribute but if is set %id% should be use to avoid same ids.
+     *                   'text' => "<i class=\"icon-pencil\"></i> Edit",                 //Mandatory for display action text
+     *                   'url' =>  OSS_Utils::genUrl( "alias", "edit" ) . "/alid/%id%"  //Mandatory to redirect the action.
+     *               ]
+     *           ]
+     *       ]
+     *   ];
+     * 
      */
     public function listAction()
+    {   
+        //Include mailbox aliases 
+        $this->view->ima = $ima = $this->_getParam( 'ima', 0 );
+        $this->view->domain = $this->getDomain();
+        if( isset( $this->_options['defaults']['server_side']['pagination']['enable'] ) && $this->_options['defaults']['server_side']['pagination']['enable'] )
+            $this->view->aliases = [];
+        else
+            $this->view->aliases = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->loadForAliasList( $this->getAdmin(), $this->getDomain(), $ima );
+
+    }
+
+    /**
+     * This action is used then server side pagination is turned on. It will look
+     * for alias data by filter passed and return json_array if aliases was found
+     * or ko if it was not successful. Return array max size is also defined in application.ini.
+     */
+    public function listSearchAction()
     {
-        $includeMailboxAliases = $this->_getParam( 'ima', 0 );
-        $this->view->includeMailboxAliases = $includeMailboxAliases;
-        $this->view->domainModel = $this->_domain;
-        $this->view->domain = 0;
-
-        $q = Doctrine_Query::create()
-                ->select( '*' )
-                ->from( 'Alias a' );
-
-        if( !$includeMailboxAliases )
-            $q->where( 'a.address != a.goto' );
-
-        if( $this->_domain )
+        Zend_Controller_Action_HelperBroker::removeHelper( 'viewRenderer' );
+        if( !isset( $this->_options['defaults']['server_side']['pagination']['enable'] ) || !$this->_options['defaults']['server_side']['pagination']['enable'] )
+            echo "ko";
+        else
         {
-            // already authorised in preDispatch()
-            $q->andWhere( 'a.domain = ?', $this->_domain['domain'] );
-            $this->view->domain = $this->_session->domain = $this->_domain;
+            $strl_len = isset( $this->_options['defaults']['server_side']['pagination']['min_search_str'] ) ? $this->_options['defaults']['server_side']['pagination']['min_search_str'] : 3;
+            $search = $this->_getParam( "search", false );
+            $this->view->ima = $ima = $this->_getParam( 'ima', 0 );
+            if( $search && strlen( $search ) >= $strl_len )
+            {
+                $aliases = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->filterForAliasList( $search, $this->getAdmin(), $this->getDomain(), $ima );
+                $max_cnt = isset( $this->_options['defaults']['server_side']['pagination']['max_result_cnt'] ) ? $this->_options['defaults']['server_side']['pagination']['max_result_cnt'] : false;
+                if( $aliases && ( !$max_cnt || $max_cnt >= count( $aliases ) ) )
+                    echo json_encode( $aliases );
+                else
+                    echo "ko";
+            }
+            else
+                echo "ko";    
         }
-        else if( !$this->getAdmin()->isSuper() )
+    }
+
+    /**
+     * Instantiate / get the alias add-edit form
+     * @return ViMbAdmin_Form_Mailbox_AddEdit
+     */
+    public function getAliasForm()
+    {
+        if( $this->aliasForm == null )
         {
-            // if we're not a super admin and we don't have a specific domain, only load allowed
-            $q->leftJoin( 'a.Domain d' )
-              ->leftJoin( 'd.DomainAdmin da' )
-              ->andWhere( 'da.username = ?', $this->getAdmin()->username );
+            $form = new ViMbAdmin_Form_Alias_AddEdit();
+
+            // populate the domain dropdown with the possible domains for this user
+            $form->getElement( "domain" )->setMultiOptions(
+                [ "" => "" ] + $this->getD2EM()->getRepository( "\\Entities\\Domain" )->loadForAdminAsArray( $this->getAdmin(), true )
+            );
+
+            // if we have a default / preferred domain, set it as selected in the form
+            if( $this->getDomain() )
+                $form->getElement( 'domain' )->setValue( $this->getDomain()->getId() );
+
+            if( $this->isEdit() )
+            {
+                $form->assignEntityToForm( $this->getAlias(), $this, $this->isEdit() );
+                $form->removeElement( 'local_part' );
+                $form->removeElement( 'domain' );  
+            }
+
+            $this->view->form = $this->aliasForm = $form;
+            
+            // call plugins
+            $this->notify( 'alias', 'add', 'formPostProcess', $this );
         }
 
-        $this->view->aliases = $q->fetchArray();
-        $q->free();
+        return $this->aliasForm;
+    }
+
+    /**
+     * Add an alias.
+     */
+    public function addAction()
+    {
+        if( !$this->getAlias() )
+        {
+            $this->isEdit = $this->view->isEdit = false;
+            $form = $this->getAliasForm();
+
+            $this->_alias = new \Entities\Alias();
+            $this->getD2EM()->persist( $this->getAlias() );
+            $this->getAlias()->setCreated( new \DateTime() );
+        }
+        else
+        {
+            $this->isEdit = $this->view->isEdit = true;
+            $this->view->alias = $this->getAlias();
+
+            $form = $this->getAliasForm();
+            $form->assignEntityToForm( $this->getAlias(), $this, $this->isEdit() );
+        }
+        
+        $this->view->domainList = $domainList = $this->getD2EM()->getRepository( "\\Entities\\Domain" )->loadForAdminAsArray( $this->getAdmin(), true );
+
+        if( $this->getDomain() )
+        {
+            $this->view->domain = $this->getDomain();
+            if( $form->getElement( 'domain' ) )
+                $form->getElement( 'domain' )->setValue( $this->getDomain()->getId() );
+        }
+
+        if( $this->getMailbox() )
+            $this->view->defaultGoto = "{$this->getMailbox()->getLocalPart()}@{$this->getDomain()->getDomain()}";
+        
+        $this->view->alias = $this->getAlias();
+        $this->view->emails = $this->_autocompleteArray();
+
+        $this->notify( 'alias', 'add', 'addPrepare', $this );
+
+        if( $this->getRequest()->isPost() )
+        {
+            $this->notify( 'alias', 'add', 'addPrevalidate', $this );
+
+            if( $form->isValid( $_POST ) )
+            {
+                $this->notify( 'alias', 'add', 'addPostvalidate', $this );
+
+                $form->assignFormToEntity( $this->getAlias(), $this, $this->isEdit() );
+                
+                if( !$this->_setGotos( $form ) )
+                    return;
+
+                if( !$this->isEdit() ) // adding
+                {
+                    // do we have available aliases?
+                    if( !$this->getAdmin()->isSuper() && $this->getDomain()->getMaxaliases() != 0
+                            && $this->getDomain->getAliasCount() >= $this->getDomain()->getMaxAliases()
+                        )
+                    {
+                        $this->addMessage( _( 'You have used all of your allocated aliases.' ), OSS_Message::ERROR );
+                        $this->redirect( "alias/list" );
+                    }
+
+                    if( !$this->getDomain() || $this->getDomain()->getId() != $form->getValue( 'domain' ) )
+                        $this->_domain = $this->loadDomain( $form->getValue( 'domain' ) );
+
+                    $this->getAlias()->setDomain( $this->getDomain() );
+                    $this->getAlias()->setActive( 1 );
+                    
+                    if( !$this->_setAddress( $form ) )
+                        return;
+                }
+                else
+                    $this->getAlias()->setModified( new \DateTime() );   
+
+                if( !$this->isEdit() && $this->getAlias()->getAddress() != $this->getAlias()->getGoto() )
+                    $this->getDomain()->setAliasCount( $this->getDomain()->getAliasCount() + 1 );
+
+                $this->log(
+                    $this->isEdit() ? \Entities\Log::ACTION_ALIAS_EDIT : \Entities\Log::ACTION_ALIAS_ADD,
+                    "{$this->getAdmin()->getFormattedName()} " . ( $this->isEdit() ? ' edited' : ' added' ) . " alias {$this->getAlias()->getAddress()}"
+                );
+
+                $this->notify( 'alias', 'add', 'addPreflush', $this );
+                $this->getD2EM()->flush();
+                $this->notify( 'alias', 'add', 'addPostflush', $this );
+
+                if( $this->getParam( "did", false ) )
+                    $this->getSessionNamespace()->domain = $this->getDomain();
+
+                $this->addMessage( _( "You have successfully added/edited the alias." ), OSS_Message::SUCCESS );
+                $this->redirect( 'alias/list' );
+            }
+        }
+    }
+
+    /**
+     * Edit an alias.
+     */
+    public function editAction()
+    {
+        $this->forward( "add" );
     }
 
 
@@ -119,17 +313,19 @@ class AliasController extends ViMbAdmin_Controller_Action
      */
     public function ajaxToggleActiveAction()
     {
-        if( !$this->_alias )
-            return print 'ko';
+        if( !$this->getAlias() )
+            print 'ko';
 
-        $this->_alias['active'] = !$this->_alias['active'];
-        $this->_alias->save();
+        $this->getAlias()->setActive( !$this->getAlias()->getActive() );
+        $this->getAlias()->setModified( new \DateTime() );
 
-        LogTable::log( 'ALIAS_TOGGLE_ACTIVE',
-            "Set {$this->_alias['address']} " . ( $this->_alias['active'] ? '' : 'de' ) . "active",
-            $this->getAdmin(), $this->_alias['domain']
+        $this->log(
+            $this->getAlias()->getActive() ? \Entities\Log::ACTION_ALIAS_ACTIVATE : \Entities\Log::ACTION_ALIAS_DEACTIVATE,
+            "{$this->getAdmin()->getFormattedName()} " . ( $this->getAlias()->getActive() ? 'activated' : 'deactivated' ) . " alias {$this->getAlias()->getAddress()}"
         );
-
+        $this->notify( 'alias', 'toggleActive', 'preflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
+        $this->getD2EM()->flush();
+        $this->notify( 'alias', 'toggleActive', 'postflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
         print 'ok';
     }
 
@@ -137,251 +333,137 @@ class AliasController extends ViMbAdmin_Controller_Action
     /**
      * Deletes an alias. Prints 'ok' on success or 'ko' otherwise to stdout.
      */
-    public function ajaxDeleteAction()
+    public function deleteAction()
     {
-        if( !$this->_alias )
-            return print 'ko';
+        if( !$this->getAlias() )
+            print 'ko';
 
-        $this->_alias->delete();
+        foreach( $this->getAlias()->getPreferences() as $pref )
+                $this->getD2EM()->remove( $pref );
 
-        LogTable::log( 'ALIAS_DELETE',
-            "Deleted {$this->_alias['address']}",
-            $this->getAdmin(), $this->_alias['domain']
+        $this->notify( 'alias', 'delete', 'preRemove', $this );
+        $this->getD2EM()->remove( $this->getAlias() );
+        if( $this->getAlias()->getAddress() != $this->getAlias()->getGoto() )
+            $this->getDomain()->setAliasCount( $this->getDomain()->getAliasCount() - 1 );
+
+        $this->log(
+            \Entities\Log::ACTION_ALIAS_DELETE,
+            "{$this->getAdmin()->getFormattedName()} removed alias {$this->getAlias()->getAddress()}"
         );
 
-        print 'ok';
+        $this->notify( 'alias', 'delete', 'preFlush', $this );
+        $this->getD2EM()->flush();
+        $this->notify( 'alias', 'delete', 'postFlush', $this );
+
+        $this->addMessage( 'Alias has bean removed successfully', OSS_Message::SUCCESS );
+        $this->redirect( 'alias/list' );
+    }
+
+    /**
+     * Sets goto to alias
+     *
+     * Parse goto value form field. If its empty return false and set error message.
+     * Function goes trough all goto address and if one of got addresses is not valid
+     * set error to form and return false. If everything is ok it return true. Gotos
+     * Is set to alias even the false is return to return goto addresses to end user.
+     *
+     *
+     * @param ViMbAdmin_Form_Alias_AddEdit $form Alias form
+     * @return bool
+     */
+    private function _setGotos( $form )
+    {
+        if( !$form->getValue( 'goto' ) )
+        {
+            $form->getElement( 'goto' )->addError( _( 'You must have at least one goto address.' ) );
+            $this->getAlias()->setGoto( "" );
+            return false; 
+        }
+        else
+        {
+            $gotos = $form->getValue( 'goto' );
+            $this->getAlias()->setGoto( implode( ',', array_unique( $gotos ) ) );
+            foreach( $gotos as $key => $goto )
+            {
+                $goto = trim( $goto );
+
+                if( $goto == '')
+                    unset( $gotos[ $key ] );
+                else
+                {
+                    if( !Zend_Validate::is( $goto, 'EmailAddress', array( 1, null ) ) )
+                    {
+                        $form->getElement( 'goto' )->addError( 'Invalid email address(es).' );
+                        return false;
+                    }
+                }
+            }
+
+            if( count( $gotos ) == 0 )
+            {
+                $form->getElement( 'goto' )->addError( 'You must have at least one goto address.' );
+                return false;
+            }
+            $this->getAlias()->setGoto( implode( ',', array_unique( $gotos ) ) );
+
+        }
+        return true;
     }
 
 
     /**
-     * Edit an alias.
+     * Sets address to alias
+     *
+     * Checks if local part and domain makes a valid address, or it is only domain address.
+     * If yes then it checks if its unique address, if yes address set to alias and return true.
+     * All other cases message is set to form and return false.
+     *
+     * @param ViMbAdmin_Form_Alias_AddEdit $form Alias form
+     * @return bool
      */
-    public function editAction()
+    private function _setAddress( $form )
     {
-        $this->view->modal = $modal = $this->_getParam( 'modal', false );
+        $address = sprintf( "%s@%s", $form->getValue( 'local_part'), $this->getDomain()->getDomain() );
 
-        $this->view->operation = "Edit";
-        if( !$this->_alias ) // no alias id passed so adding
+        // is the alias valid (allowing for wildcard domains (i.e. with no local part)
+        if( $form->getValue( "local_part" ) &&  !Zend_Validate::is( "{$address}", 'EmailAddress', array( 1, null ) ) )
         {
-            $this->view->operation = "Add";
-            $this->_alias = new Alias();
-
-            if( $this->_domain )
-                $this->view->domainModel = $this->_domain;
+            $form->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
+            return false;
         }
-        else
+        
+        $alias = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->findOneBy( ["address" => $address ] );
+        if( $alias )
         {
-            // if editing, then use that domain
-            $this->view->domainModel = $this->_alias['Domain'];
-        }
-
-        $this->view->aliasModel = $this->_alias;
-
-        $domainList = DomainTable::getDomains( $this->getAdmin() );
-        $this->view->domainList = $domainList;
-
-        $editForm = new ViMbAdmin_Form_Alias_Edit( null, $domainList );
-
-        if( $this->getRequest()->isPost() && !$modal )
-        {
-            if( $this->_alias['id'] ) // editing
+            if( $this->_options['mailboxAliases'] )
             {
-                $editForm->removeElement( 'local_part' );
-                $editForm->removeElement( 'domain' );
-            }
-
-            if( $editForm->isValid( $_POST ) )
-            {
-                $postValues = $editForm->getValues();
-
-                if( isset( $postValues['domain'] ) )
-                {
-                    $this->_domain = $this->loadDomain( $postValues['domain'] );
-                }
-
-                if( !$this->_domain || !$this->authorise( false, $this->_domain, false ) )
-                {
-                     $this->addMessage( _( "Invalid, unauthorised or non-existent domain." ), ViMbAdmin_Message::ERROR );
-                     $this->_redirect( $this->getRequest()->getPathInfo() );
-                 }
-
-                if( !$this->_alias['id'] ) // adding
-                {
-                    $alias = Doctrine::getTable( 'Alias' )->findOneByAddress( "{$postValues['local_part']}@{$this->_domain['domain']}" );
-
-                    if( $alias )
-                    {
-                        if( $this->_options['mailboxAliases'] )
-                        {
-                            if( $alias->address == $alias->goto )
-                            {
-                                $this->addMessage(
-                                            _( 'A mailbox alias exists for' ) . " {$postValues['local_part']}@{$this->_domain['domain']}",
-                                            ViMbAdmin_Message::ERROR
-                                        );
-                            }
-                            else
-                            {
-                                $this->addMessage(
-                                            _( 'Alias already exists for' ) . " {$postValues['local_part']}@{$this->_domain['domain']}",
-                                            ViMbAdmin_Message::ERROR
-                                        );
-                            }
-                        }
-                        else
-                        {
-                            $this->addMessage(
-                                        _( 'Alias already exists for' ) . " {$postValues['local_part']}@{$this->_domain['domain']}",
-                                        ViMbAdmin_Message::ERROR
-                                    );
-                        }
-
-                        $this->_redirect( $this->getRequest()->getPathInfo() );
-                    }
-                }
-
-                if( !$postValues['goto'] )
-                {
-                    $editForm->getElement( 'goto' )->addError( _( 'You must have at least one goto address.' ) );
-                }
+                if( $alias->getAddress() == $alias->getGoto() )
+                    $msg = _( 'A mailbox alias exists for' ) . " {$address}";
                 else
-                {
-                    // is the alias valid (allowing for wildcard domains (i.e. with no local part)
-                    if( !$this->_alias['id'] && $postValues['local_part'] != '' && !Zend_Validate::is( "{$postValues['local_part']}@{$this->_domain['domain']}", 'EmailAddress', array( 1, null ) ) )
-                        $editForm->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
-
-                    foreach( $postValues['goto'] as $key => $oneGoto )
-                    {
-                        $oneGoto = trim( $oneGoto );
-
-                        if( $oneGoto == '')
-                            unset( $postValues['goto'][ $key ] );
-                        else
-                        {
-                            if( !Zend_Validate::is( $oneGoto, 'EmailAddress', array( 1, null ) ) )
-                                $editForm->getElement( 'goto' )->addError( 'Invalid email address(es).' );
-                        }
-                    }
-
-                    if( !$postValues['goto'] )
-                        $editForm->getElement( 'goto' )->addError( 'You must have at least one goto address.' );
-
-                    if( !$editForm->getElement( 'goto' )->hasErrors()
-                        && ( $editForm->getElement( 'local_part' ) === null || !$editForm->getElement( 'local_part' )->hasErrors() ) )
-                    {
-                        $this->_alias->fromArray( $postValues );
-
-                        if( !$this->_alias['id'] ) // NOT editing
-                        {
-                            // do we have available mailboxes?
-                            if(     !$this->getAdmin()->isSuper() &&
-                                    $this->_domain['aliases'] != 0 &&
-                                    ( $this->_domain->countAliases() >= $this->_domain['aliases'] )
-                                )
-                            {
-                                $this->_helper->viewRenderer->setNoRender( true );
-                                $this->addMessage( _( 'You have used all of your allocated aliases.' ), ViMbAdmin_Message::ERROR );
-                                return print $this->view->render( 'close_colorbox_reload_parent.phtml');
-                            }
-
-                            $this->_alias['domain']  = $this->_domain['domain'];
-                            $this->_alias['address'] = "{$postValues['local_part']}@{$this->_domain['domain']}";
-
-                            LogTable::log( 'ALIAS_ADD',
-                                "Added {$this->_alias['address']} -> {$this->_alias['goto']}",
-                                $this->getAdmin(), $this->_alias['domain']
-                            );
-                        }
-                        else
-                        {
-                            LogTable::log( 'ALIAS_EDIT',
-                                "Edited {$this->_alias['address']} -> {$this->_alias['goto']}",
-                                $this->getAdmin(), $this->_alias['domain']
-                            );
-                        }
-
-                        $this->_alias['goto'] = implode( ',', array_unique( $postValues['goto'] ) );
-
-                        $this->_alias->save();
-
-                        $this->addMessage( _( "You have successfully added/edited the alias." ), ViMbAdmin_Message::SUCCESS );
-
-                        if( $this->_getParam( 'helper', true ) )
-                        {
-                            if( $this->_domain )
-                                $this->_redirect( 'alias/list/did/' . $this->_domain['id'] );
-                            else
-                                $this->_redirect( 'alias/list' );
-                        }
-                        else
-                        {
-                            $this->_helper->viewRenderer->setNoRender( true );
-                            print 'ok';
-                        }
-                    }
-
-                }
+                    $msg =  _( 'Alias already exists for' ) . " {$address}";
             }
+            else
+                $msg = _( 'Alias already exists for' ) . " {$address}";
+                
+            $this->addMessage( $msg, OSS_Message::ERROR );
+
+            //check if it works correctly.
+            return false;
         }
-        else
-        {
-            if( $this->_domain )
-            {
-                $this->view->domain = $this->_domain;
-                $editForm->getElement( 'domain' )->setValue( $this->_domain['id'] );
-            }
-
-            if( $this->_mailbox )
-                $this->view->defaultGoto = "{$this->_mailbox->local_part}@{$this->_mailbox->Domain->domain}";
-
-            if( $this->_alias['id'] ) // editing
-            {
-                $editForm->setDefaults( $this->_alias->toArray() );
-
-                $editForm
-                    ->getElement( 'local_part' )
-                    ->setValue( str_replace("@{$this->_alias['domain']}", '', $this->_alias['address'] ) )
-                    ->setAttrib( 'disabled', 'disabled' );
-
-                $editForm
-                    ->getElement( 'domain' )
-                    ->setValue( $this->_alias->Domain['id'] )
-                    ->setAttrib( 'disabled', 'disabled' );
-            }
-        }
-
-        if( !$this->_getParam( 'helper', true ) )
-            $this->view->modal = true;
-
-        $this->view->emails = $this->_autocompleteArray();
-
-        $this->view->editForm = $editForm;
+        $this->getAlias()->setAddress( $address );  
+        return true;
     }
-
 
     /**
      * The Ajax function providing JSON data for the jQuery UI Autocomplete on adding/editing aliases.
      */
     private function _autocompleteArray()
     {
-        $query = Doctrine_Query::create()
-                    ->select( 'a.address' )
-                    ->from( 'Alias a' );
+        $aliases   = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->loadForAliasList( $this->getAdmin(), null, true );
+        $addresses = [];
 
-        if( !$this->getAdmin()->isSuper() )
-        {
-            $query->leftJoin( 'a.Domain d' )
-                 ->leftJoin( 'd.DomainAdmin da' )
-                 ->andWhere( 'da.username = ?', $this->getAdmin()->username )
-                 ->andWhere( 'd.domain = da.domain' );
-        }
-
-        $temp = $query->fetchArray();
-
-        $addresses = array();
-
-        foreach( $temp as $oneAddress )
-            $addresses[] = $oneAddress['address'];
+        foreach( $aliases as $alias )
+            $addresses[] = $alias['address'];
 
         return json_encode( $addresses );
     }

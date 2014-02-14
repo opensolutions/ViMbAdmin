@@ -1,32 +1,25 @@
-
-    	<fieldset id="div-form-{$ielement->getId()}" class="control-group">
-			<label class="control-label"></label>
-			<div class="controls">
-				<label class="checkbox">
-    				<input id="{$ielement->getId()}" type="checkbox"
-    					{if $ielement->isChecked()}checked="checked"{/if}
-    					value="{$ielement->getCheckedValue()}" name="{$ielement->getName()}"
-					/>
-					{if isset( $ilabel )}{$ilabel}{else}{$ielement->getLabel()}&nbsp;{/if}
-	    		    {if isset( $ihint )}
-    	    		    <span id="{$ielement->getId()}_hint" rel="popover" class="label"
-        			    	data-content="{$ihint}">?</span>
-    			    {/if}
-				</label>
-	        	{if $ielement->getMessages()}
-					<script type="text/javascript">
-						$( '#{$ielement->getId()}' ).addClass( 'error' );
-						$( '#div-form-{$ielement->getId()}' ).addClass( 'error' );
-					</script>
-				{/if}
-				<span class="help-block">
-			        {if $ielement->getMessages()}
-    					{foreach from=$ielement->getMessages() item=messages}
-        					{foreach from=$messages item=msg}
-            					{$msg}<br />
-        					{/foreach}
-    					{/foreach}
-				    {/if}
-				</span>
-			</div>
-		</fieldset>
+        <fieldset id="div-form-{$ielement->getId()}" class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input id="{$ielement->getId()}" type="checkbox" {if $ielement->isChecked()}checked="checked"{/if} value="{$ielement->getCheckedValue()}" name="{$ielement->getName()}" />
+                    {if isset( $ilabel )}{$ilabel}{else}{$ielement->getLabel()}&nbsp;{/if}
+                    {if isset( $ihint )}<span id="{$ielement->getId()}_hint" rel="popover" class="label" data-content="{$ihint}">?</span>{/if}
+                </label>
+                {if $ielement->getMessages()}
+                    <script type="text/javascript">
+                        $( '#{$ielement->getId()}' ).addClass( 'error' );
+                        $( '#div-form-{$ielement->getId()}' ).addClass( 'error' );
+                    </script>
+                {/if}
+                <span class="help-block">
+                    {if $ielement->getMessages()}
+                        {foreach from=$ielement->getMessages() item=messages}
+                            {foreach from=$messages item=msg}
+                                {$msg}<br />
+                            {/foreach}
+                        {/foreach}
+                    {/if}
+                </span>
+            </div>
+        </fieldset>

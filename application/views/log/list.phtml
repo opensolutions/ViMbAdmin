@@ -1,53 +1,53 @@
-{include file="header.phtml"}
+{tmplinclude file="header.phtml"}
+
+{if isset( $session->domain ) && $session->domain }
+    {assign var=domain value=$session->domain}
+{/if}
 
 <div class="page-content" >
 
     <div class="page-header" >
         <h1>
-            Logs{if isset( $session->domain ) && $session->domain }<small> for {$session->domain.domain}</small>{/if}
-            {if isset( $session->domain ) && $session->domain}
-                <a class="btn" id="show_all_logs" title="Show All" href="{genUrl controller='log' action='list' unset=1}">
+            Logs{if isset( $domain ) && $domain }<small> for {$domain->getDomain()}</small>
+                <a class="btn have-tooltip-below" id="show_all_logs" title="Show All" href="{genUrl controller='log' action='list' unset=1}">
                     <i class="icon-remove-circle"></i>
                 </a>
-                <script>
-                    $( document ).ready( function(){
-                        $( '#show_all_logs' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                    });
-                </script>
             {/if}
         </h1>
     </div>
 
 
-{ViMbAdmin_Messages}
+{OSS_Message}
 
 <table id="list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Action</th>
-            <th>Data</th>
+            <th>Log</th>
             <th>Admin</th>
-            <th>Domain</th>
-            <th>Created</th>
+            {if !isset( $domain ) || !$domain }
+                <th>Domain</th>
+            {/if}
+            <th>Occurred At</th>
         </tr>
     </thead>
     <tbody>
-{foreach $logEntries as $oneLog}
+{foreach $logs as $log}
         <tr>
-            <td>{$oneLog.action}</td>
-            <td id="log-message-{$oneLog.id}">
-                {$oneLog.data|shorten:40}
-                {if strlen( $oneLog.data ) > 40 }
-                    <script type="text/javascript">
-                        $( document ).ready( function() {
-                            $( "#log-message-{$oneLog.id}" ).tooltip( { title: '{$oneLog.data|regex_replace:"/[\r\t\n]/":" "}' } );
-                        });
-                    </script>
-                {/if}
+            <td>{$log.action}</td>
+            <td>
+                {*
+                    <div id="log-message-{$log.id}" {if strlen( $log.data ) > 40 } title="{$log.data|regex_replace:"/[\r\t\n]/":" "}" class="have-tooltip-long"{/if}>
+                        {$log.data|shorten:40}
+                    </div>
+                *}
+                    {$log.data}
             </td>
-            <td>{$oneLog.Admin.username}</td>
-            <td>{$oneLog.Domain.domain}</td>
-            <td>{$oneLog.timestamp}</td>
+            <td>{$log.admin}</td>
+            {if !isset( $domain ) || !$domain }
+                <td>{$log.domain}</td>
+            {/if}
+            <td>{$log.timestamp->format( "Y-m-d H:i:s" )}</td>
         </tr>
 {/foreach}
     </tbody>
@@ -56,6 +56,6 @@
 <br />
 <br />
 
-{include file='log/js/list.js'}
+<script type="text/javascript">{tmplinclude file='log/js/list.js'}</script>
 </div>
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

@@ -1,6 +1,8 @@
-{include file="header.phtml"}
+{tmplinclude file="header.phtml"}
 
-{assign var='editAliasParams' value="open: true, iframe: true, transition: 'elastic', width: '750px', height: '500px'"}
+{if isset( $session->domain ) && $session->domain }
+    {assign var=domain value=$session->domain}
+{/if}
 
 <div class="page-content" >
 
@@ -9,41 +11,32 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
                     <span class="btn-group">
-                    <span class="btn" id="ima" title="{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases" >
-            	        {if $includeMailboxAliases}
-            	            <i class="icon-eye-close"></i>
-            	        {else}
+                    {if $ima}   
+                        <a class="btn have-tooltip-below" id="ima" title="Hide Mailbox Aliases" href="{genUrl controller='alias' action='list' ima=0}{if isset( $domain ) && $domain}/did/{$domain->getId()}{/if}" >
             	            <i class="icon-eye-open"></i>
-            	        {/if}
-        	        </span>
-        	        <a class="btn" id="modal-dialog-email_add_alias" title="Add Alias" href="{genUrl controller='alias' action='edit' modal=true}">
+                        </a>
+                    {else}
+                        <a class="btn have-tooltip-below" id="ima" title="Show Mailbox Aliases" href="{genUrl controller='alias' action='list' ima=1}{if isset( $domain ) && $domain}/did/{$domain->getId()}{/if}" >
+                            <i class="icon-eye-close"></i>
+                        </a>
+                    {/if}
+        	        <a class="btn have-tooltip-below" id="add_alias" title="Add Alias" href="{genUrl controller='alias' action='add'}{if isset( $domain ) && $domain}/did/{$domain->getId()}{/if}">
+
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
         	</div>
-        	<script>
-                $( document ).ready( function(){
-                    $( '#ima' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                    $( '#modal-dialog-add_alias' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                });
-            </script>
+
     	</div>
 
         <h1>
-            Aliases {if $domain}<small> for {$domain.domain} {if $domain.aliases neq 0}({$domain->countAliases()}/{$domain.aliases}){/if}</small>{/if}
-
-            {if isset( $session->domain ) && $session->domain}
-                <a class="btn" id="show_all_aliases" title="Show All" href="{genUrl controller='alias' action='list' unset=1}"><i class="icon-remove-circle"></i></a>
-                <script>
-                    $( document ).ready( function(){
-                        $( '#show_all_aliases' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                    });
-                </script>
+            Aliases {if isset( $domain ) && $domain }<small> for {$domain->getDomain()} {if $domain->getMaxAliases() != 0}({$domain->getAliasCount()}/{$domain->getMaxAliases()}){/if}</small>
+                <a class="btn have-tooltip-below" id="show_all_aliases" title="Show All" href="{genUrl controller='alias' action='list' unset=1}{if $ima}/ima/1{/if}"><i class="icon-remove-circle"></i></a>
             {/if}
         </h1>
     </div>
 
-{ViMbAdmin_Messages}
+{OSS_Message}
 
 <br/>
 
@@ -58,39 +51,60 @@
         </tr>
     </thead>
     <tbody>
-    {foreach $aliases as $oneAlias}
-        <tr id="alias_{$oneAlias.id}">
-            <td>{$oneAlias.address}</td>
-            <td>{$oneAlias.domain}</td>
+    {foreach $aliases as $alias}
+        <tr id="alias_{$alias.id}">
+            <td>{$alias.address}</td>
+            <td>{$alias.domain}</td>
             <td>
-                <div id="throb-toggle-active-{$oneAlias.id}" style="float: right;"></div>
-                <span id="toggle-active-{$oneAlias.id}" onclick="toggleActive( 'toggle-active-{$oneAlias.id}', {$oneAlias.id} );" class="btn btn-mini {if $oneAlias.active}btn-success{else}btn-danger{/if}">{$oneAlias.active|yesno}</span>
+                <div id="throb-toggle-active-{$alias.id}" style="float: right;"></div>
+                <span id="toggle-active-{$alias.id}" onclick="toggleActive( 'toggle-active-{$alias.id}', {$alias.id} );" class="btn btn-mini {if $alias.active}btn-success{else}btn-danger{/if}">{$alias.active|yesno}</span>
             </td>
-            <td id="alias-goto-{$oneAlias.id}" >
-                {$oneAlias.goto|shorten:50}
-                {if strlen( $oneAlias.goto ) > 50  }
-                    <script type="text/javascript">
-                        $( document ).ready( function() {
-                            $( "#alias-goto-{$oneAlias.id}" ).tooltip( { title: '{$oneAlias.goto|regex_replace:"/[,]/":", "}' } );
-                        });
-                    </script>
-                {/if}
+            <td>
+                <div id="alias-goto-{$alias.id}" {if strlen( $alias.goto ) > 50 } class="have-tooltip-long" title="{$alias.goto|regex_replace:"/[,]/":", "}"{/if}>
+                {$alias.goto|shorten:50}
+                </div>
             </td>
             <td>
                 <div class="btn-group">
-                    <a class="btn btn-mini" id="modal-dialog-email_edit_alias_{$oneAlias.id}" title="Edit" href="{genUrl controller='alias' action='edit' alid=$oneAlias.id modal=true}">
+                    <a class="btn btn-mini have-tooltip" id="edit_alias_{$alias.id}" title="Edit" href="{genUrl controller='alias' action='edit' alid=$alias.id}">
                         <i class="icon-pencil"></i>
                     </a>
-                    <span class="btn btn-mini" id="delete-alias-{$oneAlias.id}" title="Delete" onclick="deleteAlias( {$oneAlias.id} );">
+                    {if isset( $alias_actions ) }
+                        {assign var=oid value=$alias.id}
+                        {foreach $alias_actions as $action}
+                            {if isset( $action.menu ) }
+                                {assign var="action_list_menu" value=$action}
+                            {else}
+                                <{$action.tagName} {foreach $action as $attrib => $value}{if !in_array( $attrib, [ "tagName", "child"] )}{$attrib}="{$value|replace:'%id%':$oid}" {/if}{/foreach}>
+                                {if !is_array( $action.child ) }
+                                    {$action.child}
+                                {else}
+                                    <{$action.child.tagName} {foreach $action.child as $attrib => $value}{if $attrib != "tagName"}{$attrib}="{$value}" {/if}{/foreach} {if $action.child.tagName != "img"}></{$action.child.tagName}>{else}/>{/if}
+                                {/if}
+                                </{$action.tagName}>
+                            {/if}
+                        {/foreach}
+                    {/if}
+                    <a class="btn btn-mini have-tooltip" id="delete-alias-{$alias.id}" title="Delete" href="{genUrl controller='alias' action='delete' alid=$alias.id}">
                         <i class="icon-trash"></i>
-                    </span>
+                    </a>
+                    {if isset( $action_list_menu)}
+                        {assign var="action" value=$action_list_menu}
+                        <{$action.tagName} {foreach $action as $attrib => $value}{if !in_array( $attrib, [ "tagName", "child", "menu" ] )}{$attrib}="{$value|replace:'%id%':$oid}" {/if}{/foreach}>
+                        {if !is_array( $action.child ) }
+                            {$action.child}
+                        {else}
+                            <{$action.child.tagName} {foreach $action.child as $attrib => $value}{if $attrib != "tagName"}{$attrib}="{$value}" {/if}{/foreach} {if $action.child.tagName != "img"}></{$action.child.tagName}>{else}/>{/if}
+                        {/if}
+                        <span class="caret"></span>
+                        </{$action.tagName}>
+                        <ul class="dropdown-menu pull-right">
+                        {foreach $action.menu as $item}
+                            <li><a {if isset( $item.id)}id="{$item.id|replace:'%id%':$oid}" {/if}href="{$item.url|replace:'%id%':$oid}">{$item.text}</a></li>
+                        {/foreach}
+                        </ul>
+                    {/if}
                 </div>
-                <script>
-                    $( document ).ready( function(){
-                        $( '#modal-dialog-edit_alias_{$oneAlias.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                        $( '#delete-alias-{$oneAlias.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                    });
-                </script>
             </td>
         </tr>
     {/foreach}
@@ -101,7 +115,7 @@
 <br />
 <br />
 
-{include file='alias/js/list.js'}
+<script type="text/javascript">{tmplinclude file='alias/js/list.js'}</script>
 
 <div id="purge_dialog" class="modal hide fade">
     <div class="modal-header">
@@ -112,10 +126,10 @@
         Are you sure you want to delete this alias?
     </div>
     <div id="pdfooter" class="modal-footer">
-        <span class="btn btn-danger" id="purge_dialog_delete">Delete</span>
+        <a class="btn btn-danger" id="purge_dialog_delete" href="#">Delete</a>
         <button id="purge_dialog_cancel" class="btn">Cancel</button>
     </div>
 </div>
 
 </div>
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

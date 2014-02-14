@@ -1,4 +1,4 @@
-{include file="header.phtml" }
+{tmplinclude file="header.phtml" }
 
 <div class="page-content" >
 
@@ -7,29 +7,25 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-            	    <span class="btn" id="ima" title="{if $includeMailboxAliases}Hide{else}Show{/if} Mailbox Aliases" >
-            	        {if $includeMailboxAliases}
-            	            <i class="icon-eye-close"></i>
-            	        {else}
-            	            <i class="icon-eye-open"></i>
-            	        {/if}
-        	        </span>
-        	        <a class="btn" id="modal-dialog-add_alias" href="{genUrl controller='alias' action='edit' mid=$mailboxModel.id modal=true}" title="Add Alias" >
+            	    {if $ima}   
+                        <a class="btn have-tooltip-below" id="ima" title="Hide Mailbox Aliases" href="{genUrl controller='mailbox' action='aliases' ima=0 mid=$mailbox->getId()}" >
+                            <i class="icon-eye-close"></i>
+                        </a>
+                    {else}
+                        <a class="btn have-tooltip-below" id="ima" title="Show Mailbox Aliases" href="{genUrl controller='mailbox' action='aliases' ima=1 mid=$mailbox->getId()}" >
+                            <i class="icon-eye-close"></i>
+                        </a>
+                    {/if}
+        	        <a class="btn have-tooltip-below" id="add_alias" href="{genUrl controller='alias' action='add' mid=$mailbox->getId()}" title="Add Alias" >
             	        <i class="icon-plus"></i>
         	        </a>
             	</span>
-            	<script>
-                    $( document ).ready( function(){
-                        $( '#ima' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                        $( '#modal-dialog-add_alias' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                    });
-                </script>
         	</div>
     	</div>
-        <h1>Aliases of {$mailboxModel.username}</h1>
+        <h1>Aliases <small>for {$mailbox->getUsername()}</small></h1>
 
     </div>
-    {ViMbAdmin_Messages}
+    {OSS_Message}
 
 
     <table id="list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
@@ -41,30 +37,20 @@
             </tr>
         </thead>
         <tbody>
-        {foreach $aliases as $oneAlias}
-            <tr id="alias_{$oneAlias.id}">
-                <td>{$oneAlias.address}</td>
-                <td id="alias-goto-{$oneAlias.id}">
-                {$oneAlias.goto|shorten:50}
-                {if strlen( $oneAlias.goto ) > 50  }
-                    <script type="text/javascript">
-                        $( document ).ready( function() {
-                            $( "#alias-goto-{$oneAlias.id}" ).tooltip( { title: '{$oneAlias.goto|regex_replace:"/[,]/":", "}' } );
-                        });
-                    </script>
-                {/if}
-            </td>
+        {foreach $aliases as $alias}
+            <tr id="alias_{$alias->getId()}">
+                <td>{$alias->getAddress()}</td>
+                <td >
+                    <div id="alias-goto-{$alias->getId()}" {if strlen( $alias->getGoto() ) > 50}class="have-tooltip" title="{$alias->getGoto()|regex_replace:"/[,]/":", "}"{/if}>
+                        {$alias->getGoto()|shorten:50}
+                    </div>
+                </td>
                 <td>
                     <div class="btn-group">
-                        <span class="btn btn-mini" onclick="deleteAlias( {$oneAlias.id}, {$mailboxModel.id}, '{$oneAlias.address}' );" id="delete-alias-{$oneAlias.id}" title="Remove" >
+                        <a class="btn btn-mini have-tooltip" ref="{$alias->getAddress()}" id="delete-alias-{$alias->getId()}" href="{genUrl controller='mailbox' action='delete-alias' mid=$mailbox->getId() alid=$alias->getId()}" title="Remove" >
                             <i class="icon-trash"></i>
-                        </span>
+                        </a>
                     </div>
-                    <script>
-                        $( document ).ready( function(){
-                            $( '#delete-alias-{$oneAlias.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                        });
-                    </script>
                 </td>
             </tr>
         {/foreach}
@@ -73,7 +59,7 @@
     <br/>
     <br/>
 
-    {include file='mailbox/js/aliases.js'}
+    <script type="text/javascript">{tmplinclude file='mailbox/js/aliases.js'}</script>
 
     <div id="purge_dialog" class="modal hide fade">
     <div class="modal-header">
@@ -85,11 +71,11 @@
         <em id="purge_alias_name"></em> from this entry?
     </div>
     <div id="pdfooter" class="modal-footer">
-        <span class="btn btn-danger" id="purge_dialog_delete">Delete</span>
+        <a class="btn btn-danger" id="purge_dialog_delete" href="#">Delete</a>
         <button id="purge_dialog_cancel" class="btn">Cancel</button>
     </div>
 </div>
 
 
 </div>
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

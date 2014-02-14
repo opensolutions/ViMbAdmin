@@ -1,4 +1,4 @@
-{include file="header.phtml"}
+{tmplinclude file="header.phtml"}
 
 <div class="page-content" >
 
@@ -6,7 +6,7 @@
         <h1>Welcome to Your New ViMbAdmin Installation!</h1>
     </div>
     
-    {ViMbAdmin_Messages}
+    {OSS_Message}
     
     <p>
     This set-up procedure will guide you the final steps to put your system live.
@@ -14,19 +14,19 @@
     
     {if not $saltSet}
         <div class="well">
-            <h3>Step 1: Security Salt</h3>
+            <h3>Step 1: Security Salts</h3>
             
             <p>
-            A <em>security salt</em> is used to ensure your administrator passwords are
-            secure. You must first set a random security salt in the <code>securitysalt</code>
-            parameter in the following file: <code>application/config/application.ini</code>.
+            <em>Security salts</em> are used to ensure your passwords are
+            secure, you are authorised to complete the install procedure and for cookie security. 
+            To proceed, please set the following <strong>randomly generated</strong> salts 
+            at the top of the <code>[user]</code> section of the following file: 
+            <code>application/config/application.ini</code>.
             </p>
             
-            <p>
-            We suggest you use the following <strong>randomly generated</strong> string:
-            </p>
-            
-             <pre>{$randomSalt}</pre>
+            <pre>securitysalt                       = "{$randomSalt|htmlentities}"
+resources.auth.oss.rememberme.salt = "{$rememberSalt|htmlentities}"
+defaults.mailbox.password_salt     = "{$passwordSalt|htmlentities}"</pre>
         
             <p>
                 <strong>Please also ensure you have set all the appropriate values
@@ -75,7 +75,8 @@
     <p>
     <strong>We are only interested in counting the install
     base to know if further development and support of this open source project is
-    worthwhile.</strong>.
+    worthwhile. In fact, ViMbAdmin V3 was only released as a result of these
+    statistics.</strong>
     </p>
 
     <p>
@@ -91,4 +92,4 @@
 
 </div>
 
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

@@ -1,0 +1,136 @@
+<div id="form_div_edit_alias">
+
+    <form action="{$element->getAction()}"
+          method="{$element->getMethod()}"
+          enctype="{$element->getAttrib('enctype')}"
+          id="{$element->getId()}"
+          name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+          {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+          class="form-horizontal">
+
+        <div class="tabbable">
+
+              <ul id="plugin_tabs" class="nav nav-tabs hide">
+                  <li class="active"><a data-toggle="tab" href="#tab-main">Home</a></li>
+              </ul>
+
+              <div class="tab-content">
+
+                    <div class="tab-pane active" id="tab-main">
+
+                {if isset( $element->local_part ) && isset( $element->domain )}
+                    <fieldset class="control-group" id="div-form-password">
+                        <label for="local_part" class="control-label">
+                                Address
+                                <span class="label" id="address-popover" data-content="You can alias an entire domain by leaving the address field / local part blank." data-title="Domain Aliases" data-placement="left">?</span>
+                        </label>
+                        <div id="div-controls-{$element->local_part->getId()}" class="controls">
+                            <div class="input-append btn-group" style="float: left;">
+                                    {$element->local_part}
+                                    {if !isset( $domain ) || !$domain}
+                                        <span class="btn">@</span>
+                                        {$element->domain}
+                                    {else}
+                                        <div style="display: none;">{$element->domain}</div>
+                                        <span class="add-on">@{$domain->getDomain()}</span>
+                                    {/if}
+                                </div>
+
+                            {if $element->local_part->getMessages()}
+                                <script type="text/javascript">
+                                    $( '#{$element->local_part->getId()}' ).addClass( 'error' );
+                                    $( '#div-form-{$element->local_part->getId()}' ).addClass( 'error' );
+                                </script>
+                            {/if}
+                            <p id="help-{$element->local_part->getId()}" class="help-block">
+                                {if $element->local_part->getMessages()}
+                                    <br />
+                                    {foreach from=$element->local_part->getMessages() item=messages}
+                                        {foreach from=$messages item=msg}
+                                            <br />{$msg}
+                                        {/foreach}
+                                    {/foreach}
+                                {/if}
+                            </p>
+
+                            {if $element->domain->getMessages()}
+                                <script type="text/javascript">
+                                    $( '#{$element->domain->getId()}' ).addClass( 'error' );
+                                    $( '#div-form-{$element->domain->getId()}' ).addClass( 'error' );
+                                </script>
+                            {/if}
+                            <p id="help-{$element->domain->getId()}" class="help-block">
+                                {if $element->domain->getMessages()}
+                                    <br />
+                                    {foreach from=$element->domain->getMessages() item=messages}
+                                        {foreach from=$messages item=msg}
+                                            <br />{$msg}
+                                        {/foreach}
+                                    {/foreach}
+                                {/if}
+                            </p>
+                        </div>
+                    </fieldset>
+                {/if}
+
+                <fieldset class="control-group" id="div-form-goto">
+                    <label for="goto" class="control-label">
+                        {$element->goto->getLabel()}
+                    </label>
+                    <div class="controls" id="div-controls-goto">
+                        <div class="input-append" id="goto-div-0">
+                            <input type="text" id="goto_empty" autocomplete="off" name="goto[]" value="" size="40" title="Goto" />
+                            <span id="goto-btn-0" title="Add go to" class="btn add-on" onclick="addGoto();" style="margin-left: -5px; width: 30px;">
+                                <i class="icon-plus"></i>
+                            </span>
+                        </div>
+                    {if $element->goto->getMessages()}
+                        <script type="text/javascript">
+                            $( '#{$element->goto->getId()}' ).addClass( 'error' );
+                            $( '#div-form-{$element->goto->getId()}' ).addClass( 'error' );
+                        </script>
+                    {/if}
+                    <p id="help-goto" class="help-block">
+                        {if $element->goto->getMessages()}
+                            {foreach from=$element->goto->getMessages() item=messages}
+                                {foreach from=$messages item=msg}
+                                    {if $msg|strstr:";"}
+                                        {assign var="end" value=$msg|strpos:";"}
+                                        {$msg|substr:0:$end}
+                                    {else}
+                                        {$msg}
+                                    {/if}
+                                    <br />
+                                {/foreach}
+                            {/foreach}
+                        {/if}
+                    </p>
+                    </div>
+                </fieldset>
+            </div>
+
+                {* any plugin elements? *}
+                {foreach $element->getSubForms() as $name => $sf}
+                    {if substr( $name, 0, 9 ) eq 'pluginsf_'}
+                        {$sf}
+                    {/if}
+                {/foreach}
+
+            </div>
+
+        </div>
+
+        <fieldset class="form-actions">
+            <a class="btn" type="button" href="{genUrl controller='alias' action='list'}" value="Cancel" >Cancel</a>
+            <input class="btn btn-primary" type="submit" id="{$element->save->getId()}" value="{$element->save->getLabel()}" />
+        </field>
+    </form>
+     <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $( '#domain' ).bind( 'change',  function() {
+                $( '#help-domain' ).html( '' );
+            });
+        }); // document onready
+    </script>
+</div> <!-- #form_div_edit_alias -->

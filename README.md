@@ -1,17 +1,50 @@
 
+# WORK IN PROGRESS
+
+Please Ignore for Now.
+
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+|
+
+
 ViMbAdmin :: Virtual Mailbox Administration
 ============================================
 
-The **ViMbAdmin** project (*vim-be-admin*) provides an web based virtual mailbox 
-administration system to allow mail administrators to easily manage domains, mailboxes 
-and aliases. 
+The **ViMbAdmin** project (*vim-be-admin*) provides a web based virtual mailbox administration system to allow mail administrators to easily manage domains, mailboxes and aliases. 
 
-**ViMbAdmin** was written in PHP using our own web application framework which includes 
-the Zend Framework, the Doctrine ORM and the Smarty templating system with JQuery and Bootstrap.
+**ViMbAdmin** was written in PHP using our own web application framework which includes the Zend Framework, the Doctrine ORM and the Smarty templating system with JQuery and Bootstrap.
 
-**ViMbAdmin** is hosted on its own GitHub project page where you can find documentation, 
-browse the source code and access our Git repository. We have also set up a Google Groups 
-discussion group or you can follow the [blog posts](http://www.barryodonovan.com/index.php/category/vimbadmin-2) on our MD's personal site.
+**ViMbAdmin** is hosted on its own GitHub project page where you can find documentation, browse the source code and access our Git repository. We have also set up a Google Groups discussion group or you can follow the [blog posts](http://www.barryodonovan.com/index.php/category/vimbadmin-2) on our MD's personal site.
 
 
 * Lead Author: [Barry O'Donovan](http://www.barryodonovan.com) (founder and MD of Open Solutions)
@@ -52,14 +85,14 @@ Please see the following links for more information:
 
 * [Open Solutions' ViMbAdmin page](http://www.opensolutions.ie/open-source/vimbadmin) (with screenshots);
 * [Live demo](http://www.opensolutions.ie/vimbadmin);
-* [GitHub project page](https://github.com/opensolutions/ViMbAdmin);
+* [GitHub project page](https://github.com/opensolutions/ViMbAdmin3);
 * Various [blog posts](http://www.barryodonovan.com/index.php/category/vimbadmin-2);,
-* [GitHub wiki](https://github.com/opensolutions/ViMbAdmin/wiki)
+* [GitHub wiki](https://github.com/opensolutions/ViMbAdmin3/wiki)
 
 Copyright, License and Redistribution
 --------------------------------------
 
-Copyright (c) 2011 - 2012 [Open Source Solutions Limited](http://www.opensolutions.ie/), Dublin, Ireland.
+Copyright (c) 2011 - 2014 [Open Source Solutions Limited](http://www.opensolutions.ie/), Dublin, Ireland.
 
 **ViMbAdmin** is free software: you can redistribute it and/or modify
 it under the terms of the [GNU General Public License](http://www.gnu.org/licenses/gpl-3.0-standalone.html) as published by

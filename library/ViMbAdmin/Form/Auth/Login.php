@@ -7,7 +7,7 @@
  * project which provides an easily manageable web based virtual
  * mailbox administration system.
  *
- * Copyright (c) 2011 Open Source Solutions Limited
+ * Copyright (c) 2011 - 2012 Open Source Solutions Limited
  *
  * ViMbAdmin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,10 @@
  *   147 Stepaside Park, Stepaside, Dublin 18, Ireland.
  *   Barry O'Donovan <barry _at_ opensolutions.ie>
  *
- * @copyright Copyright (c) 2011 Open Source Solutions Limited
+ * @copyright Copyright (c) 2011 - 2012 Open Source Solutions Limited
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPLv3)
  * @author Open Source Solutions Limited <info _at_ opensolutions.ie>
  * @author Barry O'Donovan <barry _at_ opensolutions.ie>
- * @author Roland Huszti <roland _at_ opensolutions.ie>
  */
 
 /**
@@ -42,55 +41,23 @@
 class ViMbAdmin_Form_Auth_Login extends ViMbAdmin_Form
 {
 
-    public function __construct( $options = null )
+    public function init()
     {
-        parent::__construct( $options );
-
-        $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'auth/form/login.phtml' ) ) ) );
-
-        $this
-            ->setMethod( 'post' )
-            ->setAttrib( 'id', 'login_form' )
+        $this->setAttrib( 'id', 'login_form' )
             ->setAttrib( 'name', 'login_form' );
 
-        $username = $this
-                        ->createElement( 'text', 'username' )
-                        ->setAttrib( 'size', 30 )
-                        ->setLabel( _( 'Username' ) )
-                        ->setAttrib( 'title', _( 'Username' ) )
-                        ->setAttrib( 'class', 'required' )
-                        //->setAttrib( 'autocomplete', 'off' )
-                        ->setRequired( true )
-                        ->addValidator( 'NotEmpty', true )
-                        ->addValidator( 'EmailAddress', true, array( 'mx' => true ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StripSlashes' );
-
-        $username->getValidator( 'NotEmpty' )->setMessage( _( 'You must enter your email address' ), Zend_Validate_NotEmpty::IS_EMPTY );
-
-        $password = $this
-                        ->createElement( 'password', 'password' )
-                        ->setLabel( _( 'Password' ) )
-                        ->setAttrib( 'title', _( 'Password' ) )
-                        ->setAttrib( 'size', 30 )
-                        ->setRequired( true )
-                        ->addValidator( 'NotEmpty', true )
-                        ->addValidator( 'StringLength', true, array( 8, 32 ) )
-                        ->addFilter( 'StringTrim' )
-                        ->addFilter( 'HtmlEntitiesDecode' )
-                        ->addFilter( 'StripSlashes' );
-
-        $submit = $this
-                        ->createElement( 'submit' , 'login' )
-                        ->setLabel( _( 'Log In' ) );
-
-        $this
-            ->addElement( $username )
-            ->addElement( $password )
-            ->addElement( $submit );
-
-        $this->setElementDecorators( array( 'ViewHelper' ) );
+        $username = OSS_Form_Auth::createUsernameElement( OSS_Form_Auth::USERNAME_TYPE_EMAIL );
+        $username->setAttrib( 'class', 'span3' );
+        $this->addElement( $username );
+        
+        $this->addElement( OSS_Form_Auth::createPasswordElement() );
+        $this->addElement( OSS_Form_Auth::createRememberMeElement() );
+        
+        $submit = $this->createElement( 'submit' , 'login' )
+            ->setLabel( _( 'Log In' ) );
+        $this->addElement( $submit );
+        
+        $this->_addActionsDisplayGroupElement( OSS_Form_Auth::createLostPasswordElement() );
     }
 
 }

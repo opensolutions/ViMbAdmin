@@ -1,0 +1,98 @@
+
+<form action="{$element->getAction()}"
+      method="{$element->getMethod()}"
+      enctype="{$element->getAttrib('enctype')}"
+      id="{$element->getId()}"
+      name="{if $element->getName() != ''}{$element->getName()}{else}{$element->getId()}{/if}"
+      {if $element->getAttrib('target')}target="{$element->getAttrib('target')}"{/if}
+      class="form-horizontal">
+
+
+    <div class="row-fluid">
+        <div class="span6">
+            {$element->domain}
+            {$element->description}
+            {$element->backupmx}
+            {$element->active}
+            <br/>
+        </div>
+        <div class="span6">
+            <div id="advanced_options" class="dontdisplay">
+                {$element->max_aliases}
+                {$element->max_mailboxes}
+                {* $element->max_quota *}
+                {* $element->quota *}
+                <div class="control-group {if $element->max_quota->hasErrors()}error{/if}">
+                    <label class="control-label required" for="{$element->max_quota->getId()}">{$element->max_quota->getLabel()}</label>
+                    <div class="controls">
+                        <input type="text" {if $element->max_quota->isRequired()}class="required"{/if} title="{$element->max_quota->getAttrib('title')}"
+                            value="{$element->max_quota->getValue()}" id="{$element->max_quota->getId()}" name="{$element->max_quota->getName()}" />
+
+                        <span id="popover_{$element->max_quota->getId()}" rel="popover" class="btn btn-mini"
+                            data-placement="top"
+                            data-content="<p>Default unit is: {$quota_multiplier}<br/>You can append B (for Bytes), KB (KiloBytes), MB (MegaBytes) or GB (GigaBytes) to the number. E.g. 10GB</p>"
+                            data-original-title="{$element->max_quota->getAttrib('title')}">?</span>
+
+                        {if $element->max_quota->hasErrors()}
+                            <span id="help-{$element->max_quota->getId()}" class="help-block">
+                                {foreach $element->max_quota->getMessages() as $messages}
+                                    {foreach $messages as $msg}
+                                        {$msg}<br />
+                                    {/foreach}
+                                {/foreach}
+                            </span>
+                        {/if}
+                    </div>
+                </div>
+                <div class="control-group {if $element->quota->hasErrors()}error{/if}">
+                    <label class="control-label required" for="{$element->quota->getId()}">{$element->quota->getLabel()}</label>
+                    <div class="controls">
+                        <input type="text" {if $element->quota->isRequired()}class="required"{/if} title="{$element->quota->getAttrib('title')}"
+                            value="{$element->quota->getValue()}" id="{$element->quota->getId()}" name="{$element->quota->getName()}" />
+
+                        <span id="popover_{$element->quota->getId()}" rel="popover" class="btn btn-mini"
+                            data-placement="top"
+                            data-content="<p>Default unit is: {$quota_multiplier}<br/>You can append B (for Bytes), KB (KiloBytes), MB (MegaBytes) or GB (GigaBytes) to the number. E.g. 10GB</p>"
+                            data-original-title="{$element->quota->getAttrib('title')}">?</span>
+
+                        {if $element->quota->hasErrors()}
+                            <span id="help-{$element->quota->getId()}" class="help-block">
+                                {foreach $element->quota->getMessages() as $messages}
+                                    {foreach $messages as $msg}
+                                        {$msg}<br />
+                                    {/foreach}
+                                {/foreach}
+                            </span>
+                        {/if}
+                    </div>
+                </div>
+                
+                {$element->transport}
+            </div>
+        </div>
+    </div>
+
+    <fieldset class="form-actions">
+        <span class="btn" id="toogle_advanced">Advanced</span>
+        <a class="btn" href="{genUrl controller="domain" action="list"}">Cancel</a>
+        <input class="btn btn-primary" type="submit" value="{$element->save->getLabel()}" />
+    </fieldset>
+</form>
+
+<script type="text/javascript">
+    {if $element->max_aliases->hasErrors()
+        || $element->max_mailboxes->hasErrors()
+        || $element->max_quota->hasErrors()
+        || $element->quota->hasErrors()
+        || $element->transport->hasErrors() }
+        $('#advanced_options').removeClass('dontdisplay');
+    {/if}
+    
+    $(document).ready(function()
+    {
+        $('#toogle_advanced').bind('click', function() {
+            $('#advanced_options').toggle('fast');
+        });
+    }); // document onready
+
+</script>

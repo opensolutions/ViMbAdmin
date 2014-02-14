@@ -7,7 +7,7 @@
  * project which provides an easily manageable web based virtual
  * mailbox administration system.
  *
- * Copyright (c) 2011 Open Source Solutions Limited
+ * Copyright (c) 2011 - 2014 Open Source Solutions Limited
  *
  * ViMbAdmin is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
  *   147 Stepaside Park, Stepaside, Dublin 18, Ireland.
  *   Barry O'Donovan <barry _at_ opensolutions.ie>
  *
- * @copyright Copyright (c) 2011 Open Source Solutions Limited
+ * @copyright Copyright (c) 2011 - 2014 Open Source Solutions Limited
  * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License, version 3 (GPLv3)
  * @author Open Source Solutions Limited <info _at_ opensolutions.ie>
  * @author Barry O'Donovan <barry _at_ opensolutions.ie>
@@ -41,185 +41,46 @@
  */
 class AuthController extends ViMbAdmin_Controller_Action
 {
+    use OSS_Controller_Trait_Auth;
 
     /**
-     * Jumps to login action.
+     * A pre-login function allow and pre-login processing / checks.
+     * Override if you need to add functionality.
      */
-    public function indexAction()
+    protected function _preLogin()
     {
-        $this->_forward( 'login' );
-    }
-
-
-    /**
-     * Display the login box or process a login on submission.
-     */
-    public function loginAction()
-    {
-        if( $this->getAuth()->getIdentity() )
-        {
-            $this->addMessage( _( 'You are already logged in.' ), ViMbAdmin_Message::INFO );
-            $this->_redirect( 'domain/list' );
-        }
-
-        // make sure we have some users
-        if( AdminTable::getCount() == 0 )
+        if( $this->getD2EM()->getRepository( '\\Entities\\Admin' )->getCount() == 0 )
             $this->_redirect( 'auth/setup' );
-
-        $auth = Zend_Auth::getInstance();
-
-        $loginForm = new ViMbAdmin_Form_Auth_Login;
-
-        if( $this->getRequest()->isPost() && $loginForm->isValid( $_POST ) )
-        {
-            try
-            {
-                $authAdapter = new ViMbAdmin_Auth_DoctrineAdapter(
-                    $loginForm->getValue( 'username' ),
-                    AdminTable::hashPassword( $loginForm->getValue( 'password' ), $this->_options[ 'securitysalt' ] )
-                );
-
-                $result = $auth->authenticate( $authAdapter );
-
-                switch( $result->getCode() )
-                {
-                    case Zend_Auth_Result::SUCCESS:
-                        $identity = $auth->getIdentity();
-                        $this->getLogger()->info( "Admin {$identity['username']} logged in" );
-                        $this->_redirect( 'domain/list' );
-                        break;
-
-                    default:
-                        $this->addMessages( $result->getMessages(), ViMbAdmin_Message::ERROR );
-                        $this->getLogger()->debug(
-                            "Bad login for {$loginForm->getValue( 'username' )}: "
-                                . implode( ' -- ', $result->getMessages() )
-                        );
-                        break;
-                }
-            }
-            catch( Zend_Auth_Adapter_Exception $e )
-            {
-                $this->getLogger()->err( "Exception in AuthController::loginAction: " . $e->getMessage() );
-                $this->addMessage(
-                    _( "System error during login - please see system logs or contact your system administrator." ),
-                    ViMbAdmin_Message::ERROR
-                );
-            }
-        }
-
-        $this->view->loggedOut = $this->_getParam( 'out', false );
-        $this->view->loginForm = $loginForm;
     }
 
-
     /**
-     * Logs the user out, clears the identity and the session.
+     * Get the login form
+     *
+     * @return ViMbAdmin_Form_Auth_Login The login form
      */
-    public function logoutAction()
+    protected function _getFormLogin()
     {
-        if( $this->getAuth()->getIdentity() )
-            $this->getLogger()->debug( _( 'Admin' ) . ' ' . $this->getAdmin()->username . ' ' . _( 'logged out' ) . '.' );
-
-        $this->getAuth()->clearIdentity();
-        $this->getSession()->unsetAll();
-        Zend_Session::destroy( true, true );
-
-        $this->_redirect( 'auth/login/out/1' );
+        return new ViMbAdmin_Form_Auth_Login();
     }
 
+    /**
+     * Get the lost password form
+     *
+     * @return ViMbAdmin_Form_Auth_LostPassword The login form
+     */
+    protected function _getFormLostPassword()
+    {
+        return new ViMbAdmin_Form_Auth_LostPassword();
+    }
 
     /**
-     * Asks for a username (email) and sends a password reset token to the address. If the parameter "rid"
-     * exists (click on link in email) and the RID is valid then sets the admin's password to random and emails
-     * it to him/her, so he/she can log in and re-set the password if desired.
+     * Get the reset password form
+     *
+     * @return ViMbAdmin_Form_Auth_ResetPassword The login form
      */
-    public function passwordResetAction()
+    protected function _getFormResetPassword()
     {
-        $rid = $this->_getParam( 'rid', false );
-
-        if( !$rid )
-        {
-            $resetForm = new ViMbAdmin_Form_Auth_PasswordReset;
-
-            if( $this->getRequest()->isPost() && $resetForm->isValid( $_POST ) )
-            {
-                $username = $resetForm->getValue( 'username' );
-
-                $adminModel = Doctrine_Query::create()
-                    ->from( 'Admin' )
-                    ->where( 'username = ?', $username )
-                    ->fetchOne();
-
-                if( !$adminModel )
-                {
-                    $this->addMessage( _( 'User does not exist.' ), ViMbAdmin_Message::ERROR );
-                }
-                else
-                {
-                    $tokenModel = TokenTable::addToken( $adminModel, 'PASSWORD_RESET', null, null );
-
-                    $mailer = new Zend_Mail( 'UTF-8' );
-                    $mailer->setSubject( _( 'ViMbAdmin :: Password Reset' ) );
-                    $mailer->addTo( $adminModel->username );
-                    $mailer->setFrom(
-                        $this->_options['server']['email']['address'],
-                        $this->_options['server']['email']['name']
-                    );
-
-                    $this->view->tokenModel = $tokenModel;
-                    $this->view->adminModel = $adminModel;
-
-                    $mailer->setBodyText( $this->view->render( 'auth/email/password_reset.phtml' ) );
-
-                    $mailer->send();
-
-                    $this->addMessage( _( 'We have sent you an email with further details.' ), ViMbAdmin_Message::SUCCESS );
-                    $this->_redirect( 'auth/login' );
-                }
-            }
-
-            $this->view->resetForm = $resetForm;
-        }
-        elseif( strlen( $rid ) != 32 )
-        {
-            $this->addMessage( _( 'Invalid token.' ), ViMbAdmin_Message::ERROR );
-        }
-        else
-        {
-            $tokenModel = Doctrine::getTable( 'Token' )->findOneByRid( $rid );
-
-            if( !$tokenModel )
-            {
-                $this->addMessage( _( 'Invalid token.' ), ViMbAdmin_Message::ERROR );
-            }
-            else
-            {
-                $password = TokenTable::createRandomString( 10 );
-
-                $tokenModel->Admin->setPassword( $password, $this->_options['securitysalt'], true );
-
-                $mailer = new Zend_Mail( 'UTF-8' );
-                $mailer->setSubject( _( 'ViMbAdmin :: Password Reset' ) );
-                $mailer->setFrom(
-                    $this->_options['server']['email']['address'],
-                    $this->_options['server']['email']['name']
-                );
-
-                $mailer->addTo( $tokenModel->Admin->username );
-
-                $this->view->password = $password;
-
-                $mailer->setBodyText( $this->view->render( 'auth/email/new_password.phtml' ) );
-
-                $mailer->send();
-
-                TokenTable::deleteTokens( $tokenModel->Admin, 'PASSWORD_RESET' );
-
-                $this->addMessage( _( 'We have sent you an email with further details.' ), ViMbAdmin_Message::SUCCESS );
-                $this->_redirect( 'auth/login' );
-            }
-        }
+        return new ViMbAdmin_Form_Auth_ResetPassword();
     }
 
 
@@ -228,41 +89,56 @@ class AuthController extends ViMbAdmin_Controller_Action
      */
     public function changePasswordAction()
     {
-        $form = new ViMbAdmin_Form_Mailbox_Password( $this->_options['defaults']['mailbox']['min_password_length'] );
+        $form = new ViMbAdmin_Form_Mailbox_Password();
+
+        if( isset( $this->_options['defaults']['mailbox']['min_password_length'] ) )
+            $form->setMinPasswordLength( $this->_options['defaults']['mailbox']['min_password_length'] );
 
         if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
         {
-            $mailbox = Doctrine_Query::create()
-                ->from( 'Mailbox' )
-                ->where( 'username = ?', $form->getValue( 'username' ) )
-                ->fetchOne();
+            $mailbox = $this->getD2EM()->getRepository( '\\Entities\\Mailbox' )->findOneBy( ['username' => $form->getValue( 'username' ) ] );
 
             if( !$mailbox )
             {
-                $this->addMessage( _( 'Invalid username or password.' ), ViMbAdmin_Message::ERROR );
+                $this->addMessage( _( 'Invalid username or password.' ), OSS_Message::ERROR );
             }
             else
             {
-                $cPassword = $mailbox['password'];
 
-                if( $cPassword == $mailbox->hashPassword(
-                            $this->_options['defaults']['mailbox']['password_scheme'],
-                            $form->getValue( 'current_password' ),
-                            $this->_options['defaults']['mailbox']['password_hash']
+                if( OSS_Auth_Password::verify(
+                            $form->getValue( 'current_password' ), $mailbox->getPassword(),
+                            [ 
+                                'pwhash' => $this->_options['defaults']['mailbox']['password_scheme'],
+                                'pwsalt' => isset( $this->_options['defaults']['mailbox']['password_salt'] )
+                                                ? $this->_options['defaults']['mailbox']['password_salt'] : null, 
+                                'pwdovecot' => isset( $this->_options['defaults']['mailbox']['dovecot_pw_binary'] )
+                                                ? $this->_options['defaults']['mailbox']['dovecot_pw_binary'] : null,
+                                'username' => $form->getValue( 'username' )
+                            ]
                         )
                     )
                 {
-                    $mailbox->hashPassword(
-                        $this->_options['defaults']['mailbox']['password_scheme'],
-                        $form->getValue( 'new_password' ),
-                        $this->_options['defaults']['mailbox']['password_hash']
+                    $mailbox->setPassword(
+                         OSS_Auth_Password::hash(
+                            $form->getValue( 'new_password' ),
+                            [ 
+                                'pwhash' => $this->_options['defaults']['mailbox']['password_scheme'],
+                                'pwsalt' => isset( $this->_options['defaults']['mailbox']['password_salt'] )
+                                                ? $this->_options['defaults']['mailbox']['password_salt'] : null, 
+                                'pwdovecot' => isset( $this->_options['defaults']['mailbox']['dovecot_pw_binary'] )
+                                                ? $this->_options['defaults']['mailbox']['dovecot_pw_binary'] : null,
+                                 'username' => $form->getValue( 'username' )
+
+                            ]
+                        )
                     );
-                    $mailbox->save();
-                    $this->addMessage( _( 'You have successfully changed your password.' ), ViMbAdmin_Message::SUCCESS );
+
+                    $this->getD2EM()->flush();
+                    $this->addMessage( _( 'You have successfully changed your password.' ), OSS_Message::SUCCESS );
                     $this->_redirect( 'auth/login' );
                 }
                 else
-                    $this->addMessage( _( 'Invalid username or password.' ), ViMbAdmin_Message::ERROR );
+                    $this->addMessage( _( 'Invalid username or password.' ), OSS_Message::ERROR );
             }
         }
 
@@ -272,30 +148,30 @@ class AuthController extends ViMbAdmin_Controller_Action
 
     public function setupAction()
     {
-        $form = new ViMbAdmin_Form_Admin_Edit;
+        if( $this->getD2EM()->getRepository( '\\Entities\\Admin' )->getCount() != 0 )
+        {
+            $this->addMessage( _( "Admins already exist in the system." ), OSS_Message::INFO );
+            $this->_redirect( 'auth/login' );
+        }
+
+        if( $this->getAuth()->getIdentity() )
+        {
+            $this->addMessage( _( 'You are already logged in.' ), OSS_Message::INFO );
+            $this->_redirect( 'domain/list' );
+        }
+
+        $this->view->form = $form = new ViMbAdmin_Form_Admin_AddEdit();
         $form->removeElement( 'active' );
         $form->removeElement( 'super' );
         $form->removeElement( 'welcome_email' );
 
-        if( $this->getAuth()->getIdentity() )
+        if( !isset( $this->_options['securitysalt'] ) || strlen( $this->_options['securitysalt'] ) != 64 )
         {
-            $this->addMessage( _( 'You are already logged in.' ), ViMbAdmin_Message::INFO );
-            $this->_redirect( 'domain/list' );
-        }
-
-        if( $this->_options['securitysalt'] == '' )
-        {
-            $charSet = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $randomSalt = substr( str_shuffle( "{$charSet}{$charSet}" ), 0, 31 ); // please note this is not UTF-8 compatible
-
             $this->view->saltSet = false;
-            $this->view->randomSalt = $randomSalt;
+            $randomSalt = $this->view->randomSalt = OSS_String::salt( 64 );
             $form->getElement( 'salt' )->setValue( $randomSalt );
-        }
-        elseif( !AdminTable::isEmpty() )
-        {
-            $this->addMessage( _( "Admins already exist in the system." ), ViMbAdmin_Message::INFO );
-            $this->_redirect( 'auth/login' );
+            $this->view->rememberSalt = OSS_String::salt( 64 );
+            $this->view->passwordSalt = OSS_String::salt( 64 );
         }
         else
         {
@@ -305,68 +181,82 @@ class AuthController extends ViMbAdmin_Controller_Action
             {
                 if( $form->getElement( 'salt' )->getValue() != $this->_options['securitysalt'] )
                 {
-                    $this->addMessage( _( "Incorrect security salt provided. Please copy and paste it from the <code>application.ini</code> file." ), ViMbAdmin_Message::INFO );
+                    $this->addMessage( _( "Incorrect security salt provided. Please copy and paste it from the <code>application.ini</code> file." ), OSS_Message::INFO );
                 }
                 else
                 {
-                    $admin = new Admin();
-                    $admin['username'] = $form->getValue( 'username' );
-                    $admin->setPassword( $form->getValue( 'password' ), $this->_options['securitysalt'], false );
-                    $admin->super  = true;
-                    $admin->active = true;
-                    $admin->save();
-                    
+                    $admin = new \Entities\Admin();
+                    $admin->setUsername( $form->getValue( 'username' ) );
+                    $admin->setPassword(
+                        OSS_Auth_Password::hash( $form->getValue( 'password' ), $this->_options['resources']['auth']['oss'] )
+                    );
+                    $admin->setSuper( true );
+                    $admin->setActive( true );
+                    $admin->setCreated( new \DateTime() );
+                    $admin->setModified( new \DateTime() );
+                    $this->getD2EM()->persist( $admin );
+
                     // we need to populate the Doctine migration table
-                    $migration = new MigrationVersion();
-                    $migration['version'] = $this->_options['migration_version'];
-                    $migration->save();
+                    $dbversion = new \Entities\DatabaseVersion();
+                    $dbversion->setVersion( ViMbAdmin_Version::DBVERSION );
+                    $dbversion->setName( ViMbAdmin_Version::DBVERSION_NAME );
+                    $dbversion->setAppliedOn( new \DateTime() );
+                    $this->getD2EM()->persist( $dbversion );
+
+                    $this->getD2EM()->flush();
 
                     try
                     {
-                        $mailer = new Zend_Mail( 'UTF-8' );
+                        $mailer = $this->getMailer();
                         $mailer->setSubject( _( 'ViMbAdmin :: Your New Administrator Account' ) );
-                        $mailer->addTo( $admin['username'] );
+                        $mailer->addTo( $admin->getUsername() );
                         $mailer->setFrom(
                             $this->_options['server']['email']['address'],
                             $this->_options['server']['email']['name']
                         );
 
-                        $this->view->username = $admin['username'];
+                        $this->view->username = $admin->getUsername();
                         $this->view->password = $form->getValue( 'password' );
 
                         $mailer->setBodyText( $this->view->render( 'admin/email/new_admin.phtml' ) );
 
                         $mailer->send();
                     }
-                    catch( Exception $e )
-                    {}
+                    catch( Zend_Mail_Exception $e )
+                    {
+                        $this->addMessage( _( 'Could not send welcome email to the new administrator. 
+                            Please ensure you have configured a mail relay server in your <code>application.ini</code>.' ), OSS_Message::ALERT );
+                    }
 
-                    $this->addMessage( _( 'Your administrator account has been added. Please log in below.' ), ViMbAdmin_Message::SUCCESS );
+                    $this->addMessage( _( 'Your administrator account has been added. Please log in below.' ), OSS_Message::SUCCESS );
                 }
 
                 if( !( isset( $this->_options['skipInstallPingback'] ) && $this->_options['skipInstallPingback'] ) )
                 {
-                    // Try and track new installs to see if it is worthwhile continueing development
-                    include_once( APPLICATION_PATH . '/../public/PiwikTracker.php' );
-
-                    if( class_exists( 'PiwikTracker' ) )
+                    try
                     {
-                        if( $_SERVER['HTTPS'] == 'on' )
-                            PiwikTracker::$URL = 'https://stats.opensolutions.ie/';
-                        else
-                            PiwikTracker::$URL = 'http://stats.opensolutions.ie/';
+                        // Try and track new installs to see if it is worthwhile continueing development
+                        include_once( APPLICATION_PATH . '/../public/PiwikTracker.php' );
 
-                        $piwikTracker = new PiwikTracker( $idSite = 5 );
-                        $piwikTracker->doTrackPageView( 'Nes Install Completed' );
-                        $piwikTracker->doTrackGoal( $idGoal = 1, $revenue = 0 );
+                        if( class_exists( 'PiwikTracker' ) )
+                        {
+                            if( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' )
+                                PiwikTracker::$URL = 'https://stats.opensolutions.ie/';
+                            else
+                                PiwikTracker::$URL = 'http://stats.opensolutions.ie/';
+
+                            $piwikTracker = new PiwikTracker( $idSite = 5 );
+                            $piwikTracker->doTrackPageView( 'New V3 Install Completed' );
+                            $piwikTracker->doTrackGoal( $idGoal = 2, $revenue = 1 );
+                        }
                     }
+                    catch( Exception $e ){}
                 }
 
-                $this->_helper->viewRenderer->setNoRender( true );
                 $this->_redirect( 'auth/login' );
             }
         }
-        $this->view->form = $form;
     }
-
 }
+
+

@@ -46,7 +46,17 @@ final class ViMbAdmin_Version
     /**
      * Version identification - see compareVersion()
      */
-    const VERSION = '2.2.3';
+    const VERSION = '3.0.0';
+
+    /**
+     * Database schema version
+     */
+    const DBVERSION = 1;
+
+    /**
+     * Database schema version
+     */
+    const DBVERSION_NAME = 'Venus';
 
     /**
      * The latest stable version Zend Framework available
@@ -82,7 +92,7 @@ final class ViMbAdmin_Version
         {
             self::$_lastestVersion = 'not available';
 
-            $handle = fopen( 'http://www.opensolutions.ie/open-source/vimbadmin/latest', 'r' );
+            $handle = fopen( 'http://www.opensolutions.ie/open-source/vimbadmin/latest-v3', 'r' );
             if( $handle !== false ) 
             {
                 self::$_lastestVersion = trim( stream_get_contents( $handle ) );

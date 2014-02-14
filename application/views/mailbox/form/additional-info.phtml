@@ -1,0 +1,53 @@
+<div class="tab-pane fade" id="tab_plugsf_additionalInfo">
+
+    {if isset($options.AdditionalInfo.mailbox.formPreBlurb) }
+        <p>{$options.AdditionalInfo.mailbox.formPreBlurb}</p>
+    {/if}
+    {if count( $element ) <= 3 }
+        {foreach $element as $el}
+            {$el}
+        {/foreach}
+    {else}  
+        {assign var="mid" value=count( $element )/2}
+        {assign var="second" value=false}
+        <div class="row">
+        <div class="span6">
+        {foreach $element as $el}
+            {if $el@index >= $mid && !$second}
+                {assign var="second" value=true}
+                </div>
+                <div class="span6">
+            {/if}
+            {$el}
+        {/foreach}
+        </div>
+        </div>
+    {/if}
+    {if isset($options.AdditionalInfo.mailbox.formPostBlurb) }
+        <p>{$options.AdditionalInfo.mailbox.formPostBlurb}</p>
+    {/if}
+    <script type="text/javascript">
+        addPluginTab( 'Additional Info', 'tab_plugsf_additionalInfo' );
+        
+        {foreach $element as $el}   
+            $( "#{$el->getId()}").parent().append( '<p id="help-{$el->getId()}" class="help-block"> </p>' );
+            
+            {assign var='type' value=$el->getId()|substr:22}
+            if( $( '#{$el->getId()}' ).attr( 'autocomplete' ) != 'off' )
+            {
+                $( '#{$el->getId()}' ).attr( 'autocomplete', 'off' );
+                $( '#{$el->getId()}' ).typeahead({
+                    source: function ( query, process ) {
+                        return $.get('{genURl controller="additional-info" action="typeahead" type="$type"  }', { query : query }, function (data) {
+                            data = $.parseJSON( data );
+                            return process( data );
+                        });
+                    },
+                });
+            }
+        {/foreach}  
+        
+            
+        
+    </script>
+</div>

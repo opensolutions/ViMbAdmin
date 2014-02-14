@@ -41,11 +41,14 @@
  */
 class ViMbAdmin_Form_Admin_Password extends ViMbAdmin_Form
 {
+    /**
+     *  Minimum password length
+     * @var int Minimum password length
+     */
+    private $minPasswordLength = 8;
 
-    public function __construct( $minPass = 8, $options = null )
+    public function init( $options = null )
     {
-        parent::__construct( $options );
-
         $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'admin/form/password.phtml' ) ) ) );
 
         $this->setMethod( 'post' )
@@ -60,7 +63,7 @@ class ViMbAdmin_Form_Admin_Password extends ViMbAdmin_Form
             ->setAttrib( 'autocomplete', 'off' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', false, array( $minPass, 40 ) )
+            ->addValidator( 'StringLength', false, array( $this->minPasswordLength, 40 ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );
@@ -78,6 +81,28 @@ class ViMbAdmin_Form_Admin_Password extends ViMbAdmin_Form
             ->addElement( $submit );
 
         $this->setElementDecorators( array( 'ViewHelper' ) );
+    }
+    
+    /**
+     * Setter method for the minimum password length
+     *
+     * @param int $len The minimum password length
+     * @return ViMbAdmin_Form_Mailbox_AddEdit
+     */
+    public function setMinPasswordLength( $len )
+    {
+        $this->minPasswordLength = $len;
+        return $this;
+    }
+
+    /**
+     * Getter method for the minimum password length
+     *
+     * @return int $len The minimum password length
+     */
+    public function getMinPasswordLength()
+    {
+        return $this->minPasswordLength;
     }
 
 }

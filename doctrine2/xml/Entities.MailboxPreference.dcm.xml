@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Entities\MailboxPreference" repository-class="Repositories\MailboxPreference">
+    <id name="id" type="bigint">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="attribute" type="string" length="255" nullable="false"/>
+    <field name="ix" type="integer" nullable="false"/>
+    <field name="op" type="string" length="2" nullable="false"/>
+    <field name="value" type="text" nullable="false"/>
+    <field name="expire" type="bigint" nullable="false"/>
+    <indexes>
+      <index name="IX_MailboxPreference_1" columns="Mailbox_id,attribute,ix"/>
+    </indexes>
+    <many-to-one field="Mailbox" target-entity="Entities\Mailbox" inversed-by="Preferences">
+      <join-columns>
+        <join-column name="Mailbox_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

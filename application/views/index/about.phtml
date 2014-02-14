@@ -1,4 +1,4 @@
-{include file="header.phtml"}
+{tmplinclude file="header.phtml"}
 <div class="page-content" >
 
     <div class="page-header" >
@@ -10,7 +10,7 @@
 
     <div class="span9">
 
-        {ViMbAdmin_Messages}
+        {OSS_Message}
         
         <p>
             <strong>ViMbAdmin</strong> (pronounced vim-be-admin and meaning Virtual Mailbox Administration)
@@ -26,7 +26,7 @@
             <div class="span6">
             
                 <p>
-                As of version 2.0.0 released March 2012, standard and enhanced features compared to PostfixAdmin include:
+                As of version 3.0.0 released February 2014, standard and enhanced features compared to PostfixAdmin include:
                 </p>
                 
                 <ul>
@@ -40,6 +40,7 @@
                     <li> Full logging; </li>
                     <li> Facility for end users (mailbox owners) to change their password; </li>
                     <li> Single login point for all administrators whether super or not. </li>
+                    <li> Plugin support. </li>
                 </ul>
             </div>
             <div class="span6">
@@ -56,7 +57,7 @@
                         </ul>
                     </li>
                     <li> plain, MD5, SHA1, crypt or salted MD5, SHA1 and crypt mailbox password support; </li>
-                    <li> admin users table is secured with salted SHA1 passwords; </li>
+                    <li> admin users table is secured with bcrypt; </li>
                     <li> Forgotten Password / Password Reset function for admins; </li>
                 </ul>
             </div>
@@ -167,4 +168,4 @@ GNU General Public License for more details.
 
 </div>
 
-{include file="footer.phtml"}
+{tmplinclude file="footer.phtml"}

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Entities\Archive" repository-class="Repositories\Archive">
+    <id name="id" type="bigint">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="username" type="string" unique="true" nullable="false"/>
+    <field name="status" type="string" nullable="false"/>
+    <field name="archived_at" type="datetime" nullable="false"/>
+    <field name="status_changed_at" type="datetime" nullable="false"/>
+    <field name="homedir_server" type="string" length="255" nullable="true"/>
+    <field name="homedir_file" type="string" length="255" nullable="true"/>
+    <field name="homedir_orig_size" type="bigint" nullable="true"/>
+    <field name="homedir_size" type="bigint" nullable="true"/>
+    <field name="maildir_server" type="string" length="255" nullable="true"/>
+    <field name="maildir_file" type="string" length="255" nullable="true"/>
+    <field name="maildir_orig_size" type="bigint" nullable="true"/>
+    <field name="maildir_size" type="bigint" nullable="true"/>
+    <field name="data" type="text" nullable="false"/>
+    <many-to-one field="Domain" target-entity="Entities\Domain" inversed-by="Archives">
+      <join-columns>
+        <join-column name="Domain_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="ArchivedBy" target-entity="Entities\Admin" inversed-by="Archives">
+      <join-columns>
+        <join-column name="Admin_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

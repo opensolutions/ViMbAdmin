@@ -1,0 +1,11 @@
+SHELL=/bin/bash
+MAILTO=someone@example.com
+
+
+15 3	* * *	/usr/local/vimbadmin.git/bin/vimbtool.php -a mailbox.get-sizes
+
+*/5 *	* * *	/usr/local/vimbadmin.git/bin/vimbtool.php -a archive.archive-pendings
+*/5 *	* * *	/usr/local/vimbadmin.git/bin/vimbtool.php -a archive.delete-pendings
+*/5 *	* * *	/usr/local/vimbadmin.git/bin/vimbtool.php -a archive.restore-pendings
+
+

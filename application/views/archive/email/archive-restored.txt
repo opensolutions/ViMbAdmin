@@ -1,0 +1,9 @@
+Dear Administrator,
+
+Mailbox {$mailbox} was restored successfully from archive. Now you can find it in:
+
+{$options.identity.siteurl}/mailbox
+
+
+Kind regards,
+{$options.server.email.name} <{$options.server.email.address}>

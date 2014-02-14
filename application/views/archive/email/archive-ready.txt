@@ -1,0 +1,9 @@
+Dear Administrator,
+
+Archive for {$mailbox} was created successfully. Now you can restore it in:
+
+{$options.identity.siteurl}/archive
+
+
+Kind regards,
+{$options.server.email.name} <{$options.server.email.address}>

@@ -1,0 +1,15 @@
+{tmplinclude file="header.phtml"}
+<div class="page-content" >
+
+    <div class="page-header" >
+        <h1>{if $isEdit}Edit{else}Add New{/if} Domain{if $isEdit }: {$domain->getDomain()}{/if}</h1>
+    </div>
+    
+    {OSS_Message}
+
+{$form}
+{addJSValidator form=$form}
+
+</div>
+
+{tmplinclude file="footer.phtml"}

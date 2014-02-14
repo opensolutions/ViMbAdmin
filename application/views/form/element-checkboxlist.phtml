@@ -1,16 +1,14 @@
 
-        <fielset id="div-form-{$name}">
+        <fieldset id="div-form-{$ielements->getId()}" class="control-group">
             <div class="action">
-            	<dl class="inputs-list">
+                <dl class="inputs-list">
                      {foreach from=$ielements item=ielement}
-            		    <dt>
-	            			<label>
-	            				<input id="{$ielement->getId()}" type="checkbox"
-	            					{if $ielement->isChecked()}checked="checked"{/if}
-	            					value="{$ielement->getCheckedValue()}" name="{$ielement->getName()}"
-            					/>
-            					{if isset( $ilabel )}{$ilabel}{else}{$ielement->getLabel()}{/if}
-					        </label>
+                        <dt>
+                            <label class="checkbox">
+                                <input id="{$ielement->getId()}" type="checkbox" {if $ielement->isChecked()}checked="checked"{/if} value="{$ielement->getCheckedValue()}" name="{$ielement->getName()}" />
+                                {if isset( $ilabel )}{$ilabel}{else}{$ielement->getLabel()}&nbsp;{/if}
+                                {if isset( $ihint )}<span id="{$ielement->getId()}_hint" rel="popover" class="label" data-content="{$ihint}">?</span>{/if}
+                            </label>
                         </dt>
                     {/foreach}
                 </dl>

@@ -40,116 +40,56 @@
  * @package ViMbAdmin
  * @subpackage Library
  */
-class ViMbAdmin_Controller_Action extends Zend_Controller_Action
+class ViMbAdmin_Controller_Action extends OSS_Controller_Action
 {
-
-    /**
-     * A variable to hold the identity object
-     *
-     * @var object An instance of the user's identity or false
-     */
-    protected $_auth = false;
-
-    /**
-     * A variable to hold an identify of the user
-     *
-     * Will be !false if there is a valid identity
-     *
-     * @var object An instance of the user's identity or false
-     */
-    protected $_identity = false;
-
-    /**
-     * A variable to hold the admin record
-     *
-     * @var object An instance of the user record
-     */
-    protected $_admin = false;
-
-    /**
-    * A variable to hold an instance of the bootstrap object
-    *
-    * @var object An instance of the bootstrap object
-    */
-    protected $_bootstrap;
-
-    /**
-    * A variable to hold an instance of the configuration object
-    *
-    * @var object An instance of the configuration object
-    */
-    protected $_config = null;
-
-    /**
-    * A variable to hold an instance of the logger object
-    *
-    * @var object An instance of the logger object
-    */
-    protected $_logger = null;
-
-    /**
-     * A variable to hold the mailer
-     *
-     * @var object An instance of the mailer
-     */
-    protected $_mailer = null;
-
-    /**
-     * A variable to hold the session namespace
-     *
-     * @var object An instance of the session namespace
-     */
-    protected $_session = null;
-
-    /**
-     * A variable to hold the Doctrine manager
-     *
-     * @var object An instance of the Doctrine manager
-     */
-    protected $_doctrine = null;
-
-    /**
-     * @var array an array representation of the application.ini
-     */
-    protected $_options = null;
-
-
+    use OSS_Controller_Action_Trait_Namespace;
+    use OSS_Controller_Action_Trait_Doctrine2Cache;
+    use OSS_Controller_Action_Trait_Doctrine2;
+    use OSS_Controller_Action_Trait_Doctrine2User;
+    use OSS_Controller_Action_Trait_Auth;
+    // use OSS_Controller_Action_Trait_AuthRequired;
+    use OSS_Controller_Action_Trait_Mailer;
+    use OSS_Controller_Action_Trait_Logger;
+    use OSS_Controller_Action_Trait_Smarty;
+    use OSS_Controller_Action_Trait_Messages;
 
     /**
      * The domain object from a 'id' parameter passed to the controller
      *
-     * Set to false by default which is a requirement of preDispatch()
-     * @see DomainController::preDispatch()
+     * @var \Entities\Domain
      */
     protected $_domain = false;
 
     /**
      * The admin object from an 'admin' parameter passed to the controller
      *
-     * Set to false by default which is a requirement of preDispatch()
-     * @see AdminController::preDispatch()
+     * @var \Entities\Admin
      */
     protected $_targetAdmin = false;
 
     /**
      * The alias object from a 'id' parameter passed to the controller
      *
-     * Set to false by default which is a requirement of preDispatch()
-     * @see AliasController::preDispatch()
+     * @var \Entities\Mailbox
      */
     protected $_mailbox = false;
 
     /**
      * The alias object from a 'id' parameter passed to the controller
      *
-     * Set to false by default which is a requirement of preDispatch()
-     * @see AliasController::preDispatch()
+     * @var \Entities\Alias
      */
     protected $_alias = false;
 
+    /**
+     * The archive object from a 'id' parameter passed to the controller
+     *
+     * @var \Entities\Archive
+     */
+    protected $_archive = false;
 
     /**
-     * Override the Zend_Controller_Action's constructor (which is called
+     * Override the OSS_Controller_Action's constructor (which is called
      * at the very beginning of this function anyway).
      *
      * @param object $request See Parent class constructor
@@ -161,228 +101,56 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
         Zend_Controller_Response_Abstract $response,
         array $invokeArgs = null )
     {
-        // get the bootstrap object
-        $this->_bootstrap = $invokeArgs['bootstrap'];
-
-        // load up the options
-        $this->_options = $this->_bootstrap->getOptions();
-        Zend_Registry::set( 'options', $this->_options );
-
-        // and from the bootstrap, we can get other resources:
-        $this->_config   = $this->_bootstrap->getResource( 'config' );
-        $this->_logger   = $this->_bootstrap->getResource( 'logger' );
-        $this->_session  = $this->_bootstrap->getResource( 'namespace' );
-        $this->_doctrine = $this->_bootstrap->getResource( 'doctrine' );
-        $this->_auth     = $this->_bootstrap->getResource( 'auth' );
-        $this->_identity = $this->_auth->getIdentity();
-        $this->_admin    = $this->_identity['admin'];
-
-        // Smarty must be set during bootstrap
-        try
-        {
-            $this->view = $this->createView();
-
-            $this->view->session     = $this->_session;
-            $this->view->options     = $this->_options;
-            $this->view->auth        = $this->_auth;
-            $this->view->hasIdentity = $this->_auth->hasIdentity();
-            $this->view->identity    = $this->_identity;
-            $this->view->inColorBox  = false;
-        }
-        catch( Zend_Exception $e )
-        {
-            echo _( 'Caught exception' ) . ': ' . get_class( $e ) . "\n";
-            echo _( 'Message' ) . ': ' . $e->getMessage() . "\n";
-
-            die( "\n\n" . _( 'You must set-up Smarty in the bootstrap code.' ) . "\n\n" );
-        }
-
-        $this->view->addHelperPath( 'ViMbAdmin/View/Helper', 'ViMbAdmin_View_Helper' );
-
         // call the parent's version where all the Zend magic happens
         parent::__construct( $request, $response, $invokeArgs );
-
-        $this->view->controller = $this->getRequest()->getParam( 'controller' );
-        $this->view->action     = $this->getRequest()->getParam( 'action'     );
-
-        $this->view->doctype( 'XHTML1_TRANSITIONAL' );
-        $this->view->headMeta()->appendHttpEquiv( 'Content-Type', 'text/html; charset=utf-8' );
 
         // if we issue a redirect, we want it to exit immediatly
         $this->getHelper( 'Redirector' )->setExit( true );
 
-
         // SECURITY and other stuff for logged in users
-        if( $this->_auth->hasIdentity() )
+        if( $this->getAuth()->hasIdentity() )
         {
             // version check
-            if( !( isset( $this->_options['skipVersionCheck'] ) && $this->_options['skipVersionCheck'] ) )
-                if( $this->getAdmin()->isSuper() )
-                    $this->checkVersion();
+            $this->checkVersion();
 
+            // SECURITY and load objects
+            if( ( $aid = $this->getParam( 'aid', false ) ) )
+                $this->_targetAdmin = $this->loadAdmin( $aid );
 
-            // SECURITY
-            $params = $this->_getAllParams();
+            if( ( $did = $this->getParam( 'did', false ) ) )
+                $this->_domain = $this->loadDomain( $did );
 
-            if( isset( $params['aid'] ) && $params['aid'] )
-            {
-                if( !( $this->_targetAdmin = $this->loadAdmin( $params['aid'] ) ) )
-                {
-                    // domain id parameter specified but invalid or non-existant
-                    $this->addMessage( _( "Invalid or non-existant admin." ), ViMbAdmin_Message::ERROR );
-                    $this->_redirect( 'admin/list' );
-                    die( 'ViMbAdmin_Controller_Action:preDispatch() - should not execute' );
-                }
+            if( ( $mid = $this->getParam( 'mid', false ) ) )
+                $this->_mailbox = $this->loadMailbox( $mid );
 
-                // can only act on a target admin if we're a super admin (or ourselves!)!
-                if( $this->getAdmin()->id != $this->_targetAdmin['id'] )
-                    $this->authorise( true );
-            }
+            if( ( $alid = $this->getParam( 'alid', false ) ) )
+                $this->_alias = $this->loadAlias( $alid );
 
-            if( isset( $params['did'] ) && $params['did'] )
-            {
-                if( !( $this->_domain = $this->loadDomain( $params['did'] ) ) )
-                {
-                    // domain id parameter specified but invalid or non-existant
-                    $this->addMessage( _( "Invalid or non-existant domain." ), ViMbAdmin_Message::ERROR );
-                    $this->_redirect( 'domain/list' );
-                    die( 'ViMbAdmin_Controller_Action:preDispatch() - should not execute' );
-                }
-
-                // is this user allowed to admin the given domain?
-                $this->authorise( false, $this->_domain );
-            }
-
-            if( isset( $params['mid'] ) && $params['mid'] )
-            {
-                if( !( $this->_mailbox = $this->loadMailbox( $params['mid'] ) ) )
-                {
-                    // mailbox id parameter specified but invalid or non-existant
-                    $this->addMessage( _( "Invalid or non-existant mailbox." ), ViMbAdmin_Message::ERROR );
-                    $this->_redirect( 'mailbox/list' );
-                    die( 'ViMbAdmin_Controller_Action:preDispatch() - should not execute' );
-                }
-
-                // is this user allowed to admin the given mailbox?
-                if( !$this->_domain )
-                {
-                    if( !( $this->_domain = Doctrine::getTable( 'Domain' )->findOneByDomain( $this->_mailbox['domain'] ) ) )
-                    {
-                        $this->addMessage( _( "Invalid or non-existant domain." ), ViMbAdmin_Message::ERROR );
-                        $this->_redirect( 'domain/list' );
-                        die( 'ViMbAdmin_Controller_Action:preDispatch() - should not execute' );
-                    }
-                }
-
-                $this->authorise( false, $this->_domain );
-            }
-
-            if( isset( $params['alid'] ) && $params['alid'] )
-            {
-                if( !( $this->_alias = $this->loadAlias( $params['alid'] ) ) )
-                {
-                    // alias id parameter specified but invalid or non-existant
-                    $this->addMessage( _( "Invalid or non-existant alias." ), ViMbAdmin_Message::ERROR );
-                    $this->_redirect( 'alias/list' );
-                    die( 'ViMbAdmin_Controller_Action:preDispatch() - should not execute' );
-                }
-
-                // is this user allowed to admin the given mailbox?
-                if( !$this->_domain )
-                {
-                    if( !( $this->_domain = Doctrine::getTable( 'Domain' )->findOneByDomain( $this->_alias['domain'] ) ) )
-                    {
-                        $this->addMessage( _( "Invalid or non-existant domain." ), ViMbAdmin_Message::ERROR );
-                        $this->_redirect( 'domain/list' );
-                        die( 'ViMbAdmin_Controller_Action:preDispatch() - should not execute' );
-                    }
-                }
-
-                $this->authorise( false, $this->_domain );
-            }
-
-
-
-        }
-        else
-        {
-
+            if( ( $arid = $this->getParam( 'arid', false ) ) )
+                $this->_archive = $this->loadArchive( $arid );
         }
     }
 
-
-    /**
-     * A utility method to get a named resource.
-     *
-     * @param string $resource
-     */
-    public function getResource( $resource )
-    {
-        return $this->_bootstrap->getResource( $resource );
-    }
-
-
-    /**
-    * Creates and returns with a new view object.
-    *
-    * @param void
-    * @return object
-    */
-    public function createView()
-    {
-        $view = $this->_bootstrap->getResource( 'smarty' );
-        $view->pagebase = '';
-
-        // are we using ssl?
-        if( ( isset( $_SERVER['HTTPS'] ) && !empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' )
-                || ( isset( $_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == 443 ) )
-            $ssl = 's';
-        else
-            $ssl = '';
-
-        if( isset( $_SERVER['SERVER_NAME'] ) )
-            $view->pagebase = "http{$ssl}://{$_SERVER['SERVER_NAME']}" . Zend_Controller_Front::getInstance()->getBaseUrl();
-
-        $view->basepath = Zend_Controller_Front::getInstance()->getBaseUrl();
-
-        return $view;
-    }
-
-
-    /**
-     * Returns the logger object
-     *
-     * @return Zend_Log The Zend_Log object
-     */
-    public function getLogger()
-    {
-        return $this->_logger;
-    }
-
-
-    /**
-     * Load a configuration value
-     *
-     * @param string $key The associate array key to get from the config array
-     * @return mixed The configuration value for the given key
-     */
-    public function getConfigValue( $key )
-    {
-        return $this->_config[ $key ];
-    }
 
 
     public function checkVersion()
     {
+        if( isset( $this->_options['skipVersionCheck'] ) && $this->_options['skipVersionCheck'] )
+            return;
+
+        if( !$this->getAdmin()->isSuper() )
+            return;
+
         // only check once per 24 hours per session
-        if( isset( $this->_session->versionChecked ) && $this->_session->versionChecked > ( time() - 86400 ) )
+        if( isset( $this->getSessionNamespace()->versionChecked ) && $this->getSessionNamespace()->versionChecked > ( time() - 86400 ) )
             return;
 
         // only check once in a 24h period for each user
-        $lastCheck = ConfigTable::getValue( 'version_last_check_at.' . $this->getAdmin()->id );
+        $lastCheck = $this->getAdmin()->getPreference( 'version_last_check_at' );
+
         if( $lastCheck && $lastCheck > time() - 86400 )
         {
-            $this->_session->versionChecked = $lastCheck;
+            $this->getSessionNamespace()->versionChecked = $lastCheck;
             return;
         }
 
@@ -392,152 +160,61 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
             $this->addMessage(
                 sprintf(
                     _( 'Current version is: %s. There is a new version available: %s. '
-                       . 'See the <a href="https://github.com/opensolutions/ViMbAdmin/blob/master/CHANGELOG">change log</a>. '
-                       . '<br /><br />'
-                       . 'ViMbAdmin V3 has also been released - please see '
-                       . '<a href="https://github.com/opensolutions/ViMbAdmin/wiki/Announcing-ViMbAdmin-v3.0.0">the ViMbAdmin v3.0.0 announcement</a>.'
+                        . 'See the <a href="https://github.com/opensolutions/ViMbAdmin3/blob/master/CHANGELOG">change log</a> '
+                        . 'and <a href="https://github.com/opensolutions/ViMbAdmin3/releases">releases list</a>.' 
                     ),
                     ViMbAdmin_Version::VERSION,
                     ViMbAdmin_Version::getLatest()
                 ),
-                ViMbAdmin_Message::INFO
+                OSS_Message::INFO
             );
         }
 
-        $this->_session->versionChecked = time();
-        ConfigTable::setValue( 'version_last_check_at.' . $this->getAdmin()->id, $this->_session->versionChecked );
+        $this->getSessionNamespace()->versionChecked = time();
+        $this->getAdmin()->setPreference( 'version_last_check_at', $this->getSessionNamespace()->versionChecked );
+        $this->getD2EM()->flush();
     }
-
-    /**
-     * Adds a message to the session. Useful when you need a message to be displayed after a _redirect(), which normally gets rid of all messages as the messages by default
-     * go to a view variable, while this goes into the session, and the Smarty function will clear it out just after showing the message.
-     *
-     * @param string $message the message text
-     * @param string $class the message class, ViMbAdmin_Message::INFO|ALERT|SUCCESS|ERROR|...
-     * @return void
-     */
-    public function addMessage( $message, $class )
-    {
-        $this->_session->ViMbAdmin_Messages[] = new ViMbAdmin_Message( $message, $class );
-    }
-
-
-    /**
-     * Adds messages to the session.
-     *
-     * @see addMessage
-     * @param string $messages the array of messages
-     * @param string $class the message class, ViMbAdmin_Message::INFO|ALERT|SUCCESS|ERROR|...
-     * @return void
-     */
-    public function addMessages( $messages, $class )
-    {
-        if( !is_array( $messages ) )
-            $messages = array( $messages );
-
-        foreach( $messages as $msg )
-            $this->addMessage( $msg, $class );
-    }
-
-
-    /**
-     * Return the Zend_Auth instance.
-     * @return Zend_Auth The Zend_Auth instance or false
-     */
-    protected function getAuth()
-    {
-        return $this->_auth;
-    }
-
-
-    /**
-     * Returns the identify object for the Zend_Auth session.
-     *
-     * Will be !false if there is a valid identity
-     *
-     * @return array The Zend_auth identity object or false
-     */
-    protected function getIdentity()
-    {
-        return $this->_identity;
-    }
-
 
     /**
      * Get the user ORM object.
      *
      * Returns the instance of the Doctrine User object for the logged in user.
      *
-     * @return Admin The admin object or false.
+     * @return \Entities\Admin The admin object or false.
      */
-    protected function getAdmin()
+    public function getAdmin()
     {
-        return $this->_admin;
+        return $this->getUser();
     }
 
-
     /**
-     * Get the namespace (session).
-     *
-     * @return Zend_Session_Namespace The session namespace.
-     */
-    protected function getSession()
-    {
-        return $this->_session;
-    }
-
-
-    /**
-     * A function to generate a URL with the given parameters.
-     *
-     * This is a useful function as no knowledge of the application's path is required.
-     *
-     * @param string|bool $controller The controller to call.
-     * @param string|bool $action     The action to call (controller must be set if setting action)
-     * @param string|bool $module      The module to use. Set to false to ignore.
-     * @param string|bool $params     An array of key value pairs to add to the URL.
-     */
-    public function genUrl( $controller = false, $action = false, $module = false, $params = array() )
-    {
-        $url = $this->getFrontController()->getBaseUrl();
-
-        // when the webpage is directly under "xyz.com/", and not in "xyz.com/wherever"
-        // an empty href attribute in an anchor tag means "the current URL", which is not always good
-        if ($url == '')
-        {
-            $url = 'http';
-            if ( ( isset($_SERVER['HTTPS']) ) && ( $_SERVER['HTTPS'] == 'on' ) ) $url .= 's';
-            $url .= "://{$_SERVER['HTTP_HOST']}";
-        }
-
-        if( $module )
-            $url .= "/{$module}";
-
-        if( $controller )
-            $url .= "/{$controller}";
-
-        if( $action )
-            $url .= "/{$action}";
-
-        foreach( $params as $var => $value )
-            $url .= "/{$var}/{$value}";
-
-        return $url;
-    }
-
-
-    /**
-     * Load an Admin object from a user supplied parameter.
+     * Load an Admin object from a user supplied ID parameter.
      *
      * @param int $id The admin to load
-     * @return bool|Admin Either false or the admin object
+     * @param bool $redirect If no admin found, redirect to `admin/list` rather than returning false
+     * @param bool $authorise If true, ensure the current user can act on this admin
+     * @return \Entities\Admin Either false or the admin object
      */
-    public function loadAdmin( $id = null )
+    public function loadAdmin( $id = null, $redirect = true, $authorise = true )
     {
-        if( !$id || $id == null || $id == 0 || !is_numeric( $id ) || $id == '0' || !strlen( $id ) )
-            return false;
+        $admin = $this->getD2EM()->getRepository( '\\Entities\\Admin' )->find( $id );
 
-        return Doctrine::getTable( 'Admin' )->find( $id );
+        if( !$admin )
+        {
+            if( !$redirect ) return false;
+
+            $this->addMessage( _( "Invalid or non-existant admin." ), OSS_Message::ERROR );
+            $this->redirectAndEnsureDie( 'admin/list' );
+        }
+
+        if( $authorise )
+        {
+            // can only act on a target admin if we're a super admin (or ourselves!)!
+            if( $this->getAdmin()->getId() != $admin->getId() )
+                $this->authorise( true );
+        }
+
+        return $admin;
     }
 
 
@@ -545,46 +222,189 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
      * Load a Domain object from a user supplied parameter.
      *
      * @param int $id The domain to load
-     * @return bool|Domain Either false or the domain object
+     * @param bool $redirect If no domain found, redirect to `domain/list` rather than returning false
+     * @param bool $authorise If true, ensure the current user can act on this domain
+     * @return \Entities\Domain Either false or the domain object
      */
-    public function loadDomain( $id = null )
+    public function loadDomain( $id = null, $redirect = true, $authorise = true )
     {
-        if( !$id || $id == null || $id == 0 || !is_numeric( $id ) || $id == '0' || !strlen( $id ) )
-            return false;
+        $domain = $this->getD2EM()->getRepository( '\\Entities\\Domain' )->find( $id );
 
-        return Doctrine::getTable( 'Domain' )->find( $id );
+        if( !$domain )
+        {
+            if( !$redirect ) return false;
+
+            $this->addMessage( _( "Invalid or non-existant domain." ), OSS_Message::ERROR );
+            $this->redirectAndEnsureDie( 'domain/list' );
+        }
+
+        if( $authorise )
+            $this->authorise( false, $domain );
+
+        return $domain;
     }
-
 
     /**
      * Load an Alias object from a user supplied parameter.
      *
-     * @param int $id The alias to load
-     * @return Alias Either false or the alias object
+     * @param int $id The domain to load
+     * @param bool $redirect If no alias found, redirect to `alias/list` rather than returning false
+     * @param bool $authorise If true, ensure the current user can act on this alias
+     * @return \Entities\Alias Either false or the alias object
      */
-    public function loadAlias( $id = null )
+    public function loadAlias( $id = null, $redirect = true, $authorise = true )
     {
-        if( !$id || $id == null || $id == 0 || !ctype_digit( $id ) || $id == '0' || !strlen( $id ) )
-            return false;
+        $alias = $this->getD2EM()->getRepository( '\\Entities\\Alias' )->find( $id );
 
-        return Doctrine::getTable( 'Alias' )->find( $id );
+        if( !$alias )
+        {
+            if( !$redirect ) return false;
+
+            $this->addMessage( _( "Invalid or non-existant alias." ), OSS_Message::ERROR );
+            $this->redirectAndEnsureDie( 'alias/list' );
+        }
+
+        if( $authorise )
+            $this->authorise( false, $alias->getDomain() );
+
+        $this->_domain = $alias->getDomain();
+
+        return $alias;
     }
 
 
     /**
-     * Load an Mailbox object from a user supplied parameter.
+     * Load a Mailbox object from a user supplied parameter.
      *
      * @param int $id The mailbox to load
-     * @return Mailbox Either false or the mailbox object
+     * @param bool $redirect If no mailbox found, redirect to `mailbox/list` rather than returning false
+     * @param bool $authorise If true, ensure the current user can act on this mailbox
+     * @return \Entities\Mailbox Either false or the mailbox object
      */
-    public function loadMailbox( $id = null )
+    public function loadMailbox( $id = null, $redirect = true, $authorise = true )
     {
-        if( !$id || $id == null || $id == 0 || !ctype_digit( $id ) || $id == '0' || !strlen( $id ) )
-            return false;
+        $mailbox = $this->getD2EM()->getRepository( '\\Entities\\Mailbox' )->find( $id );
 
-        return Doctrine::getTable( 'Mailbox' )->find( $id );
+        if( !$mailbox )
+        {
+            if( !$redirect ) return false;
+
+            $this->addMessage( _( "Invalid or non-existant mailbox." ), OSS_Message::ERROR );
+            $this->redirectAndEnsureDie( 'mailbox/list' );
+        }
+
+        if( $authorise )
+            $this->authorise( false, $mailbox->getDomain() );
+
+        $this->_domain = $mailbox->getDomain();
+
+        return $mailbox;
+    }
+    
+    /**
+     * Load a Mailbox object from a user supplied parameter.
+     *
+     * @param string $username The mailbox address
+     * @param bool $redirect If no mailbox found, redirect to `mailbox/list` rather than returning false
+     * @param bool $authorise If true, ensure the current user can act on this mailbox
+     * @return \Entities\Mailbox Either false or the mailbox object
+     */
+    public function loadMailboxByUsername( $username, $redirect = true, $authorise = true )
+    {
+        $mailbox = $this->getD2EM()->getRepository( '\\Entities\\Mailbox' )->findOneBy( ['username' => $username ] );
+
+        if( !$mailbox )
+        {
+            if( !$redirect ) return false;
+
+            $this->addMessage( _( "Invalid or non-existant mailbox." ), OSS_Message::ERROR );
+            $this->redirectAndEnsureDie( 'mailbox/list' );
+        }
+
+        if( $authorise )
+            $this->authorise( false, $mailbox->getDomain() );
+
+        $this->_domain = $mailbox->getDomain();
+
+        return $mailbox;
     }
 
+    /**
+     * Load an Archive object from a user supplied ID parameter.
+     *
+     * @param int $id The archive id to load
+     * @param bool $redirect If no archive found, redirect to `archive/list` rather than returning false
+     * @param bool $authorise If true, ensure the current user can act on this admin
+     * @return \Entities\Archive Either false or the archive object
+     */
+    public function loadArchive( $id = null, $redirect = true, $authorise = true )
+    {
+        $archive = $this->getD2EM()->getRepository( '\\Entities\\Archive' )->find( $id );
+
+        if( !$archive )
+        {
+            if( !$redirect ) return false;
+
+            $this->addMessage( _( "Invalid or non-existant archive." ), OSS_Message::ERROR );
+            $this->redirectAndEnsureDie( 'archive/list' );
+        }
+
+        if( $authorise )
+            $this->authorise( false, $archive->getDomain() );
+
+        $this->_domain = $archive->getDomain();
+        return $archive;
+    }
+
+    /**
+     * Accessor method for the target admin object
+     *
+     * @return \Entities\Admin Or false
+     */
+    public function getTargetAdmin()
+    {
+        return $this->_targetAdmin;
+    }
+
+    /**
+     * Accessor method for the domain object
+     *
+     * @return \Entities\Domain Or false
+     */
+    public function getDomain()
+    {
+        return $this->_domain;
+    }
+
+    /**
+     * Accessor method for the mailbox object
+     *
+     * @return \Entities\Mailbox Or false
+     */
+    public function getMailbox()
+    {
+        return $this->_mailbox;
+    }
+
+    /**
+     * Accessor method for the alias object
+     *
+     * @return \Entities\Alias Or false
+     */
+    public function getAlias()
+    {
+        return $this->_alias;
+    }
+
+    /**
+     * Accessor method for the archive object
+     *
+     * @return \Entities\Archive Or false
+     */
+    public function getArchive()
+    {
+        return $this->_archive;
+    }
 
     /**
      * A generic authorisation checker for use in the controllers.
@@ -607,97 +427,82 @@ class ViMbAdmin_Controller_Action extends Zend_Controller_Action
         {
             if( $redirect )
             {
-                $this->addMessage( _( 'You must be logged in to perform the requested action.' ), ViMbAdmin_Message::INFO );
-                $this->_redirect( 'auth/login' );
+                $this->addMessage( _( 'You must be logged in to perform the requested action.' ), OSS_Message::INFO );
+                $this->redirectAndEnsureDie( 'auth/login' );
             }
-            else
-                return false;
 
-            // should not be executed:
-            die( _( 'Security Issue' ) . ': ' . $this->getHelper( 'Redirector' )->setExit( true ) . _( 'is not set' ) . '.' );
+            return false;
         }
 
         if( $this->getAdmin()->isSuper() )
+        {
             return true; // a superadmin can do everything
-
-        if( $super ) // user should be a super but is not
+        }
+        else if( $super ) // user should be a super but is not
         {
             if( $redirect )
             {
-                $this->addMessage( _( 'You must be a superadmin to perform this function.' ), ViMbAdmin_Message::ALERT );
-                $this->_redirect( 'auth/login' );
+                $this->addMessage( _( 'You must be a superadmin to perform this function.' ), OSS_Message::ALERT );
+                $this->redirectAndEnsureDie( 'auth/login' );
             }
-            else
-                return false;
 
-            // should not be executed:
-            die( _( 'Security Issue' ) . ': ' . $this->getHelper( 'Redirector' )->setExit( true ) . _( 'is not set' ) . '.' );
+            return false;
         }
 
         if( $domain ) // if not [null, false, 0] ( 0 is 'add new' as every id >= 1 )
         {
-            try
+            if( is_string( $domain ) && strlen( $domain ) )
+                $domain = $this->getD2EM()->getRepository( '\\Entities\\Domain' )->findOneBy( [ 'domain' => $domain ] );
+            else if( ctype_digit( $domain ) && $domain )
+                $domain = $this->getD2EM()->getRepository( '\\Entities\\Domain' )->find( $domain );
+
+            if( !( $domain instanceof \Entities\Domain ) || !$domain->getId() )
             {
-                if( is_string( $domain ) && strlen( $domain ) )
-                    $domain = Doctrine::getTable( 'Domain' )->findOneByDomain( $domain );
-                else if( ctype_digit( $domain ) && $domain )
-                    $domain = Doctrine::getTable( 'Domain' )->find( $domain );
-
-                if( !( $domain instanceof Domain ) || !$domain['id'] )
-                {
-                    if( $redirect )
-                    {
-                        $this->addMessage( _( "You do not have the required privileges to perform this action." ), ViMbAdmin_Message::INFO );
-                        $this->_redirect( 'auth/login' );
-                    }
-                    else
-                        return false;
-                }
-
-                $canEdit = Doctrine_Query::create()
-                            ->from( 'DomainAdmin' )
-                            ->where( 'username = ?', $this->getAdmin()->username )
-                            ->andWhere( 'domain = ?', $domain['domain'] )
-                            ->fetchArray();
-
-                if( sizeof( $canEdit ) == 0 )
-                {
-                    if( $redirect )
-                    {
-                        $this->addMessage( _( "You do not have the required privileges to perform this action." ), ViMbAdmin_Message::INFO );
-                        $this->_redirect( 'auth/login' );
-                    }
-                    else
-                        return false;
-
-                    // should not be executed:
-                    die( _( 'Security Issue' ) . ': ' . $this->getHelper( 'Redirector' )->setExit( true ) . _( 'is not set' ) . '.' );
-                }
-
-                return true;
-            }
-            catch( Exception $e )
-            {
-                $this->_logger->err( "Exception in Action::authorise(): " . $e->getMessage() );
-
                 if( $redirect )
                 {
-                    $this->addMessage(
-                        _( 'System error during login - please see system logs or contact your system administrator.' ),
-                        ViMbAdmin_Message::ERROR
-                    );
-
-                    $this->_redirect( 'auth/login' );
+                    $this->addMessage( _( "You do not have the required privileges to perform this action." ), OSS_Message::INFO );
+                    $this->redirectAndEnsureDie( 'auth/login' );
                 }
-                else
-                    return false;
 
-                // should not be executed:
-                die( _( 'Security Issue' ) . ': ' . $this->getHelper( 'Redirector' )->setExit( true ) . _( 'is not set' ) . '.' );
+                return false;
+            }
+
+            if( !$this->getAdmin()->canManageDomain( $domain ) )
+            {
+                if( $redirect )
+                {
+                    $this->addMessage( _( "You do not have the required privileges to perform this action." ), OSS_Message::INFO );
+                    $this->redirectAndEnsureDie( 'auth/login' );
+                }
+
+                return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Add a new log record to the Log table
+     *
+     * @param $action string The action
+     * @param $message string The log message
+     * @return \Entities\Log
+     */
+    protected function log( $action, $message )
+    {
+        $log = new \Entities\Log();
+        $log->setAction( $action );
+        $log->setData( $message );
+        $log->setAdmin( $this->getAdmin() );
+
+        if( $this->getDomain() )
+            $log->setDomain( $this->getDomain() );
+
+        $log->setTimestamp( new DateTime() );
+        $this->getD2EM()->persist( $log );
+
+        return $log;
     }
 
 }

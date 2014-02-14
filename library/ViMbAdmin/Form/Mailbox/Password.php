@@ -41,17 +41,19 @@
  */
 class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
 {
-
-    public function __construct( $minPass = 8, $options = null )
+    /**
+     *  Minimum password length
+     * @var int Minimum password length
+     */
+    private $minPasswordLength = 8;
+                       
+                       
+    public function init()
     {
-        parent::__construct( $options );
+        $this->setDecorators( [ [ 'ViewScript', [ 'viewScript' => 'mailbox/form/change-password.phtml' ] ] ] );
 
-        $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'mailbox/form/change-password.phtml' ) ) ) );
-
-        $this
-            ->setMethod( 'post' )
-            ->setAttrib( 'id', 'change_password_form' )
-            ->setAttrib( 'name', 'change_password_form' );
+        $this->setAttrib( 'id', 'change_password_form' )
+             ->setAttrib( 'name', 'change_password_form' );
 
         $username = $this->createElement( 'text', 'username' )
             ->setLabel( _( 'Username' ) )
@@ -73,7 +75,7 @@ class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
             ->setAttrib( 'class', 'required' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', true, array( $minPass, 32 ) )
+            ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 32 ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );
@@ -84,7 +86,7 @@ class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
             ->setAttrib( 'class', 'required' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', true, array( $minPass, 32 ) )
+            ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 32 ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );
@@ -95,7 +97,7 @@ class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
             ->setAttrib( 'class', 'required' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'IdenticalField', true, array( 'fieldName' => 'new_password', 'fieldTitle' => _( 'the new password' ) ) )
+            ->addValidator( 'OSSIdenticalField', true, array( 'fieldName' => 'new_password', 'fieldTitle' => _( 'the new password' ) ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );
@@ -116,7 +118,28 @@ class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
             ->addElement( $cancel )
             ->addElement( $submit );
 
-        $this->setElementDecorators( array( 'ViewHelper' ) );
     }
 
+
+    /**
+     * Setter method for the minimum password length
+     *
+     * @param int $len The minimum password length
+     * @return ViMbAdmin_Form_Mailbox_AddEdit
+     */
+    public function setMinPasswordLength( $len )
+    {
+        $this->minPasswordLength = $len;   
+        return $this;
+    }
+                                                         
+    /**
+     * Getter method for the minimum password length
+     * 
+     * @return int $len The minimum password length 
+     */
+    public function getMinPasswordLength()
+    {
+        return $this->minPasswordLength;
+    }
 }

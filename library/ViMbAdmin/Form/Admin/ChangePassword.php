@@ -43,8 +43,7 @@ class ViMbAdmin_Form_Admin_ChangePassword extends ViMbAdmin_Form
 
         $this->setDecorators( array( array( 'ViewScript', array( 'viewScript' => 'admin/form/change-password.phtml' ) ) ) );
 
-        $this
-            ->setMethod( 'post' )
+        $this->setMethod( 'post' )
             ->setAttrib( 'id', 'change_password_form' )
             ->setAttrib( 'name', 'change_password_form' );
 
@@ -75,7 +74,7 @@ class ViMbAdmin_Form_Admin_ChangePassword extends ViMbAdmin_Form
             ->setAttrib( 'size', 20)
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'IdenticalField', true, array( 'fieldName' => 'password', 'fieldTitle' => 'the new password' ) )
+            ->addValidator( 'OSSIdenticalField', true, array( 'fieldName' => 'password', 'fieldTitle' => 'the new password' ) )
             ->addFilter( 'StripSlashes' );
 
         $confirmPassword->getValidator( 'NotEmpty' )

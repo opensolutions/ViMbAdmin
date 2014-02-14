@@ -1,4 +1,4 @@
-{include file="header.phtml"}
+{tmplinclude file="header.phtml"}
 
 <div class="page-content" >
 
@@ -6,22 +6,18 @@
         <div style="float: right; margin-top: -10px;">
             <div class="btn-toolbar">
             	<span class="btn-group">
-        	        <span class="btn" id="open_add_admin" title="Add Admin">
+        	        <a class="btn have-tooltip-below" id="add_admin" title="Assign Administrator" href="{genUrl controller='domain' action='assign-admin' did=$domain->getId()}">
             	        <i class="icon-plus"></i>
-        	        </apan>
+        	        </a>
             	</span>
         	</div>
-    	    <script>
-                $( document ).ready( function(){
-                    $( '#open_add_admin' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover', placement: 'bottom' } );
-                });
-            </script>
+
     	</div>
 
-        <h1>Domain Admins <small>for {$domainModel.domain}</small></h1>
+        <h1>Domain Administrators <small>for {$domain->getDomain()}</small></h1>
     </div>
 
-{ViMbAdmin_Messages}
+{OSS_Message}
 
 <table id="list_table" cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered">
     <thead>
@@ -31,28 +27,23 @@
         </tr>
     </thead>
     <tbody>
-{foreach $domainModel.DomainAdmin as $oneAdmin}
-    <tr id="admin_{$oneAdmin.Admin.id}">
-        <td>{$oneAdmin.Admin.username}{if not $oneAdmin.Admin.active} <em>(inactive)</em>{/if}</td>
-        <td>
-            <span class="btn btn-mini" onclick="removeAdmin( {$oneAdmin.Admin.id}, '{$oneAdmin.Admin.username}' );" id="remove-admin-{$oneAdmin.Admin.id}" title="Remove">
-                <i class="icon-trash"></i>
-            </span>
-            <script>
-                $( document ).ready( function(){
-                    $( '#remove-admin-{$oneAdmin.Admin.id}' ).tooltip( { delay: { show: 500, hide: 2 }, trigger: 'hover' } );
-                });
-            </script>
-        </td>
-    </tr>
-{/foreach}
+    {foreach $domain->getAdmins() as $admin}
+        {if !$admin->isSuper()}
+            <tr id="admin_{$admin->getId()}">
+                <td>{$admin->getUsername()}{if !$admin->getActive()} <em>(inactive)</em>{/if}</td>
+                <td>
+                    <a class="btn btn-small have-tooltip" href="{genUrl controller='domain' action='remove-admin' aid=$admin->getId() did=$domain->getId()}" ref="{$admin->getUsername()}" id="remove-admin-{$admin->getId()}" title="Remove">
+                        <i class="icon-minus"></i>
+                    </a>
+                </td>
+            </tr>
+        {/if}
+    {/foreach}
     </tbody>
 </table>
-
-<br />
-<br />
-
-{include file='domain/js/admins.js'}
+<br/>
+<br/>
+</div>
 
 <div id="purge_dialog" class="modal hide fade">
     <div class="modal-header">
@@ -63,55 +54,9 @@
         Are you sure you want to remove <em id="purge_admin_name"></em> ?
     </div>
     <div id="pdfooter" class="modal-footer">
-        <span class="btn btn-danger" id="purge_dialog_delete">Remove</span>
+        <a class="btn btn-danger" id="purge_dialog_delete" href="#">Remove</a>
         <button id="purge_dialog_cancel" class="btn">Cancel</button>
     </div>
 </div>
-
-
-<div id="add_dialog" class="modal hide fade">
-    <div class="modal-header">
-        <a href="#" class="close" data-dismiss="modal">&times;</a>
-        <h3>Add Admin</h3>
-    </div>
-        <div class="modal-body" style="min-height: 75px;">
-        {if count( $adminList ) == 0 }
-            <div id="vimbadmin-message-900" class="alert alert-info fade in">
-                <a class="close" data-dismiss="alert" href="#">×</a>
-                There is no admin to assign to this domain.
-            </div>
-        {/if}
-        <form class="form-horizontal" style="position: fixed; z-index: 1;">
-            <fieldset id="div-form-admin" class="control-group">
-                <label class="control-label" for="admin"> Admin </label>
-                <div id="div-controls-admin" class="controls">
-                    <select name="admin" id="admin_list">
-                        <div id="div-controls-admin" class="controls">
-                            {foreach $adminList as $oneAdmin}
-                                <option id="admin" value="{$oneAdmin.id}">{$oneAdmin.username}{if not $oneAdmin.active} <em>(inactive)</em>{/if}</option>
-                            {/foreach}
-                        </div>
-                    </select>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-    <div id="aafooter" class="modal-footer">
-        {if count( $adminList ) > 0 }
-            <span class="btn btn-primary" id="add_dialog_add">Add</span>
-        {/if}
-        <button id="add_dialog_cancel" class="btn">Cancel</button>
-    </div>
-</div>
-
-    <script type="text/javascript">
-        $( '#admin_list' ).chosen();
-        $(document).ready(function()
-        {
-            $( '#domain' ).chosen();
-        }); // document onready
-
-    </script>
-
-</div>
-{include file="footer.phtml"}
+<script type="text/javascript">{tmplinclude file='domain/js/admins.js'}</script>
+{tmplinclude file="footer.phtml"}

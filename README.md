@@ -1,5 +1,5 @@
-
-# ViMbAdmin :: Virtual Mailbox Administration
+# ViMbAdmin 
+## Virtual Mailbox Administration
 
 The **ViMbAdmin** project (*vim-be-admin*) provides a web based virtual mailbox administration system to allow mail administrators to easily manage domains, mailboxes and aliases. 
 

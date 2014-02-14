@@ -1,8 +1,24 @@
 {
-	"name": "opensolutions/vimbadmin3",
-	"description": "ViMdAdmin :: Virtual Mailbox Administration v3",
-	"keywords": ["vimdadmin", "postfix", "postfixadmin"],
-	"license": "GPLv3",
+	"name": "opensolutions/vimbadmin",
+	"description": "ViMdAdmin :: Virtual Mailbox Administration",
+	"type": "project",
+	"keywords": ["vimdadmin", "postfix", "postfixadmin", "dovecot"],
+	"homepage": "http://www.vimbadmin.net/",
+	"license": "GPL-3.0+",
+	"authors": [
+		{
+			"name": "Barry O'Donovan",
+			"email": "barry@opensolutions.ie",
+			"homepage": "http://www.barryodonovan.com/",
+			"role": "Lead Developer"
+		},
+		{
+			"name": "Open Solutions",
+			"email": "info@opensolutions.ie",
+			"homepage": "http://www.opensolutions.ie/",
+			"role": "Development Team"
+		}
+	],
 	"repositories": [
         	{
             		"type": "vcs",
@@ -17,6 +33,11 @@
                 "smarty/smarty": "~3.1.0",
 		"opensolutions/minify": "1.*",
 		"komola/bootstrap-zend-framework": "dev-master"
+	},
+	"support": {
+		"issues": "https://github.com/opensolutions/ViMbAdmin/issues",
+		"wiki": "https://github.com/opensolutions/ViMbAdmin/wiki",
+		"source": "https://github.com/opensolutions/ViMbAdmin"
 	},
 	"autoload": {
 	},

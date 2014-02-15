@@ -62,7 +62,6 @@ class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
             ->setAttrib( 'autocomplete', 'off' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'EmailAddress', true, array( 'mx' => true ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );

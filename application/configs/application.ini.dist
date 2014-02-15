@@ -145,7 +145,7 @@ defaults.mailbox.min_password_length = 8
 ;                      scheme specified by XXX. To see available schemes, use 'dovecotpw -l' 
 ;                      or 'doveadm pw -l'
 
-defaults.mailbox.password_scheme = "crypt:md5"
+defaults.mailbox.password_scheme = "md5.salted"
 
 ; The path to (and initial option(s) if necessary) the Dovecot password generator. Typical 
 ; values may be something like:
@@ -255,7 +255,7 @@ identity.siteurl = "https://www.example.com/vimbadmin/"
 
 
 ;;
-;; All mails and correspondance will come from the following;;
+;; All mail and correspondence will come from the following;;
 
 server.email.name = "ViMbAdmin Administrator"
 server.email.address = "support@example.com"

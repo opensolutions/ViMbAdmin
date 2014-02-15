@@ -235,7 +235,7 @@ class AuthController extends ViMbAdmin_Controller_Action
                 {
                     try
                     {
-                        // Try and track new installs to see if it is worthwhile continueing development
+                        // Try and track new installs to see if it is worthwhile continuing development
                         include_once( APPLICATION_PATH . '/../public/PiwikTracker.php' );
 
                         if( class_exists( 'PiwikTracker' ) )

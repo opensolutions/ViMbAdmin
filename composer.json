@@ -2,7 +2,7 @@
 	"name": "opensolutions/vimbadmin",
 	"description": "ViMdAdmin :: Virtual Mailbox Administration",
 	"type": "project",
-	"keywords": ["vimdadmin", "postfix", "postfixadmin", "dovecot"],
+	"keywords": ["vimbadmin", "postfix", "postfixadmin", "dovecot"],
 	"homepage": "http://www.vimbadmin.net/",
 	"license": "GPL-3.0+",
 	"authors": [

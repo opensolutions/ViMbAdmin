@@ -50,7 +50,7 @@ class Mailbox extends EntityRepository
             ->select( 'm.id as id, m.username as username, m.name as name, m.active as active, m.maildir_size as maildir_size,
                     m.homedir_size as homedir_size, m.size_at as size_at, m.quota as quota, d.domain as domain, m.delete_pending' )
             ->from( '\\Entities\\Mailbox', 'm' )
-            ->where( 'm.delete_pending IS FALSE' )
+            ->where( 'm.delete_pending = FALSE' )
             ->join( 'm.Domain', 'd' );
         
         if( !$admin->isSuper() )
@@ -91,7 +91,7 @@ class Mailbox extends EntityRepository
                     m.homedir_size as homedir_size, m.size_at as size_at, m.quota as quota, d.domain as domain, m.delete_pending' )
             ->from( '\\Entities\\Mailbox', 'm' )
             ->join( 'm.Domain', 'd' )
-            ->where( "m.delete_pending = 0 AND ( m.username LIKE '{$filter}%' OR m.name LIKE '{$filter}%' OR d.domain LIKE '{$filter}%' )" );
+            ->where( "m.delete_pending = FALSE AND ( m.username LIKE '{$filter}%' OR m.name LIKE '{$filter}%' OR d.domain LIKE '{$filter}%' )" );
         
         if( !$admin->isSuper() )
             $qb->join( 'd.Admins', 'd2a' )
@@ -250,7 +250,7 @@ class Mailbox extends EntityRepository
         return $this->getEntityManager()->createQueryBuilder()
             ->select( 'm' )
             ->from( '\\Entities\\Mailbox', 'm' )
-            ->where( 'm.delete_pending = 1' )
+            ->where( 'm.delete_pending = TRUE' )
             ->getQuery()
             ->getResult();  
     }

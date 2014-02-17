@@ -99,7 +99,7 @@ class Domain extends EntityRepository
         $dql = "SELECT d.id AS id, d.domain AS name, d.alias_count AS aliases, d.mailbox_count AS mailboxes,
                     d.max_aliases AS maxaliases, d.max_mailboxes AS maxmailboxes, SUM( m.maildir_size ) AS mailboxes_size,
                     d.max_quota AS maxquota, d.quota AS quota, d.transport AS transport, d.backupmx AS backupmx,
-                    d.active AS active, d.created AS created, m.delete_pending AS delete_pending
+                    d.active AS active, d.created AS created
                 FROM \\Entities\\Domain d LEFT JOIN d.Mailboxes m";
         
         // FIXME a.address != a.goto

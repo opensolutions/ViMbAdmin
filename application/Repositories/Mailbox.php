@@ -50,7 +50,7 @@ class Mailbox extends EntityRepository
             ->select( 'm.id as id, m.username as username, m.name as name, m.active as active, m.maildir_size as maildir_size,
                     m.homedir_size as homedir_size, m.size_at as size_at, m.quota as quota, d.domain as domain, m.delete_pending' )
             ->from( '\\Entities\\Mailbox', 'm' )
-            ->where( 'm.delete_pending = 0' )
+            ->where( 'm.delete_pending IS FALSE' )
             ->join( 'm.Domain', 'd' );
         
         if( !$admin->isSuper() )

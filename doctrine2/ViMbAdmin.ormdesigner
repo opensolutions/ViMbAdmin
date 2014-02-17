@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <orm-designer version="2.2.10.815" name="ViMbAdmin3" mvc="Without MVC" orm="Doctrine2" uuid="15328530-f75f-43e2-a906-a8eead4a5924">
-  <module name="ViMbAdmin" import-format="Doctrine2Xml" import-path="../../vimbadmin3/doctrine2/xml" uuid="2c6ca297-a962-4b31-a81c-0d852efeec06">
+  <module name="ViMbAdmin" import-format="Doctrine2Xml" import-path="xml" uuid="2c6ca297-a962-4b31-a81c-0d852efeec06">
     <entity name="DirectoryEntry" description="Follows inetOrgPerson" uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="0e246371-4e8d-4c23-9adf-f22f6a371299"/>
       <field name="mailbox_id" type="bigint" required="true" unique="true" uuid="6f5bde75-8d05-4af3-b43c-de94e44621a5"/>
@@ -274,7 +274,7 @@
       <field name="op" type="string" size="2" default=":=" required="true" uuid="f5f0284e-6b4c-4569-9255-b7a0cc15f5bb"/>
       <field name="value" type="text" required="true" uuid="d286cd76-42b2-4695-96b4-0bd03d853b44"/>
       <field name="expire" type="bigint" default="0" required="true" uuid="8d41cc0f-4c5a-4213-9cdc-28a3ee60cddf"/>
-      <index name="IX_AliasPreference_1">
+      <index name="IX_DomainPreference_1">
         <index-field name="Domain_id"/>
         <index-field name="attribute"/>
         <index-field name="ix"/>
@@ -326,7 +326,7 @@
     <project uuid="15328530-f75f-43e2-a906-a8eead4a5924" size-x="30" size-x2="1421" size-y="35" size-y2="826"/>
     <entity uuid="1fc7527f-ff62-49c5-99ba-d03644a71d3c" position-x="486" position-y="6" size-x="0" size-x2="127" size-y="0" size-y2="269"/>
     <entity uuid="2159b835-0acc-4444-89f1-e30fb1a6558f" position-x="300" position-y="337" size-x="0" size-x2="149" size-y="0" size-y2="241"/>
-    <module uuid="2c6ca297-a962-4b31-a81c-0d852efeec06" bk-color="16054771" position-x="20" position-y="15" size-x="0" size-x2="1143" size-y="0" size-y2="647"/>
+    <module uuid="2c6ca297-a962-4b31-a81c-0d852efeec06" bk-color="4294244851" position-x="20" position-y="15" size-x="0" size-x2="1143" size-y="0" size-y2="647"/>
     <entity uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a" position-x="1029" position-y="214" size-x="0" size-x2="190" size-y="0" size-y2="437"/>
     <entity uuid="45ebe1d0-ea7e-4c68-a3a9-094441328f02" position-x="1062" position-y="37" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
     <association uuid="5ec08d3d-4ea2-405d-832f-92f6341aa457" caption1-position-x="1" caption1-position-y="0" center-position-x="0" center-position-y="0"/>

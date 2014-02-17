@@ -10,7 +10,7 @@
     <field name="value" type="text" nullable="false"/>
     <field name="expire" type="bigint" nullable="false"/>
     <indexes>
-      <index name="IX_AliasPreference_1" columns="Domain_id,attribute,ix"/>
+      <index name="IX_DomainPreference_1" columns="Domain_id,attribute,ix"/>
     </indexes>
     <many-to-one field="Domain" target-entity="Entities\Domain" inversed-by="Preferences">
       <join-columns>

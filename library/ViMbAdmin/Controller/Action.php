@@ -155,18 +155,22 @@ class ViMbAdmin_Controller_Action extends OSS_Controller_Action
         }
 
         // is there a new version available?
-        if( ViMbAdmin_Version::compareVersion( ViMbAdmin_Version::getLatest() ) == 1 )
+        $latest = ViMbAdmin_Version::getLatest();
+        if( $latest != 'not available' )
         {
-            $this->addMessage(
-                sprintf(
-                    _( 'Current version is: %s. There is a new version available: %s. '
-                        . 'See the <a href="https://github.com/opensolutions/ViMbAdmin/releases list</a>.' 
+            if( ViMbAdmin_Version::compareVersion( $latest ) == 1 )
+            {
+                $this->addMessage(
+                    sprintf(
+                        _( 'Current version is: %s. There is a new version available: %s. '
+                            . 'See the <a href="https://github.com/opensolutions/ViMbAdmin/releases/tag/' . $latest . '">releases list</a>.' 
+                        ),
+                        ViMbAdmin_Version::VERSION,
+                        ViMbAdmin_Version::getLatest()
                     ),
-                    ViMbAdmin_Version::VERSION,
-                    ViMbAdmin_Version::getLatest()
-                ),
-                OSS_Message::INFO
-            );
+                    OSS_Message::INFO
+                );
+            }
         }
 
         $this->getSessionNamespace()->versionChecked = time();

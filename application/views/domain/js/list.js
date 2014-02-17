@@ -54,7 +54,7 @@ $(document).ready(function()
 
 }); // document onready
 
-function toggleActive( elid, id){
+function toggleActive( elid, id) {
     ossToggle( $( '#' + elid ), "{genUrl controller='domain' action='ajax-toggle-active'}", { "did": id } );
 };
 
@@ -136,8 +136,10 @@ function formatActive( id, active )
 {
     var active_class = active ? 'success': 'danger';
     var active_msg = active ? 'Yes': 'No';
-    return '<div id="throb-toggle-active-' + id + '" style="float: right;"></div>\
-    <span id="toggle-active-' +id + '" onclick="toggleActive( \'toggle-active-' + id +  '\', ' + id +  ' );" class="btn btn-mini btn-' + active_class + '">' + active_msg + '</span>';
+    return '<div id="throb-toggle-active-' + id + '" style="float: right;"></div>'
+        + '<span id="toggle-active-' + id + '" '
+        + 'onclick="toggleActive( \'toggle-active-' + id +  '\', ' + id +  ' );" class="btn btn-mini btn-' + active_class + '">' 
+        + active_msg + '</span>';
 }
 
 function formatMailboxes( id, mailboxes, maxmailboxes )

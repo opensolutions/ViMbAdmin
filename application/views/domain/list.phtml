@@ -60,7 +60,7 @@
                 {/if}
                 <td>
                     <div id="throb-toggle-active-{$domain.id}" style="float: right;"></div>
-                    <span id="toggle-active-{$domain.id}" onclick="toggleActive( 'toggle-active-{$domain.id}', {$domain.id}, ".", "" );" class="btn btn-mini {if $domain.active}btn-success{else}btn-danger{/if}">{$domain.active|yesno}</span>
+                    <span id="toggle-active-{$domain.id}" onclick="toggleActive( 'toggle-active-{$domain.id}', {$domain.id}, '.', '' );" class="btn btn-mini {if $domain.active}btn-success{else}btn-danger{/if}">{$domain.active|yesno}</span>
                 </td>
                 <td>{$domain.transport}</td>
                 <td>{$domain.backupmx|yesno}</td>

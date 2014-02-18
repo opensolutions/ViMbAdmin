@@ -3,6 +3,7 @@
 .gitmodules
 .settings/
 .gitmodules
+*.DS_Store
 application/configs/application.ini
 application/configs/application.ini.old
 library/Twitter

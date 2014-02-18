@@ -50,8 +50,47 @@ class ViMbAdmin_Dovecot
      */
     public static function password( $scheme, $pass, $user )
     {
+        $cmd = self::checkOptions() . ' -s ' . escapeshellarg( $scheme ) . ' -u ' . escapeshellarg( $user ) . ' -p ' . escapeshellarg( $pass );
+        $a = exec( $cmd, $output, $retval );
+        
+        if( $retval != 0 )
+            throw new ViMbAdmin_Exception( sprintf( _( 'Error executing Dovecot password command: ' . $cmd ) ) );
+        
+        return trim( substr( $a, strlen( $scheme ) + 2 ) );
+    }
+
+    /**
+     * Utility function to call Dovecot password generator
+     *
+     * @param string $scheme The Dovecot scheme to use
+     * @param string $pwhash The hashed password
+     * @param string $pwplain The plaintext password
+     * @param string $user The username (required by some schemes)
+     * @throws ViMbAdmin_Exception
+     * @return bool True if password matches
+     */
+    public static function passwordVerify( $scheme, $pwhash, $pwplain, $user )
+    {
+        $cmd = "echo " . escapeshellarg( $pwplain ) . " | "
+            . self::checkOptions() . ' -s ' . escapeshellarg( $scheme ) . ' -u ' . escapeshellarg( $user ) 
+            . ' -t ' . escapeshellarg( "{{$scheme}}{$pwhash}" );
+            
+        $a = exec( $cmd, $output, $retval );
+        
+        return $retval == 0;
+    }
+
+    /**
+     * Verify and return the Dovecot adm binary
+     * 
+     * @param  array $options Zend_Config - application.ini 
+     * @return string         Path to binary
+     */
+    public static function checkOptions( $options = null )
+    {
         // binary should be available from options in the registry
-        $options = Zend_Registry::get( 'options' );
+        if( $options === null )
+            $options = Zend_Registry::get( 'options' );
         
         if( !isset( $options['defaults']['mailbox']['dovecot_pw_binary'] ) )
             throw new ViMbAdmin_Exception( sprintf( _( 'Configuration param "defaults.mailbox.dovecot_pw_binary" not defined' ) ) );
@@ -63,13 +102,7 @@ class ViMbAdmin_Dovecot
         if( !file_exists( $binary ) || !is_executable( $binary ) )
             throw new ViMbAdmin_Exception( sprintf( _( 'Dovecot binary [%s] does not exist or is not executable' ), $binary ) );
         
-        $cmd .= ' -s ' . escapeshellarg( $scheme ) . ' -u ' . escapeshellarg( $user ) . ' -p ' . escapeshellarg( $pass );
-        $a = exec( $cmd, $output, $retval );
-        
-        if( $retval != 0 )
-            throw new ViMbAdmin_Exception( sprintf( _( 'Error executing Dovecot password command: ' . $cmd ) ) );
-        
-        return trim( substr( $a, strlen( $scheme ) + 2 ) );
+        return $cmd;
     }
 
 }

@@ -76,11 +76,13 @@
 
     <form name="purge_mailbox_form" id="purge_mailbox_form" method="post" action="">
         <fieldset class="form-actions">
-            <label class="checkbox">
-                <input type="checkbox" value="1" checked="checked" id="cb_delete_files" name="delete_files" />
-                Delete the home directory and mailbox files also
-            </label>
-            <br />
+            {if isset( $options.mailbox_deletion_fs_enabled ) and $options.mailbox_deletion_fs_enabled}
+                <label class="checkbox">
+                    <input type="checkbox" value="1" checked="checked" id="cb_delete_files" name="delete_files" />
+                    Delete the home directory and mailbox files also
+                </label>
+                <br />
+            {/if}
             <a class="btn" href="{genUrl controller='mailbox' action='list'}">Cancel</a>
             <button class="btn btn-danger" type="submit" value="purge" name="purge">Purge</button>
         </fieldset>

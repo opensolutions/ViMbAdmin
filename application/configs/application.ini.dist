@@ -184,14 +184,22 @@ archive.path = "/srv/archives"
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Enable mailbox deletion on the file system
+; 
+; See: https://github.com/opensolutions/ViMbAdmin/wiki/Deleting-Mailboxes
+;
+
+mailbox_deletion_fs_enable = false
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Export Mailbox Settings
 ; 
-; See: ; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Export-Settings
+; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Export-Settings
 ;
 defaults.export_settings.disabled = true
+
 
 ;; Export settings alowed subnets  
 defaults.export_settings.allowed_subnet[] = "10."

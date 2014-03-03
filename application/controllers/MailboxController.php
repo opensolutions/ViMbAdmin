@@ -261,7 +261,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                 if( !$this->isEdit() )
                 {
                     // do we have available mailboxes?
-                    if( !$this->getAdmin()->isSuper() && $this->getDomain->getMaxMailoboxes() != 0 && $this->getDomain()->getMailboxCount() >= $this->getDomain()->getMaxMailboxes() )
+                    if( !$this->getAdmin()->isSuper() && $this->getDomain()->getMaxMailboxes() != 0 && $this->getDomain()->getMailboxCount() >= $this->getDomain()->getMaxMailboxes() )
                     {
                         $this->addMessage( _( 'You have used all of your allocated mailboxes.' ), OSS_Message::ERROR );
                         return;

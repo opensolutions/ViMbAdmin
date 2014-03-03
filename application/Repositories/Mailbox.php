@@ -55,7 +55,7 @@ class Mailbox extends EntityRepository
         
         if( !$admin->isSuper() )
             $qb->join( 'd.Admins', 'd2a' )
-                ->andWhere( 'd2a.Admin = ?1' )
+                ->andWhere( 'd2a = ?1' )
                 ->setParameter( 1, $admin );
 
         if( $domain )

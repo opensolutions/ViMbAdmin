@@ -39,8 +39,6 @@ class Alias extends EntityRepository
         if( !$admin->isSuper() )
         {
             $qb->leftJoin( 'a.Domain', 'd' )
-                ->leftJoin( 'd.DomainAdmin', 'da' )
-                ->andWhere( 'da.Admin = ?2' )
                 ->leftJoin( 'd.Admins', 'd2a' )
                 ->andWhere( 'd2a = ?2' )
                 ->setParameter( 2, $admin );
@@ -74,9 +72,9 @@ class Alias extends EntityRepository
         if( !$admin->isSuper() )
         {
             $qb->leftJoin( 'a.Domain', 'd' )
-                ->leftJoin( 'd.DomainAdmin', 'da' )
-                ->andWhere( 'da.username = ?3' )
-                ->setParameter( 3, $admin->getUsername() );
+                ->leftJoin( 'd.Admins', 'd2a' )
+                ->andWhere( 'd2a = ?3' )
+                ->setParameter( 3, $admin );
         }
 
         return $qb->getQuery()->getResult();

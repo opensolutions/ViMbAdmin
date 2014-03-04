@@ -16,9 +16,10 @@ class Alias extends EntityRepository
 	/**
 	 * Loads aliases for mailbox.
 	 *
-	 * Selects aliases where address not equal to goto, and goto equals to 
-	 * mailbox username, or all if include mailbox aliases is true. If admin 
-	 * is not super then it checks if admin have have linked with domain.
+	 * Selects aliases where the address is not equal to goto (i.e. it's not a
+     * mailbox alias), and goto equals the mailbox username. If include
+     * mailbox aliases is true then it does also return those. If admin
+	 * is not super then it checks if admin is linked with the domain.
 	 *
 	 * @param \Entities\Mailbox $mailbox Mailbox for alias filtering.
 	 * @param \Entities\Admin   $admin   Admin for checking privileges.
@@ -39,11 +40,9 @@ class Alias extends EntityRepository
         if( !$admin->isSuper() )
         {
             $qb->leftJoin( 'a.Domain', 'd' )
-                ->leftJoin( 'd.DomainAdmin', 'da' )
-                ->andWhere( 'da.Admin = ?2' )
                 ->leftJoin( 'd.Admins', 'd2a' )
-                ->andWhere( 'd2a = ?2' )
-                ->setParameter( 2, $admin );
+                ->andWhere( 'd2a = :admin' )
+                ->setParameter( 'admin', $admin );
         }
 
         return $qb->getQuery()->getResult();
@@ -52,15 +51,15 @@ class Alias extends EntityRepository
 	/**
 	 * Loads aliases with mailbox.
 	 *
-	 * Selects aliases where address not equal to goto, and goto not equals to 
-	 * mailbox username, but goto has mailbox username. If admin is not super 
+	 * Selects aliases where address not equal to goto, and goto not equals to
+	 * mailbox username, but goto has mailbox username. If admin is not super
 	 * then it checks if admin have have linked with domain.
 	 *
 	 * @param \Entities\Mailbox $mailbox Mailbox for alias filtering.
 	 * @param \Entities\Admin   $admin   Admin for checking privileges.
 	 * @return \Entities\Alias[]
 	 */
-	public function loadWithMailbox( $mailbox, $admin ) 
+	public function loadWithMailbox( $mailbox, $admin )
 	{
 		$qb = $this->getEntityManager()->createQueryBuilder()
                 ->select( 'a' )
@@ -74,9 +73,9 @@ class Alias extends EntityRepository
         if( !$admin->isSuper() )
         {
             $qb->leftJoin( 'a.Domain', 'd' )
-                ->leftJoin( 'd.DomainAdmin', 'da' )
-                ->andWhere( 'da.username = ?3' )
-                ->setParameter( 3, $admin->getUsername() );
+                ->leftJoin( 'd.Admins', 'd2a' )
+                ->andWhere( 'd2a = :admin' )
+                ->setParameter( 'admin', $admin );
         }
 
         return $qb->getQuery()->getResult();
@@ -88,7 +87,7 @@ class Alias extends EntityRepository
      * Loads aliases for alias list, if admin is not super, it will select aliases
      * only from domains which are linked with admin. If domain is set it will select
      * aliases only for given domain, and if ima set to false then it will select all
-     * aliases where goto not equal to address that mean non mailbox aliases. 
+     * aliases where goto not equal to address that mean non mailbox aliases.
      *
      * @param \Entities\Admin  $admin  Admin for filtering mailboxes.
      * @param \Entities\Domain $domain Domain for filtering mailboxes.
@@ -101,12 +100,12 @@ class Alias extends EntityRepository
             ->select( 'a.id as id , a.address as address, a.goto as goto, a.active as active, d.domain as domain' )
             ->from( '\\Entities\\Alias', 'a' )
             ->join( 'a.Domain', 'd' );
-     
+
         if( !$admin->isSuper() )
             $qb->join( 'd.Admins', 'd2a' )
                 ->where( 'd2a = ?1' )
                 ->setParameter( 1, $admin );
-        
+
         if( $domain )
             $qb->andWhere( 'a.Domain = ?2' )
                 ->setParameter( 2, $domain );
@@ -115,17 +114,17 @@ class Alias extends EntityRepository
         	$qb->andWhere( "a.address != a.goto" );
         return $qb->getQuery()->getArrayResult();
     }
-    
+
     /**
      * Return filtered alias data array
      *
      * Use filter to filter aliases by address or goto or domain. If filter
-     * starts with * it will be replaced with % to meet sql requirements. At 
+     * starts with * it will be replaced with % to meet sql requirements. At
      * the end % will be added to all strings. So filter 'man' will bicome
      * 'man%' and will look for man, manual and iffilter '*man' it wil bicome
      * '%man%' and will look for records like human, humanity, man, manual.
      *
-     * @param string           $filter Flter for mailboxes 
+     * @param string           $filter Flter for mailboxes
      * @param \Entities\Admin  $admin  Admin for filtering mailboxes.
      * @param \Entities\Domain $domain Domain for filtering mailboxes.
      * @param bool             $ima    Include mailbox aliases flag.
@@ -134,16 +133,16 @@ class Alias extends EntityRepository
     public function filterForAliasList( $filter, $admin, $domain = null,  $ima = false  )
     {
         $filter = str_replace ( "'" , "" , $filter );
-        
+
         if( strpos( $filter, "*" ) === 0 )
             $filter = '%' . substr( $filter, 1 );
-        
+
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select( 'a.id as id , a.address as address, a.goto as goto, a.active as active, d.domain as domain' )
             ->from( '\\Entities\\Alias', 'a' )
             ->join( 'a.Domain', 'd' )
             ->where( "( a.goto LIKE '{$filter}%' OR a.address LIKE '{$filter}%' OR d.domain LIKE '{$filter}%')" );
-        
+
         if( !$admin->isSuper() )
             $qb->join( 'd.Admins', 'd2a' )
                 ->andWhere( 'd2a = ?1' )
@@ -152,10 +151,10 @@ class Alias extends EntityRepository
         if( $domain )
             $qb->andWhere( 'm.Domain = ?2' )
                 ->setParameter( 2, $domain );
-                
+
         if( !$ima )
         	$qb->andWhere( "a.address != a.goto" );
-        	
-        return $qb->getQuery()->getArrayResult();  
+
+        return $qb->getQuery()->getArrayResult();
     }
 }

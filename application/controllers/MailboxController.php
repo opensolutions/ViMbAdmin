@@ -260,15 +260,15 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
 
                 if( !$this->isEdit() )
                 {
+                    if( !$this->getDomain() || $this->getDomain()->getId() != $form->getElement( 'domain' )->getValue() )
+                        $this->_domain = $this->loadDomain( $form->getElement( 'domain' )->getValue() );
+
                     // do we have available mailboxes?
                     if( !$this->getAdmin()->isSuper() && $this->getDomain()->getMaxMailboxes() != 0 && $this->getDomain()->getMailboxCount() >= $this->getDomain()->getMaxMailboxes() )
                     {
                         $this->addMessage( _( 'You have used all of your allocated mailboxes.' ), OSS_Message::ERROR );
                         return;
                     }
-
-                    if( !$this->getDomain() || $this->getDomain()->getId() != $form->getElement( 'domain' )->getValue() )
-                        $this->_domain = $this->loadDomain( $form->getElement( 'domain' )->getValue() );
 
                     // is the mailbox address valid?
                     $username = sprintf( "%s@%s", $form->getValue( 'local_part' ), $this->_domain->getDomain() );

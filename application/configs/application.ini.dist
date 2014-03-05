@@ -9,7 +9,7 @@
 ;;
 ;; ** This is for ViMbAdmin V3 and later **
 ;;
-;; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Configuration
+;; See: https://github.com/opensolutions/ViMbAdmin/wiki/Configuration
 
 [user]
 
@@ -64,8 +64,8 @@ resources.doctrine2cache.namespace              = 'ViMbAdmin3'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Default values used when creating domains
 ; 
-; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Configuration
-; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Quotas
+; See: https://github.com/opensolutions/ViMbAdmin/wiki/Configuration
+; See: https://github.com/opensolutions/ViMbAdmin/wiki/Quotas
 
 defaults.domain.quota = 0
 defaults.domain.maxquota = 0
@@ -98,7 +98,7 @@ defaults.table.entries = 50
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Options for the display of domain and mailbox sizes
 ;;
-;; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Mailbox-Sizes
+;; See: https://github.com/opensolutions/ViMbAdmin/wiki/Mailbox-Sizes
 ;;
 ;; Enable or disable display of sizes. Default: disabled
 
@@ -168,7 +168,7 @@ mailboxAliases = 1
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Archiving-Mailboxes
+; See: https://github.com/opensolutions/ViMbAdmin/wiki/Archiving-Mailboxes
 
 server_id = 1
 
@@ -196,7 +196,7 @@ mailbox_deletion_fs_enable = false
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Export Mailbox Settings
 ; 
-; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Export-Settings
+; See: https://github.com/opensolutions/ViMbAdmin/wiki/Export-Settings
 ;
 defaults.export_settings.disabled = true
 
@@ -275,7 +275,7 @@ server.email.address = "support@example.com"
 ;;
 ;; You can skin ViMbAdmin pages if you wish. 
 ;;
-;; See: https://github.com/opensolutions/ViMbAdmin3/wiki/Skinning
+;; See: https://github.com/opensolutions/ViMbAdmin/wiki/Skinning
 
 ; resources.smarty.skin      = "myskin"
 

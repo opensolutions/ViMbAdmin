@@ -190,7 +190,7 @@ archive.path = "/srv/archives"
 ; See: https://github.com/opensolutions/ViMbAdmin/wiki/Deleting-Mailboxes
 ;
 
-mailbox_deletion_fs_enable = false
+mailbox_deletion_fs_enabled = false
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

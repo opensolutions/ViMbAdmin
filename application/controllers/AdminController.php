@@ -185,10 +185,11 @@ class AdminController extends ViMbAdmin_Controller_Action
      */
     public function passwordAction()
     {
+        $redirectUrl = $this->getAdmin()->isSuper() ? 'admin/list' : 'domain/list';
         if( !$this->getTargetAdmin() )
         {
             $this->addMessage( 'Invalid or non-existent admin.', OSS_Message::ERROR );
-            $this->redirect( 'admin/list' );
+            $this->redirect( $redirectUrl );
         }
         $this->view->targetAdmin = $this->getTargetAdmin();
 
@@ -205,7 +206,7 @@ class AdminController extends ViMbAdmin_Controller_Action
                 );
 
             $this->addMessage( _( 'You have insufficient privileges for this task.' ), OSS_Message::ERROR );
-            $this->redirect( 'admin/list' );
+            $this->redirect( $redirectUrl );
         }
 
         if( $self )
@@ -268,7 +269,7 @@ class AdminController extends ViMbAdmin_Controller_Action
             else
                 $this->addMessage( "You have successfully changed your password.", OSS_Message::SUCCESS );
 
-            $this->redirect( 'admin/list' );
+            $this->redirect( $redirectUrl );
         }
 
     }

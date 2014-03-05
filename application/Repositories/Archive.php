@@ -30,8 +30,8 @@ class Archive extends EntityRepository
 
         if( !$admin->isSuper() )
             $qb->join( 'd.Admins', 'd2a' )
-                ->where( 'd2a.Admin = ?1' )
-                ->setParameter( 1, $admin );
+                ->where( 'd2a = :admin' )
+                ->setParameter( 'admin', $admin );
 
         if( $domain )
             $qb->andWhere( 'a.Domain = ?2' )

@@ -46,7 +46,8 @@ resources.doctrine2.connection.options.driver   = 'pdo_mysql'
 resources.doctrine2.connection.options.dbname   = 'vimbadmin'
 resources.doctrine2.connection.options.user     = 'vimbadmin'
 resources.doctrine2.connection.options.password = 'xxx'
-resources.doctrine2.connection.options.host     = 'localhost'    
+resources.doctrine2.connection.options.host     = 'localhost'
+resources.doctrine2.connection.options.charset  = 'utf8'
 
 ;; Doctrine2 requires Memcache for maximum efficency. Without Memcache
 ;; it can be highly inefficient and will slow page requests down.

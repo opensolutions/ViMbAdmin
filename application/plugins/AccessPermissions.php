@@ -40,7 +40,7 @@
  * rely on a specific column in the Mailbox database table which plugins should typically
  * avoid.
  *
- * See https://github.com/opensolutions/ViMbAdmin3/wiki/Plugin-Access-Permissions
+ * See https://github.com/opensolutions/ViMbAdmin/wiki/Plugin-Access-Permissions
  *
  * @package ViMbAdmin
  * @subpackage Plugins

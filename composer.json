@@ -1,45 +1,66 @@
 {
-	"name": "opensolutions/vimbadmin",
-	"description": "ViMdAdmin :: Virtual Mailbox Administration",
-	"type": "project",
-	"keywords": ["vimbadmin", "postfix", "postfixadmin", "dovecot"],
-	"homepage": "http://www.vimbadmin.net/",
-	"license": "GPL-3.0+",
-	"authors": [
-		{
-			"name": "Barry O'Donovan",
-			"email": "barry@opensolutions.ie",
-			"homepage": "http://www.barryodonovan.com/",
-			"role": "Lead Developer"
-		},
-		{
-			"name": "Open Solutions",
-			"email": "info@opensolutions.ie",
-			"homepage": "http://www.opensolutions.ie/",
-			"role": "Development Team"
-		}
-	],
-	"repositories": [
-        	{
-            		"type": "vcs",
-            		"url": "https://github.com/opensolutions/Bootstrap-Zend-Framework"
-        	}
-    	],	
-	"require": {
-        	"php": ">=5.4.0",
-        	"doctrine/orm": "2.*",
-		"opensolutions/oss-framework": "dev-master",        
-		"zendframework/zendframework1": "~1.12",
-                "smarty/smarty": "~3.1.0",
-		"opensolutions/minify": "1.*",
-		"komola/bootstrap-zend-framework": "dev-master"
-	},
-	"support": {
-		"issues": "https://github.com/opensolutions/ViMbAdmin/issues",
-		"wiki": "https://github.com/opensolutions/ViMbAdmin/wiki",
-		"source": "https://github.com/opensolutions/ViMbAdmin"
-	},
-	"autoload": {
-	},
-	"minimum-stability": "dev"
+    "name": "opensolutions/vimbadmin",
+    "description": "ViMdAdmin :: Virtual Mailbox Administration",
+    "type": "project",
+    "keywords": ["vimbadmin", "postfix", "postfixadmin", "dovecot"],
+    "homepage": "http://www.vimbadmin.net/",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Barry O'Donovan",
+            "email": "barry@opensolutions.ie",
+            "homepage": "http://www.barryodonovan.com/",
+            "role": "Lead Developer"
+        },
+        {
+            "name": "Open Solutions",
+            "email": "info@opensolutions.ie",
+            "homepage": "http://www.opensolutions.ie/",
+            "role": "Development Team"
+        }
+    ],
+    "repositories": [
+    	{
+    		"type": "vcs",
+    		"url": "https://github.com/opensolutions/Bootstrap-Zend-Framework"
+    	},
+        {
+            "type": "package",
+            "package": {
+                "name": "smarty/smarty",
+                "version": "3.1.17",
+                "dist": {
+                    "url": "http://www.smarty.net/files/Smarty-3.1.17.zip",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "http://smarty-php.googlecode.com/svn/",
+                    "type": "svn",
+                    "reference": "tags/v3.1.17/distribution/"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+		"doctrine/orm": "2.*",
+        "opensolutions/oss-framework": "dev-master",
+        "zendframework/zendframework1": "~1.12",
+        "smarty/smarty": "~3.1.0",
+        "opensolutions/minify": "1.*",
+        "komola/bootstrap-zend-framework": "dev-master"
+    },
+    "support": {
+        "issues": "https://github.com/opensolutions/ViMbAdmin/issues",
+        "wiki": "https://github.com/opensolutions/ViMbAdmin/wiki",
+        "source": "https://github.com/opensolutions/ViMbAdmin"
+    },
+    "autoload": {
+        "classmap": [
+            "vendor/smarty/smarty/libs/Smarty.class.php",
+            "vendor/smarty/smarty/libs/SmartyBC.class.php",
+            "vendor/smarty/smarty/libs/sysplugins/smarty_security.php"
+        ]
+    },
+    "minimum-stability": "dev"
 }

@@ -646,6 +646,8 @@ resources.smarty.plugins[] = APPLICATION_PATH "/../library/ViMbAdmin/Smarty/func
 resources.smarty.plugins[] = APPLICATION_PATH "/../vendor/opensolutions/oss-framework/src/OSS/Smarty/functions"
 resources.smarty.plugins[] = APPLICATION_PATH "/../vendor/smarty/smarty/distribution/libs/plugins"
 resources.smarty.plugins[] = APPLICATION_PATH "/../vendor/smarty/smarty/distribution/libs/sysplugins"
+resources.smarty.plugins[] = APPLICATION_PATH "/../vendor/smarty/smarty/libs/plugins"
+resources.smarty.plugins[] = APPLICATION_PATH "/../vendor/smarty/smarty/libs/sysplugins"
 resources.smarty.debugging = 0
 
 

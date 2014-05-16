@@ -28,15 +28,15 @@
             "type": "package",
             "package": {
                 "name": "smarty/smarty",
-                "version": "3.1.17",
+                "version": "3.1.18",
                 "dist": {
-                    "url": "http://www.smarty.net/files/Smarty-3.1.17.zip",
+                    "url": "http://www.smarty.net/files/Smarty-3.1.18.zip",
                     "type": "zip"
                 },
                 "source": {
                     "url": "http://smarty-php.googlecode.com/svn/",
                     "type": "svn",
-                    "reference": "tags/v3.1.17/distribution/"
+                    "reference": "tags/v3.1.18/distribution/"
                 }
             }
         }
@@ -57,9 +57,9 @@
     },
     "autoload": {
         "classmap": [
-            "vendor/smarty/smarty/libs/Smarty.class.php",
-            "vendor/smarty/smarty/libs/SmartyBC.class.php",
-            "vendor/smarty/smarty/libs/sysplugins/smarty_security.php"
+            "vendor/smarty/smarty/distribution/libs/Smarty.class.php",
+            "vendor/smarty/smarty/distribution/libs/SmartyBC.class.php",
+            "vendor/smarty/smarty/distribution/libs/sysplugins/smarty_security.php"
         ]
     },
     "minimum-stability": "dev"

@@ -46,7 +46,7 @@
 		"doctrine/orm": "2.*",
         "opensolutions/oss-framework": "dev-master",
         "zendframework/zendframework1": "~1.12",
-        "smarty/smarty": "~3.1.0",
+        "smarty/smarty": "3.1.17",
         "opensolutions/minify": "1.*",
         "komola/bootstrap-zend-framework": "dev-master"
     },

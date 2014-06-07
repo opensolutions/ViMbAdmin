@@ -1,15 +1,27 @@
 /**
- * @preserve throbber.js v 0.1 2011-09-18
+ * @preserve throbber.js v 0.0.2 2014-04-30
  * http://aino.com
  *
- * Copyright (c) 2011, Aino
+ * Copyright (c) Aino Aktiebolag
  * Licensed under the MIT license.
  *
  */
 
-/*global Image, Throbber:true*/
+/*global Image, module, define, window */
 
-(function( window ) {
+(function(global, factory) {
+
+    if ( typeof module === "object" && typeof module.exports === "object" ) {
+        module.exports = factory( global );
+    } else if ( typeof define == 'function' && define.amd ) {
+        define( "throbber", [], function() {
+            return factory( global );
+        });
+    } else {
+        global.Throbber = factory( global );
+    }
+
+}(window || this, function( window ) {
 
     var document = window.document,
 
@@ -25,6 +37,55 @@
             }
             return defaults;
         },
+
+        _animate = (function() {
+
+            var loops = [];
+            var animating = false;
+
+            var requestFrame = (function(){
+              var r = 'RequestAnimationFrame';
+              return window.requestAnimationFrame || 
+                window['webkit'+r] || 
+                window['moz'+r] || 
+                window['o'+r] || 
+                window['ms'+r] || 
+                function( callback ) {
+                  window.setTimeout(callback, 1000 / 60);
+                };
+            }());
+
+            function tick() {
+
+                requestFrame(tick);
+                var now = +(new Date());
+
+                for(var i=0; i<loops.length; i++) {
+                    var loop = loops[i];
+                    loop.elapsed = now - loop.then;
+                    if (loop.elapsed > loop.fpsInterval) {
+                        loop.then = now - (loop.elapsed % loop.fpsInterval);
+                        loop.fn();
+                    }
+                }
+            }
+
+            return function animate(fps, draw) {
+
+                var now = +(new Date());
+                loops.push({
+                    fpsInterval: 1000/fps,
+                    then: now,
+                    startTime: now,
+                    elapsed: 0,
+                    fn: draw
+                });
+                if ( !animating ) {
+                    animating = true;
+                    tick();
+                }
+            };
+        }()),
 
         // convert any color to RGB array
         _getRGB = function( color ) {
@@ -79,12 +140,13 @@
 
                 l = i+step >= o.lines ? i-o.lines+step : i+step;
 
-                ctx.strokeStyle = 'rgba(' + o.color.join(',') + ',' + M.max(0, (l/o.lines - fade) ) + ')';
+                ctx.strokeStyle = 'rgba(' + o.color.join(',') + ',' + M.max(0, ((l/o.lines) - fade) ).toFixed(2) + ')';
                 ctx.beginPath();
 
                 ctx.moveTo( size/2, size/2-o.padding/2 );
                 ctx.lineTo( size/2, 0 );
-                ctx.stroke( o.strokewidth );
+                ctx.lineWidth = o.strokewidth;
+                ctx.stroke();
                 _restore( ctx, size, false );
                 ctx.rotate( ad * ( 360/o.lines ) * M.PI/180 );
                 _restore( ctx, size, true );
@@ -101,7 +163,11 @@
 
 
     // Throbber constructor
-    Throbber = function( options ) {
+    function Throbber( options ) {
+
+        if ( !(this instanceof Throbber )) {
+            return new Throbber( options );
+        }
 
         var elem = this.elem = document.createElement('canvas'),
             scope = this;
@@ -136,7 +202,6 @@
         this.configure( options );
 
         // fade phase
-        // -1 = init
         // 0 = idle
         // 1 = fadein
         // 2 = running
@@ -198,11 +263,12 @@
                     _draw( alpha, o, scope.ctx, step );
                     step = step === 0 ? scope.o.lines : step-1;
                 }
-
-                window.setTimeout( scope.loop, 1000/o.fps );
             };
         }());
-    };
+
+        _animate(this.o.fps, this.loop);
+
+    }
 
     // Throbber prototypes
     Throbber.prototype = {
@@ -241,6 +307,17 @@
 
             // copy the amount of lines into steps
             this.step = o.lines;
+            
+            // double-up for retina screens
+            if (!!window.devicePixelRatio) {
+                // lock element into desired end size
+                this.elem.style.width = o.size + 'px';
+                this.elem.style.height = o.size + 'px';
+
+                o.size *= window.devicePixelRatio;
+                o.padding *= window.devicePixelRatio;
+                o.strokewidth *= window.devicePixelRatio;
+            }
 
             return this;
         },
@@ -272,4 +349,6 @@
         }
     };
 
-}( this ));
+    return Throbber;
+
+}));

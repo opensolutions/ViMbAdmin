@@ -41,7 +41,7 @@ $whatToCompress = 'all';
 $verbose = true;
 
 // We use APPLICATION_PATH as per the Zend framework. Feel free to remove as it's only used for the paths defined below here
-defined( 'APPLICATION_PATH' ) || define( 'APPLICATION_PATH', realpath( SCRIPTDIR . '/../../application' ) );
+defined( 'APPLICATION_PATH' ) || define( 'APPLICATION_PATH', realpath( __DIR__ . '/../application' ) );
 
 
 /////////////////////////////////////////////////////////////////////////////////

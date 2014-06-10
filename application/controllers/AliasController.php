@@ -90,11 +90,11 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
      *
      * $this->view->alias_actions allow to append aliases list action buttons. %id% will be replaced by
      * alias id form the list. below is example array which creates edit alias button, and another button
-     * with drop down options for edit alias. Only one drop down button can be defined per button group, 
+     * with drop down options for edit alias. Only one drop down button can be defined per button group,
      * and it always be appended at the end.
      * $actions = [
      *       [                          //Simple link button
-     *           'tagName' => 'a',     //Mandatory parameter for element type. 
+     *           'tagName' => 'a',     //Mandatory parameter for element type.
      *           'href' => OSS_Utils::genUrl( "alias", "edit" ) . "/alid/%id%", //Url for action
      *           'title' => "Edit",
      *           'class' => "btn btn-mini have-tooltip",  //Class for css options.
@@ -116,7 +116,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
      *               'class' => "icon-cog"
      *           ],
      *           'menu' => [        //menu array is mandatory then defining drop down button
-     *               [ 
+     *               [
      *                   'id' => "menu-edit-%id%",   //Not mandatory attribute but if is set %id% should be use to avoid same ids.
      *                   'text' => "<i class=\"icon-pencil\"></i> Edit",                 //Mandatory for display action text
      *                   'url' =>  OSS_Utils::genUrl( "alias", "edit" ) . "/alid/%id%"  //Mandatory to redirect the action.
@@ -124,11 +124,11 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
      *           ]
      *       ]
      *   ];
-     * 
+     *
      */
     public function listAction()
-    {   
-        //Include mailbox aliases 
+    {
+        //Include mailbox aliases
         $this->view->ima = $ima = $this->_getParam( 'ima', 0 );
         $this->view->domain = $this->getDomain();
         if( isset( $this->_options['defaults']['server_side']['pagination']['enable'] ) && $this->_options['defaults']['server_side']['pagination']['enable'] )
@@ -163,7 +163,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
                     echo "ko";
             }
             else
-                echo "ko";    
+                echo "ko";
         }
     }
 
@@ -190,11 +190,11 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
             {
                 $form->assignEntityToForm( $this->getAlias(), $this, $this->isEdit() );
                 $form->removeElement( 'local_part' );
-                $form->removeElement( 'domain' );  
+                $form->removeElement( 'domain' );
             }
 
             $this->view->form = $this->aliasForm = $form;
-            
+
             // call plugins
             $this->notify( 'alias', 'add', 'formPostProcess', $this );
         }
@@ -224,7 +224,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
             $form = $this->getAliasForm();
             $form->assignEntityToForm( $this->getAlias(), $this, $this->isEdit() );
         }
-        
+
         $this->view->domainList = $domainList = $this->getD2EM()->getRepository( "\\Entities\\Domain" )->loadForAdminAsArray( $this->getAdmin(), true );
 
         if( $this->getDomain() )
@@ -236,7 +236,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
 
         if( $this->getMailbox() )
             $this->view->defaultGoto = "{$this->getMailbox()->getLocalPart()}@{$this->getDomain()->getDomain()}";
-        
+
         $this->view->alias = $this->getAlias();
         $this->view->emails = $this->_autocompleteArray();
 
@@ -251,12 +251,15 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
                 $this->notify( 'alias', 'add', 'addPostvalidate', $this );
 
                 $form->assignFormToEntity( $this->getAlias(), $this, $this->isEdit() );
-                
+
                 if( !$this->_setGotos( $form ) )
                     return;
 
                 if( !$this->isEdit() ) // adding
                 {
+                    if( !$this->getDomain() || $this->getDomain()->getId() != $form->getValue( 'domain' ) )
+                        $this->_domain = $this->loadDomain( $form->getValue( 'domain' ) );
+
                     // do we have available aliases?
                     if( !$this->getAdmin()->isSuper() && $this->getDomain()->getMaxaliases() != 0
                             && $this->getDomain->getAliasCount() >= $this->getDomain()->getMaxAliases()
@@ -266,17 +269,14 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
                         $this->redirect( "alias/list" );
                     }
 
-                    if( !$this->getDomain() || $this->getDomain()->getId() != $form->getValue( 'domain' ) )
-                        $this->_domain = $this->loadDomain( $form->getValue( 'domain' ) );
-
                     $this->getAlias()->setDomain( $this->getDomain() );
                     $this->getAlias()->setActive( 1 );
-                    
+
                     if( !$this->_setAddress( $form ) )
                         return;
                 }
                 else
-                    $this->getAlias()->setModified( new \DateTime() );   
+                    $this->getAlias()->setModified( new \DateTime() );
 
                 if( !$this->isEdit() && $this->getAlias()->getAddress() != $this->getAlias()->getGoto() )
                     $this->getDomain()->setAliasCount( $this->getDomain()->getAliasCount() + 1 );
@@ -377,7 +377,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
         {
             $form->getElement( 'goto' )->addError( _( 'You must have at least one goto address.' ) );
             $this->getAlias()->setGoto( "" );
-            return false; 
+            return false;
         }
         else
         {
@@ -431,7 +431,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
             $form->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
             return false;
         }
-        
+
         $alias = $this->getD2EM()->getRepository( "\\Entities\\Alias" )->findOneBy( ["address" => $address ] );
         if( $alias )
         {
@@ -444,13 +444,13 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
             }
             else
                 $msg = _( 'Alias already exists for' ) . " {$address}";
-                
+
             $this->addMessage( $msg, OSS_Message::ERROR );
 
             //check if it works correctly.
             return false;
         }
-        $this->getAlias()->setAddress( $address );  
+        $this->getAlias()->setAddress( $address );
         return true;
     }
 

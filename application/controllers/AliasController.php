@@ -262,7 +262,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
 
                     // do we have available aliases?
                     if( !$this->getAdmin()->isSuper() && $this->getDomain()->getMaxaliases() != 0
-                            && $this->getDomain->getAliasCount() >= $this->getDomain()->getMaxAliases()
+                            && $this->getDomain()->getAliasCount() >= $this->getDomain()->getMaxAliases()
                         )
                     {
                         $this->addMessage( _( 'You have used all of your allocated aliases.' ), OSS_Message::ERROR );

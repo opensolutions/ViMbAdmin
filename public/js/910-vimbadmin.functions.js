@@ -223,3 +223,15 @@
     {
         return /^([A-Za-z0-9_\-\+\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test( str );
     }
+
+
+    /**
+     * Checks if the value is a valid domain for email addresses or not.
+     *
+     * @param string str
+     * @return boolean
+     */
+    function isValidEmailDomain( str )
+    {
+        return /^([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test( str );
+    }

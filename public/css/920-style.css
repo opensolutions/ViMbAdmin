@@ -337,3 +337,11 @@ dl.inputs-list
     margin-left: 180px;
     margin-top: 5px;
 }
+
+.tab-content {
+  overflow: inherit;
+}
+
+.popover.right {
+  text-align: left !important;
+}

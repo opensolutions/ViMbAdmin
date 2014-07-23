@@ -22,7 +22,7 @@
                     <fieldset class="control-group" id="div-form-password">
                         <label for="local_part" class="control-label">
                                 Address
-                                <span class="label" id="address-popover" data-content="You can alias an entire domain by leaving the address field / local part blank." data-title="Domain Aliases" data-placement="left">?</span>
+                                <span class="label" id="address-popover" data-content="You can catch all unused addresses by leaving the address field / local part blank." data-title="Catch-all Aliases">?</span>
                         </label>
                         <div id="div-controls-{$element->local_part->getId()}" class="controls">
                             <div class="input-append btn-group" style="float: left;">
@@ -76,6 +76,7 @@
                 <fieldset class="control-group" id="div-form-goto">
                     <label for="goto" class="control-label">
                         {$element->goto->getLabel()}
+                        <span class="label" id="goto-popover" data-content="You can alias a address to another domain by leaving the local part empty (e.g. @example.com)." data-title="Domain Aliases">?</span>
                     </label>
                     <div class="controls" id="div-controls-goto">
                         <div class="input-append" id="goto-div-0">

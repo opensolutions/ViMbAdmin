@@ -4,6 +4,7 @@ var gotoId = 1; // constantly increment it to make sure it is always unique on t
 $(document).ready( function()
 {
     $("#address-popover").popover( { trigger: 'hover' } );
+    $("#goto-popover").popover( { trigger: 'hover' } );
 
     $( '#goto_empty' ).keypress( function(e) {
         if( e.which == 13 )
@@ -61,7 +62,7 @@ function addGoto()
 
     if( address != '' )
     {
-        if( isValidEmail( address ) )
+        if( address.substr( 0, 1 ) == '@' && isValidEmailDomain( address.substr( 1 ) ) || isValidEmail( address ) )
         {
             if( gotoList.indexOf( address ) == -1 )
             {

@@ -391,7 +391,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
                     unset( $gotos[ $key ] );
                 else
                 {
-                    if( !Zend_Validate::is( $goto, 'EmailAddress', array( 1, null ) ) )
+                    if( substr( $goto, 0, 1 ) != '@' && !Zend_Validate::is( $goto, 'EmailAddress', array( 1, null ) ) )
                     {
                         $form->getElement( 'goto' )->addError( 'Invalid email address(es).' );
                         return false;

@@ -96,7 +96,7 @@ class ViMbAdmin_Form_Mailbox_AddEdit extends ViMbAdmin_Form
             ->setAttrib( 'size', 40 )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 32 ) )
+            ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 255 ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );

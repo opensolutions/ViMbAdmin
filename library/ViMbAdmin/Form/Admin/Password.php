@@ -63,7 +63,7 @@ class ViMbAdmin_Form_Admin_Password extends ViMbAdmin_Form
             ->setAttrib( 'autocomplete', 'off' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', false, array( $this->minPasswordLength, 40 ) )
+            ->addValidator( 'StringLength', false, array( $this->minPasswordLength, 255 ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );

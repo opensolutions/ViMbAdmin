@@ -54,7 +54,7 @@ class ViMbAdmin_Form_Admin_ChangePassword extends ViMbAdmin_Form
             ->setAttrib( 'size', 20)
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', true, array( 8, 32 ) )
+            ->addValidator( 'StringLength', true, array( 8, 255 ) )
             ->addFilter( 'StripSlashes' );
 
         $password = $this
@@ -64,7 +64,7 @@ class ViMbAdmin_Form_Admin_ChangePassword extends ViMbAdmin_Form
             ->setAttrib( 'size', 20)
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', true, array( 8, 32 ) )
+            ->addValidator( 'StringLength', true, array( 8, 255 ) )
             ->addFilter( 'StripSlashes' );
 
         $confirmPassword = $this

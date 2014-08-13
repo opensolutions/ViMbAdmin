@@ -74,7 +74,7 @@ class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
             ->setAttrib( 'class', 'required' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 32 ) )
+            ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 255 ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );
@@ -85,7 +85,7 @@ class ViMbAdmin_Form_Mailbox_Password extends ViMbAdmin_Form
             ->setAttrib( 'class', 'required' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
-            ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 32 ) )
+            ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 255 ) )
             ->addFilter( 'StringTrim' )
             ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );

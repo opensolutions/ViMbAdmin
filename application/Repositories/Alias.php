@@ -149,7 +149,7 @@ class Alias extends EntityRepository
                 ->setParameter( 1, $admin );
 
         if( $domain )
-            $qb->andWhere( 'm.Domain = ?2' )
+            $qb->andWhere( 'a.Domain = ?2' )
                 ->setParameter( 2, $domain );
 
         if( !$ima )

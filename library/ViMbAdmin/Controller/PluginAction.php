@@ -166,8 +166,14 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
      */
     public function notify( $controller, $action, $hook, OSS_Controller_Action $controllerObject, $params = null )
     {
-        foreach( $this->observers as $o )
-            $o->update( $controller, $action, $hook, $controllerObject, $params );
+        $returnValue=true;
+        foreach( $this->observers as $o ) {
+            $status=$o->update( $controller, $action, $hook, $controllerObject, $params );
+            if(!$status) {
+                $returnValue=false;
+            }
+        }
+        return($returnValue);
     }
     
     /**

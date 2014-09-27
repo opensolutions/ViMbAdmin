@@ -38,7 +38,13 @@
          // read config parameters
          $this->defaultAliases = $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases'];
      }
-     
+
+     /**
+      * Is called after a mailbox is created. It ensures that required aliases are created.
+      *
+      * @param $controller
+      * @param $options
+      */
      public function mailbox_add_addPostflush($controller, $options) {
          // get domain
          $domainId = $controller->getDomain()->getId();
@@ -66,5 +72,30 @@
                  }
              }
          }
+     }
+
+     /**
+      * Check if the aliases is allowed to be removed. If not return false, else return true.
+      *
+      * @param $controller
+      * @param $options
+      * @return bool
+      */
+     public function alias_delete_preRemove($controller, $options) {
+         // get alias that should be deleted
+         $alias = $controller->getAlias()->getAddress();
+         $domain = $controller->getDomain()->getDomain();
+
+         // check if the alias to delete is not enforced by the plugin
+         if($this->defaultAliases) {
+             foreach($this->defaultAliases as $key => $item) {
+                 if($alias == $item.'@'.$domain) {
+                     // not allowed to delete, show error message and stop delete
+                     $controller->addMessage( sprintf( _("Alias %s is required and cannot be deleted."), $alias), OSS_Message::ERROR);
+                     return false;
+                 }
+             }
+         }
+         return true;
      }
  }

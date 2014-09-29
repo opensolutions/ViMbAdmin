@@ -316,6 +316,8 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
         if( !$this->getAlias() )
             print 'ko';
 
+        $status = $this->notify( 'alias', 'toggleActive', 'preToggle', $this, [ 'active' => $this->getAlias()->getActive() ] );
+
         $this->getAlias()->setActive( !$this->getAlias()->getActive() );
         $this->getAlias()->setModified( new \DateTime() );
 

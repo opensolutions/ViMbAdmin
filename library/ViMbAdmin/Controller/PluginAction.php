@@ -172,6 +172,9 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
             if(!$status) {
                 $returnValue=false;
             }
+            if($hook == 'preToggle') {
+                $returnValue=$status;
+            }
         }
         return($returnValue);
     }

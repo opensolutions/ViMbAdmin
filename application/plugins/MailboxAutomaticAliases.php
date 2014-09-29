@@ -98,4 +98,24 @@
          }
          return true;
      }
+
+     public function alias_toggleActive_preToggle($controller, $options) {
+         // get alias that should be deleted
+         $alias = $controller->getAlias()->getAddress();
+         $domain = $controller->getDomain()->getDomain();
+
+         if($options['active'] == 'true') {
+             // we have to check if it is allowed to disable this alias
+             if($this->defaultAliases) {
+                 foreach($this->defaultAliases as $key => $item) {
+                     if($alias == $item.'@'.$domain) {
+                         // not allowed to delete, show error message and stop delete
+                         return( sprintf( _("Alias %s is required and cannot be disabled."), $alias));
+                     }
+                 }
+             }
+
+         }
+        return 'ok';
+     }
  }

@@ -318,17 +318,19 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
 
         $status = $this->notify( 'alias', 'toggleActive', 'preToggle', $this, [ 'active' => $this->getAlias()->getActive() ] );
 
-        $this->getAlias()->setActive( !$this->getAlias()->getActive() );
-        $this->getAlias()->setModified( new \DateTime() );
+        if( $status == 'ok') {
+            $this->getAlias()->setActive( !$this->getAlias()->getActive() );
+            $this->getAlias()->setModified( new \DateTime() );
 
-        $this->log(
-            $this->getAlias()->getActive() ? \Entities\Log::ACTION_ALIAS_ACTIVATE : \Entities\Log::ACTION_ALIAS_DEACTIVATE,
-            "{$this->getAdmin()->getFormattedName()} " . ( $this->getAlias()->getActive() ? 'activated' : 'deactivated' ) . " alias {$this->getAlias()->getAddress()}"
-        );
-        $this->notify( 'alias', 'toggleActive', 'preflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
-        $this->getD2EM()->flush();
-        $this->notify( 'alias', 'toggleActive', 'postflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
-        print 'ok';
+            $this->log(
+                $this->getAlias()->getActive() ? \Entities\Log::ACTION_ALIAS_ACTIVATE : \Entities\Log::ACTION_ALIAS_DEACTIVATE,
+                "{$this->getAdmin()->getFormattedName()} " . ( $this->getAlias()->getActive() ? 'activated' : 'deactivated' ) . " alias {$this->getAlias()->getAddress()}"
+            );
+            $this->notify( 'alias', 'toggleActive', 'preflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
+            $this->getD2EM()->flush();
+            $this->notify( 'alias', 'toggleActive', 'postflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
+        }
+        print $status;
     }
 
 

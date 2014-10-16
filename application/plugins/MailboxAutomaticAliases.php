@@ -118,4 +118,39 @@
          }
         return 'ok';
      }
+
+     /**
+      * Is called after an alias is created. It ensures that required aliases are created.
+      *
+      * @param $controller
+      * @param $options
+      */
+     public function alias_add_addPreflush($controller, $options) {
+         // get domain
+         $domainId = $controller->getDomain()->getId();
+         $domain = $controller->getDomain()->getDomain();
+
+         // get alias
+         $aliasGoto = $controller->getalias()->getGoto();
+
+         // check if domain has enforced aliases or do we have to create them?
+         if($this->defaultAliases) {
+             foreach($this->defaultAliases as $key => $item) {
+                 $aliasList = $controller->getD2EM()->getRepository( "\\Entities\\Alias" )->filterForAliasList( $item . '@' . $domain, $controller->getAdmin(), $domainId, true );
+                 if(count($aliasList) == 0) {
+                     $alias = new \Entities\Alias();
+                     $alias->setAddress($item.'@'.$domain);
+                     $alias->setGoto($aliasGoto);
+                     $alias->setDomain($controller->getDomain());
+                     $alias->setActive(1);
+                     $alias->setCreated(new \DateTime());
+                     $controller->getD2EM()->persist($alias);
+                     // Increase alias count for domain
+                     $controller->getDomain()->increaseAliasCount();
+                     $controller->getD2EM()->flush();
+                     $controller->addMessage( sprintf(_("Auto-Created alias %s@%s -> %s."), $item, $domain, $aliasGoto));
+                 }
+             }
+         }
+     }
  }

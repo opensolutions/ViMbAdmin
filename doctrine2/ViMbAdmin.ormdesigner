@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<orm-designer version="2.2.10.815" name="ViMbAdmin3" mvc="Without MVC" orm="Doctrine2" uuid="15328530-f75f-43e2-a906-a8eead4a5924">
+<skipper version="3.0.1.1129" name="ViMbAdmin3" mvc="Without MVC" orm="Doctrine2" uuid="15328530-f75f-43e2-a906-a8eead4a5924">
   <module name="ViMbAdmin" import-format="Doctrine2Xml" import-path="xml" uuid="2c6ca297-a962-4b31-a81c-0d852efeec06">
     <entity name="DirectoryEntry" description="Follows inetOrgPerson" uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="0e246371-4e8d-4c23-9adf-f22f6a371299"/>
@@ -34,7 +34,7 @@
       <field name="vimb_update" type="datetime" required="true" uuid="f377e655-f312-49a4-874e-c707f4503391"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\DirectoryEntry</attribute>
-        <attribute name="schema">directory_entry</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">directory_entry</attribute>
       </orm-attributes>
     </entity>
@@ -55,7 +55,7 @@
       <orm-attributes>
         <attribute name="repository-class">Repositories\Admin</attribute>
         <attribute name="table">admin</attribute>
-        <attribute name="schema">admin</attribute>
+        <attribute name="schema">vimbadmin</attribute>
       </orm-attributes>
     </entity>
     <entity name="Domain" uuid="1fc7527f-ff62-49c5-99ba-d03644a71d3c">
@@ -82,7 +82,7 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Domain</attribute>
-        <attribute name="schema">domain</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">domain</attribute>
       </orm-attributes>
     </entity>
@@ -109,7 +109,7 @@
       <field name="modified" type="datetime" uuid="49cc4ebf-41ec-4c50-8be5-204d49c2ee62"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Mailbox</attribute>
-        <attribute name="schema">mailbox</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">mailbox</attribute>
       </orm-attributes>
     </entity>
@@ -123,7 +123,7 @@
       <field name="created" type="datetime" required="true" uuid="f058d51b-158b-4dcc-b6ff-2a02f6ae1b42"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\DomainToAdmin</attribute>
-        <attribute name="schema">domain_admins</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">domain_admins</attribute>
       </orm-attributes>
     </entity>
@@ -145,7 +145,7 @@
       <field name="modified" type="datetime" uuid="a2413fa9-b287-43f4-8958-4e612589f717"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Alias</attribute>
-        <attribute name="schema">alias</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">alias</attribute>
       </orm-attributes>
     </entity>
@@ -167,7 +167,7 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\AdminPreference</attribute>
-        <attribute name="schema">admin_pref</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">admin_pref</attribute>
       </orm-attributes>
     </entity>
@@ -183,7 +183,7 @@
       <field name="Domain_id" type="bigint" uuid="037295b5-8477-4840-a348-6c40dae851f1"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Log</attribute>
-        <attribute name="schema">log</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">log</attribute>
       </orm-attributes>
     </entity>
@@ -208,7 +208,7 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\MailboxPreference</attribute>
-        <attribute name="schema">mailbox_pref</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">mailbox_pref</attribute>
       </orm-attributes>
     </entity>
@@ -222,7 +222,7 @@
       <field name="applied_on" type="datetime" required="true" uuid="ab43cef7-0f14-4ff2-80eb-a672a3d933de"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\DatabaseVersion</attribute>
-        <attribute name="schema">dbversion</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">dbversion</attribute>
       </orm-attributes>
     </entity>
@@ -237,7 +237,7 @@
       <field name="created" type="datetime" required="true" uuid="b009751c-d5b4-4207-be6d-1fdee10f7f20"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\RememberMe</attribute>
-        <attribute name="schema">remember_me</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">remember_me</attribute>
       </orm-attributes>
     </entity>
@@ -259,7 +259,7 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\AliasPreference</attribute>
-        <attribute name="schema">alias_pref</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">alias_pref</attribute>
       </orm-attributes>
     </entity>
@@ -281,7 +281,7 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\DomainPreference</attribute>
-        <attribute name="schema">domain_pref</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">domain_pref</attribute>
       </orm-attributes>
     </entity>
@@ -307,7 +307,7 @@
       <field name="data" type="text" required="true" uuid="36e1893d-3362-4b67-b610-f8d7553a939b"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Archive</attribute>
-        <attribute name="schema">archive</attribute>
+        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">archive</attribute>
       </orm-attributes>
     </entity>
@@ -322,23 +322,34 @@
     </orm-attributes>
   </module>
   <visual-data>
-    <entity uuid="0a3139bc-67e7-41cf-82b1-2f53337bcbaf" position-x="493" position-y="509" size-x="0" size-x2="111" size-y="0" size-y2="115"/>
+    <entity uuid="0a3139bc-67e7-41cf-82b1-2f53337bcbaf" bg-color="4294967295" hdr-color="4292006610" position-x="493" position-y="509" size-x="0" size-x2="111" size-y="0" size-y2="115"/>
+    <association uuid="143ff4af-0b7f-453a-a55e-ffd3d272d1be" color="4288059030"/>
     <project uuid="15328530-f75f-43e2-a906-a8eead4a5924" size-x="30" size-x2="1421" size-y="35" size-y2="826"/>
-    <entity uuid="1fc7527f-ff62-49c5-99ba-d03644a71d3c" position-x="486" position-y="6" size-x="0" size-x2="127" size-y="0" size-y2="269"/>
-    <entity uuid="2159b835-0acc-4444-89f1-e30fb1a6558f" position-x="300" position-y="337" size-x="0" size-x2="149" size-y="0" size-y2="241"/>
-    <module uuid="2c6ca297-a962-4b31-a81c-0d852efeec06" bk-color="4294244851" position-x="20" position-y="15" size-x="0" size-x2="1143" size-y="0" size-y2="647"/>
-    <entity uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a" position-x="1029" position-y="214" size-x="0" size-x2="190" size-y="0" size-y2="437"/>
-    <entity uuid="45ebe1d0-ea7e-4c68-a3a9-094441328f02" position-x="1062" position-y="37" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
-    <association uuid="5ec08d3d-4ea2-405d-832f-92f6341aa457" caption1-position-x="1" caption1-position-y="0" center-position-x="0" center-position-y="0"/>
-    <entity uuid="6db3acbf-c2bd-412e-93ad-401290455c57" position-x="30" position-y="72" size-x="0" size-x2="122" size-y="0" size-y2="115"/>
-    <entity uuid="6f2a163e-900a-4bf5-af83-eb13191ff10e" position-x="645" position-y="303" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
-    <entity uuid="76f412af-3d29-4b1d-a209-a407ba2e89c5" position-x="810" position-y="400" size-x="0" size-x2="114" size-y="0" size-y2="73"/>
-    <entity uuid="84795b6a-58cd-4d9c-846a-63e9a6cfa2f5" position-x="272" position-y="24" size-x="0" size-x2="108" size-y="0" size-y2="88"/>
-    <entity uuid="87c23ef4-98f0-4273-a54f-92ca6c3e63a5" position-x="12" position-y="416" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
-    <entity uuid="90282946-8af8-4824-8fbf-ed0c8cd75321" position-x="783" position-y="0" size-x="0" size-x2="154" size-y="0" size-y2="283"/>
-    <entity uuid="b7a13608-6503-4ba5-bb7c-602ec44b5401" position-x="155" position-y="370" size-x="0" size-x2="114" size-y="0" size-y2="129"/>
-    <entity uuid="ecb7d3bf-095b-4207-93be-0645ca2fb077" position-x="703" position-y="510" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
-    <association uuid="f2a36410-021a-4421-a75e-94b4f4abf10d" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0"/>
-    <entity uuid="f46119d2-f62e-4fda-8886-352c2c7cd7d0" position-x="230" position-y="134" size-x="0" size-x2="114" size-y="0" size-y2="101"/>
+    <entity uuid="1fc7527f-ff62-49c5-99ba-d03644a71d3c" bg-color="4294967295" hdr-color="4292006610" position-x="486" position-y="6" size-x="0" size-x2="127" size-y="0" size-y2="269"/>
+    <entity uuid="2159b835-0acc-4444-89f1-e30fb1a6558f" bg-color="4294967295" hdr-color="4292006610" position-x="300" position-y="337" size-x="0" size-x2="149" size-y="0" size-y2="241"/>
+    <module uuid="2c6ca297-a962-4b31-a81c-0d852efeec06" bg-color="4294244851" position-x="20" position-y="15" size-x="0" size-x2="1143" size-y="0" size-y2="647"/>
+    <entity uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a" bg-color="4294967295" hdr-color="4292006610" position-x="1029" position-y="214" size-x="0" size-x2="190" size-y="0" size-y2="437"/>
+    <association uuid="3d6ca7db-eb93-4c11-93a7-896b4367b73d" color="4288059030"/>
+    <association uuid="3dcdcc32-6681-45c6-baa1-b511e38e6bf4" color="4288059030"/>
+    <entity uuid="45ebe1d0-ea7e-4c68-a3a9-094441328f02" bg-color="4294967295" hdr-color="4292006610" position-x="1062" position-y="37" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <association uuid="51b420f6-298b-4f39-9eac-e076838c78a9" color="4288059030"/>
+    <association uuid="5ec08d3d-4ea2-405d-832f-92f6341aa457" caption1-position-x="1" caption1-position-y="0" center-position-x="0" center-position-y="0" color="4288059030"/>
+    <association uuid="69d5d550-3a45-44fc-8ff4-813a919c9099" color="4288059030"/>
+    <entity uuid="6db3acbf-c2bd-412e-93ad-401290455c57" bg-color="4294967295" hdr-color="4292006610" position-x="30" position-y="72" size-x="0" size-x2="122" size-y="0" size-y2="115"/>
+    <entity uuid="6f2a163e-900a-4bf5-af83-eb13191ff10e" bg-color="4294967295" hdr-color="4292006610" position-x="645" position-y="303" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <entity uuid="76f412af-3d29-4b1d-a209-a407ba2e89c5" bg-color="4294967295" hdr-color="4292006610" position-x="810" position-y="400" size-x="0" size-x2="114" size-y="0" size-y2="73"/>
+    <entity uuid="84795b6a-58cd-4d9c-846a-63e9a6cfa2f5" bg-color="4294967295" hdr-color="4292006610" position-x="272" position-y="24" size-x="0" size-x2="108" size-y="0" size-y2="88"/>
+    <entity uuid="87c23ef4-98f0-4273-a54f-92ca6c3e63a5" bg-color="4294967295" hdr-color="4292006610" position-x="12" position-y="416" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <entity uuid="90282946-8af8-4824-8fbf-ed0c8cd75321" bg-color="4294967295" hdr-color="4292006610" position-x="783" position-y="0" size-x="0" size-x2="154" size-y="0" size-y2="283"/>
+    <association uuid="99c5eb69-ac2d-4df5-8cd7-fcdf042b39e9" color="4288059030"/>
+    <many-to-many-association uuid="a3996cbf-3e92-4503-b40f-d4b4c19f058d" color="4288059030"/>
+    <entity uuid="b7a13608-6503-4ba5-bb7c-602ec44b5401" bg-color="4294967295" hdr-color="4292006610" position-x="155" position-y="370" size-x="0" size-x2="114" size-y="0" size-y2="129"/>
+    <association uuid="d08becc7-dbf1-4b10-8806-d795a2e9f6f2" color="4288059030"/>
+    <association uuid="d8aee4c0-6040-4643-9367-ae76ef07978d" color="4288059030"/>
+    <entity uuid="ecb7d3bf-095b-4207-93be-0645ca2fb077" bg-color="4294967295" hdr-color="4292006610" position-x="703" position-y="510" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <association uuid="f02325fc-33d1-4066-9c91-eb835d9f85bc" color="4288059030"/>
+    <association uuid="f2a36410-021a-4421-a75e-94b4f4abf10d" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="4288059030"/>
+    <entity uuid="f46119d2-f62e-4fda-8886-352c2c7cd7d0" bg-color="4294967295" hdr-color="4292006610" position-x="217" position-y="178" size-x="0" size-x2="108" size-y="0" size-y2="101"/>
+    <association uuid="f73bcaea-bd83-488d-b32b-0e73e847a592" color="4288059030"/>
   </visual-data>
-</orm-designer>
+</skipper>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Entities\DirectoryEntry" repository-class="Repositories\DirectoryEntry" schema="directory_entry" table="directory_entry">
+  <entity name="Entities\DirectoryEntry" repository-class="Repositories\DirectoryEntry" schema="vimbadmin" table="directory_entry">
     <id name="id" type="bigint">
       <generator strategy="AUTO"/>
     </id>

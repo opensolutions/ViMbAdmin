@@ -39,7 +39,7 @@
  * @package ViMbAdmin
  * @subpackage Controllers
  */
-class DomainController extends ViMbAdmin_Controller_Action
+class DomainController extends ViMbAdmin_Controller_PluginAction
 {
 
     /**

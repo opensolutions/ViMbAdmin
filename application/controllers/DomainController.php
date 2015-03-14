@@ -43,6 +43,12 @@ class DomainController extends ViMbAdmin_Controller_Action
 {
 
     /**
+     * Local store for the form
+     * @var ViMbAdmin_Form_Domain_AddEdit
+     */
+    private $domainForm = null;
+
+    /**
      * Most actions in this object will require a domain object to edit / act on.
      *
      * This method will look for an 'id' parameter and, if set, will
@@ -139,16 +145,30 @@ class DomainController extends ViMbAdmin_Controller_Action
 
 
     /**
+     * Instantiate / get the domain add-edit form
+     * @return ViMbAdmin_Form_Domain_AddEdit
+     */
+    public function getDomainForm()
+    {
+        if( $this->domainForm == null )
+        {
+            $form = new ViMbAdmin_Form_Domain_AddEdit();
+            if( isset( $this->_options['defaults']['quota']['multiplier'] ) )
+                $form->setFilterFileSizeMultiplier( $this->_options['defaults']['quota']['multiplier'] );
+            
+            $this->view->form = $this->domainForm = $form;
+            
+            // call plugins
+            $this->notify( 'domain', 'add', 'formPostProcess', $this );
+        }
+        return $this->domainForm;
+    }
+
+    /**
      * Add / edit a domain.
      */
     public function addAction()
     {
-        $form = $this->view->form = new ViMbAdmin_Form_Domain_AddEdit();
-        if( isset( $this->_options['defaults']['quota']['multiplier'] ) )
-            $form->setFilterFileSizeMultiplier( $this->_options['defaults']['quota']['multiplier'] );
-
-        $this->view->quota_multiplier = $form->getFilterFileSizeMultiplier();
-
         if( !$this->getDomain() )
         {
             $this->view->isEdit = $isEdit = false;
@@ -159,7 +179,7 @@ class DomainController extends ViMbAdmin_Controller_Action
             $this->getD2EM()->persist( $this->_domain );
 
             // set defaults
-            
+            $form = $this->getDomainForm();
             $form->getElement( 'max_mailboxes' )->setValue( $this->_options['defaults']['domain']['mailboxes'] );
             $form->getElement( 'max_aliases'   )->setValue( $this->_options['defaults']['domain']['aliases'] );
             $form->getElement( 'transport'     )->setValue( $this->_options['defaults']['domain']['transport'] );
@@ -169,6 +189,7 @@ class DomainController extends ViMbAdmin_Controller_Action
         else
         {
             $this->view->isEdit = $isEdit = true;
+            $form = $this->getDomainForm();
             $form->assignEntityToForm( $this->getDomain(), $this, $isEdit );
             $form->getElement( 'domain' )
                 ->setAttrib( 'readonly', 'readonly' )
@@ -176,25 +197,39 @@ class DomainController extends ViMbAdmin_Controller_Action
                 ->removeValidator( 'OSSDoctrine2Uniqueness' );
         }
 
+        $this->view->quota_multiplier = $form->getFilterFileSizeMultiplier();
+
         $this->view->domain = $this->getDomain();
 
-        if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
+        $this->notify( 'domain', 'add', 'addPrepare', $this );
+        
+        if( $this->getRequest()->isPost() )
         {
-            $form->assignFormToEntity( $this->getDomain(), $this, $isEdit );
-
-            if( $isEdit )
-                $this->getDomain()->setModified( new \DateTime() );
-
-            $this->log(
-                $isEdit ? \Entities\Log::ACTION_DOMAIN_EDIT : \Entities\Log::ACTION_DOMAIN_ADD,
-                "{$this->getAdmin()->getFormattedName()} " . ( $isEdit ? ' edited' : ' added' ) . " domain {$this->getDomain()->getDomain()}"
-            );
+            $this->notify( 'domain', 'add', 'addPrevalidate', $this );
             
-            $this->getD2EM()->flush();
+            if( $form->isValid( $_POST ) )
+            {
+                $this->notify( 'domain', 'add', 'addPostvalidate', $this );
             
-            $this->addMessage( _( "You have successfully added/edited the domain record." ), OSS_Message::SUCCESS );
+                $form->assignFormToEntity( $this->getDomain(), $this, $isEdit );
 
-            $this->redirect( 'domain/list' );
+                if( $isEdit )
+                    $this->getDomain()->setModified( new \DateTime() );
+
+                $this->log(
+                    $isEdit ? \Entities\Log::ACTION_DOMAIN_EDIT : \Entities\Log::ACTION_DOMAIN_ADD,
+                    "{$this->getAdmin()->getFormattedName()} " . ( $isEdit ? ' edited' : ' added' ) . " domain {$this->getDomain()->getDomain()}"
+                );
+            
+                $this->notify( 'domain', 'add', 'addPreflush', $this );
+                $this->getD2EM()->flush();
+                $this->notify( 'domain', 'add', 'addPostflush', $this );
+            
+                $this->notify( 'domain', 'add', 'addFinish', $this );
+                $this->addMessage( _( "You have successfully added/edited the domain record." ), OSS_Message::SUCCESS );
+
+                $this->redirect( 'domain/list' );
+            } 
         }
     }
 
@@ -295,7 +330,9 @@ class DomainController extends ViMbAdmin_Controller_Action
     public function purgeAction()
     {
         $this->authorise( true );
+        $this->notify( 'domain', 'purge', 'preRemove', $this );
         $this->getD2EM()->getRepository( '\\Entities\\Domain' )->purge( $this->getDomain() );
+        $this->notify( 'domain', 'purge', 'purgeFinish', $this );
         $this->redirect( 'domain/list' );
     }
 }

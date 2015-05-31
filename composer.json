@@ -20,10 +20,10 @@
         }
     ],
     "repositories": [
-    	{
-    		"type": "vcs",
-    		"url": "https://github.com/opensolutions/Bootstrap-Zend-Framework"
-    	},
+        {
+            "type": "vcs",
+            "url": "https://github.com/opensolutions/Bootstrap-Zend-Framework"
+        },
         {
             "type": "package",
             "package": {
@@ -43,7 +43,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-		"doctrine/orm": "2.*",
+        "doctrine/orm": "2.4.*",
         "opensolutions/oss-framework": "dev-master",
         "zendframework/zendframework1": "~1.12",
         "smarty/smarty": "3.1.18",

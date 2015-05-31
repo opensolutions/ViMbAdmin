@@ -46,7 +46,7 @@ final class ViMbAdmin_Version
     /**
      * Version identification - see compareVersion()
      */
-    const VERSION = '3.0.11';
+    const VERSION = '3.0.12';
 
     /**
      * Database schema version
@@ -88,12 +88,12 @@ final class ViMbAdmin_Version
      */
     public static function getLatest()
     {
-        if( null === self::$_lastestVersion ) 
+        if( null === self::$_lastestVersion )
         {
             self::$_lastestVersion = 'not available';
 
             $handle = fopen( 'http://www.opensolutions.ie/open-source/vimbadmin/latest-v3', 'r' );
-            if( $handle !== false ) 
+            if( $handle !== false )
             {
                 self::$_lastestVersion = trim( stream_get_contents( $handle ) );
                 fclose( $handle );

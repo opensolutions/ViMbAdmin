@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="Entities\Mailbox" repository-class="Repositories\Mailbox" schema="vimbadmin" table="mailbox">
+  <entity name="Entities\Mailbox" repository-class="Repositories\Mailbox" table="mailbox">
     <id name="id" type="bigint">
       <generator strategy="AUTO"/>
     </id>
@@ -8,10 +8,22 @@
     <field name="password" type="string" nullable="false"/>
     <field name="name" type="string" length="255" nullable="true"/>
     <field name="alt_email" type="string" length="255" nullable="true"/>
-    <field name="quota" type="bigint" nullable="false"/>
+    <field name="quota" type="bigint" nullable="false">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
     <field name="local_part" type="string" length="255" nullable="false"/>
-    <field name="active" type="boolean" nullable="false"/>
-    <field name="access_restriction" type="string" length="100" nullable="false"/>
+    <field name="active" type="boolean" nullable="false">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="access_restriction" type="string" length="100" nullable="false">
+      <options>
+        <option name="default">ALL</option>
+      </options>
+    </field>
     <field name="homedir" type="string" length="255" nullable="true"/>
     <field name="maildir" type="string" length="255" nullable="true"/>
     <field name="uid" type="bigint" nullable="true"/>
@@ -19,7 +31,11 @@
     <field name="homedir_size" type="bigint" nullable="true"/>
     <field name="maildir_size" type="bigint" nullable="true"/>
     <field name="size_at" type="datetime" nullable="true"/>
-    <field name="delete_pending" type="boolean" nullable="true"/>
+    <field name="delete_pending" type="boolean" nullable="true">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
     <field name="created" type="datetime" nullable="false"/>
     <field name="modified" type="datetime" nullable="true"/>
     <many-to-one field="Domain" target-entity="Entities\Domain" inversed-by="Mailboxes">

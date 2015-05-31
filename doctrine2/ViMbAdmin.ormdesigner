@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<skipper version="3.0.1.1129" name="ViMbAdmin3" mvc="Without MVC" orm="Doctrine2" uuid="15328530-f75f-43e2-a906-a8eead4a5924">
-  <module name="ViMbAdmin" import-format="Doctrine2Xml" import-path="xml" uuid="2c6ca297-a962-4b31-a81c-0d852efeec06">
-    <entity name="DirectoryEntry" description="Follows inetOrgPerson" uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a">
+<skipper version="3.2.1.1226" name="ViMbAdmin3" mvc="Without MVC" orm="Doctrine2" uuid="15328530-f75f-43e2-a906-a8eead4a5924">
+  <module name="\ViMbAdmin" local-name="ViMbAdmin" namespace="\Entities" local-namespace="Entities" export-format="Doctrine2Xml" export-path="xml" uuid="2c6ca297-a962-4b31-a81c-0d852efeec06">
+    <entity name="\Entities\DirectoryEntry" local-name="DirectoryEntry" namespace="\Entities" description="Follows inetOrgPerson" uuid="3a8a83b4-a2c1-4392-bfcd-a5f5c7478f0a">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="0e246371-4e8d-4c23-9adf-f22f6a371299"/>
       <field name="mailbox_id" type="bigint" required="true" unique="true" uuid="6f5bde75-8d05-4af3-b43c-de94e44621a5"/>
       <field name="businessCategory" type="string" size="255" uuid="b1cedd94-86f3-4332-9c9e-96a4c87a5449"/>
@@ -34,14 +34,13 @@
       <field name="vimb_update" type="datetime" required="true" uuid="f377e655-f312-49a4-874e-c707f4503391"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\DirectoryEntry</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">directory_entry</attribute>
       </orm-attributes>
     </entity>
-    <association from="DirectoryEntry" to="Mailbox" owner-alias="DirectoryEntry" inverse-alias="Mailbox" uuid="f2a36410-021a-4421-a75e-94b4f4abf10d">
+    <association from="\Entities\DirectoryEntry" to="\Entities\Mailbox" owner-alias="DirectoryEntry" inverse-alias="Mailbox" many-owner="false" many-inverse="false" parent-required="true" uuid="f2a36410-021a-4421-a75e-94b4f4abf10d">
       <association-field from="mailbox_id" to="id"/>
     </association>
-    <entity name="Admin" uuid="6db3acbf-c2bd-412e-93ad-401290455c57">
+    <entity name="\Entities\Admin" local-name="Admin" namespace="\Entities" uuid="6db3acbf-c2bd-412e-93ad-401290455c57">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="c6af807b-6f27-46b7-9f33-c052fbda2c9d"/>
       <field name="username" type="string" size="255" uuid="5ce51461-5ed6-4ffb-9243-59559e96afac"/>
       <field name="password" type="string" size="255" required="true" uuid="e255a9e1-6ba5-4244-8b7f-8d58bdc18862"/>
@@ -55,10 +54,9 @@
       <orm-attributes>
         <attribute name="repository-class">Repositories\Admin</attribute>
         <attribute name="table">admin</attribute>
-        <attribute name="schema">vimbadmin</attribute>
       </orm-attributes>
     </entity>
-    <entity name="Domain" uuid="1fc7527f-ff62-49c5-99ba-d03644a71d3c">
+    <entity name="\Entities\Domain" local-name="Domain" namespace="\Entities" uuid="1fc7527f-ff62-49c5-99ba-d03644a71d3c">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="4878bf64-6087-42c4-a1f7-9871cf48d729"/>
       <field name="domain" type="string" size="255" required="true" uuid="6c20cc2b-18d7-49a9-b27a-691d81285694"/>
       <field name="description" type="string" size="255" uuid="e1faf04e-a0e8-4977-affe-3536a7b34742"/>
@@ -82,11 +80,10 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Domain</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">domain</attribute>
       </orm-attributes>
     </entity>
-    <entity name="Mailbox" uuid="90282946-8af8-4824-8fbf-ed0c8cd75321">
+    <entity name="\Entities\Mailbox" local-name="Mailbox" namespace="\Entities" uuid="90282946-8af8-4824-8fbf-ed0c8cd75321">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="f7e54ea5-462e-4ae0-b16e-dea6bc6ac460"/>
       <field name="Domain_id" type="bigint" uuid="14f07f91-8a79-4d80-b600-4108b4ba0c50"/>
       <field name="username" type="string" size="255" required="true" uuid="6fd2cb24-8b38-42ff-a562-d4629d959495"/>
@@ -109,33 +106,31 @@
       <field name="modified" type="datetime" uuid="49cc4ebf-41ec-4c50-8be5-204d49c2ee62"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Mailbox</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">mailbox</attribute>
       </orm-attributes>
     </entity>
-    <association from="Mailbox" to="Domain" owner-alias="Mailboxes" inverse-alias="Domain" uuid="3dcdcc32-6681-45c6-baa1-b511e38e6bf4">
+    <association from="\Entities\Mailbox" to="\Entities\Domain" owner-alias="Mailboxes" inverse-alias="Domain" many-owner="true" many-inverse="false" uuid="3dcdcc32-6681-45c6-baa1-b511e38e6bf4">
       <association-field from="Domain_id" to="id"/>
     </association>
-    <entity name="DomainToAdmin" uuid="84795b6a-58cd-4d9c-846a-63e9a6cfa2f5">
+    <entity name="\Entities\DomainToAdmin" local-name="DomainToAdmin" namespace="\Entities" uuid="84795b6a-58cd-4d9c-846a-63e9a6cfa2f5">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="f3c43f92-ef80-4c5f-903e-b08064e078f8"/>
       <field name="Admin_id" type="bigint" required="true" uuid="e330527c-204b-4d39-a0c1-b767c74d84f5"/>
       <field name="Domain_id" type="bigint" required="true" uuid="f8e47e00-3250-46d5-8bb7-013197d89c30"/>
       <field name="created" type="datetime" required="true" uuid="f058d51b-158b-4dcc-b6ff-2a02f6ae1b42"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\DomainToAdmin</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">domain_admins</attribute>
       </orm-attributes>
     </entity>
-    <many-to-many mn-entity="DomainToAdmin" uuid="a3996cbf-3e92-4503-b40f-d4b4c19f058d">
-      <many-to-many-entity name="Admin" owning-side="true" alias="Admins" uuid="ba238e4b-8f8f-4c48-a645-63af24da9fcc">
+    <many-to-many mn-entity="\Entities\DomainToAdmin" uuid="a3996cbf-3e92-4503-b40f-d4b4c19f058d">
+      <many-to-many-entity name="\Entities\Admin" owning-side="true" alias="Admins" uuid="ba238e4b-8f8f-4c48-a645-63af24da9fcc">
         <many-to-many-field from="Admin_id" to="id"/>
       </many-to-many-entity>
-      <many-to-many-entity name="Domain" owning-side="false" alias="Domains" uuid="4bae0b0f-d306-417f-beb3-434dcd6486a7">
+      <many-to-many-entity name="\Entities\Domain" owning-side="false" alias="Domains" uuid="4bae0b0f-d306-417f-beb3-434dcd6486a7">
         <many-to-many-field from="Domain_id" to="id"/>
       </many-to-many-entity>
     </many-to-many>
-    <entity name="Alias" uuid="0a3139bc-67e7-41cf-82b1-2f53337bcbaf">
+    <entity name="\Entities\Alias" local-name="Alias" namespace="\Entities" uuid="0a3139bc-67e7-41cf-82b1-2f53337bcbaf">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="9133b2b1-3d00-4c33-a7d2-bb90cf57697b"/>
       <field name="Domain_id" type="bigint" uuid="07acc490-8608-41fd-be9b-50ab41eb64c1"/>
       <field name="address" type="string" size="255" required="true" unique="true" uuid="f6edd122-d15c-43fc-adf3-32c0a62925cf"/>
@@ -145,14 +140,13 @@
       <field name="modified" type="datetime" uuid="a2413fa9-b287-43f4-8958-4e612589f717"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Alias</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">alias</attribute>
       </orm-attributes>
     </entity>
-    <association from="Alias" to="Domain" owner-alias="Aliases" inverse-alias="Domain" uuid="d08becc7-dbf1-4b10-8806-d795a2e9f6f2">
+    <association from="\Entities\Alias" to="\Entities\Domain" owner-alias="Aliases" inverse-alias="Domain" many-owner="true" many-inverse="false" uuid="d08becc7-dbf1-4b10-8806-d795a2e9f6f2">
       <association-field from="Domain_id" to="id"/>
     </association>
-    <entity name="AdminPreference" uuid="87c23ef4-98f0-4273-a54f-92ca6c3e63a5">
+    <entity name="\Entities\AdminPreference" local-name="AdminPreference" namespace="\Entities" uuid="87c23ef4-98f0-4273-a54f-92ca6c3e63a5">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="263db75b-a629-4ffc-8eef-020f68b9fec1"/>
       <field name="Admin_id" type="bigint" uuid="0b1d335b-9e76-451b-ab00-f5d3b52b75aa"/>
       <field name="attribute" type="string" size="255" required="true" uuid="e064671a-da99-4f19-9fb4-ec866c61da69"/>
@@ -167,14 +161,13 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\AdminPreference</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">admin_pref</attribute>
       </orm-attributes>
     </entity>
-    <association from="AdminPreference" to="Admin" owner-alias="Preferences" inverse-alias="Admin" uuid="3d6ca7db-eb93-4c11-93a7-896b4367b73d">
+    <association from="\Entities\AdminPreference" to="\Entities\Admin" owner-alias="Preferences" inverse-alias="Admin" many-owner="true" many-inverse="false" uuid="3d6ca7db-eb93-4c11-93a7-896b4367b73d">
       <association-field from="Admin_id" to="id"/>
     </association>
-    <entity name="Log" uuid="f46119d2-f62e-4fda-8886-352c2c7cd7d0">
+    <entity name="\Entities\Log" local-name="Log" namespace="\Entities" uuid="f46119d2-f62e-4fda-8886-352c2c7cd7d0">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="0ab38d9b-5dcb-4314-89a3-e1fe0338ae77"/>
       <field name="action" type="string" size="100" required="true" uuid="82a3a3a0-42f6-4011-af40-23e26cc6b751"/>
       <field name="data" type="text" uuid="5b317afb-72dc-406d-8ef5-2597824f9f78"/>
@@ -183,17 +176,16 @@
       <field name="Domain_id" type="bigint" uuid="037295b5-8477-4840-a348-6c40dae851f1"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Log</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">log</attribute>
       </orm-attributes>
     </entity>
-    <association from="Log" to="Admin" owner-alias="Logs" inverse-alias="Admin" uuid="69d5d550-3a45-44fc-8ff4-813a919c9099">
+    <association from="\Entities\Log" to="\Entities\Admin" owner-alias="Logs" inverse-alias="Admin" many-owner="true" many-inverse="false" uuid="69d5d550-3a45-44fc-8ff4-813a919c9099">
       <association-field from="Admin_id" to="id"/>
     </association>
-    <association from="Log" to="Domain" owner-alias="Logs" inverse-alias="Domain" uuid="143ff4af-0b7f-453a-a55e-ffd3d272d1be">
+    <association from="\Entities\Log" to="\Entities\Domain" owner-alias="Logs" inverse-alias="Domain" many-owner="true" many-inverse="false" uuid="143ff4af-0b7f-453a-a55e-ffd3d272d1be">
       <association-field from="Domain_id" to="id"/>
     </association>
-    <entity name="MailboxPreference" uuid="45ebe1d0-ea7e-4c68-a3a9-094441328f02">
+    <entity name="\Entities\MailboxPreference" local-name="MailboxPreference" namespace="\Entities" uuid="45ebe1d0-ea7e-4c68-a3a9-094441328f02">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="737089b5-1cfc-4863-a656-07156b5dcde3"/>
       <field name="Mailbox_id" type="bigint" uuid="f73ce68f-0d64-4888-870d-ca10f7503a2f"/>
       <field name="attribute" type="string" size="255" required="true" uuid="06697f83-cda0-4e8a-820f-8fb7f4dfcb52"/>
@@ -208,25 +200,23 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\MailboxPreference</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">mailbox_pref</attribute>
       </orm-attributes>
     </entity>
-    <association from="MailboxPreference" to="Mailbox" owner-alias="Preferences" inverse-alias="Mailbox" uuid="f73bcaea-bd83-488d-b32b-0e73e847a592">
+    <association from="\Entities\MailboxPreference" to="\Entities\Mailbox" owner-alias="Preferences" inverse-alias="Mailbox" many-owner="true" many-inverse="false" uuid="f73bcaea-bd83-488d-b32b-0e73e847a592">
       <association-field from="Mailbox_id" to="id"/>
     </association>
-    <entity name="DatabaseVersion" uuid="76f412af-3d29-4b1d-a209-a407ba2e89c5">
+    <entity name="\Entities\DatabaseVersion" local-name="DatabaseVersion" namespace="\Entities" uuid="76f412af-3d29-4b1d-a209-a407ba2e89c5">
       <field name="id" type="integer" required="true" primary="true" auto-increment="true" uuid="039dbbb7-4c62-4b25-9143-44f4a4502b00"/>
       <field name="version" type="integer" required="true" uuid="21ef34ac-8cf1-46a8-98ca-127a48a5b221"/>
       <field name="name" type="string" size="255" required="true" uuid="be678113-429d-4bbd-af51-1e71434a19ac"/>
       <field name="applied_on" type="datetime" required="true" uuid="ab43cef7-0f14-4ff2-80eb-a672a3d933de"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\DatabaseVersion</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">dbversion</attribute>
       </orm-attributes>
     </entity>
-    <entity name="RememberMe" uuid="b7a13608-6503-4ba5-bb7c-602ec44b5401">
+    <entity name="\Entities\RememberMe" local-name="RememberMe" namespace="\Entities" uuid="b7a13608-6503-4ba5-bb7c-602ec44b5401">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="20655b62-d548-4eec-a5dd-8dd875d0f817"/>
       <field name="Admin_id" type="bigint" uuid="917eb151-8490-4d47-b750-7ecd229b50bb"/>
       <field name="userhash" type="string" size="40" required="true" uuid="4a2c7416-c9b6-4255-9669-a8d2377ac685"/>
@@ -237,14 +227,13 @@
       <field name="created" type="datetime" required="true" uuid="b009751c-d5b4-4207-be6d-1fdee10f7f20"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\RememberMe</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">remember_me</attribute>
       </orm-attributes>
     </entity>
-    <association from="RememberMe" to="Admin" owner-alias="RememberMes" inverse-alias="User" uuid="51b420f6-298b-4f39-9eac-e076838c78a9">
+    <association from="\Entities\RememberMe" to="\Entities\Admin" owner-alias="RememberMes" inverse-alias="User" many-owner="true" many-inverse="false" uuid="51b420f6-298b-4f39-9eac-e076838c78a9">
       <association-field from="Admin_id" to="id"/>
     </association>
-    <entity name="AliasPreference" uuid="ecb7d3bf-095b-4207-93be-0645ca2fb077">
+    <entity name="\Entities\AliasPreference" local-name="AliasPreference" namespace="\Entities" uuid="ecb7d3bf-095b-4207-93be-0645ca2fb077">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="dfbcaa8c-b8a3-432b-b280-aff4f496caec"/>
       <field name="Alias_id" type="bigint" uuid="73a86289-7aa3-48e7-90c4-c25af97ee269"/>
       <field name="attribute" type="string" size="255" required="true" uuid="b4db6ad1-340c-4727-a1ea-0a48c9ef098c"/>
@@ -259,14 +248,13 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\AliasPreference</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">alias_pref</attribute>
       </orm-attributes>
     </entity>
-    <association from="AliasPreference" to="Alias" owner-alias="Preferences" inverse-alias="Alias" uuid="99c5eb69-ac2d-4df5-8cd7-fcdf042b39e9">
+    <association from="\Entities\AliasPreference" to="\Entities\Alias" owner-alias="Preferences" inverse-alias="Alias" many-owner="true" many-inverse="false" uuid="99c5eb69-ac2d-4df5-8cd7-fcdf042b39e9">
       <association-field from="Alias_id" to="id"/>
     </association>
-    <entity name="DomainPreference" uuid="6f2a163e-900a-4bf5-af83-eb13191ff10e">
+    <entity name="\Entities\DomainPreference" local-name="DomainPreference" namespace="\Entities" uuid="6f2a163e-900a-4bf5-af83-eb13191ff10e">
       <field name="id" type="bigint" required="true" primary="true" auto-increment="true" uuid="d967b9e7-7c0f-42ce-9064-48b029ee5907"/>
       <field name="Domain_id" type="bigint" uuid="4a052a0f-f14b-46ed-be97-49b79dfeddfc"/>
       <field name="attribute" type="string" size="255" required="true" uuid="24c3dd68-d392-4ee2-a737-e5c8fad08a0c"/>
@@ -281,14 +269,13 @@
       </index>
       <orm-attributes>
         <attribute name="repository-class">Repositories\DomainPreference</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">domain_pref</attribute>
       </orm-attributes>
     </entity>
-    <association from="DomainPreference" to="Domain" owner-alias="Preferences" inverse-alias="Domain" uuid="d8aee4c0-6040-4643-9367-ae76ef07978d">
+    <association from="\Entities\DomainPreference" to="\Entities\Domain" owner-alias="Preferences" inverse-alias="Domain" many-owner="true" many-inverse="false" uuid="d8aee4c0-6040-4643-9367-ae76ef07978d">
       <association-field from="Domain_id" to="id"/>
     </association>
-    <entity name="Archive" uuid="2159b835-0acc-4444-89f1-e30fb1a6558f">
+    <entity name="\Entities\Archive" local-name="Archive" namespace="\Entities" uuid="2159b835-0acc-4444-89f1-e30fb1a6558f">
       <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="4c5b4c9c-821f-43e0-b7da-80de0afcfb14"/>
       <field name="Admin_id" type="bigint" uuid="330b2423-a229-4258-bad0-7ae9048e1c47"/>
       <field name="Domain_id" type="bigint" uuid="8cf39cf6-6052-47fc-b31d-b72b5bcf8daa"/>
@@ -307,19 +294,15 @@
       <field name="data" type="text" required="true" uuid="36e1893d-3362-4b67-b610-f8d7553a939b"/>
       <orm-attributes>
         <attribute name="repository-class">Repositories\Archive</attribute>
-        <attribute name="schema">vimbadmin</attribute>
         <attribute name="table">archive</attribute>
       </orm-attributes>
     </entity>
-    <association from="Archive" to="Domain" owner-alias="Archives" inverse-alias="Domain" uuid="f02325fc-33d1-4066-9c91-eb835d9f85bc">
+    <association from="\Entities\Archive" to="\Entities\Domain" owner-alias="Archives" inverse-alias="Domain" many-owner="true" many-inverse="false" uuid="f02325fc-33d1-4066-9c91-eb835d9f85bc">
       <association-field from="Domain_id" to="id"/>
     </association>
-    <association from="Archive" to="Admin" owner-alias="Archives" inverse-alias="ArchivedBy" uuid="5ec08d3d-4ea2-405d-832f-92f6341aa457">
+    <association from="\Entities\Archive" to="\Entities\Admin" owner-alias="Archives" inverse-alias="ArchivedBy" many-owner="true" many-inverse="false" uuid="5ec08d3d-4ea2-405d-832f-92f6341aa457">
       <association-field from="Admin_id" to="id"/>
     </association>
-    <orm-attributes>
-      <attribute name="namespace">Entities</attribute>
-    </orm-attributes>
   </module>
   <visual-data>
     <entity uuid="0a3139bc-67e7-41cf-82b1-2f53337bcbaf" bg-color="4294967295" hdr-color="4292006610" position-x="493" position-y="509" size-x="0" size-x2="111" size-y="0" size-y2="115"/>

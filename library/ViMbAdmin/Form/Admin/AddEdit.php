@@ -64,7 +64,8 @@ class ViMbAdmin_Form_Admin_AddEdit extends ViMbAdmin_Form
         $username->addValidator( new OSS_Validate_OSSDoctrine2Uniqueness( array( 'entity' => '\\Entities\\Admin', 'property' => 'username' ) ), true );
 
         $password = OSS_Form_Auth::createPasswordElement();
-        
+        $password->setAttrib( 'autocomplete', 'off' );
+
         $active = $this->createElement( 'checkbox', 'active' )
             ->setLabel( _( 'Active' ) )
             ->addValidator( 'InArray', false, array( array( 0, 1 ) ) )

@@ -16,5 +16,5 @@ The **ViMbAdmin** project (*vim-be-admin*) provides a web based virtual mailbox 
 * [Packagist / Composer](https://packagist.org/packages/opensolutions/vimbadmin)
 * [Discussion Mailing List](http://groups.google.com/group/vimbadmin-discuss)
 * [Announcement Mailing List](http://groups.google.com/group/vimbadmin-announce)
-* [Latest News](http://www.opensolutions.ie/blog/category/vimbadmin/) ([RSS feed](http://www.opensolutions.ie/blog/category/vimbadmin/feed/))
+* [Latest News](http://www.barryodonovan.com/tag/vimbadmin) ([RSS feed](http://www.barryodonovan.com/tag/vimbadmin/feed/))
 

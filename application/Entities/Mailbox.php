@@ -587,9 +587,10 @@ class Mailbox
     {
         list( $un, $dn ) = explode( '@', $email );
 
-        $str = str_replace ( '%u', $un,    $str );
-        $str = str_replace ( '%d', $dn,    $str );
-        $str = str_replace ( '%m', $email, $str );
+        $str = str_replace ( '%atmail', substr( $email, 0, 1 ) . '/' . substr( $email, 1, 1 ) . '/' . $email, $str );
+        $str = str_replace ( '%u',      $un,    $str );
+        $str = str_replace ( '%d',      $dn,    $str );
+        $str = str_replace ( '%m',      $email, $str );
 
         return $str;
     }
@@ -603,14 +604,14 @@ class Mailbox
     public function setHomedirSize($homedirSize)
     {
         $this->homedir_size = $homedirSize;
-    
+
         return $this;
     }
 
     /**
      * Get homedir_size
      *
-     * @return integer 
+     * @return integer
      */
     public function getHomedirSize()
     {
@@ -626,14 +627,14 @@ class Mailbox
     public function setMaildirSize($maildirSize)
     {
         $this->maildir_size = $maildirSize;
-    
+
         return $this;
     }
 
     /**
      * Get maildir_size
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaildirSize()
     {
@@ -649,14 +650,14 @@ class Mailbox
     public function setSizeAt($sizeAt)
     {
         $this->size_at = $sizeAt;
-    
+
         return $this;
     }
 
     /**
      * Get size_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getSizeAt()
     {
@@ -699,14 +700,14 @@ class Mailbox
     public function setDirectoryEntry(\Entities\DirectoryEntry $directoryEntry = null)
     {
         $this->DirectoryEntry = $directoryEntry;
-    
+
         return $this;
     }
 
     /**
      * Get DirectoryEntry
      *
-     * @return \Entities\DirectoryEntry 
+     * @return \Entities\DirectoryEntry
      */
     public function getDirectoryEntry()
     {
@@ -735,7 +736,7 @@ class Mailbox
     /**
      * Get delete_pending
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDeletePending()
     {

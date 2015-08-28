@@ -51,7 +51,7 @@ resources.doctrine2.connection.options.charset  = 'utf8'
 
 ;; Doctrine2 requires Memcache for maximum efficency. Without Memcache
 ;; it can be highly inefficient and will slow page requests down.
-;; 
+;;
 ;; You are strongly advised to install memcache and comment ArrayCache
 ;; here and uncomment MemcacheCache.
 ;;
@@ -64,7 +64,7 @@ resources.doctrine2cache.namespace              = 'ViMbAdmin3'
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Default values used when creating domains
-; 
+;
 ; See: https://github.com/opensolutions/ViMbAdmin/wiki/Configuration
 ; See: https://github.com/opensolutions/ViMbAdmin/wiki/Quotas
 
@@ -121,9 +121,10 @@ defaults.mailbox.gid = 2000
 ; Set the homedir and maildir values in the mailbox table where the
 ; following substitutions apply:
 ;
-;     %d -> domain part of email address
-;     %u -> user part of email address
-;     $m -> full email address
+;     %d      -> domain part of email address
+;     %u      -> user part of email address
+;     %m      -> full email address
+;     %atmail -> substitutes an email address (test@example.com) with t/e/test@example.com 
 ;
 ;
 ; http://wiki2.dovecot.org/VirtualUsers/Home
@@ -136,19 +137,19 @@ defaults.mailbox.min_password_length = 8
 
 ; The password hashing function to use. Set to one of:
 ;
-;   "plain"       - password stored as clear text 
+;   "plain"       - password stored as clear text
 ;   "md5"         - password hashed using MD5 without salt (PHP md5())
 ;   "md5.salted"  - password hashed using MD5 with salt (see below)
 ;   "sha1"        - password hashed using sha1 without salt
-;   "sha1.salted" - password hashed using sha1 with salt defined below 
-;   "crypt:XXX"   - call the PHP crypt function (with random salt) where XXX is one of: md5, blowfish, sha256, sha512 
-;   "dovecot:XXX" - call the Dovecot password generator (see next option below) and use the 
-;                      scheme specified by XXX. To see available schemes, use 'dovecotpw -l' 
+;   "sha1.salted" - password hashed using sha1 with salt defined below
+;   "crypt:XXX"   - call the PHP crypt function (with random salt) where XXX is one of: md5, blowfish, sha256, sha512
+;   "dovecot:XXX" - call the Dovecot password generator (see next option below) and use the
+;                      scheme specified by XXX. To see available schemes, use 'dovecotpw -l'
 ;                      or 'doveadm pw -l'
 
 defaults.mailbox.password_scheme = "md5.salted"
 
-; The path to (and initial option(s) if necessary) the Dovecot password generator. Typical 
+; The path to (and initial option(s) if necessary) the Dovecot password generator. Typical
 ; values may be something like:
 ;
 ; "/usr/bin/doveadm pw"
@@ -187,7 +188,7 @@ archive.path = "/srv/archives"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Enable mailbox deletion on the file system
-; 
+;
 ; See: https://github.com/opensolutions/ViMbAdmin/wiki/Deleting-Mailboxes
 ;
 
@@ -196,13 +197,13 @@ mailbox_deletion_fs_enabled = false
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Export Mailbox Settings
-; 
+;
 ; See: https://github.com/opensolutions/ViMbAdmin/wiki/Export-Settings
 ;
 defaults.export_settings.disabled = true
 
 
-;; Export settings alowed subnets  
+;; Export settings alowed subnets
 defaults.export_settings.allowed_subnet[] = "10."
 defaults.export_settings.allowed_subnet[] = "192.168."
 
@@ -253,10 +254,10 @@ server.webmail.user  = "%m"
 
 identity.orgname  = "Example Limited"
 identity.name  = "Example Support Team"
-identity.email = "support@example.com"   
+identity.email = "support@example.com"
 identity.autobot.name  = "ViMbAdmin Autobot"
 identity.autobot.email = "autobot@example.com"
-identity.mailer.name   = "ViMbAdmin Autobot"  
+identity.mailer.name   = "ViMbAdmin Autobot"
 identity.mailer.email  = "do-not-reply@example.com"
 
 identity.sitename = "ViMbAdmin"
@@ -274,7 +275,7 @@ server.email.address = "support@example.com"
 ;;
 ;; Skinning
 ;;
-;; You can skin ViMbAdmin pages if you wish. 
+;; You can skin ViMbAdmin pages if you wish.
 ;;
 ;; See: https://github.com/opensolutions/ViMbAdmin/wiki/Skinning
 
@@ -355,12 +356,12 @@ skipInstallPingback = 0
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Allow admins to dictate whether a user can use BOTH, IMAP ONLY, 
-; POP3 ONLY when creating mailboxes. 
+; Allow admins to dictate whether a user can use BOTH, IMAP ONLY,
+; POP3 ONLY when creating mailboxes.
 ;
 ; Must be supported by your POP3/IMAP server.
 ;
-; See https://github.com/opensolutions/ViMbAdmin/wiki/POP3-IMAP-Access-Permissions 
+; See https://github.com/opensolutions/ViMbAdmin/wiki/POP3-IMAP-Access-Permissions
 ; for documentation.
 ;
 ; This is handled via a plugin
@@ -600,7 +601,7 @@ resources.doctrine2cache.autoload_method    = "composer"
 ;resources.doctrine2cache.memcache.servers.0.persistent = false
 ;resources.doctrine2cache.memcache.servers.0.weight     = 1
 ;resources.doctrine2cache.memcache.servers.0.timeout    = 1
-;resources.doctrine2cache.memcache.servers.0.retry_int  = 15  
+;resources.doctrine2cache.memcache.servers.0.retry_int  = 15
 
 ; resources.doctrine2cache.memcache.servers.1.host       = 'xxx'
 ; resources.doctrine2cache.memcache.servers.2.host       = 'yyy'
@@ -612,12 +613,12 @@ resources.auth.oss.adapter = "OSS_Auth_Doctrine2Adapter"
 resources.auth.oss.pwhash  = "bcrypt"
 resources.auth.oss.hash_cost  = 9
 resources.auth.oss.entity  = "\\Entities\\Admin"
-resources.auth.oss.disabled.lost-username = 1   
+resources.auth.oss.disabled.lost-username = 1
 resources.auth.oss.disabled.lost-password = 0
 
 resources.auth.oss.rememberme.enabled = 1
 resources.auth.oss.rememberme.timeout = 2592000
-resources.auth.oss.rememberme.secure  = true   
+resources.auth.oss.rememberme.secure  = true
 
 resources.auth.oss.lost_password.use_captcha = true
 
@@ -659,4 +660,3 @@ mini_css = 0
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
 resources.frontController.params.displayExceptions = 1
-

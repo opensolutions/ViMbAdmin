@@ -95,7 +95,7 @@ final class ViMbAdmin_Version
             $handle = fopen( 'http://www.opensolutions.ie/open-source/vimbadmin/latest-v3', 'r' );
             if( $handle !== false )
             {
-                self::$_lastestVersion = trim( stream_get_contents( $handle ) );
+                self::$_lastestVersion = preg_replace( "/[^0-9\.]/", "", trim( stream_get_contents( $handle, 12 ) ) );
                 fclose( $handle );
             }
         }

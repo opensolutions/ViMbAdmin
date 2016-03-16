@@ -23,22 +23,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/opensolutions/Bootstrap-Zend-Framework"
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "smarty/smarty",
-                "version": "3.1.18",
-                "dist": {
-                    "url": "http://www.smarty.net/files/Smarty-3.1.18.zip",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "http://smarty-php.googlecode.com/svn/",
-                    "type": "svn",
-                    "reference": "tags/v3.1.18/distribution/"
-                }
-            }
         }
     ],
     "require": {
@@ -48,7 +32,8 @@
         "zendframework/zendframework1": "~1.12",
         "smarty/smarty": "3.1.18",
         "opensolutions/minify": "1.*",
-        "komola/bootstrap-zend-framework": "dev-master"
+        "komola/bootstrap-zend-framework": "dev-master",
+        "smarty/smarty": "~3.1"
     },
     "support": {
         "issues": "https://github.com/opensolutions/ViMbAdmin/issues",

@@ -161,6 +161,11 @@ class ViMbAdmin_Form_Mailbox_AddEdit extends ViMbAdmin_Form
     public function setMinPasswordLength( $len )
     {
         $this->minPasswordLength = $len;
+
+        if( $this->getElement( 'password' ) ) {
+            $this->getElement( 'password' )->getValidator( 'StringLength' )->setMin( $len );
+        }
+        
         return $this;
     }
 

@@ -391,7 +391,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
                     unset( $gotos[ $key ] );
                 else
                 {
-                    if( substr( $goto, 0, 1 ) != '@' && !Zend_Validate::is( $goto, 'EmailAddress', array( 1, null ) ) )
+                    if( substr( $goto, 0, 1 ) != '@' && !Zend_Validate::is( $goto, 'EmailAddress', array('domain' => FALSE) ) )
                     {
                         $form->getElement( 'goto' )->addError( 'Invalid email address(es).' );
                         return false;
@@ -426,7 +426,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
         $address = sprintf( "%s@%s", $form->getValue( 'local_part'), $this->getDomain()->getDomain() );
 
         // is the alias valid (allowing for wildcard domains (i.e. with no local part)
-        if( $form->getValue( "local_part" ) &&  !Zend_Validate::is( "{$address}", 'EmailAddress', array( 1, null ) ) )
+        if( $form->getValue( "local_part" ) &&  !Zend_Validate::is( "{$address}", 'EmailAddress', array('domain' => FALSE) ) )
         {
             $form->getElement( 'local_part' )->addError( _( 'Invalid email address.' ) );
             return false;

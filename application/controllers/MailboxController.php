@@ -59,8 +59,8 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
      */
     public function preDispatch()
     {
-        if( $this->getRequest()->getActionName() != 'cli-get-sizes' 
-                && $this->getRequest()->getActionName() != 'cli-delete-pending' 
+        if( $this->getRequest()->getActionName() != 'cli-get-sizes'
+                && $this->getRequest()->getActionName() != 'cli-delete-pending'
                 && !$this->getMailbox() && !$this->getDomain() )
             $this->authorise();
 
@@ -93,11 +93,11 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
      *
      * $this->view->mailbox_actions allow to append mailbox list action buttons. %id% will be replaced by
      * mailbox id form the list. below is example array which creates edit mailbox button, and another button
-     * with drop down options for purge or edit mailbox. Only one drop down button can be defined per button group, 
+     * with drop down options for purge or edit mailbox. Only one drop down button can be defined per button group,
      * and it always be appended at the end.
      * $actions = [
      *       [                          //Simple link button
-     *           'tagName' => 'a',     //Mandatory parameter for element type. 
+     *           'tagName' => 'a',     //Mandatory parameter for element type.
      *           'href' => OSS_Utils::genUrl( "mailbox", "edit" ) . "/mid/%id%", //Url for action
      *           'title' => "Edit",
      *           'class' => "btn btn-mini have-tooltip",  //Class for css options.
@@ -119,7 +119,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
      *               'class' => "icon-cog"
      *           ],
      *           'menu' => [        //menu array is mandatory then defining drop down button
-     *               [ 
+     *               [
      *                   'id' => "menu-edit-%id%",   //Not mandatory attribute but if is set %id% should be use to avoid same ids.
      *                   'text' => "<i class=\"icon-pencil\"></i> Edit",                 //Mandatory for display action text
      *                   'url' =>  OSS_Utils::genUrl( "mailbox", "edit" ) . "/mid/%id%"  //Mandatory to redirect the action.
@@ -128,7 +128,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
      *           ]
      *       ]
      *   ];
-     * 
+     *
      */
     public function listAction()
     {
@@ -136,7 +136,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
             $this->view->mailboxes = [];
         else
             $this->view->mailboxes = $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->loadForMailboxList( $this->getAdmin(), $this->getDomain() );
-        
+
         if( isset( $this->_options['defaults']['list_size']['disabled'] ) && !$this->_options['defaults']['list_size']['disabled'] )
         {
             if( isset( $this->_options['defaults']['list_size']['multiplier'] ) && isset( OSS_Filter_FileSize::$SIZE_MULTIPLIERS[ $this->_options['defaults']['list_size']['multiplier'] ] ) )
@@ -169,7 +169,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                     echo "ko";
             }
             else
-                echo "ko";    
+                echo "ko";
         }
     }
 
@@ -272,7 +272,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
 
                     // is the mailbox address valid?
                     $username = sprintf( "%s@%s", $form->getValue( 'local_part' ), $this->_domain->getDomain() );
-                    if( !Zend_Validate::is( $username, 'EmailAddress', array( 1, null ) ) )
+                    if( !Zend_Validate::is( $username, 'EmailAddress', array('domain' => FALSE) ) )
                     {
                         $form->getElement( 'local_part' )->addError( 'Invalid email address.' );
                         return;
@@ -306,12 +306,12 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                     $this->getMailbox()->setPassword(
                          OSS_Auth_Password::hash(
                             $password,
-                            [ 
+                            [
                                 'pwhash' => $this->_options['defaults']['mailbox']['password_scheme'],
                                 'pwsalt' => isset( $this->_options['defaults']['mailbox']['password_salt'] )
-                                                ? $this->_options['defaults']['mailbox']['password_salt'] : null, 
+                                                ? $this->_options['defaults']['mailbox']['password_salt'] : null,
                                 'pwdovecot' => isset( $this->_options['defaults']['mailbox']['dovecot_pw_binary'] )
-                                                ? $this->_options['defaults']['mailbox']['dovecot_pw_binary'] : null, 
+                                                ? $this->_options['defaults']['mailbox']['dovecot_pw_binary'] : null,
                                 'username' => $username
                             ]
                         )
@@ -425,7 +425,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
 
         if( isset( $_POST['purge'] ) && ( $_POST['purge'] == 'purge' ) )
         {
-            
+
             $this->notify( 'mailbox', 'purge', 'preRemove', $this );
 
             $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->purgeMailbox( $this->getMailbox(), $this->getAdmin(), !$this->getParam( 'delete_files', false ) );
@@ -433,7 +433,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                 \Entities\Log::ACTION_MAILBOX_PURGE,
                 "{$this->getAdmin()->getFormattedName()} purged mailbox {$this->getMailbox()->getUsername()}"
             );
-            
+
             $this->notify( 'mailbox', 'purge', 'preFlush', $this );
 
             if( $this->getParam( 'delete_files', false ) )
@@ -530,7 +530,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
     {
         $form = $this->view->form = new ViMbAdmin_Form_Mailbox_EmailSettings();
         $mailbox = $this->getMailbox( $this->getParam( "mid", false ), false );
-        
+
         if( !$mailbox )
         {
             $this->addMessage( _( 'Unable to load mailbox.' ), OSS_Message::ERROR );
@@ -538,21 +538,21 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
             die();
         }
         $this->view->mailbox = $mailbox;
-        
+
         $emails = [ 'username' => $mailbox->getUsername() ];
         if( $mailbox->getAltEmail() )
             $emails[ 'alt_email'] = $mailbox->getAltEmail();
-            
-        $emails['other']  = "Other";        
+
+        $emails['other']  = "Other";
         $form->getElement( 'type' )->setMultiOptions( $emails );
-        
+
         if( $this->getRequest()->isPost() && $this->getParam( 'send', false ))
         {
             $form->isValid( $_POST );
             if( $form->getValue( 'type' ) == 'other' )
                 $form->getElement( 'email' )->setRequired( true );
-            
-            $error = false;    
+
+            $error = false;
             if( $form->isValid( $_POST ) )
             {
                 if( $form->getValue( 'type' ) == 'other' )
@@ -568,7 +568,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                             break;
                         }
                         else
-                            $email[] = trim( $em );                            
+                            $email[] = trim( $em );
                     }
                 }
                 else if( $form->getValue( 'type' ) == 'username' )
@@ -581,14 +581,14 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                     echo "Unknown email type.";
                     die();
                 }
-                
+
                 if( !$error )
                 {
                     if( $this->_sendSettingsEmail( false, '', false, $email ) )
                         $this->addMessage( _( 'Settings email successfully sent' ), OSS_Message::SUCCESS );
                     else
                         $this->addMessage( _( 'Could not send settings email' ), OSS_Message::ERROR );
-                    
+
                     print "ok";
                     die();
                 }
@@ -604,18 +604,18 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
             echo "List size option is disabled in application.ini.\n";
             return;
         }
-       
+
         foreach( $this->getD2EM()->getRepository( "\\Entities\\Domain" )->findAll() as $domain )
         {
             $cnt = 0;
-            
+
             if( $this->getParam( 'verbose' ) )
                 echo "Processing {$domain->getDomain()}...\n";
-                
+
             foreach( $domain->getMailboxes() as $mailbox )
             {
                 if( $this->getParam( 'debug' ) ) echo "    - {$mailbox->getUsername()}";
-                
+
                 $msize = OSS_DiskUtils::du( $mailbox->getCleanedMaildir() );
                 if( $msize !== false )
                 {
@@ -638,17 +638,17 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                 }
 
                 $mailbox->setSizeAt( new \DateTime() );
-                
+
                 if( $this->getParam( 'debug' ) ) echo "\n";
-                
+
                 $cnt++;
                 if( $cnt % 200 == 0)
                     $this->getD2EM()->flush();
-                    
+
             } // mailboxes
-            
+
             $this->getD2EM()->flush();
-            
+
         } // domains
     }
 
@@ -667,7 +667,7 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
         foreach( $mailboxes as $mailbox )
         {
             if( $this->getParam( 'verbose' ) ) echo " - " . $mailbox->getUsername() . "... ";
-            
+
             $homedir = $mailbox->getHomedir();
             $maildir = $mailbox->getCleanedMaildir();
 
@@ -687,11 +687,11 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                         echo "ERROR: Could not delete $dir when deleting mailbox " . $mailbox->getUsername() . "\n";
                 }
             }
-          
-            $this->getD2EM()->remove( $mailbox );  
+
+            $this->getD2EM()->remove( $mailbox );
             $this->getD2EM()->flush();
             if( $this->getParam( 'verbose' ) ) echo "DONE\n";
-        } 
+        }
     }
 
     /**
@@ -710,19 +710,19 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
     private function _sendSettingsEmail( $cc = false, $password = '', $isWelcome = false, $email = false )
     {
         $mailer = $this->getMailer();
-        
+
         if( $isWelcome )
             $mailer->setSubject( sprintf( _( "Welcome to your new mailbox on %s" ), $this->getMailbox()->getDomain()->getDomain() ) );
         else
             $mailer->setSubject( sprintf( _( "Settings for your mailbox on %s" ), $this->getMailbox()->getDomain()->getDomain() ) );
 
         $mailer->setFrom( $this->_options['server']['email']['address'], $this->_options['server']['email']['name'] );
-        
+
         if( !$email )
             $mailer->addTo( $this->getMailbox()->getUsername(), $this->getMailbox()->getName() );
         else
             $mailer->addTo( $email );
-        
+
         if( $cc ) $mailer->addCc( $cc );
 
         $this->view->mailbox  = $this->getMailbox();
@@ -773,10 +773,10 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
             $this->getMailbox()->setPassword(
                 OSS_Auth_Password::hash(
                     $form->getValue( 'password' ),
-                    [ 
+                    [
                         'pwhash' => $this->_options['defaults']['mailbox']['password_scheme'],
                         'pwsalt' => isset( $this->_options['defaults']['mailbox']['password_salt'] )
-                                        ? $this->_options['defaults']['mailbox']['password_salt'] : null, 
+                                        ? $this->_options['defaults']['mailbox']['password_salt'] : null,
                         'pwdovecot' => isset( $this->_options['defaults']['mailbox']['dovecot_pw_binary'] )
                                         ? $this->_options['defaults']['mailbox']['dovecot_pw_binary'] : null,
                         'username' => $this->getMailbox()->getUsername()

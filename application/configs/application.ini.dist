@@ -288,14 +288,20 @@ server.email.address = "support@example.com"
 ;; See: http://framework.zend.com/manual/en/zend.mail.smtp-authentication.html
 ;;
 ;; Ensure you have a working mail server configuration so the system can
-;; send emails:
+;; send emails.
+;; Possible values:
+;; transport.type: sendmail, smtp
+;; transport.auth: crammd5, login, plain
+;; transport.ssl: ssl, tls
 ;;
-resources.mailer.smtphost = "localhost"
-;resources.mailer.username = ""
-;resources.mailer.password = ""
-;resources.mailer.auth     = ""
-;resources.mailer.ssl      = ""
-;resources.mailer.port     = "25"
+
+resources.mail.transport.type = smtp
+resources.mail.transport.host = "localhost"
+;resources.mail.transport.username = ""
+;resources.mail.transport.password = ""
+;resources.mail.transport.auth = ""
+;resources.mail.transport.ssl = ""
+;resources.mail.transport.port = "25"
 
 
 

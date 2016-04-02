@@ -45,6 +45,5 @@
             "vendor/smarty/smarty/libs/SmartyBC.class.php",
             "vendor/smarty/smarty/libs/sysplugins/smarty_security.php"
         ]
-    },
-    "minimum-stability": "dev"
+    }
 }

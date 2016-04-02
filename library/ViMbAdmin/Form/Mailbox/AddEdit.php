@@ -94,6 +94,7 @@ class ViMbAdmin_Form_Mailbox_AddEdit extends ViMbAdmin_Form
             ->setLabel( _( 'Password' ) )
             ->setAttrib( 'title', _( 'Password' ) )
             ->setAttrib( 'size', 40 )
+            ->setAttrib( 'autocomplete', 'off' )
             ->setRequired( true )
             ->addValidator( 'NotEmpty', true )
             ->addValidator( 'StringLength', true, array( $this->getMinPasswordLength(), 255 ) )

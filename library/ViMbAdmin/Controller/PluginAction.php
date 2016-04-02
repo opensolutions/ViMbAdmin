@@ -48,7 +48,7 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
      */
     private $observers = [];
 
-    
+
     /**
      * Set by the add/edit actions, else null. Can be used by plugins to know if this is an
      * add or edit operation.
@@ -56,10 +56,10 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
      * @var bool
      */
     protected $isEdit = null;
-    
-    
-    
-    
+
+
+
+
     /**
      * Override the Zend_Controller_Action's constructor (which is called
      * at the very beginning of this function anyway).
@@ -76,11 +76,11 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
     {
         // call the parent's version where all the Zend magic happens
         parent::__construct( $request, $response, $invokeArgs );
-    
+
         $this->registerObservers();
     }
-    
-    
+
+
     /**
      * Registers any plugins found in the main plugin directory as well as modules.
      *
@@ -92,7 +92,7 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
         // find system plugins
         foreach( $this->loadObservers( APPLICATION_PATH . '/plugins' ) as $plugin )
             $this->attach( $plugin );
-        
+
         // find any module plugins
         $modsdir = APPLICATION_PATH . '/modules';
         foreach( scandir( $modsdir ) as $module )
@@ -104,8 +104,8 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
             }
         }
     }
-    
-    
+
+
     /**
      * Loads any found plugin and instaniates it (unless disabled by configuration).
      */
@@ -113,14 +113,14 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
     {
         $files = scandir( $path );
         $plugins = [];
-        
+
         foreach( $files as $f )
         {
             if( substr( $f, -4, 4 ) == '.php' && substr( $f, 0, 1 ) != '.' )
             {
                 require_once "{$path}/{$f}";
                 $pname = substr( $f, 0, strlen( $f ) - 4 );
-                
+
                 // make sure it has not been disabled!
                 if( !isset( $this->_options['vimbadmin_plugins'][$pname]['disabled'] ) || !$this->_options['vimbadmin_plugins'][$pname]['disabled'] )
                 {
@@ -129,10 +129,10 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
                 }
             }
         }
-        
+
         return $plugins;
     }
-    
+
     /**
      * Attach an instaniated observer
      */
@@ -140,21 +140,21 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
     {
         $this->observers[] = $observer;
     }
-    
+
     /**
      * Detach an observer
      */
     public function detach( OSS_Plugin_Observer $observer )
     {
         $newObservers = [];
-        
+
         foreach( $this->observers as $o )
             if( $o !== $observer )
                 $newObservers[] = $o;
-        
+
         $this->observers = $newObservers;
     }
-    
+
     /**
      * Give any observers a chance to execute their plugin code
      *
@@ -166,10 +166,13 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
      */
     public function notify( $controller, $action, $hook, OSS_Controller_Action $controllerObject, $params = null )
     {
-        foreach( $this->observers as $o )
-            $o->update( $controller, $action, $hook, $controllerObject, $params );
+        foreach( $this->observers as $o ) {
+            if( $o->update( $controller, $action, $hook, $controllerObject, $params ) === false ) {
+                return false;
+            }
+        }
     }
-    
+
     /**
      * Getter method for isEdit
      * @see $isEdit

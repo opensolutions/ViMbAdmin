@@ -326,6 +326,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
         $this->notify( 'alias', 'toggleActive', 'preflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
         $this->getD2EM()->flush();
         $this->notify( 'alias', 'toggleActive', 'postflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
+
         print 'ok';
     }
 
@@ -341,21 +342,22 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
         foreach( $this->getAlias()->getPreferences() as $pref )
                 $this->getD2EM()->remove( $pref );
 
-        $this->notify( 'alias', 'delete', 'preRemove', $this );
-        $this->getD2EM()->remove( $this->getAlias() );
-        if( $this->getAlias()->getAddress() != $this->getAlias()->getGoto() )
-            $this->getDomain()->setAliasCount( $this->getDomain()->getAliasCount() - 1 );
+        if( $this->notify( 'alias', 'delete', 'preRemove', $this ) !== false ) {
+            $this->getD2EM()->remove( $this->getAlias() );
+            if( $this->getAlias()->getAddress() != $this->getAlias()->getGoto() )
+                $this->getDomain()->setAliasCount( $this->getDomain()->getAliasCount() - 1 );
 
-        $this->log(
-            \Entities\Log::ACTION_ALIAS_DELETE,
-            "{$this->getAdmin()->getFormattedName()} removed alias {$this->getAlias()->getAddress()}"
-        );
+            $this->log(
+                \Entities\Log::ACTION_ALIAS_DELETE,
+                "{$this->getAdmin()->getFormattedName()} removed alias {$this->getAlias()->getAddress()}"
+            );
 
-        $this->notify( 'alias', 'delete', 'preFlush', $this );
-        $this->getD2EM()->flush();
-        $this->notify( 'alias', 'delete', 'postFlush', $this );
+            $this->notify( 'alias', 'delete', 'preFlush', $this );
+            $this->getD2EM()->flush();
+            $this->notify( 'alias', 'delete', 'postFlush', $this );
 
-        $this->addMessage( 'Alias has bean removed successfully', OSS_Message::SUCCESS );
+            $this->addMessage( 'Alias has bean removed successfully', OSS_Message::SUCCESS );
+        }
         $this->redirect( 'alias/list' );
     }
 

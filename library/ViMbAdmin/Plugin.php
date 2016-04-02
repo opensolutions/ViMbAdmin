@@ -70,6 +70,7 @@ class ViMbAdmin_Plugin
         $hookfn = "{$controller}_{$action}_{$hook}";
         if( method_exists( $this, $hookfn ) )
             return $this->$hookfn( $controllerObject, $params );
+            
         return true;
     }
 

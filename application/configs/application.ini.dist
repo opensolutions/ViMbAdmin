@@ -124,7 +124,7 @@ defaults.mailbox.gid = 2000
 ;     %d      -> domain part of email address
 ;     %u      -> user part of email address
 ;     %m      -> full email address
-;     %atmail -> substitutes an email address (test@example.com) with t/e/test@example.com 
+;     %atmail -> substitutes an email address (test@example.com) with t/e/test@example.com
 ;
 ;
 ; http://wiki2.dovecot.org/VirtualUsers/Home
@@ -413,16 +413,8 @@ vimbadmin_plugins.AccessPermissions.type.SIEVE = "SIEVE"
 ;
 
 vimbadmin_plugins.AccessPermissions.disabled = false
-vimbadmin_plugins.Jabber.disabled            = true
 vimbadmin_plugins.DirectoryEntry.disabled    = true
-vimbadmin_plugins.SharedMailbox.disabled     = true
-vimbadmin_plugins.SOGo.disabled              = true
-
-
 vimbadmin_plugins.AdditionalInfo.disabled = true
-vimbadmin_plugins.Addressbook.disabled    = true
-vimbadmin_plugins.Calendar.disabled       = true
-vimbadmin_plugins.RoundCube.disabled      = true
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -38,12 +38,5 @@
         "issues": "https://github.com/opensolutions/ViMbAdmin/issues",
         "wiki": "https://github.com/opensolutions/ViMbAdmin/wiki",
         "source": "https://github.com/opensolutions/ViMbAdmin"
-    },
-    "autoload": {
-        "classmap": [
-            "vendor/smarty/smarty/libs/Smarty.class.php",
-            "vendor/smarty/smarty/libs/SmartyBC.class.php",
-            "vendor/smarty/smarty/libs/sysplugins/smarty_security.php"
-        ]
     }
 }

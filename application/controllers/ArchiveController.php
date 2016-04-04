@@ -879,6 +879,7 @@ class ArchiveController extends ViMbAdmin_Controller_PluginAction
         $mailbox->setGid( $params['gid'] );
         $mailbox->setHomedirSize( $params['homedir_size'] );
         $mailbox->setMaildirSize( $params['maildir_size'] );
+        $mailbox->setDeletePending( $params['delete_pending'] );
         $mailbox->setCreated( new \DateTime( $params['created']['date'] ) );
         $mailbox->setSizeAt( new \DateTime( $params['size_at']['date'] ) );
         $mailbox->setModified( new \DateTime() );

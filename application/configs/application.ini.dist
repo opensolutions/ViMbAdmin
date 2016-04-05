@@ -295,7 +295,7 @@ server.email.address = "support@example.com"
 ;; transport.ssl: ssl, tls
 ;;
 
-resources.mail.transport.type = smtp
+resources.mail.transport.type = "smtp"
 resources.mail.transport.host = "localhost"
 ;resources.mail.transport.username = ""
 ;resources.mail.transport.password = ""

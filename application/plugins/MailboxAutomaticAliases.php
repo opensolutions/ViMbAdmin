@@ -110,13 +110,14 @@
                  foreach($this->defaultAliases as $key => $item) {
                      if($alias == $item.'@'.$domain) {
                          // not allowed to delete, show error message and stop delete
-                         return( sprintf( _("Alias %s is required and cannot be disabled."), $alias));
+                         print( sprintf( _("Alias %s is required and cannot be disabled."), $alias));
+                         exit(0);
                      }
                  }
              }
 
          }
-        return 'ok';
+        return true;
      }
 
      /**

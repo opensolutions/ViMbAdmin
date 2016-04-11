@@ -171,6 +171,7 @@ class ViMbAdmin_Controller_PluginAction extends ViMbAdmin_Controller_Action impl
                 return false;
             }
         }
+        return true;
     }
 
     /**

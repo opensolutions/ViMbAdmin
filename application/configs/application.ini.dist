@@ -139,15 +139,27 @@ defaults.mailbox.min_password_length = 8
 ;
 ;   "plain"       - password stored as clear text
 ;   "md5"         - password hashed using MD5 without salt (PHP md5())
-;   "md5.salted"  - password hashed using MD5 with salt (see below)
+;   "md5-salted"  - password hashed using MD5 with salt (salt set in defaults.mailbox.password_salt above)
 ;   "sha1"        - password hashed using sha1 without salt
-;   "sha1.salted" - password hashed using sha1 with salt defined below
+;   "sha1-salted" - password hashed using sha1 with salt (salt set in defaults.mailbox.password_salt above)
 ;   "crypt:XXX"   - call the PHP crypt function (with random salt) where XXX is one of: md5, blowfish, sha256, sha512
 ;   "dovecot:XXX" - call the Dovecot password generator (see next option below) and use the
 ;                      scheme specified by XXX. To see available schemes, use 'dovecotpw -l'
 ;                      or 'doveadm pw -l'
 
-defaults.mailbox.password_scheme = "md5.salted"
+; You should pick a hashing function as string as your mail system allows.
+; At time of writing, Dovecot ( http://wiki2.dovecot.org/Authentication/PasswordSchemes ) recommends one of
+; BLF-CRYPT, SHA512-CRYPT, SHA256-CRYPT in descending order of strength
+defaults.mailbox.password_scheme = "dovecot:BLF-CRYPT"
+
+; April 2016 - Bad salts - it was pointed out that a typo in the code below meant that
+; the now deprecated md5.salted and sha1.salted (as opposed to their hyphenated versions above)
+; didn't actually use the requested salt string but a fixed salt of "md5.salted" and "sha1.salted"
+; respectivily. These options still work for backwards compatibility.
+; See:
+; https://github.com/opensolutions/OSS-Framework/issues/43#issuecomment-207040421
+; https://github.com/opensolutions/OSS-Framework/commit/b3d669a81f8214032a70e594472ece9fe9322fe2
+
 
 ; The path to (and initial option(s) if necessary) the Dovecot password generator. Typical
 ; values may be something like:

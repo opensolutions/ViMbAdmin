@@ -147,7 +147,7 @@ defaults.mailbox.min_password_length = 8
 ;                      scheme specified by XXX. To see available schemes, use 'dovecotpw -l'
 ;                      or 'doveadm pw -l'
 
-; You should pick a hashing function as string as your mail system allows.
+; You should pick a hashing function as strong as your mail system allows.
 ; At time of writing, Dovecot ( http://wiki2.dovecot.org/Authentication/PasswordSchemes ) recommends one of
 ; BLF-CRYPT, SHA512-CRYPT, SHA256-CRYPT in descending order of strength
 defaults.mailbox.password_scheme = "dovecot:BLF-CRYPT"
@@ -155,7 +155,7 @@ defaults.mailbox.password_scheme = "dovecot:BLF-CRYPT"
 ; April 2016 - Bad salts - it was pointed out that a typo in the code below meant that
 ; the now deprecated md5.salted and sha1.salted (as opposed to their hyphenated versions above)
 ; didn't actually use the requested salt string but a fixed salt of "md5.salted" and "sha1.salted"
-; respectivily. These options still work for backwards compatibility.
+; respectively. These options still work for backwards compatibility.
 ; See:
 ; https://github.com/opensolutions/OSS-Framework/issues/43#issuecomment-207040421
 ; https://github.com/opensolutions/OSS-Framework/commit/b3d669a81f8214032a70e594472ece9fe9322fe2

@@ -1,0 +1,25 @@
+language: php
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7
+  - hhvm
+  - nightly
+
+matrix:
+  allow_failures:
+    - php: nightly
+  fast-finish: true
+
+install:
+  - composer install
+
+before_script:
+  - export PATH="$TRAVIS_BUILD_DIR/bin:$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
+
+script:
+  - find . -not \( -path './vendor' -prune \) -type f -name '*.php' -print0 | xargs -0 -I file php -l file > /dev/null
+
+sudo: false
+

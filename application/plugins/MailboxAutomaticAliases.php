@@ -91,7 +91,7 @@
              foreach($this->defaultAliases as $key => $item) {
                  if($alias == $item.'@'.$domain) {
                      // not allowed to delete, show error message and stop delete
-                     $controller->addMessage( sprintf( _("Alias %s is required and cannot be deleted."), $alias), OSS_Message::ERROR);
+                     $controller->addMessage( sprintf( _("Alias %s is required and cannot be deleted. See <a href=\"https://www.ietf.org/rfc/rfc2142.txt\" target=\"page\">RFC2142</a>"), $alias), OSS_Message::ERROR);
                      return false;
                  }
              }
@@ -110,7 +110,7 @@
                  foreach($this->defaultAliases as $key => $item) {
                      if($alias == $item.'@'.$domain) {
                          // not allowed to delete, show error message and stop delete
-                         print( sprintf( _("Alias %s is required and cannot be disabled."), $alias));
+                         print( sprintf( _("Alias %s is required and cannot be disabled. See <a href=\"https://www.ietf.org/rfc/rfc2142.txt\" target=\"page\">RFC2142</a>"), $alias));
                          exit(0);
                      }
                  }

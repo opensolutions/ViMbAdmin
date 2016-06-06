@@ -21,9 +21,9 @@
 ; is to verify that you are in fact the person authorised to complete the
 ; installation as well as provide security for cookies and passwords.
 
-securitysalt                       = "0e(*MnS;<VK]U9836PRUOnDJosMqCx_$m=zvX\y#/~z=~[Hb!92|EIL6>b@1)Kf:"
-resources.auth.oss.rememberme.salt = ")y$USG;@-M=kH&.ULF^Rh~oNAQ-DG,/j60v^|{gy/ieAE\23F1Em(e}6qSsb4%@h"
-defaults.mailbox.password_salt     = "QdnC~7nE$A~YQrXV\0L|#P4a{\c=@Zk/N@vgKx!|_^#odh)SjT&lkRUIJ}Z5VD8["
+securitysalt                       = ""
+resources.auth.oss.rememberme.salt = ""
+defaults.mailbox.password_salt     = ""
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,7 +44,7 @@ resources.frontController.params.displayExceptions = 1
 resources.doctrine2.connection.options.driver   = 'pdo_mysql'
 resources.doctrine2.connection.options.dbname   = 'vimbadmin'
 resources.doctrine2.connection.options.user     = 'vimbadmin'
-resources.doctrine2.connection.options.password = 'password'
+resources.doctrine2.connection.options.password = 'xxx'
 resources.doctrine2.connection.options.host     = 'localhost'
 resources.doctrine2.connection.options.charset  = 'utf8'
 
@@ -661,3 +661,15 @@ phpSettings.display_errors = 1
 resources.frontController.params.displayExceptions = 1
 
 [vagrant : production]
+
+securitysalt                       = "0e(*MnS;<VK]U9836PRUOnDJosMqCx_$m=zvX\y#/~z=~[Hb!92|EIL6>b@1)Kf:"
+resources.auth.oss.rememberme.salt = ")y$USG;@-M=kH&.ULF^Rh~oNAQ-DG,/j60v^|{gy/ieAE\23F1Em(e}6qSsb4%@h"
+defaults.mailbox.password_salt     = "QdnC~7nE$A~YQrXV\0L|#P4a{\c=@Zk/N@vgKx!|_^#odh)SjT&lkRUIJ}Z5VD8["
+
+
+resources.doctrine2.connection.options.driver   = 'pdo_mysql'
+resources.doctrine2.connection.options.dbname   = 'vimbadmin'
+resources.doctrine2.connection.options.user     = 'vimbadmin'
+resources.doctrine2.connection.options.password = 'password'
+resources.doctrine2.connection.options.host     = 'localhost'
+resources.doctrine2.connection.options.charset  = 'utf8'

@@ -23,7 +23,6 @@ var/session/sess_*
 var/tmp
 library/Minify/
 *~
-composer.lock
 vendor/[a-zA-Z0-9]*
 vimbadmin.sublime-project
 vimbadmin.sublime-workspace

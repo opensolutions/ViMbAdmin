@@ -19,12 +19,23 @@ benefit from this application.
 
     <div id="modal_dialog" class="modal hide fade"> </div>
     <footer>
+
+        {if $smarty.const.APPLICATION_ENV == 'vagrant'}
+            <div class="alert alert-warning">
+            <p>
+                <strong>
+                    VIMBADMIN IS RUNNING IN VAGRANT (DEVELOPMENT) MODE AND IS NOT FIT FOR PRODUCTION USE!
+                </strong>
+            </p>
+            </div>
+        {/if}
+
         <p>
             Copyright &copy; 2011 - {$smarty.now|date_formatter:"%Y"} <a href="http://www.opensolutions.ie/" target="_blank" title="Open Source Solutions Limited">Open Source Solutions Limited</a>.
             This Program is provided AS IS, without warranty.
         </p>
         <p>
-            <a href="http://www.vimbadmin.net/">ViMbAdmin</a> 
+            <a href="http://www.vimbadmin.net/">ViMbAdmin</a>
                 <a href="https://github.com/opensolutions/ViMbAdmin/releases">V{ViMbAdmin_Version::VERSION}</a>.
             Licensed under the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html" target="_blank" title="GNU GPL v3">
                 GNU General Public License V3

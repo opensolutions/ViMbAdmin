@@ -5,11 +5,7 @@
  * CLI script
  */
 
-// Set UTC time zone if none set in cli php.ini
-if(!ini_get('date.timezone')) {
-    date_default_timezone_set('UTC');
-}
-
+date_default_timezone_set(@date_default_timezone_get());
 require_once( dirname( __FILE__ ) . '/../vendor/autoload.php' );
 require_once( dirname( __FILE__ ) . '/utils.inc' );
 //define( 'APPLICATION_ENV', scriptutils_get_application_env() );

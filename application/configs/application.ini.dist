@@ -409,7 +409,11 @@ vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "abuse"
 vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "hostmaster"
 vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "webmaster"
 
-
+; Define this if emails should be forwarded to a fixed address instead of the first mailbox address of the domain
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.postmaster = "postmaster@example.net"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.abuse = "abuse@example.net"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.hostmaster = "hostmaster@example.net"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.webmaster = "webmaster@example.net"
 
 
 

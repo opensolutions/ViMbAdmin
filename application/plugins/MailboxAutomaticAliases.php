@@ -31,12 +31,14 @@
  */
  class ViMbAdminPlugin_MailboxAutomaticAliases extends ViMbAdmin_Plugin implements OSS_Plugin_Observer {
     private $defaultAliases;
-     
+    private $defaultMapping;
+
      public function __construct(OSS_Controller_Action $controller) {
          parent::__construct($controller, get_class() );
 
          // read config parameters
          $this->defaultAliases = $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases'];
+         $this->defaultMapping = $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultMapping'];
      }
 
      /**
@@ -60,7 +62,11 @@
                  if(count($aliasList) == 0) {
                      $alias = new \Entities\Alias();
                      $alias->setAddress($item.'@'.$domain);
-                     $alias->setGoto($mailbox);
+                     if($this->defaultMapping[$item]) {
+                        $alias->setGoto($this->defaultMapping[$item]);
+                     } else {
+                         $alias->setGoto($mailbox);
+                     }
                      $alias->setDomain($controller->getDomain());
                      $alias->setActive(1);
                      $alias->setCreated(new \DateTime());
@@ -68,7 +74,7 @@
                      // Increase alias count for domain
                      $controller->getDomain()->increaseAliasCount();
                      $controller->getD2EM()->flush();
-                     $controller->addMessage( sprintf(_("Auto-Created alias %s@%s -> %s."), $item, $domain, $mailbox));
+                     $controller->addMessage( sprintf(_("Auto-Created alias %s -> %s."), $alias->getAddress(), $alias->getGoto()));
                  }
              }
          }
@@ -141,7 +147,11 @@
                  if(count($aliasList) == 0) {
                      $alias = new \Entities\Alias();
                      $alias->setAddress($item.'@'.$domain);
-                     $alias->setGoto($aliasGoto);
+                     if($this->defaultMapping[$item]) {
+                         $alias->setGoto($this->defaultMapping[$item]);
+                     }else{
+                         $alias->setGoto($aliasGoto);
+                     }
                      $alias->setDomain($controller->getDomain());
                      $alias->setActive(1);
                      $alias->setCreated(new \DateTime());
@@ -149,7 +159,7 @@
                      // Increase alias count for domain
                      $controller->getDomain()->increaseAliasCount();
                      $controller->getD2EM()->flush();
-                     $controller->addMessage( sprintf(_("Auto-Created alias %s@%s -> %s."), $item, $domain, $aliasGoto));
+                     $controller->addMessage( sprintf(_("Auto-Created alias %s -> %s."), $alias->getAddress(), $alias->getGoto()));
                  }
              }
          }

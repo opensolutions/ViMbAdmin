@@ -116,6 +116,10 @@ defaults.list_size.multiplier = 'GB'
 ; This sets the uid and gid columns in the mailbox table to the below values
 defaults.mailbox.uid = 2000
 defaults.mailbox.gid = 2000
+; This sets the user and group's name columns in the mailbox table to the below values
+; These names should match with the IDs assigned above
+defaults.mailbox.uname = vmail
+defaults.mailbox.gname = vmail
 
 
 ; Set the homedir and maildir values in the mailbox table where the

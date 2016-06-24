@@ -79,7 +79,7 @@ class DomainController extends ViMbAdmin_Controller_PluginAction
     {
         if( isset( $this->getSessionNamespace()->domain ) )
             unset( $this->getSessionNamespace()->domain );
-        
+
         if( !isset( $this->_options['defaults']['server_side']['pagination']['domain']['enable'] ) || !$this->_options['defaults']['server_side']['pagination']['domain']['enable'] )
             $this->view->domains = $this->getD2EM()->getRepository( '\\Entities\\Domain' )->loadForDomainList( $this->getAdmin() );
         else
@@ -117,7 +117,7 @@ class DomainController extends ViMbAdmin_Controller_PluginAction
                     echo "ko";
             }
             else
-                echo "ko";    
+                echo "ko";
         }
     }
 
@@ -132,12 +132,12 @@ class DomainController extends ViMbAdmin_Controller_PluginAction
 
         $this->getDomain()->setActive( !$this->getDomain()->getActive() );
         $this->getDomain()->setModified( new DateTime() );
-        
+
         $this->log(
             $this->getDomain()->getActive() ? \Entities\Log::ACTION_DOMAIN_ACTIVATE : \Entities\Log::ACTION_DOMAIN_DEACTIVATE,
             "{$this->getAdmin()->getFormattedName()} " . ( $this->getDomain()->getActive() ? 'activated' : 'deactivated' ) . " domain {$this->getDomain()->getDomain()}"
         );
-        
+
         $this->getD2EM()->flush();
 
         print 'ok';
@@ -155,9 +155,9 @@ class DomainController extends ViMbAdmin_Controller_PluginAction
             $form = new ViMbAdmin_Form_Domain_AddEdit();
             if( isset( $this->_options['defaults']['quota']['multiplier'] ) )
                 $form->setFilterFileSizeMultiplier( $this->_options['defaults']['quota']['multiplier'] );
-            
+
             $this->view->form = $this->domainForm = $form;
-            
+
             // call plugins
             $this->notify( 'domain', 'add', 'formPostProcess', $this );
         }
@@ -202,16 +202,27 @@ class DomainController extends ViMbAdmin_Controller_PluginAction
         $this->view->domain = $this->getDomain();
 
         $this->notify( 'domain', 'add', 'addPrepare', $this );
-        
+
         if( $this->getRequest()->isPost() )
         {
             $this->notify( 'domain', 'add', 'addPrevalidate', $this );
-            
+
             if( $form->isValid( $_POST ) )
             {
                 $this->notify( 'domain', 'add', 'addPostvalidate', $this );
-            
+
                 $form->assignFormToEntity( $this->getDomain(), $this, $isEdit );
+
+                foreach (
+                    [
+                        $this->_options['defaults']['mailbox']['homedir'],
+                        $this->_options['defaults']['mailbox']['homedir'].'/'. $this->getDomain()->getDomain()
+                    ] as $directory) {
+                    if(!file_exists($directory) && !mkdir($directory, 0775, true))
+                        throw new ViMbAdmin_Exception("Unable to create the directory `$directory`.");
+                    chmod($directory, 0775);
+                    chgrp($directory, $this->_options['defaults']['mailbox']['gname']);
+                }
 
                 if( $isEdit )
                     $this->getDomain()->setModified( new \DateTime() );
@@ -220,16 +231,16 @@ class DomainController extends ViMbAdmin_Controller_PluginAction
                     $isEdit ? \Entities\Log::ACTION_DOMAIN_EDIT : \Entities\Log::ACTION_DOMAIN_ADD,
                     "{$this->getAdmin()->getFormattedName()} " . ( $isEdit ? ' edited' : ' added' ) . " domain {$this->getDomain()->getDomain()}"
                 );
-            
+
                 $this->notify( 'domain', 'add', 'addPreflush', $this );
                 $this->getD2EM()->flush();
                 $this->notify( 'domain', 'add', 'addPostflush', $this );
-            
+
                 $this->notify( 'domain', 'add', 'addFinish', $this );
                 $this->addMessage( _( "You have successfully added/edited the domain record." ), OSS_Message::SUCCESS );
 
                 $this->redirect( 'domain/list' );
-            } 
+            }
         }
     }
 
@@ -299,7 +310,7 @@ class DomainController extends ViMbAdmin_Controller_PluginAction
         $remainingAdmins = $this->getD2em()->getRepository( "\\Entities\\Admin" )->getNotAssignedForDomain( $this->getDomain() );
 
         $this->view->form = $form = new ViMbAdmin_Form_Domain_AssignAdmin();
-        $form->getElement( "admin" )->setMultiOptions( $remainingAdmins );   
+        $form->getElement( "admin" )->setMultiOptions( $remainingAdmins );
 
         if( $this->getRequest()->isPost() && $form->isValid( $_POST ) )
         {

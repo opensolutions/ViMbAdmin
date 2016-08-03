@@ -197,6 +197,8 @@ class DomainController extends ViMbAdmin_Controller_PluginAction
                 ->removeValidator( 'OSSDoctrine2Uniqueness' );
         }
 
+        $this->authorise( true ); // must be a super admin
+
         $this->view->quota_multiplier = $form->getFilterFileSizeMultiplier();
 
         $this->view->domain = $this->getDomain();

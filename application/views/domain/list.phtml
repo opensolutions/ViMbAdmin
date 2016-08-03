@@ -67,9 +67,11 @@
                 <td>{$domain.created->format( 'Y-m-d' )}</td>
                 <td>
                     <div class="btn-group">
-                        <a class="btn btn-mini have-tooltip" id="edit_domain_{$domain.id}" title="Edit" href="{genUrl controller='domain' action='edit' did=$domain.id}">
-                            <i class="icon-pencil"></i>
-                        </a>
+                        {if $user->isSuper()}
+                            <a class="btn btn-mini have-tooltip" id="edit_domain_{$domain.id}" title="Edit" href="{genUrl controller='domain' action='edit' did=$domain.id}">
+                                <i class="icon-pencil"></i>
+                            </a>
+                        {/if}
                         {if isset( $domain_actions ) }
                             {assign var=oid value=$mbox.id}
                             {foreach $domain_actions as $action}

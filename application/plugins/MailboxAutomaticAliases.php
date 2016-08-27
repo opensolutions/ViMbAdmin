@@ -82,6 +82,7 @@
 
      /**
       * Check if the aliases is allowed to be removed. If not return false, else return true.
+      * Check if the alias is used as administrative destination and if yes deny removal.
       *
       * @param $controller
       * @param $options
@@ -102,6 +103,8 @@
                  }
              }
          }
+
+         # @TODO Add check for administrative alias removal
          return true;
      }
 
@@ -123,6 +126,7 @@
              }
 
          }
+         # @TODO Check here also for administrative destination alias
         return true;
      }
 

@@ -164,4 +164,26 @@
              }
          }
      }
+
+     /**
+      * Check that a mailbox cannot be removed if used as administrative destination mailbox
+      *
+      */
+     public function mailbox_purge_preRemove($controller, $options) {
+         /*  check if mailbox is not an administrative mailbox */
+         $mailbox = $controller->getMailbox()->getUserName();
+
+         if($this->defaultMapping) {
+             foreach($this->defaultMapping as $key => $item) {
+                 if($mailbox == $item) {
+                     // not allowed to delete, show error message and stop delete
+                     $controller->addMessage( sprintf( _("Mailbox %s is defined as automatic alias to fullfill <a href=\"https://www.ietf.org/rfc/rfc2142.txt\" target=\"page\">RFC2142</a>. If you want to remove it, update you application.ini file first. Check key vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping."), $mailbox), OSS_Message::ERROR);
+                     //print( sprintf( _("Mailbox %s is defined as automatic alias to fullfill <a href=\"https://www.ietf.org/rfc/rfc2142.txt\" target=\"page\">RFC2142</a>. If you want to remove it, update you application.ini file first. Check key vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping."), $mailbox));
+                     return false;
+                 }
+             }
+         }
+         return true;
+     }
+
  }

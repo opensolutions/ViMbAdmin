@@ -426,28 +426,29 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
         if( isset( $_POST['purge'] ) && ( $_POST['purge'] == 'purge' ) )
         {
 
-            $this->notify( 'mailbox', 'purge', 'preRemove', $this );
+            if($this->notify( 'mailbox', 'purge', 'preRemove', $this ) !== false) {
 
-            $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->purgeMailbox( $this->getMailbox(), $this->getAdmin(), !$this->getParam( 'delete_files', false ) );
-            $this->log(
-                \Entities\Log::ACTION_MAILBOX_PURGE,
-                "{$this->getAdmin()->getFormattedName()} purged mailbox {$this->getMailbox()->getUsername()}"
-            );
+                $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->purgeMailbox( $this->getMailbox(), $this->getAdmin(), !$this->getParam( 'delete_files', false ) );
+                $this->log(
+                    \Entities\Log::ACTION_MAILBOX_PURGE,
+                    "{$this->getAdmin()->getFormattedName()} purged mailbox {$this->getMailbox()->getUsername()}"
+                );
 
-            $this->notify( 'mailbox', 'purge', 'preFlush', $this );
+                $this->notify( 'mailbox', 'purge', 'preFlush', $this );
 
-            if( $this->getParam( 'delete_files', false ) )
-            {
-                $this->getMailbox()->setDeletePending( true );
-                $this->getMailbox()->setActive( false );
+                if( $this->getParam( 'delete_files', false ) )
+                {
+                    $this->getMailbox()->setDeletePending( true );
+                    $this->getMailbox()->setActive( false );
+                }
+                else
+                    $this->getD2EM()->remove( $this->getMailbox() );
+
+                $this->getD2EM()->flush();
+                $this->notify( 'mailbox', 'purge', 'postFlush', $this );
+
+                $this->addMessage( _( 'You have successfully purged the mailbox.' ), OSS_Message::SUCCESS );
             }
-            else
-                $this->getD2EM()->remove( $this->getMailbox() );
-
-            $this->getD2EM()->flush();
-            $this->notify( 'mailbox', 'purge', 'postFlush', $this );
-
-            $this->addMessage( _( 'You have successfully purged the mailbox.' ), OSS_Message::SUCCESS );
             $this->_redirect( 'mailbox/list' );
 
         }

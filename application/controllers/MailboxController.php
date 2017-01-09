@@ -330,6 +330,12 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
 
                     $this->getDomain()->setMailboxCount( $this->getDomain()->getMailboxCount() + 1 );
 
+                    $target_mail_dir = $this->getMailbox()->getHomedir().'/'. dirname($this->getMailbox()->getMaildir());
+                    if(!file_exists($directory) && !mkdir($target_mail_dir, 0775, true))
+                        throw new ViMbAdmin_Exception("Unable to create the mailbox directory `$target_mail_dir`.");
+                    chmod($target_mail_dir, 0775);
+                    chgrp($target_mail_dir, $this->_options['defaults']['mailbox']['gname']);
+
                 }
                 else
                 {

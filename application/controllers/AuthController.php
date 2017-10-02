@@ -135,7 +135,7 @@ class AuthController extends ViMbAdmin_Controller_Action
 
                     $this->getD2EM()->flush();
                     $this->addMessage( _( 'You have successfully changed your password.' ), OSS_Message::SUCCESS );
-                    $this->_redirect( 'auth/login' );
+                    $this->_redirect( 'auth/change-password' );
                 }
                 else
                     $this->addMessage( _( 'Invalid username or password.' ), OSS_Message::ERROR );

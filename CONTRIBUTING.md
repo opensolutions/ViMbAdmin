@@ -1,3 +1,9 @@
+# Looking for Help?
+
+**Please do not open a GitHub issue but ask the mailing list.**
+
+Full details: https://www.vimbadmin.net/support.php
+
 # How to contribute
 
 Third-party patches are welcomed for adding functionality, fixing bugs and just correcting typos on ViMbAdmin.

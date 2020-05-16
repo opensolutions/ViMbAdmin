@@ -37,8 +37,11 @@
          parent::__construct($controller, get_class() );
 
          // read config parameters
-         $this->defaultAliases = $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases'];
-         $this->defaultMapping = $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultMapping'];
+         $this->defaultAliases = isset( $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases'] )
+             ? $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases'] : [];
+
+         $this->defaultMapping = isset( $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultMapping'] )
+            ? $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultMapping'] : [];
      }
 
      /**

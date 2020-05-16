@@ -400,7 +400,7 @@ vimbadmin_plugins.AccessPermissions.type.SIEVE = "SIEVE"
 ; Allow admins to force that for a mailbox/domain basic aliases are existing
 ; If a new mailbox is created the system will check if the aliases are existing, if not they are created.
 
-vimbadmin_plugins.MailboxAutomaticAliases.disabled = false
+vimbadmin_plugins.MailboxAutomaticAliases.disabled = true
 
 ; These aliases should always exist, it is not recommened to delete it
 vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "postmaster"

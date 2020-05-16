@@ -93,7 +93,8 @@ defaults.server_side.pagination.domain.max_result_cnt = 500
 ; must be one of these: 10, 25, 50, 100
 defaults.table.entries = 50
 
-
+;; Enable or disable display of Domain name column. Default : enabled
+defaults.list_domain.disabled = false
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

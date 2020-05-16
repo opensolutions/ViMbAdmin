@@ -37,7 +37,9 @@
             {if isset($options.defaults.list_size.disabled) && !$options.defaults.list_size.disabled}
                 <th>Size ({$size_multiplier})</th>
             {/if}
-            <th>Domain</th>
+            {if !isset($options.defaults.list_domain.disabled) || !$options.defaults.list_domain.disabled}
+                <th>Domain</th>
+            {/if}
             <th width="55">Active</th>
             <th width="140"></th>
         </tr>
@@ -57,7 +59,9 @@
                     {/if}
                 </td>
             {/if}
-            <td>{$mbox.domain}</td>
+            {if !isset($options.defaults.list_domain.disabled) || !$options.defaults.list_domain.disabled}
+                <td>{$mbox.domain}</td>
+            {/if}
             <td>
                 <div id="throb-toggle-active-{$mbox.id}" style="float: right;"></div>
                 <span id="toggle-active-{$mbox.id}" onclick="toggleActive( 'toggle-active-{$mbox.id}', {$mbox.id} );" class="btn btn-mini {if $mbox.active}btn-success{else}btn-danger{/if}">{$mbox.active|yesno}</span>

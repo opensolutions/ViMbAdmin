@@ -53,7 +53,9 @@ $(document).ready( function() {
             {if isset($options.defaults.list_size.disabled) && !$options.defaults.list_size.disabled}
             { 'sType': 'num-html' },
             {/if}
+            {if !isset($options.defaults.list_domain.disabled) || !$options.defaults.list_domain.disabled}
             null,
+            {/if}
             { "bSearchable": false },
             { 'bSortable': false, "bSearchable": false }
         ]

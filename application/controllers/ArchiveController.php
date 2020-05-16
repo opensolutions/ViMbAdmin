@@ -138,6 +138,11 @@ class ArchiveController extends ViMbAdmin_Controller_PluginAction
             $this->notify( 'archive', 'add', 'prePurge', $this ); 
             $this->getD2EM()->getRepository( "\\Entities\\Mailbox" )->purgeMailbox( $this->getMailbox(), $this->getAdmin() );
 
+            $this->log(
+                \Entities\Log::ACTION_ARCHIVE_REQUEST,
+                "{$this->getAdmin()->getFormattedName()} requested mailbox archive for {$this->getMailbox()->getUsername()}"
+            );
+
             $this->notify( 'archive', 'add', 'preFlushPurge', $this, [ 'mailbox' => $this->getMailbox() ] );
             $this->getD2EM()->flush();
             $this->notify( 'archive', 'add', 'postFlushPurge', $this, [ 'mailbox' => $this->getMailbox() ] );
@@ -168,6 +173,11 @@ class ArchiveController extends ViMbAdmin_Controller_PluginAction
                     $this->redirect( 'archive/list' );
                 }
 
+                $this->log(
+                    \Entities\Log::ACTION_ARCHIVE_REQUEST_CANCEL,
+                    "{$this->getAdmin()->getFormattedName()} canceled mailbox archive request for {$data['mailbox']->getUsername()}"
+                );
+
                 $archive = $this->getD2EM()->getRepository( "\\Entities\\Archive" )->find( $this->getArchive()->getId() );
                 $this->getD2EM()->remove( $archive );
                 $this->notify( 'archive', 'cancel', 'preFlushRestore', $this );
@@ -183,8 +193,14 @@ class ArchiveController extends ViMbAdmin_Controller_PluginAction
         else if( $this->getArchive()->getStatus() == \Entities\Archive::STATUS_PENDING_RESTORE )
         {
             $result = $this->_archiveStateChange( $this->getArchive(), \Entities\Archive::STATUS_ARCHIVED, \Entities\Archive::STATUS_PENDING_RESTORE );
-            if( $result )
-                $this->addMessage( "Pending restore was canceled successfully.", OSS_Message::SUCCESS );   
+            if( $result ) {
+                $this->log(
+                    \Entities\Log::ACTION_ARCHIVE_RESTORE_CANCEL,
+                    "{$this->getAdmin()->getFormattedName()} canceled mailbox restore request for {$this->getArchive()->getUsername()}"
+                );
+
+                $this->addMessage("Pending restore was canceled successfully.", OSS_Message::SUCCESS);
+            }
             else
                 $this->addMessage( "State was changed during canceling. Cancel action cannot be performed at this state.", OSS_Message::INFO );   
         }
@@ -193,8 +209,15 @@ class ArchiveController extends ViMbAdmin_Controller_PluginAction
             $result = $this->_archiveStateChange( $this->getArchive(), \Entities\Archive::STATUS_ARCHIVED, \Entities\Archive::STATUS_PENDING_DELETE );
             if( $result )
             {
-                if( !$this->getArchive()->getHomedirServer() )
-                    $this->getArchive()->setStatus( \Entities\Archive::STATUS_PENDING_ARCHIVE );
+                if( !$this->getArchive()->getHomedirServer() ) {
+                    $this->getArchive()->setStatus(\Entities\Archive::STATUS_PENDING_ARCHIVE);
+                }
+
+                $this->log(
+                    \Entities\Log::ACTION_ARCHIVE_DELETE_CANCEL,
+                    "{$this->getAdmin()->getFormattedName()} canceled mailbox delete request for {$this->getArchive()->getUsername()}"
+                );
+
 
                 $this->addMessage( "Pending delete was canceled successfully.", OSS_Message::SUCCESS );    
             }    
@@ -203,6 +226,8 @@ class ArchiveController extends ViMbAdmin_Controller_PluginAction
         }
         else 
             $this->addMessage( "Cancel action cannot be performed at this state.", OSS_Message::INFO );
+
+
 
         $this->getD2EM()->flush();
         $this->redirect( 'archive/list' );

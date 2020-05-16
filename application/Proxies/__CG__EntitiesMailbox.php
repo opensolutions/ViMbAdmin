@@ -12,39 +12,41 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
      *      three parameters, being respectively the proxy object to be initialized, the method that triggered the
      *      initialization process and an array of ordered parameters that were passed to that method.
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setInitializer
+     * @see \Doctrine\Common\Proxy\Proxy::__setInitializer
      */
     public $__initializer__;
 
     /**
      * @var \Closure the callback responsible of loading properties that need to be copied in the cloned object
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setCloner
+     * @see \Doctrine\Common\Proxy\Proxy::__setCloner
      */
     public $__cloner__;
 
     /**
      * @var boolean flag indicating if this object was already initialized
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__isInitialized
+     * @see \Doctrine\Persistence\Proxy::__isInitialized
      */
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
-     *
-     * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
      */
-    public static $lazyPropertiesDefaults = array();
-
-
+    public static $lazyPropertiesNames = array (
+);
 
     /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
+     *
+     * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public function __construct($initializer = null, $cloner = null)
+    public static $lazyPropertiesDefaults = array (
+);
+
+
+
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'username', 'password', 'name', 'alt_email', 'quota', 'local_part', 'active', 'access_restriction', 'homedir', 'maildir', 'uid', 'gid', 'created', 'modified', 'id', 'Preferences', 'homedir_size', 'maildir_size', 'size_at', 'Domain', 'DirectoryEntry', 'delete_pending', '_className', '_preferenceClassName', '_cache', '_namespace');
+            return ['__isInitialized__', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'username', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'password', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'name', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'alt_email', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'quota', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'local_part', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'active', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'access_restriction', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'homedir', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'maildir', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'uid', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'gid', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'created', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'modified', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'id', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'Preferences', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'homedir_size', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'maildir_size', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'size_at', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'Domain', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'DirectoryEntry', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'delete_pending', '_className', '_preferenceClassName', '' . "\0" . 'Entities\\Mailbox' . "\0" . '_cache', '' . "\0" . 'Entities\\Mailbox' . "\0" . '_namespace'];
         }
 
-        return array('__isInitialized__', 'username', 'password', 'name', 'alt_email', 'quota', 'local_part', 'active', 'access_restriction', 'homedir', 'maildir', 'uid', 'gid', 'created', 'modified', 'id', 'Preferences', 'homedir_size', 'maildir_size', 'size_at', 'Domain', 'DirectoryEntry', 'delete_pending', '_className', '_preferenceClassName', '_cache', '_namespace');
+        return ['__isInitialized__', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'username', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'password', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'name', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'alt_email', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'quota', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'local_part', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'active', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'access_restriction', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'homedir', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'maildir', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'uid', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'gid', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'created', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'modified', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'id', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'Preferences', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'homedir_size', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'maildir_size', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'size_at', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'Domain', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'DirectoryEntry', '' . "\0" . 'Entities\\Mailbox' . "\0" . 'delete_pending', '_className', '_preferenceClassName', '' . "\0" . 'Entities\\Mailbox' . "\0" . '_cache', '' . "\0" . 'Entities\\Mailbox' . "\0" . '_namespace'];
     }
 
     /**
@@ -82,7 +84,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -97,7 +99,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
     }
 
     /**
@@ -105,7 +107,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
     }
 
     /**
@@ -165,6 +167,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -179,7 +182,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setUsername($username)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUsername', array($username));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUsername', [$username]);
 
         return parent::setUsername($username);
     }
@@ -190,7 +193,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getUsername()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUsername', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUsername', []);
 
         return parent::getUsername();
     }
@@ -201,7 +204,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setPassword($password)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPassword', array($password));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPassword', [$password]);
 
         return parent::setPassword($password);
     }
@@ -212,7 +215,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getPassword()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPassword', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPassword', []);
 
         return parent::getPassword();
     }
@@ -223,7 +226,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setName($name)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setName', array($name));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setName', [$name]);
 
         return parent::setName($name);
     }
@@ -234,7 +237,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getName()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getName', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getName', []);
 
         return parent::getName();
     }
@@ -245,7 +248,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setAltEmail($altEmail)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAltEmail', array($altEmail));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAltEmail', [$altEmail]);
 
         return parent::setAltEmail($altEmail);
     }
@@ -256,7 +259,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getAltEmail()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAltEmail', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAltEmail', []);
 
         return parent::getAltEmail();
     }
@@ -267,7 +270,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setQuota($quota)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setQuota', array($quota));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setQuota', [$quota]);
 
         return parent::setQuota($quota);
     }
@@ -278,7 +281,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getQuota()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getQuota', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getQuota', []);
 
         return parent::getQuota();
     }
@@ -289,7 +292,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setLocalPart($localPart)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLocalPart', array($localPart));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLocalPart', [$localPart]);
 
         return parent::setLocalPart($localPart);
     }
@@ -300,7 +303,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getLocalPart()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLocalPart', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLocalPart', []);
 
         return parent::getLocalPart();
     }
@@ -311,7 +314,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setActive($active)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setActive', array($active));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setActive', [$active]);
 
         return parent::setActive($active);
     }
@@ -322,7 +325,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getActive()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActive', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActive', []);
 
         return parent::getActive();
     }
@@ -333,7 +336,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setAccessRestriction($accessRestriction)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAccessRestriction', array($accessRestriction));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAccessRestriction', [$accessRestriction]);
 
         return parent::setAccessRestriction($accessRestriction);
     }
@@ -344,7 +347,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getAccessRestriction()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAccessRestriction', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAccessRestriction', []);
 
         return parent::getAccessRestriction();
     }
@@ -355,7 +358,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setHomedir($homedir)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHomedir', array($homedir));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHomedir', [$homedir]);
 
         return parent::setHomedir($homedir);
     }
@@ -366,7 +369,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getHomedir()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHomedir', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHomedir', []);
 
         return parent::getHomedir();
     }
@@ -377,7 +380,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setMaildir($maildir)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMaildir', array($maildir));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMaildir', [$maildir]);
 
         return parent::setMaildir($maildir);
     }
@@ -388,7 +391,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getMaildir()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMaildir', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMaildir', []);
 
         return parent::getMaildir();
     }
@@ -399,7 +402,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getCleanedMaildir()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCleanedMaildir', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCleanedMaildir', []);
 
         return parent::getCleanedMaildir();
     }
@@ -410,7 +413,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setUid($uid)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUid', array($uid));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUid', [$uid]);
 
         return parent::setUid($uid);
     }
@@ -421,7 +424,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getUid()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUid', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUid', []);
 
         return parent::getUid();
     }
@@ -432,7 +435,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setGid($gid)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGid', array($gid));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGid', [$gid]);
 
         return parent::setGid($gid);
     }
@@ -443,7 +446,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getGid()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGid', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGid', []);
 
         return parent::getGid();
     }
@@ -454,7 +457,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setCreated($created)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreated', array($created));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreated', [$created]);
 
         return parent::setCreated($created);
     }
@@ -465,7 +468,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getCreated()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreated', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreated', []);
 
         return parent::getCreated();
     }
@@ -476,7 +479,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setModified($modified)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setModified', array($modified));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setModified', [$modified]);
 
         return parent::setModified($modified);
     }
@@ -487,7 +490,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getModified()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getModified', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getModified', []);
 
         return parent::getModified();
     }
@@ -502,7 +505,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
     }
@@ -513,7 +516,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function addPreference(\Entities\MailboxPreference $preferences)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPreference', array($preferences));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPreference', [$preferences]);
 
         return parent::addPreference($preferences);
     }
@@ -524,7 +527,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function removePreference(\Entities\MailboxPreference $preferences)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removePreference', array($preferences));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removePreference', [$preferences]);
 
         return parent::removePreference($preferences);
     }
@@ -535,7 +538,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getPreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreferences', []);
 
         return parent::getPreferences();
     }
@@ -546,7 +549,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setDomain(\Entities\Domain $domain = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDomain', array($domain));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDomain', [$domain]);
 
         return parent::setDomain($domain);
     }
@@ -557,7 +560,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getDomain()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDomain', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDomain', []);
 
         return parent::getDomain();
     }
@@ -568,7 +571,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function addMailboxPreference(\Entities\MailboxPreference $preferences)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addMailboxPreference', array($preferences));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addMailboxPreference', [$preferences]);
 
         return parent::addMailboxPreference($preferences);
     }
@@ -579,7 +582,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function formatMaildir($maildir = '')
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'formatMaildir', array($maildir));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'formatMaildir', [$maildir]);
 
         return parent::formatMaildir($maildir);
     }
@@ -590,7 +593,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function formatHomedir($homedir = '')
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'formatHomedir', array($homedir));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'formatHomedir', [$homedir]);
 
         return parent::formatHomedir($homedir);
     }
@@ -601,7 +604,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setHomedirSize($homedirSize)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHomedirSize', array($homedirSize));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHomedirSize', [$homedirSize]);
 
         return parent::setHomedirSize($homedirSize);
     }
@@ -612,7 +615,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getHomedirSize()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHomedirSize', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHomedirSize', []);
 
         return parent::getHomedirSize();
     }
@@ -623,7 +626,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setMaildirSize($maildirSize)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMaildirSize', array($maildirSize));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMaildirSize', [$maildirSize]);
 
         return parent::setMaildirSize($maildirSize);
     }
@@ -634,7 +637,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getMaildirSize()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMaildirSize', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMaildirSize', []);
 
         return parent::getMaildirSize();
     }
@@ -645,7 +648,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setSizeAt($sizeAt)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSizeAt', array($sizeAt));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSizeAt', [$sizeAt]);
 
         return parent::setSizeAt($sizeAt);
     }
@@ -656,7 +659,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getSizeAt()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSizeAt', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSizeAt', []);
 
         return parent::getSizeAt();
     }
@@ -667,7 +670,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setDirectoryEntry(\Entities\DirectoryEntry $directoryEntry = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDirectoryEntry', array($directoryEntry));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDirectoryEntry', [$directoryEntry]);
 
         return parent::setDirectoryEntry($directoryEntry);
     }
@@ -678,7 +681,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getDirectoryEntry()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDirectoryEntry', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDirectoryEntry', []);
 
         return parent::getDirectoryEntry();
     }
@@ -689,7 +692,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setDeletePending($deletePending)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDeletePending', array($deletePending));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDeletePending', [$deletePending]);
 
         return parent::setDeletePending($deletePending);
     }
@@ -700,7 +703,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getDeletePending()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDeletePending', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDeletePending', []);
 
         return parent::getDeletePending();
     }
@@ -711,7 +714,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function loadPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'loadPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'loadPreference', [$attribute, $index, $includeExpired]);
 
         return parent::loadPreference($attribute, $index, $includeExpired);
     }
@@ -722,7 +725,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function hasPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasPreference', [$attribute, $index, $includeExpired]);
 
         return parent::hasPreference($attribute, $index, $includeExpired);
     }
@@ -733,7 +736,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreference', [$attribute, $index, $includeExpired]);
 
         return parent::getPreference($attribute, $index, $includeExpired);
     }
@@ -744,7 +747,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function setPreference($attribute, $value, $operator = '=', $expires = 0, $index = 0)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreference', array($attribute, $value, $operator, $expires, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreference', [$attribute, $value, $operator, $expires, $index]);
 
         return parent::setPreference($attribute, $value, $operator, $expires, $index);
     }
@@ -755,7 +758,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function addIndexedPreference($attribute, $value, $operator = '=', $expires = 0, $max = 0)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addIndexedPreference', array($attribute, $value, $operator, $expires, $max));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addIndexedPreference', [$attribute, $value, $operator, $expires, $max]);
 
         return parent::addIndexedPreference($attribute, $value, $operator, $expires, $max);
     }
@@ -766,7 +769,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function cleanExpiredPreferences($asOf = NULL, $attribute = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'cleanExpiredPreferences', array($asOf, $attribute));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'cleanExpiredPreferences', [$asOf, $attribute]);
 
         return parent::cleanExpiredPreferences($asOf, $attribute);
     }
@@ -777,7 +780,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function deletePreference($attribute, $index = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deletePreference', array($attribute, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deletePreference', [$attribute, $index]);
 
         return parent::deletePreference($attribute, $index);
     }
@@ -788,7 +791,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function expungePreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'expungePreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'expungePreferences', []);
 
         return parent::expungePreferences();
     }
@@ -799,7 +802,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getIndexedPreference($attribute, $withIndex = false, $ignoreExpired = true)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIndexedPreference', array($attribute, $withIndex, $ignoreExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIndexedPreference', [$attribute, $withIndex, $ignoreExpired]);
 
         return parent::getIndexedPreference($attribute, $withIndex, $ignoreExpired);
     }
@@ -810,7 +813,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function getAssocPreference($attribute, $index = NULL, $ignoreExpired = true)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAssocPreference', array($attribute, $index, $ignoreExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAssocPreference', [$attribute, $index, $ignoreExpired]);
 
         return parent::getAssocPreference($attribute, $index, $ignoreExpired);
     }
@@ -821,7 +824,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function deleteAssocPreference($attribute, $index = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deleteAssocPreference', array($attribute, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deleteAssocPreference', [$attribute, $index]);
 
         return parent::deleteAssocPreference($attribute, $index);
     }
@@ -832,7 +835,7 @@ class Mailbox extends \Entities\Mailbox implements \Doctrine\ORM\Proxy\Proxy
     public function _getPreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '_getPreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '_getPreferences', []);
 
         return parent::_getPreferences();
     }

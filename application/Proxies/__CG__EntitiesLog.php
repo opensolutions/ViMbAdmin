@@ -12,39 +12,41 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
      *      three parameters, being respectively the proxy object to be initialized, the method that triggered the
      *      initialization process and an array of ordered parameters that were passed to that method.
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setInitializer
+     * @see \Doctrine\Common\Proxy\Proxy::__setInitializer
      */
     public $__initializer__;
 
     /**
      * @var \Closure the callback responsible of loading properties that need to be copied in the cloned object
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setCloner
+     * @see \Doctrine\Common\Proxy\Proxy::__setCloner
      */
     public $__cloner__;
 
     /**
      * @var boolean flag indicating if this object was already initialized
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__isInitialized
+     * @see \Doctrine\Persistence\Proxy::__isInitialized
      */
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
-     *
-     * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
      */
-    public static $lazyPropertiesDefaults = array();
-
-
+    public static $lazyPropertiesNames = array (
+);
 
     /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
+     *
+     * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public function __construct($initializer = null, $cloner = null)
+    public static $lazyPropertiesDefaults = array (
+);
+
+
+
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'action', 'data', 'timestamp', 'id', 'Admin', 'Domain');
+            return ['__isInitialized__', '' . "\0" . 'Entities\\Log' . "\0" . 'action', '' . "\0" . 'Entities\\Log' . "\0" . 'data', '' . "\0" . 'Entities\\Log' . "\0" . 'timestamp', '' . "\0" . 'Entities\\Log' . "\0" . 'id', '' . "\0" . 'Entities\\Log' . "\0" . 'Admin', '' . "\0" . 'Entities\\Log' . "\0" . 'Domain'];
         }
 
-        return array('__isInitialized__', 'action', 'data', 'timestamp', 'id', 'Admin', 'Domain');
+        return ['__isInitialized__', '' . "\0" . 'Entities\\Log' . "\0" . 'action', '' . "\0" . 'Entities\\Log' . "\0" . 'data', '' . "\0" . 'Entities\\Log' . "\0" . 'timestamp', '' . "\0" . 'Entities\\Log' . "\0" . 'id', '' . "\0" . 'Entities\\Log' . "\0" . 'Admin', '' . "\0" . 'Entities\\Log' . "\0" . 'Domain'];
     }
 
     /**
@@ -82,7 +84,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -97,7 +99,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
     }
 
     /**
@@ -105,7 +107,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
     }
 
     /**
@@ -165,6 +167,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -179,7 +182,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function setAction($action)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAction', array($action));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAction', [$action]);
 
         return parent::setAction($action);
     }
@@ -190,7 +193,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function getAction()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAction', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAction', []);
 
         return parent::getAction();
     }
@@ -201,7 +204,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function setData($data)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setData', array($data));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setData', [$data]);
 
         return parent::setData($data);
     }
@@ -212,7 +215,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function getData()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getData', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getData', []);
 
         return parent::getData();
     }
@@ -223,7 +226,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function setTimestamp($timestamp)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTimestamp', array($timestamp));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTimestamp', [$timestamp]);
 
         return parent::setTimestamp($timestamp);
     }
@@ -234,7 +237,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function getTimestamp()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTimestamp', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTimestamp', []);
 
         return parent::getTimestamp();
     }
@@ -249,7 +252,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
     }
@@ -260,7 +263,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function setAdmin(\Entities\Admin $admin = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAdmin', array($admin));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAdmin', [$admin]);
 
         return parent::setAdmin($admin);
     }
@@ -271,7 +274,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function getAdmin()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAdmin', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAdmin', []);
 
         return parent::getAdmin();
     }
@@ -282,7 +285,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function setDomain(\Entities\Domain $domain = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDomain', array($domain));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDomain', [$domain]);
 
         return parent::setDomain($domain);
     }
@@ -293,7 +296,7 @@ class Log extends \Entities\Log implements \Doctrine\ORM\Proxy\Proxy
     public function getDomain()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDomain', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDomain', []);
 
         return parent::getDomain();
     }

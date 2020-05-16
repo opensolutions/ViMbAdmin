@@ -12,39 +12,41 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
      *      three parameters, being respectively the proxy object to be initialized, the method that triggered the
      *      initialization process and an array of ordered parameters that were passed to that method.
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setInitializer
+     * @see \Doctrine\Common\Proxy\Proxy::__setInitializer
      */
     public $__initializer__;
 
     /**
      * @var \Closure the callback responsible of loading properties that need to be copied in the cloned object
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setCloner
+     * @see \Doctrine\Common\Proxy\Proxy::__setCloner
      */
     public $__cloner__;
 
     /**
      * @var boolean flag indicating if this object was already initialized
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__isInitialized
+     * @see \Doctrine\Persistence\Proxy::__isInitialized
      */
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
-     *
-     * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
      */
-    public static $lazyPropertiesDefaults = array();
-
-
+    public static $lazyPropertiesNames = array (
+);
 
     /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
+     *
+     * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public function __construct($initializer = null, $cloner = null)
+    public static $lazyPropertiesDefaults = array (
+);
+
+
+
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'attribute', 'ix', 'op', 'value', 'expire', 'id', 'Mailbox');
+            return ['__isInitialized__', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'attribute', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'ix', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'op', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'value', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'expire', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'id', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'Mailbox'];
         }
 
-        return array('__isInitialized__', 'attribute', 'ix', 'op', 'value', 'expire', 'id', 'Mailbox');
+        return ['__isInitialized__', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'attribute', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'ix', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'op', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'value', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'expire', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'id', '' . "\0" . 'Entities\\MailboxPreference' . "\0" . 'Mailbox'];
     }
 
     /**
@@ -82,7 +84,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -97,7 +99,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
     }
 
     /**
@@ -105,7 +107,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
     }
 
     /**
@@ -165,6 +167,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -179,7 +182,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function setAttribute($attribute)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAttribute', array($attribute));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAttribute', [$attribute]);
 
         return parent::setAttribute($attribute);
     }
@@ -190,7 +193,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function getAttribute()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAttribute', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAttribute', []);
 
         return parent::getAttribute();
     }
@@ -201,7 +204,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function setIx($ix)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIx', array($ix));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIx', [$ix]);
 
         return parent::setIx($ix);
     }
@@ -212,7 +215,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function getIx()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIx', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIx', []);
 
         return parent::getIx();
     }
@@ -223,7 +226,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function setOp($op)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOp', array($op));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOp', [$op]);
 
         return parent::setOp($op);
     }
@@ -234,7 +237,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function getOp()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOp', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOp', []);
 
         return parent::getOp();
     }
@@ -245,7 +248,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function setValue($value)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValue', array($value));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setValue', [$value]);
 
         return parent::setValue($value);
     }
@@ -256,7 +259,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function getValue()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValue', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getValue', []);
 
         return parent::getValue();
     }
@@ -267,7 +270,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function setExpire($expire)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setExpire', array($expire));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setExpire', [$expire]);
 
         return parent::setExpire($expire);
     }
@@ -278,7 +281,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function getExpire()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getExpire', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getExpire', []);
 
         return parent::getExpire();
     }
@@ -293,7 +296,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
     }
@@ -304,7 +307,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function setMailbox(\Entities\Mailbox $mailbox = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMailbox', array($mailbox));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMailbox', [$mailbox]);
 
         return parent::setMailbox($mailbox);
     }
@@ -315,7 +318,7 @@ class MailboxPreference extends \Entities\MailboxPreference implements \Doctrine
     public function getMailbox()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMailbox', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMailbox', []);
 
         return parent::getMailbox();
     }

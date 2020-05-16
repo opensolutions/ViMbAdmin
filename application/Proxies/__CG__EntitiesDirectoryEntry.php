@@ -12,39 +12,41 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
      *      three parameters, being respectively the proxy object to be initialized, the method that triggered the
      *      initialization process and an array of ordered parameters that were passed to that method.
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setInitializer
+     * @see \Doctrine\Common\Proxy\Proxy::__setInitializer
      */
     public $__initializer__;
 
     /**
      * @var \Closure the callback responsible of loading properties that need to be copied in the cloned object
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setCloner
+     * @see \Doctrine\Common\Proxy\Proxy::__setCloner
      */
     public $__cloner__;
 
     /**
      * @var boolean flag indicating if this object was already initialized
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__isInitialized
+     * @see \Doctrine\Persistence\Proxy::__isInitialized
      */
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
-     *
-     * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
      */
-    public static $lazyPropertiesDefaults = array();
-
-
+    public static $lazyPropertiesNames = array (
+);
 
     /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
+     *
+     * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public function __construct($initializer = null, $cloner = null)
+    public static $lazyPropertiesDefaults = array (
+);
+
+
+
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'businessCategory', 'carLicense', 'departmentNumber', 'displayName', 'employeeNumber', 'employeeType', 'homePhone', 'homePostalAddress', 'initials', 'jpegPhoto', 'labeledURI', 'mail', 'manager', 'mobile', 'o', 'pager', 'preferredLanguage', 'roomNumber', 'secretary', 'personalTitle', 'sn', 'ou', 'title', 'facsimileTelephoneNumber', 'givenName', 'telephoneNumber', 'vimb_created', 'vimb_update', 'id', 'Mailbox');
+            return ['__isInitialized__', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'businessCategory', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'carLicense', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'departmentNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'displayName', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'employeeNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'employeeType', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'homePhone', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'homePostalAddress', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'initials', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'jpegPhoto', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'labeledURI', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'mail', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'manager', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'mobile', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'o', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'pager', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'preferredLanguage', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'roomNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'secretary', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'personalTitle', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'sn', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'ou', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'title', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'facsimileTelephoneNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'givenName', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'telephoneNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'vimb_created', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'vimb_update', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'id', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'Mailbox'];
         }
 
-        return array('__isInitialized__', 'businessCategory', 'carLicense', 'departmentNumber', 'displayName', 'employeeNumber', 'employeeType', 'homePhone', 'homePostalAddress', 'initials', 'jpegPhoto', 'labeledURI', 'mail', 'manager', 'mobile', 'o', 'pager', 'preferredLanguage', 'roomNumber', 'secretary', 'personalTitle', 'sn', 'ou', 'title', 'facsimileTelephoneNumber', 'givenName', 'telephoneNumber', 'vimb_created', 'vimb_update', 'id', 'Mailbox');
+        return ['__isInitialized__', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'businessCategory', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'carLicense', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'departmentNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'displayName', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'employeeNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'employeeType', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'homePhone', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'homePostalAddress', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'initials', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'jpegPhoto', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'labeledURI', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'mail', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'manager', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'mobile', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'o', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'pager', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'preferredLanguage', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'roomNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'secretary', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'personalTitle', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'sn', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'ou', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'title', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'facsimileTelephoneNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'givenName', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'telephoneNumber', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'vimb_created', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'vimb_update', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'id', '' . "\0" . 'Entities\\DirectoryEntry' . "\0" . 'Mailbox'];
     }
 
     /**
@@ -82,7 +84,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -97,7 +99,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
     }
 
     /**
@@ -105,7 +107,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
     }
 
     /**
@@ -165,6 +167,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -179,7 +182,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setBusinessCategory($businessCategory)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBusinessCategory', array($businessCategory));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBusinessCategory', [$businessCategory]);
 
         return parent::setBusinessCategory($businessCategory);
     }
@@ -190,7 +193,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getBusinessCategory()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBusinessCategory', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBusinessCategory', []);
 
         return parent::getBusinessCategory();
     }
@@ -201,7 +204,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setCarLicense($carLicense)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCarLicense', array($carLicense));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCarLicense', [$carLicense]);
 
         return parent::setCarLicense($carLicense);
     }
@@ -212,7 +215,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getCarLicense()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCarLicense', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCarLicense', []);
 
         return parent::getCarLicense();
     }
@@ -223,7 +226,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setDepartmentNumber($departmentNumber)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDepartmentNumber', array($departmentNumber));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDepartmentNumber', [$departmentNumber]);
 
         return parent::setDepartmentNumber($departmentNumber);
     }
@@ -234,7 +237,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getDepartmentNumber()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDepartmentNumber', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDepartmentNumber', []);
 
         return parent::getDepartmentNumber();
     }
@@ -245,7 +248,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setDisplayName($displayName)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDisplayName', array($displayName));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDisplayName', [$displayName]);
 
         return parent::setDisplayName($displayName);
     }
@@ -256,7 +259,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getDisplayName()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDisplayName', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDisplayName', []);
 
         return parent::getDisplayName();
     }
@@ -267,7 +270,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setEmployeeNumber($employeeNumber)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmployeeNumber', array($employeeNumber));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmployeeNumber', [$employeeNumber]);
 
         return parent::setEmployeeNumber($employeeNumber);
     }
@@ -278,7 +281,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getEmployeeNumber()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmployeeNumber', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmployeeNumber', []);
 
         return parent::getEmployeeNumber();
     }
@@ -289,7 +292,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setEmployeeType($employeeType)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmployeeType', array($employeeType));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmployeeType', [$employeeType]);
 
         return parent::setEmployeeType($employeeType);
     }
@@ -300,7 +303,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getEmployeeType()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmployeeType', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmployeeType', []);
 
         return parent::getEmployeeType();
     }
@@ -311,7 +314,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setHomePhone($homePhone)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHomePhone', array($homePhone));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHomePhone', [$homePhone]);
 
         return parent::setHomePhone($homePhone);
     }
@@ -322,7 +325,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getHomePhone()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHomePhone', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHomePhone', []);
 
         return parent::getHomePhone();
     }
@@ -333,7 +336,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setHomePostalAddress($homePostalAddress)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHomePostalAddress', array($homePostalAddress));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHomePostalAddress', [$homePostalAddress]);
 
         return parent::setHomePostalAddress($homePostalAddress);
     }
@@ -344,7 +347,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getHomePostalAddress()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHomePostalAddress', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHomePostalAddress', []);
 
         return parent::getHomePostalAddress();
     }
@@ -355,7 +358,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setInitials($initials)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInitials', array($initials));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInitials', [$initials]);
 
         return parent::setInitials($initials);
     }
@@ -366,7 +369,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getInitials()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInitials', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInitials', []);
 
         return parent::getInitials();
     }
@@ -377,7 +380,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setJpegPhoto($jpegPhoto)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJpegPhoto', array($jpegPhoto));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setJpegPhoto', [$jpegPhoto]);
 
         return parent::setJpegPhoto($jpegPhoto);
     }
@@ -388,7 +391,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getJpegPhoto()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJpegPhoto', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJpegPhoto', []);
 
         return parent::getJpegPhoto();
     }
@@ -399,7 +402,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setLabeledURI($labeledURI)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLabeledURI', array($labeledURI));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLabeledURI', [$labeledURI]);
 
         return parent::setLabeledURI($labeledURI);
     }
@@ -410,7 +413,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getLabeledURI()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLabeledURI', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLabeledURI', []);
 
         return parent::getLabeledURI();
     }
@@ -421,7 +424,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setMail($mail)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMail', array($mail));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMail', [$mail]);
 
         return parent::setMail($mail);
     }
@@ -432,7 +435,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getMail()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMail', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMail', []);
 
         return parent::getMail();
     }
@@ -443,7 +446,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setManager($manager)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setManager', array($manager));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setManager', [$manager]);
 
         return parent::setManager($manager);
     }
@@ -454,7 +457,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getManager()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getManager', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getManager', []);
 
         return parent::getManager();
     }
@@ -465,7 +468,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setMobile($mobile)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMobile', array($mobile));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMobile', [$mobile]);
 
         return parent::setMobile($mobile);
     }
@@ -476,7 +479,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getMobile()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMobile', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMobile', []);
 
         return parent::getMobile();
     }
@@ -487,7 +490,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setO($o)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setO', array($o));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setO', [$o]);
 
         return parent::setO($o);
     }
@@ -498,7 +501,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getO()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getO', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getO', []);
 
         return parent::getO();
     }
@@ -509,7 +512,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setPager($pager)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPager', array($pager));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPager', [$pager]);
 
         return parent::setPager($pager);
     }
@@ -520,7 +523,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getPager()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPager', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPager', []);
 
         return parent::getPager();
     }
@@ -531,7 +534,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setPreferredLanguage($preferredLanguage)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreferredLanguage', array($preferredLanguage));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreferredLanguage', [$preferredLanguage]);
 
         return parent::setPreferredLanguage($preferredLanguage);
     }
@@ -542,7 +545,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getPreferredLanguage()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreferredLanguage', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreferredLanguage', []);
 
         return parent::getPreferredLanguage();
     }
@@ -553,7 +556,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setRoomNumber($roomNumber)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRoomNumber', array($roomNumber));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRoomNumber', [$roomNumber]);
 
         return parent::setRoomNumber($roomNumber);
     }
@@ -564,7 +567,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getRoomNumber()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRoomNumber', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRoomNumber', []);
 
         return parent::getRoomNumber();
     }
@@ -575,7 +578,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setSecretary($secretary)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSecretary', array($secretary));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSecretary', [$secretary]);
 
         return parent::setSecretary($secretary);
     }
@@ -586,7 +589,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getSecretary()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSecretary', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSecretary', []);
 
         return parent::getSecretary();
     }
@@ -597,7 +600,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setPersonalTitle($personalTitle)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPersonalTitle', array($personalTitle));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPersonalTitle', [$personalTitle]);
 
         return parent::setPersonalTitle($personalTitle);
     }
@@ -608,7 +611,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getPersonalTitle()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPersonalTitle', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPersonalTitle', []);
 
         return parent::getPersonalTitle();
     }
@@ -619,7 +622,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setSn($sn)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSn', array($sn));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSn', [$sn]);
 
         return parent::setSn($sn);
     }
@@ -630,7 +633,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getSn()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSn', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSn', []);
 
         return parent::getSn();
     }
@@ -641,7 +644,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setOu($ou)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOu', array($ou));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOu', [$ou]);
 
         return parent::setOu($ou);
     }
@@ -652,7 +655,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getOu()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOu', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOu', []);
 
         return parent::getOu();
     }
@@ -663,7 +666,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setTitle($title)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTitle', array($title));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTitle', [$title]);
 
         return parent::setTitle($title);
     }
@@ -674,7 +677,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getTitle()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTitle', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTitle', []);
 
         return parent::getTitle();
     }
@@ -685,7 +688,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setFacsimileTelephoneNumber($facsimileTelephoneNumber)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFacsimileTelephoneNumber', array($facsimileTelephoneNumber));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFacsimileTelephoneNumber', [$facsimileTelephoneNumber]);
 
         return parent::setFacsimileTelephoneNumber($facsimileTelephoneNumber);
     }
@@ -696,7 +699,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getFacsimileTelephoneNumber()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFacsimileTelephoneNumber', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFacsimileTelephoneNumber', []);
 
         return parent::getFacsimileTelephoneNumber();
     }
@@ -707,7 +710,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setGivenName($givenName)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGivenName', array($givenName));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGivenName', [$givenName]);
 
         return parent::setGivenName($givenName);
     }
@@ -718,7 +721,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getGivenName()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGivenName', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGivenName', []);
 
         return parent::getGivenName();
     }
@@ -729,7 +732,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setTelephoneNumber($telephoneNumber)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTelephoneNumber', array($telephoneNumber));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTelephoneNumber', [$telephoneNumber]);
 
         return parent::setTelephoneNumber($telephoneNumber);
     }
@@ -740,7 +743,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getTelephoneNumber()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTelephoneNumber', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTelephoneNumber', []);
 
         return parent::getTelephoneNumber();
     }
@@ -751,7 +754,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setVimbCreated($vimbCreated)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVimbCreated', array($vimbCreated));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVimbCreated', [$vimbCreated]);
 
         return parent::setVimbCreated($vimbCreated);
     }
@@ -762,7 +765,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getVimbCreated()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVimbCreated', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVimbCreated', []);
 
         return parent::getVimbCreated();
     }
@@ -773,7 +776,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setVimbUpdate($vimbUpdate)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVimbUpdate', array($vimbUpdate));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVimbUpdate', [$vimbUpdate]);
 
         return parent::setVimbUpdate($vimbUpdate);
     }
@@ -784,7 +787,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getVimbUpdate()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVimbUpdate', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVimbUpdate', []);
 
         return parent::getVimbUpdate();
     }
@@ -799,7 +802,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
     }
@@ -810,7 +813,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function setMailbox(\Entities\Mailbox $mailbox)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMailbox', array($mailbox));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMailbox', [$mailbox]);
 
         return parent::setMailbox($mailbox);
     }
@@ -821,7 +824,7 @@ class DirectoryEntry extends \Entities\DirectoryEntry implements \Doctrine\ORM\P
     public function getMailbox()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMailbox', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMailbox', []);
 
         return parent::getMailbox();
     }

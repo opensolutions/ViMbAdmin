@@ -12,39 +12,41 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
      *      three parameters, being respectively the proxy object to be initialized, the method that triggered the
      *      initialization process and an array of ordered parameters that were passed to that method.
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setInitializer
+     * @see \Doctrine\Common\Proxy\Proxy::__setInitializer
      */
     public $__initializer__;
 
     /**
      * @var \Closure the callback responsible of loading properties that need to be copied in the cloned object
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setCloner
+     * @see \Doctrine\Common\Proxy\Proxy::__setCloner
      */
     public $__cloner__;
 
     /**
      * @var boolean flag indicating if this object was already initialized
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__isInitialized
+     * @see \Doctrine\Persistence\Proxy::__isInitialized
      */
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
-     *
-     * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
      */
-    public static $lazyPropertiesDefaults = array();
-
-
+    public static $lazyPropertiesNames = array (
+);
 
     /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
+     *
+     * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public function __construct($initializer = null, $cloner = null)
+    public static $lazyPropertiesDefaults = array (
+);
+
+
+
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'userhash', 'ckey', 'original_ip', 'expires', 'created', 'id', 'User', 'last_used');
+            return ['__isInitialized__', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'userhash', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'ckey', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'original_ip', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'expires', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'created', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'id', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'User', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'last_used'];
         }
 
-        return array('__isInitialized__', 'userhash', 'ckey', 'original_ip', 'expires', 'created', 'id', 'User', 'last_used');
+        return ['__isInitialized__', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'userhash', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'ckey', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'original_ip', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'expires', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'created', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'id', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'User', '' . "\0" . 'Entities\\RememberMe' . "\0" . 'last_used'];
     }
 
     /**
@@ -82,7 +84,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -97,7 +99,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
     }
 
     /**
@@ -105,7 +107,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
     }
 
     /**
@@ -165,6 +167,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -179,7 +182,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function setUserhash($userhash)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUserhash', array($userhash));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUserhash', [$userhash]);
 
         return parent::setUserhash($userhash);
     }
@@ -190,7 +193,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function getUserhash()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUserhash', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUserhash', []);
 
         return parent::getUserhash();
     }
@@ -201,7 +204,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function setCkey($ckey)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCkey', array($ckey));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCkey', [$ckey]);
 
         return parent::setCkey($ckey);
     }
@@ -212,7 +215,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function getCkey()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCkey', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCkey', []);
 
         return parent::getCkey();
     }
@@ -223,7 +226,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function setOriginalIp($originalIp)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOriginalIp', array($originalIp));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setOriginalIp', [$originalIp]);
 
         return parent::setOriginalIp($originalIp);
     }
@@ -234,7 +237,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function getOriginalIp()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOriginalIp', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOriginalIp', []);
 
         return parent::getOriginalIp();
     }
@@ -245,7 +248,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function setExpires($expires)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setExpires', array($expires));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setExpires', [$expires]);
 
         return parent::setExpires($expires);
     }
@@ -256,7 +259,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function getExpires()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getExpires', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getExpires', []);
 
         return parent::getExpires();
     }
@@ -267,7 +270,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function setCreated($created)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreated', array($created));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreated', [$created]);
 
         return parent::setCreated($created);
     }
@@ -278,7 +281,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function getCreated()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreated', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreated', []);
 
         return parent::getCreated();
     }
@@ -293,7 +296,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
     }
@@ -304,7 +307,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function setUser(\Entities\Admin $user = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUser', array($user));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUser', [$user]);
 
         return parent::setUser($user);
     }
@@ -315,7 +318,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function getUser()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUser', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUser', []);
 
         return parent::getUser();
     }
@@ -326,7 +329,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function setLastUsed($lastUsed)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLastUsed', array($lastUsed));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLastUsed', [$lastUsed]);
 
         return parent::setLastUsed($lastUsed);
     }
@@ -337,7 +340,7 @@ class RememberMe extends \Entities\RememberMe implements \Doctrine\ORM\Proxy\Pro
     public function getLastUsed()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLastUsed', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLastUsed', []);
 
         return parent::getLastUsed();
     }

@@ -12,39 +12,41 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
      *      three parameters, being respectively the proxy object to be initialized, the method that triggered the
      *      initialization process and an array of ordered parameters that were passed to that method.
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setInitializer
+     * @see \Doctrine\Common\Proxy\Proxy::__setInitializer
      */
     public $__initializer__;
 
     /**
      * @var \Closure the callback responsible of loading properties that need to be copied in the cloned object
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setCloner
+     * @see \Doctrine\Common\Proxy\Proxy::__setCloner
      */
     public $__cloner__;
 
     /**
      * @var boolean flag indicating if this object was already initialized
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__isInitialized
+     * @see \Doctrine\Persistence\Proxy::__isInitialized
      */
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
-     *
-     * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
      */
-    public static $lazyPropertiesDefaults = array();
-
-
+    public static $lazyPropertiesNames = array (
+);
 
     /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
+     *
+     * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public function __construct($initializer = null, $cloner = null)
+    public static $lazyPropertiesDefaults = array (
+);
+
+
+
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'address', 'goto', 'active', 'created', 'modified', 'id', 'Domain', 'Preferences', '_className', '_preferenceClassName', '_cache', '_namespace');
+            return ['__isInitialized__', '' . "\0" . 'Entities\\Alias' . "\0" . 'address', '' . "\0" . 'Entities\\Alias' . "\0" . 'goto', '' . "\0" . 'Entities\\Alias' . "\0" . 'active', '' . "\0" . 'Entities\\Alias' . "\0" . 'created', '' . "\0" . 'Entities\\Alias' . "\0" . 'modified', '' . "\0" . 'Entities\\Alias' . "\0" . 'id', '' . "\0" . 'Entities\\Alias' . "\0" . 'Domain', '' . "\0" . 'Entities\\Alias' . "\0" . 'Preferences', '_className', '_preferenceClassName', '' . "\0" . 'Entities\\Alias' . "\0" . '_cache', '' . "\0" . 'Entities\\Alias' . "\0" . '_namespace'];
         }
 
-        return array('__isInitialized__', 'address', 'goto', 'active', 'created', 'modified', 'id', 'Domain', 'Preferences', '_className', '_preferenceClassName', '_cache', '_namespace');
+        return ['__isInitialized__', '' . "\0" . 'Entities\\Alias' . "\0" . 'address', '' . "\0" . 'Entities\\Alias' . "\0" . 'goto', '' . "\0" . 'Entities\\Alias' . "\0" . 'active', '' . "\0" . 'Entities\\Alias' . "\0" . 'created', '' . "\0" . 'Entities\\Alias' . "\0" . 'modified', '' . "\0" . 'Entities\\Alias' . "\0" . 'id', '' . "\0" . 'Entities\\Alias' . "\0" . 'Domain', '' . "\0" . 'Entities\\Alias' . "\0" . 'Preferences', '_className', '_preferenceClassName', '' . "\0" . 'Entities\\Alias' . "\0" . '_cache', '' . "\0" . 'Entities\\Alias' . "\0" . '_namespace'];
     }
 
     /**
@@ -82,7 +84,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -97,7 +99,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
     }
 
     /**
@@ -105,7 +107,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
     }
 
     /**
@@ -165,6 +167,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -179,7 +182,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function setAddress($address)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAddress', array($address));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAddress', [$address]);
 
         return parent::setAddress($address);
     }
@@ -190,7 +193,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getAddress()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAddress', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAddress', []);
 
         return parent::getAddress();
     }
@@ -201,7 +204,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function setGoto($goto)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGoto', array($goto));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGoto', [$goto]);
 
         return parent::setGoto($goto);
     }
@@ -212,7 +215,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getGoto()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGoto', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGoto', []);
 
         return parent::getGoto();
     }
@@ -223,7 +226,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function setActive($active)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setActive', array($active));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setActive', [$active]);
 
         return parent::setActive($active);
     }
@@ -234,7 +237,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getActive()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActive', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActive', []);
 
         return parent::getActive();
     }
@@ -245,7 +248,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function setCreated($created)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreated', array($created));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreated', [$created]);
 
         return parent::setCreated($created);
     }
@@ -256,7 +259,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getCreated()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreated', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreated', []);
 
         return parent::getCreated();
     }
@@ -267,7 +270,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function setModified($modified)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setModified', array($modified));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setModified', [$modified]);
 
         return parent::setModified($modified);
     }
@@ -278,7 +281,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getModified()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getModified', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getModified', []);
 
         return parent::getModified();
     }
@@ -293,7 +296,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
     }
@@ -304,7 +307,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function setDomain(\Entities\Domain $domain = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDomain', array($domain));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDomain', [$domain]);
 
         return parent::setDomain($domain);
     }
@@ -315,7 +318,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getDomain()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDomain', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDomain', []);
 
         return parent::getDomain();
     }
@@ -326,7 +329,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function addPreference(\Entities\AliasPreference $preferences)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPreference', array($preferences));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPreference', [$preferences]);
 
         return parent::addPreference($preferences);
     }
@@ -337,7 +340,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function removePreference(\Entities\AliasPreference $preferences)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removePreference', array($preferences));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removePreference', [$preferences]);
 
         return parent::removePreference($preferences);
     }
@@ -348,7 +351,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getPreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreferences', []);
 
         return parent::getPreferences();
     }
@@ -359,7 +362,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function loadPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'loadPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'loadPreference', [$attribute, $index, $includeExpired]);
 
         return parent::loadPreference($attribute, $index, $includeExpired);
     }
@@ -370,7 +373,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function hasPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasPreference', [$attribute, $index, $includeExpired]);
 
         return parent::hasPreference($attribute, $index, $includeExpired);
     }
@@ -381,7 +384,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreference', [$attribute, $index, $includeExpired]);
 
         return parent::getPreference($attribute, $index, $includeExpired);
     }
@@ -392,7 +395,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function setPreference($attribute, $value, $operator = '=', $expires = 0, $index = 0)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreference', array($attribute, $value, $operator, $expires, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreference', [$attribute, $value, $operator, $expires, $index]);
 
         return parent::setPreference($attribute, $value, $operator, $expires, $index);
     }
@@ -403,7 +406,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function addIndexedPreference($attribute, $value, $operator = '=', $expires = 0, $max = 0)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addIndexedPreference', array($attribute, $value, $operator, $expires, $max));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addIndexedPreference', [$attribute, $value, $operator, $expires, $max]);
 
         return parent::addIndexedPreference($attribute, $value, $operator, $expires, $max);
     }
@@ -414,7 +417,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function cleanExpiredPreferences($asOf = NULL, $attribute = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'cleanExpiredPreferences', array($asOf, $attribute));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'cleanExpiredPreferences', [$asOf, $attribute]);
 
         return parent::cleanExpiredPreferences($asOf, $attribute);
     }
@@ -425,7 +428,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function deletePreference($attribute, $index = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deletePreference', array($attribute, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deletePreference', [$attribute, $index]);
 
         return parent::deletePreference($attribute, $index);
     }
@@ -436,7 +439,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function expungePreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'expungePreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'expungePreferences', []);
 
         return parent::expungePreferences();
     }
@@ -447,7 +450,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getIndexedPreference($attribute, $withIndex = false, $ignoreExpired = true)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIndexedPreference', array($attribute, $withIndex, $ignoreExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIndexedPreference', [$attribute, $withIndex, $ignoreExpired]);
 
         return parent::getIndexedPreference($attribute, $withIndex, $ignoreExpired);
     }
@@ -458,7 +461,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function getAssocPreference($attribute, $index = NULL, $ignoreExpired = true)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAssocPreference', array($attribute, $index, $ignoreExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAssocPreference', [$attribute, $index, $ignoreExpired]);
 
         return parent::getAssocPreference($attribute, $index, $ignoreExpired);
     }
@@ -469,7 +472,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function deleteAssocPreference($attribute, $index = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deleteAssocPreference', array($attribute, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deleteAssocPreference', [$attribute, $index]);
 
         return parent::deleteAssocPreference($attribute, $index);
     }
@@ -480,7 +483,7 @@ class Alias extends \Entities\Alias implements \Doctrine\ORM\Proxy\Proxy
     public function _getPreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '_getPreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '_getPreferences', []);
 
         return parent::_getPreferences();
     }

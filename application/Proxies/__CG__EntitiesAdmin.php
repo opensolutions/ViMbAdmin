@@ -12,39 +12,41 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
      *      three parameters, being respectively the proxy object to be initialized, the method that triggered the
      *      initialization process and an array of ordered parameters that were passed to that method.
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setInitializer
+     * @see \Doctrine\Common\Proxy\Proxy::__setInitializer
      */
     public $__initializer__;
 
     /**
      * @var \Closure the callback responsible of loading properties that need to be copied in the cloned object
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setCloner
+     * @see \Doctrine\Common\Proxy\Proxy::__setCloner
      */
     public $__cloner__;
 
     /**
      * @var boolean flag indicating if this object was already initialized
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__isInitialized
+     * @see \Doctrine\Persistence\Proxy::__isInitialized
      */
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
-     *
-     * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
      */
-    public static $lazyPropertiesDefaults = array();
-
-
+    public static $lazyPropertiesNames = array (
+);
 
     /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
+     *
+     * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public function __construct($initializer = null, $cloner = null)
+    public static $lazyPropertiesDefaults = array (
+);
+
+
+
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'username', 'password', 'super', 'active', 'created', 'modified', 'id', 'Admin', 'Logs', 'Domains', 'Preferences', 'RememberMes', 'Archives', '_className', '_preferenceClassName', '_cache', '_namespace');
+            return ['__isInitialized__', '' . "\0" . 'Entities\\Admin' . "\0" . 'username', '' . "\0" . 'Entities\\Admin' . "\0" . 'password', '' . "\0" . 'Entities\\Admin' . "\0" . 'super', '' . "\0" . 'Entities\\Admin' . "\0" . 'active', '' . "\0" . 'Entities\\Admin' . "\0" . 'created', '' . "\0" . 'Entities\\Admin' . "\0" . 'modified', '' . "\0" . 'Entities\\Admin' . "\0" . 'id', '' . "\0" . 'Entities\\Admin' . "\0" . 'Admin', '' . "\0" . 'Entities\\Admin' . "\0" . 'Logs', '' . "\0" . 'Entities\\Admin' . "\0" . 'Domains', '' . "\0" . 'Entities\\Admin' . "\0" . 'Preferences', '' . "\0" . 'Entities\\Admin' . "\0" . 'RememberMes', '' . "\0" . 'Entities\\Admin' . "\0" . 'Archives', '_className', '_preferenceClassName', '' . "\0" . 'Entities\\Admin' . "\0" . '_cache', '' . "\0" . 'Entities\\Admin' . "\0" . '_namespace'];
         }
 
-        return array('__isInitialized__', 'username', 'password', 'super', 'active', 'created', 'modified', 'id', 'Admin', 'Logs', 'Domains', 'Preferences', 'RememberMes', 'Archives', '_className', '_preferenceClassName', '_cache', '_namespace');
+        return ['__isInitialized__', '' . "\0" . 'Entities\\Admin' . "\0" . 'username', '' . "\0" . 'Entities\\Admin' . "\0" . 'password', '' . "\0" . 'Entities\\Admin' . "\0" . 'super', '' . "\0" . 'Entities\\Admin' . "\0" . 'active', '' . "\0" . 'Entities\\Admin' . "\0" . 'created', '' . "\0" . 'Entities\\Admin' . "\0" . 'modified', '' . "\0" . 'Entities\\Admin' . "\0" . 'id', '' . "\0" . 'Entities\\Admin' . "\0" . 'Admin', '' . "\0" . 'Entities\\Admin' . "\0" . 'Logs', '' . "\0" . 'Entities\\Admin' . "\0" . 'Domains', '' . "\0" . 'Entities\\Admin' . "\0" . 'Preferences', '' . "\0" . 'Entities\\Admin' . "\0" . 'RememberMes', '' . "\0" . 'Entities\\Admin' . "\0" . 'Archives', '_className', '_preferenceClassName', '' . "\0" . 'Entities\\Admin' . "\0" . '_cache', '' . "\0" . 'Entities\\Admin' . "\0" . '_namespace'];
     }
 
     /**
@@ -82,7 +84,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -97,7 +99,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
     }
 
     /**
@@ -105,7 +107,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
     }
 
     /**
@@ -165,6 +167,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -179,7 +182,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function setUsername($username)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUsername', array($username));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUsername', [$username]);
 
         return parent::setUsername($username);
     }
@@ -190,7 +193,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getUsername()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUsername', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUsername', []);
 
         return parent::getUsername();
     }
@@ -201,7 +204,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getEmail()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmail', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmail', []);
 
         return parent::getEmail();
     }
@@ -212,7 +215,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getFormattedName()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormattedName', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormattedName', []);
 
         return parent::getFormattedName();
     }
@@ -223,7 +226,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function setPassword($password)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPassword', array($password));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPassword', [$password]);
 
         return parent::setPassword($password);
     }
@@ -234,7 +237,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getPassword()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPassword', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPassword', []);
 
         return parent::getPassword();
     }
@@ -245,7 +248,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function setSuper($super)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSuper', array($super));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSuper', [$super]);
 
         return parent::setSuper($super);
     }
@@ -256,7 +259,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getSuper()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSuper', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSuper', []);
 
         return parent::getSuper();
     }
@@ -267,7 +270,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function isSuper()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isSuper', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'isSuper', []);
 
         return parent::isSuper();
     }
@@ -278,7 +281,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function setActive($active)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setActive', array($active));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setActive', [$active]);
 
         return parent::setActive($active);
     }
@@ -289,7 +292,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getActive()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActive', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActive', []);
 
         return parent::getActive();
     }
@@ -300,7 +303,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function setCreated($created)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreated', array($created));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCreated', [$created]);
 
         return parent::setCreated($created);
     }
@@ -311,7 +314,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getCreated()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreated', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCreated', []);
 
         return parent::getCreated();
     }
@@ -322,7 +325,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function setModified($modified)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setModified', array($modified));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setModified', [$modified]);
 
         return parent::setModified($modified);
     }
@@ -333,7 +336,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getModified()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getModified', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getModified', []);
 
         return parent::getModified();
     }
@@ -348,7 +351,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
     }
@@ -359,7 +362,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function addAdmin(\Entities\AdminPreference $admin)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addAdmin', array($admin));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addAdmin', [$admin]);
 
         return parent::addAdmin($admin);
     }
@@ -370,7 +373,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function removeAdmin(\Entities\AdminPreference $admin)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeAdmin', array($admin));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeAdmin', [$admin]);
 
         return parent::removeAdmin($admin);
     }
@@ -381,7 +384,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getAdmin()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAdmin', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAdmin', []);
 
         return parent::getAdmin();
     }
@@ -392,7 +395,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function addLog(\Entities\Log $logs)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addLog', array($logs));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addLog', [$logs]);
 
         return parent::addLog($logs);
     }
@@ -403,7 +406,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function removeLog(\Entities\Log $logs)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeLog', array($logs));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeLog', [$logs]);
 
         return parent::removeLog($logs);
     }
@@ -414,7 +417,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getLogs()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLogs', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLogs', []);
 
         return parent::getLogs();
     }
@@ -425,7 +428,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function addDomain(\Entities\Domain $domains)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addDomain', array($domains));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addDomain', [$domains]);
 
         return parent::addDomain($domains);
     }
@@ -436,7 +439,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function removeDomain(\Entities\Domain $domains)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeDomain', array($domains));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeDomain', [$domains]);
 
         return parent::removeDomain($domains);
     }
@@ -447,7 +450,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getDomains()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDomains', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDomains', []);
 
         return parent::getDomains();
     }
@@ -458,7 +461,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function addPreference(\Entities\AdminPreference $preferences)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPreference', array($preferences));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPreference', [$preferences]);
 
         return parent::addPreference($preferences);
     }
@@ -469,7 +472,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function removePreference(\Entities\AdminPreference $preferences)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removePreference', array($preferences));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removePreference', [$preferences]);
 
         return parent::removePreference($preferences);
     }
@@ -480,7 +483,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getPreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreferences', []);
 
         return parent::getPreferences();
     }
@@ -491,7 +494,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function canManageDomain($domain)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'canManageDomain', array($domain));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'canManageDomain', [$domain]);
 
         return parent::canManageDomain($domain);
     }
@@ -502,7 +505,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function addAdminPreference(\Entities\AdminPreference $preferences)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addAdminPreference', array($preferences));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addAdminPreference', [$preferences]);
 
         return parent::addAdminPreference($preferences);
     }
@@ -513,7 +516,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function addRememberMe(\Entities\RememberMe $rememberMes)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addRememberMe', array($rememberMes));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addRememberMe', [$rememberMes]);
 
         return parent::addRememberMe($rememberMes);
     }
@@ -524,7 +527,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function removeRememberMe(\Entities\RememberMe $rememberMes)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeRememberMe', array($rememberMes));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeRememberMe', [$rememberMes]);
 
         return parent::removeRememberMe($rememberMes);
     }
@@ -535,7 +538,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getRememberMes()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRememberMes', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRememberMes', []);
 
         return parent::getRememberMes();
     }
@@ -546,7 +549,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function addArchive(\Entities\Archive $archives)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addArchive', array($archives));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addArchive', [$archives]);
 
         return parent::addArchive($archives);
     }
@@ -557,7 +560,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function removeArchive(\Entities\Archive $archives)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeArchive', array($archives));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeArchive', [$archives]);
 
         return parent::removeArchive($archives);
     }
@@ -568,7 +571,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getArchives()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArchives', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getArchives', []);
 
         return parent::getArchives();
     }
@@ -579,7 +582,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function loadPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'loadPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'loadPreference', [$attribute, $index, $includeExpired]);
 
         return parent::loadPreference($attribute, $index, $includeExpired);
     }
@@ -590,7 +593,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function hasPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasPreference', [$attribute, $index, $includeExpired]);
 
         return parent::hasPreference($attribute, $index, $includeExpired);
     }
@@ -601,7 +604,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getPreference($attribute, $index = 0, $includeExpired = false)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreference', array($attribute, $index, $includeExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreference', [$attribute, $index, $includeExpired]);
 
         return parent::getPreference($attribute, $index, $includeExpired);
     }
@@ -612,7 +615,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function setPreference($attribute, $value, $operator = '=', $expires = 0, $index = 0)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreference', array($attribute, $value, $operator, $expires, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPreference', [$attribute, $value, $operator, $expires, $index]);
 
         return parent::setPreference($attribute, $value, $operator, $expires, $index);
     }
@@ -623,7 +626,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function addIndexedPreference($attribute, $value, $operator = '=', $expires = 0, $max = 0)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addIndexedPreference', array($attribute, $value, $operator, $expires, $max));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addIndexedPreference', [$attribute, $value, $operator, $expires, $max]);
 
         return parent::addIndexedPreference($attribute, $value, $operator, $expires, $max);
     }
@@ -634,7 +637,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function cleanExpiredPreferences($asOf = NULL, $attribute = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'cleanExpiredPreferences', array($asOf, $attribute));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'cleanExpiredPreferences', [$asOf, $attribute]);
 
         return parent::cleanExpiredPreferences($asOf, $attribute);
     }
@@ -645,7 +648,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function deletePreference($attribute, $index = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deletePreference', array($attribute, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deletePreference', [$attribute, $index]);
 
         return parent::deletePreference($attribute, $index);
     }
@@ -656,7 +659,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function expungePreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'expungePreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'expungePreferences', []);
 
         return parent::expungePreferences();
     }
@@ -667,7 +670,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getIndexedPreference($attribute, $withIndex = false, $ignoreExpired = true)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIndexedPreference', array($attribute, $withIndex, $ignoreExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIndexedPreference', [$attribute, $withIndex, $ignoreExpired]);
 
         return parent::getIndexedPreference($attribute, $withIndex, $ignoreExpired);
     }
@@ -678,7 +681,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function getAssocPreference($attribute, $index = NULL, $ignoreExpired = true)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAssocPreference', array($attribute, $index, $ignoreExpired));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAssocPreference', [$attribute, $index, $ignoreExpired]);
 
         return parent::getAssocPreference($attribute, $index, $ignoreExpired);
     }
@@ -689,7 +692,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function deleteAssocPreference($attribute, $index = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deleteAssocPreference', array($attribute, $index));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'deleteAssocPreference', [$attribute, $index]);
 
         return parent::deleteAssocPreference($attribute, $index);
     }
@@ -700,7 +703,7 @@ class Admin extends \Entities\Admin implements \Doctrine\ORM\Proxy\Proxy
     public function _getPreferences()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '_getPreferences', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '_getPreferences', []);
 
         return parent::_getPreferences();
     }

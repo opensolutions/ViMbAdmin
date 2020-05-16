@@ -12,39 +12,41 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
      *      three parameters, being respectively the proxy object to be initialized, the method that triggered the
      *      initialization process and an array of ordered parameters that were passed to that method.
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setInitializer
+     * @see \Doctrine\Common\Proxy\Proxy::__setInitializer
      */
     public $__initializer__;
 
     /**
      * @var \Closure the callback responsible of loading properties that need to be copied in the cloned object
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__setCloner
+     * @see \Doctrine\Common\Proxy\Proxy::__setCloner
      */
     public $__cloner__;
 
     /**
      * @var boolean flag indicating if this object was already initialized
      *
-     * @see \Doctrine\Common\Persistence\Proxy::__isInitialized
+     * @see \Doctrine\Persistence\Proxy::__isInitialized
      */
     public $__isInitialized__ = false;
 
     /**
-     * @var array properties to be lazy loaded, with keys being the property
-     *            names and values being their default values
-     *
-     * @see \Doctrine\Common\Persistence\Proxy::__getLazyProperties
+     * @var array<string, null> properties to be lazy loaded, indexed by property name
      */
-    public static $lazyPropertiesDefaults = array();
-
-
+    public static $lazyPropertiesNames = array (
+);
 
     /**
-     * @param \Closure $initializer
-     * @param \Closure $cloner
+     * @var array<string, mixed> default values of properties to be lazy loaded, with keys being the property names
+     *
+     * @see \Doctrine\Common\Proxy\Proxy::__getLazyProperties
      */
-    public function __construct($initializer = null, $cloner = null)
+    public static $lazyPropertiesDefaults = array (
+);
+
+
+
+    public function __construct(?\Closure $initializer = null, ?\Closure $cloner = null)
     {
 
         $this->__initializer__ = $initializer;
@@ -64,10 +66,10 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'version', 'id', 'name', 'applied_on');
+            return ['__isInitialized__', '' . "\0" . 'Entities\\DatabaseVersion' . "\0" . 'version', '' . "\0" . 'Entities\\DatabaseVersion' . "\0" . 'id', '' . "\0" . 'Entities\\DatabaseVersion' . "\0" . 'name', '' . "\0" . 'Entities\\DatabaseVersion' . "\0" . 'applied_on'];
         }
 
-        return array('__isInitialized__', 'version', 'id', 'name', 'applied_on');
+        return ['__isInitialized__', '' . "\0" . 'Entities\\DatabaseVersion' . "\0" . 'version', '' . "\0" . 'Entities\\DatabaseVersion' . "\0" . 'id', '' . "\0" . 'Entities\\DatabaseVersion' . "\0" . 'name', '' . "\0" . 'Entities\\DatabaseVersion' . "\0" . 'applied_on'];
     }
 
     /**
@@ -82,7 +84,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
 
                 $existingProperties = get_object_vars($proxy);
 
-                foreach ($proxy->__getLazyProperties() as $property => $defaultValue) {
+                foreach ($proxy::$lazyPropertiesDefaults as $property => $defaultValue) {
                     if ( ! array_key_exists($property, $existingProperties)) {
                         $proxy->$property = $defaultValue;
                     }
@@ -97,7 +99,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
      */
     public function __clone()
     {
-        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', array());
+        $this->__cloner__ && $this->__cloner__->__invoke($this, '__clone', []);
     }
 
     /**
@@ -105,7 +107,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
      */
     public function __load()
     {
-        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__load', []);
     }
 
     /**
@@ -165,6 +167,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
     /**
      * {@inheritDoc}
      * @internal generated method: use only when explicitly handling proxy specific loading logic
+     * @deprecated no longer in use - generated code now relies on internal components rather than generated public API
      * @static
      */
     public function __getLazyProperties()
@@ -179,7 +182,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
     public function setVersion($version)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVersion', array($version));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setVersion', [$version]);
 
         return parent::setVersion($version);
     }
@@ -190,7 +193,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
     public function getVersion()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVersion', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVersion', []);
 
         return parent::getVersion();
     }
@@ -205,7 +208,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
         }
 
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
     }
@@ -216,7 +219,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
     public function setName($name)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setName', array($name));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setName', [$name]);
 
         return parent::setName($name);
     }
@@ -227,7 +230,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
     public function getName()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getName', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getName', []);
 
         return parent::getName();
     }
@@ -238,7 +241,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
     public function setAppliedOn($appliedOn)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAppliedOn', array($appliedOn));
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAppliedOn', [$appliedOn]);
 
         return parent::setAppliedOn($appliedOn);
     }
@@ -249,7 +252,7 @@ class DatabaseVersion extends \Entities\DatabaseVersion implements \Doctrine\ORM
     public function getAppliedOn()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppliedOn', array());
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppliedOn', []);
 
         return parent::getAppliedOn();
     }

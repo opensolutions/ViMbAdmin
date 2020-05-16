@@ -396,10 +396,25 @@ vimbadmin_plugins.AccessPermissions.type.SIEVE = "SIEVE"
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Allow admins to force that for a mailbox/domain basic aliases are existing
+; If a new mailbox is created the system will check if the aliases are existing, if not they are created.
 
+vimbadmin_plugins.MailboxAutomaticAliases.disabled = false
 
+; These aliases should always exist, it is not recommened to delete it
+vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "postmaster"
+vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "abuse"
 
+; These aliases are optional, but it recommended to not remove them
+vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "hostmaster"
+vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "webmaster"
 
+; Define this if emails should be forwarded to a fixed address instead of the first mailbox address of the domain
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.postmaster = "postmaster@example.net"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.abuse = "abuse@example.net"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.hostmaster = "hostmaster@example.net"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.webmaster = "webmaster@example.net"
 
 
 

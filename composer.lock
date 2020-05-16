@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74f28618f83e50c53982304b5b4cb3fc",
+    "content-hash": "97e52f36368338b6aa3f8c629a25ea26",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -975,123 +975,6 @@
             "time": "2020-03-27T11:06:43+00:00"
         },
         {
-            "name": "komola/bootstrap-zend-framework",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/opensolutions/Bootstrap-Zend-Framework.git",
-                "reference": "f81b60c1f477f4fbe4266b6d811a3eff9491f285"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/opensolutions/Bootstrap-Zend-Framework/zipball/f81b60c1f477f4fbe4266b6d811a3eff9491f285",
-                "reference": "f81b60c1f477f4fbe4266b6d811a3eff9491f285",
-                "shasum": ""
-            },
-            "require": {
-                "zendframework/zendframework1": "1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Twitter_": "library"
-                }
-            },
-            "include-path": [
-                "library/"
-            ],
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Sebastian Hoitz",
-                    "email": "hoitz@komola.de",
-                    "homepage": "http://komola.de"
-                }
-            ],
-            "description": "Twitter bootstrap for ZF1",
-            "support": {
-                "source": "https://github.com/opensolutions/Bootstrap-Zend-Framework/tree/master"
-            },
-            "time": "2014-02-03T20:52:54+00:00"
-        },
-        {
-            "name": "opensolutions/minify",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/opensolutions/Minify.git",
-                "reference": "7463254585f3f145bb7e63e186c919591848f680"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/opensolutions/Minify/zipball/7463254585f3f145bb7e63e186c919591848f680",
-                "reference": "7463254585f3f145bb7e63e186c919591848f680",
-                "shasum": ""
-            },
-            "bin": [
-                "minify.php"
-            ],
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Barry O'Donovan",
-                    "email": "barry@opensolutions.ie",
-                    "homepage": "http://www.barryodonovan.com/",
-                    "role": "Lead Developer"
-                }
-            ],
-            "description": "A JS and CSS minifier tool (with additional benefits for projects using template engines such as Smarty)",
-            "keywords": [
-                "minifier",
-                "minify"
-            ],
-            "time": "2014-02-05T09:45:35+00:00"
-        },
-        {
-            "name": "opensolutions/oss-framework",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/opensolutions/OSS-Framework.git",
-                "reference": "f82b4f5dbfbcd8923c145cafe7ada1ade35eba96"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/opensolutions/OSS-Framework/zipball/f82b4f5dbfbcd8923c145cafe7ada1ade35eba96",
-                "reference": "f82b4f5dbfbcd8923c145cafe7ada1ade35eba96",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "zendframework/zendframework1": "~1.12"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "OSS_": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Open Solutions' extension to Zend Framework 1.",
-            "keywords": [
-                "opensolutions",
-                "oss"
-            ],
-            "time": "2017-02-15T11:28:10+00:00"
-        },
-        {
             "name": "psr/container",
             "version": "1.0.0",
             "source": {
@@ -1541,13 +1424,48 @@
             "time": "2019-11-18T17:27:11+00:00"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "opensolutions/minify",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opensolutions/Minify.git",
+                "reference": "7463254585f3f145bb7e63e186c919591848f680"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opensolutions/Minify/zipball/7463254585f3f145bb7e63e186c919591848f680",
+                "reference": "7463254585f3f145bb7e63e186c919591848f680",
+                "shasum": ""
+            },
+            "bin": [
+                "minify.php"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Barry O'Donovan",
+                    "email": "barry@opensolutions.ie",
+                    "homepage": "http://www.barryodonovan.com/",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "A JS and CSS minifier tool (with additional benefits for projects using template engines such as Smarty)",
+            "keywords": [
+                "minifier",
+                "minify"
+            ],
+            "time": "2014-02-05T09:45:35+00:00"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "opensolutions/oss-framework": 20,
-        "komola/bootstrap-zend-framework": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

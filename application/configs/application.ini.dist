@@ -592,7 +592,7 @@ appnamespace = "ViMbAdmin"
 
 temporary_directory = APPLICATION_PATH "/../var/tmp"
 
-pluginPaths.OSS_Resource = APPLICATION_PATH "/../vendor/opensolutions/oss-framework/src/OSS/Resource"
+pluginPaths.OSS_Resource = APPLICATION_PATH "/../library/OSS/Resource"
 pluginPaths.ViMbAdmin_Resource = APPLICATION_PATH "/../library/ViMbAdmin/Resource"
 
 mini_js = 1
@@ -670,7 +670,7 @@ resources.smarty.compiled  = APPLICATION_PATH "/../var/templates_c"
 resources.smarty.cache     = APPLICATION_PATH "/../var/cache"
 resources.smarty.config    = APPLICATION_PATH "/configs/smarty"
 resources.smarty.plugins[] = APPLICATION_PATH "/../library/ViMbAdmin/Smarty/functions"
-resources.smarty.plugins[] = APPLICATION_PATH "/../vendor/opensolutions/oss-framework/src/OSS/Smarty/functions"
+resources.smarty.plugins[] = APPLICATION_PATH "/../library/OSS/Smarty/functions"
 resources.smarty.plugins[] = APPLICATION_PATH "/../vendor/smarty/smarty/libs/plugins"
 resources.smarty.plugins[] = APPLICATION_PATH "/../vendor/smarty/smarty/libs/sysplugins"
 resources.smarty.debugging = 0

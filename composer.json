@@ -19,21 +19,24 @@
             "role": "Development Team"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/opensolutions/Bootstrap-Zend-Framework"
-        }
-    ],
     "require": {
         "php": ">=5.4.0",
         "doctrine/orm": "2.6.*",
-        "opensolutions/oss-framework": "dev-master",
         "shardj/zf1-future": "1.*",
-        "opensolutions/minify": "1.*",
-        "komola/bootstrap-zend-framework": "dev-master",
         "smarty/smarty": "~3.1"
     },
+    "require-dev": {
+        "opensolutions/minify": "1.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "OSS_": "library/",
+            "Twitter_": "library"
+        }
+    },
+    "include-path": [
+        "library/"
+    ],
     "support": {
         "issues": "https://github.com/opensolutions/ViMbAdmin/issues",
         "wiki": "https://github.com/opensolutions/ViMbAdmin/wiki",

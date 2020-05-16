@@ -27,9 +27,9 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "doctrine/orm": "2.4.*",
+        "doctrine/orm": "2.6.*",
         "opensolutions/oss-framework": "dev-master",
-        "zendframework/zendframework1": "~1.12",
+        "shardj/zf1-future": "1.*",
         "opensolutions/minify": "1.*",
         "komola/bootstrap-zend-framework": "dev-master",
         "smarty/smarty": "~3.1"

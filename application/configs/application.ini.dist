@@ -444,7 +444,7 @@ vimbadmin_plugins.DirectoryEntry.disabled_elements.GivenName                = fa
 vimbadmin_plugins.DirectoryEntry.disabled_elements.Sn                       = false
 vimbadmin_plugins.DirectoryEntry.disabled_elements.DisplayName              = false
 vimbadmin_plugins.DirectoryEntry.disabled_elements.Initials                 = false
-vimbadmin_plugins.DirectoryEntry.disabled_elements.BusinesCategory          = false
+vimbadmin_plugins.DirectoryEntry.disabled_elements.BusinessCategory         = false
 vimbadmin_plugins.DirectoryEntry.disabled_elements.EmployeeType             = false
 vimbadmin_plugins.DirectoryEntry.disabled_elements.Title                    = false
 vimbadmin_plugins.DirectoryEntry.disabled_elements.DepartmentNumber         = false
@@ -459,7 +459,7 @@ vimbadmin_plugins.DirectoryEntry.disabled_elements.Mobile                   = fa
 vimbadmin_plugins.DirectoryEntry.disabled_elements.Pager                    = false
 vimbadmin_plugins.DirectoryEntry.disabled_elements.FacsimileTelephoneNumber = false
 vimbadmin_plugins.DirectoryEntry.disabled_elements.HomePostalAddress        = false
-vimbadmin_plugins.DirectoryEntry.disabled_elements.LabeledUri               = false
+vimbadmin_plugins.DirectoryEntry.disabled_elements.LabeledURI               = false
 vimbadmin_plugins.DirectoryEntry.disabled_elements.Manager                  = false
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

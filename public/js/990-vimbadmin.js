@@ -43,7 +43,6 @@ var vm_cookie_options = {
 };
 
 var vm_prefs = {
-	'iLength' : 10
 };
 
 var cprefs = $.jsonCookie( 'vm_prefs' );

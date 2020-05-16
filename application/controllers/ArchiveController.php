@@ -477,6 +477,8 @@ class ArchiveController extends ViMbAdmin_Controller_PluginAction
             $this->_notifyAdmin( $archive->getArchivedBy(), "archive/email/archive-restored.txt", "Mailbox restored", 
                 $data['mailbox']->getUsername() );
 
+            $data['mailbox']->getDomain()->setMailboxCount( $data['mailbox']->getDomain()->getMailboxCount() + 1 );
+
             $this->getD2EM()->remove( $this->getD2EM()->getRepository( "\\Entities\\Archive" )->find( $archive->getId() ) );
             $this->getD2EM()->flush();
 

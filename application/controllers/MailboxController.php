@@ -199,14 +199,15 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                 $form->getElement( 'domain' )->setValue( $this->getDomain()->getId() );
 
 
-            if( $this->isEdit() )
-            {
-                $form->removeElement( 'password' );
-                $form->removeElement( 'local_part' );
-                $form->removeElement( 'domain'     );
+            if( $this->isEdit() ) {
+                $form->removeElement('password');
+                $form->removeElement('local_part');
+                $form->removeElement('domain');
+            } elseif( $this->getDomain() ) {
+                $form->getElement( "quota"  )->setValue( $this->getDomain()->getQuota() ? $this->getDomain()->getQuota() : 0 );
+            } else {
+                $form->getElement("quota")->setValue(0);
             }
-            else
-                $form->getElement( "quota"  )->setValue( 0 );
 
             $this->view->form = $this->mailboxForm = $form;
 

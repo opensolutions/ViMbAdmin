@@ -357,7 +357,18 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
                 );
 
                 $this->notify( 'mailbox', 'add', 'addPreflush', $this );
-                $this->getD2EM()->flush();
+
+                try {
+                    $this->getD2EM()->flush();
+                } catch( Doctrine\DBAL\Exception\UniqueConstraintViolationException $e ) {
+                    if( strpos( $e->getMessage(), 'occurred while executing \'INSERT INTO alias' ) > 0 ) {
+                        $this->addMessage(_("An alias already exists for the mailbox you are trying to create. Please delete the alias first."), OSS_Message::ERROR);
+                        return;
+                    }
+                    throw $e;
+                }
+
+
                 $this->notify( 'mailbox', 'add', 'addPostflush', $this, [ 'options' => $this->_options ] );
 
                 if( $form->getValue( 'welcome_email' ) )

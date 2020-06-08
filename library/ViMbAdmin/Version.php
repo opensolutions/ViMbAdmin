@@ -46,7 +46,7 @@ final class ViMbAdmin_Version
     /**
      * Version identification - see compareVersion()
      */
-    const VERSION = '3.1.1';
+    const VERSION = '3.2.1';
 
     /**
      * Database schema version

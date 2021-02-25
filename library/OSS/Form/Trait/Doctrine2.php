@@ -37,6 +37,8 @@
  * @author     The Skilled Team of PHP Developers at Open Solutions <info@opensolutions.ie>
  */
 
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\NoopWordInflector;
 
 /**
  * Functionality for creating / editing elements and other functionality using a Doctrine2 backend
@@ -60,13 +62,14 @@ trait OSS_Form_Trait_Doctrine2
      */
     public function assignFormToEntity( $entity, $controller, $isEdit )
     {
+        $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
         $fields  = $controller->getD2EM()->getClassMetadata( get_class( $entity ) )->getFieldNames();
     
         foreach( $this->getElements() as $eName => $eConfig )
         {
             if( in_array( $eName, $fields ) && !$eConfig->getAttrib( 'readonly' ) )
             {
-                $fn = 'set' . Doctrine\Common\Util\Inflector::classify( $eName );
+                $fn = 'set' . $inflector->classify( $eName );
                 $entity->$fn( $this->getValue( $eName ) );
             }
         }
@@ -85,13 +88,14 @@ trait OSS_Form_Trait_Doctrine2
      */
     public function assignEntityToForm( $entity, $controller, $isEdit = true )
     {
+        $inflector = new Inflector(new NoopWordInflector(), new NoopWordInflector());
         $fields  = $controller->getD2EM()->getClassMetadata( get_class( $entity ) )->getFieldNames();
     
         foreach( $this->getElements() as $eName => $eConfig )
         {
             if( in_array( $eName, $fields ) )
             {
-                $fn = 'get' . Doctrine\Common\Util\Inflector::classify( $eName );
+                $fn = 'get' . $inflector->classify( $eName );
                 
                 if( $entity->$fn() instanceof DateTime )
                     $this->getElement( $eName )->setValue( $entity->$fn()->format( 'Y-m-d H:i:s' ) );

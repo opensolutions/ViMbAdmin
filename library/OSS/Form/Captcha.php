@@ -92,6 +92,7 @@ class OSS_Form_Captcha
             ->setRequired( true )
             ->addValidator( 'StringLength', true, array( 6, 10 ) )
             ->addFilter( 'StringTrim' )
+            ->addFilter( 'HtmlEntitiesDecode' )
             ->addFilter( 'StripSlashes' );
     }
 

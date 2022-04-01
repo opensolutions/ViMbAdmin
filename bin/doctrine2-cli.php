@@ -59,7 +59,7 @@ $helpers = array(
     'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper( $em )
 );
 
-$cli = new \Symfony\Component\Console\Application( 'Doctrine Command Line Interface', Doctrine\Common\Version::VERSION );
+$cli = new \Symfony\Component\Console\Application( 'Doctrine Command Line Interface' );
 $cli->setCatchExceptions(true);
 $helperSet = $cli->getHelperSet();
 foreach ($helpers as $name => $helper) {

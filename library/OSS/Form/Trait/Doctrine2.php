@@ -37,6 +37,13 @@
  * @author     The Skilled Team of PHP Developers at Open Solutions <info@opensolutions.ie>
  */
 
+use Doctrine\Inflector\CachedWordInflector;
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\Rules\English;
+use Doctrine\Inflector\RulesetInflector;
+
+
+
 
 /**
  * Functionality for creating / editing elements and other functionality using a Doctrine2 backend
@@ -66,7 +73,7 @@ trait OSS_Form_Trait_Doctrine2
         {
             if( in_array( $eName, $fields ) && !$eConfig->getAttrib( 'readonly' ) )
             {
-                $fn = 'set' . Doctrine\Common\Util\Inflector::classify( $eName );
+                $fn = 'set' . static::inflector()->classify( $eName );
                 $entity->$fn( $this->getValue( $eName ) );
             }
         }
@@ -91,7 +98,7 @@ trait OSS_Form_Trait_Doctrine2
         {
             if( in_array( $eName, $fields ) )
             {
-                $fn = 'get' . Doctrine\Common\Util\Inflector::classify( $eName );
+                $fn = 'get' . static::inflector()->classify( $eName );
                 
                 if( $entity->$fn() instanceof DateTime )
                     $this->getElement( $eName )->setValue( $entity->$fn()->format( 'Y-m-d H:i:s' ) );
@@ -207,6 +214,20 @@ trait OSS_Form_Trait_Doctrine2
     
         return( $maxId );
     }
-    
+
+
+
+    protected static function inflector()
+    {
+        return new Inflector(
+            new CachedWordInflector(new RulesetInflector(
+                English\Rules::getSingularRuleset()
+            )),
+            new CachedWordInflector(new RulesetInflector(
+                English\Rules::getPluralRuleset()
+            ))
+        );
+    }
+
     
 }

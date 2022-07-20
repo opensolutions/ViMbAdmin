@@ -408,18 +408,22 @@ class MailboxController extends ViMbAdmin_Controller_PluginAction
         if( !$this->getMailbox() )
             print 'ko';
 
-        $this->getMailbox()->setActive( !$this->getMailbox()->getActive() );
-        $this->getMailbox()->setModified( new \DateTime() );
+        if($this->notify( 'mailbox', 'toggleActive', 'preToggle', $this, [ 'active' => $this->getMailbox()->getActive() ]) === true) {
+            $this->getMailbox()->setActive( !$this->getMailbox()->getActive() );
+            $this->getMailbox()->setModified( new \DateTime() );
 
-        $this->log(
-            $this->getMailbox()->getActive() ? \Entities\Log::ACTION_MAILBOX_ACTIVATE : \Entities\Log::ACTION_MAILBOX_DEACTIVATE,
-            "{$this->getAdmin()->getFormattedName()} " . ( $this->getMailbox()->getActive() ? 'activated' : 'deactivated' ) . " mailbox {$this->getMailbox()->getUsername()}"
-        );
+            $this->log(
+                $this->getMailbox()->getActive() ? \Entities\Log::ACTION_MAILBOX_ACTIVATE : \Entities\Log::ACTION_MAILBOX_DEACTIVATE,
+                "{$this->getAdmin()->getFormattedName()} " . ( $this->getMailbox()->getActive() ? 'activated' : 'deactivated' ) . " mailbox {$this->getMailbox()->getUsername()}"
+            );
 
-        $this->notify( 'mailbox', 'toggleActive', 'postflush', $this, [ 'active' => $this->getMailbox()->getActive() ] );
-        $this->getD2EM()->flush();
-        $this->notify( 'mailbox', 'toggleActive', 'postflush', $this, [ 'active' => $this->getMailbox()->getActive() ] );
-        print 'ok';
+            $this->notify( 'mailbox', 'toggleActive', 'preflush', $this, [ 'active' => $this->getMailbox()->getActive() ] );
+            $this->getD2EM()->flush();
+            $this->notify( 'mailbox', 'toggleActive', 'postflush', $this, [ 'active' => $this->getMailbox()->getActive() ] );
+            print 'ok';
+        } else {
+            print 'ko';
+        }
     }
 
 

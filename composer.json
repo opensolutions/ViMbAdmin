@@ -23,7 +23,7 @@
         "php": ">=5.4.0",
         "doctrine/orm": "2.8.*",
         "shardj/zf1-future": "1.*",
-        "smarty/smarty": "~3.1"
+        "smarty/smarty": "~4.2"
     },
     "require-dev": {
         "opensolutions/minify": "1.*"

@@ -359,7 +359,7 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
             $this->getD2EM()->flush();
             $this->notify( 'alias', 'delete', 'postFlush', $this );
 
-            $this->addMessage( 'Alias has bean removed successfully', OSS_Message::SUCCESS );
+            $this->addMessage( 'Alias has been removed successfully', OSS_Message::SUCCESS );
         }
         $this->redirect( 'alias/list' );
     }

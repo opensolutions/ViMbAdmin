@@ -367,13 +367,6 @@ skipVersionCheck = 0
 skipInstallPingback = 0
 
 
-
-
-
-
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Allow admins to dictate whether a user can use BOTH, IMAP ONLY,
 ; POP3 ONLY when creating mailboxes.
@@ -395,7 +388,6 @@ vimbadmin_plugins.AccessPermissions.type.POP3  = "POP3"
 vimbadmin_plugins.AccessPermissions.type.SIEVE = "SIEVE"
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Allow admins to force that for a mailbox/domain basic aliases are existing
 ; If a new mailbox is created the system will check if the aliases are existing, if not they are created.
@@ -411,10 +403,9 @@ vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "hostmaster"
 vimbadmin_plugins.MailboxAutomaticAliases.defaultAliases[] = "webmaster"
 
 ; Define this if emails should be forwarded to a fixed address instead of the first mailbox address of the domain
-;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.postmaster = "postmaster@example.net"
-;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.abuse = "abuse@example.net"
-;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.hostmaster = "hostmaster@example.net"
-;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.webmaster = "webmaster@example.net"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.postmaster = "@other.tld"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.abuse = "postmaster"
+;vimbadmin_plugins.MailboxAutomaticAliases.defaultMapping.* = "root@domain.tld"
 
 
 

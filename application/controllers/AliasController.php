@@ -327,10 +327,10 @@ class AliasController extends ViMbAdmin_Controller_PluginAction
             $this->notify( 'alias', 'toggleActive', 'preflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
             $this->getD2EM()->flush();
             $this->notify( 'alias', 'toggleActive', 'postflush', $this, [ 'active' => $this->getAlias()->getActive() ] );
+            print 'ok';
         } else {
             print 'ko';
         }
-        print 'ok';
     }
 
 

@@ -13,6 +13,9 @@
     </field>
     <field name="created" type="datetime" nullable="false"/>
     <field name="modified" type="datetime" nullable="true"/>
+    <unique-constraints>
+      <unique-constraint name="IX_Address_1" columns="address"/>
+    </unique-constraints>
     <many-to-one field="Domain" target-entity="Entities\Domain" inversed-by="Aliases">
       <join-columns>
         <join-column name="Domain_id" referenced-column-name="id"/>

@@ -38,6 +38,9 @@
     </field>
     <field name="created" type="datetime" nullable="false"/>
     <field name="modified" type="datetime" nullable="true"/>
+    <unique-constraints>
+      <unique-constraint name="IX_Username_1" columns="username"/>
+    </unique-constraints>
     <many-to-one field="Domain" target-entity="Entities\Domain" inversed-by="Mailboxes">
       <join-columns>
         <join-column name="Domain_id" referenced-column-name="id"/>

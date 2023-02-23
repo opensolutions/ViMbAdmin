@@ -228,16 +228,6 @@ class OSS_View_Smarty extends Zend_View_Abstract
     }
 
 
-    /**
-     * Retrieve an assigned variable
-     *
-     * @param string $key The variable name.
-     * @return mixed The variable value.
-     */
-    public function __get( $key )
-    {
-        return $this->_smarty->getTemplateVars( $key );
-    }
 
 
     /**

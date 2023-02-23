@@ -20,10 +20,10 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=8.0.0",
         "doctrine/orm": "2.8.*",
         "shardj/zf1-future": "1.*",
-        "smarty/smarty": "~3.1"
+        "smarty/smarty": "~4.3.0"
     },
     "require-dev": {
         "opensolutions/minify": "1.*"
@@ -41,5 +41,10 @@
         "issues": "https://github.com/opensolutions/ViMbAdmin/issues",
         "wiki": "https://github.com/opensolutions/ViMbAdmin/wiki",
         "source": "https://github.com/opensolutions/ViMbAdmin"
+    },
+    "config": {
+        "platform": {
+            "php": "8.0"
+        }
     }
 }

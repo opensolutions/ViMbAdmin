@@ -37,7 +37,6 @@
  */
 
 use Doctrine\ORM\Mapping\ClassMetadata,
-    Doctrine\Common\Util\Inflector,
     Doctrine\ORM\EntityManager;
 
 /**
@@ -93,6 +92,21 @@ class OSS_Doctrine2_EntitySerializer
         return $this;
     }
 
+
+    /**
+     * Snake case type function
+     * @param $value
+     * @return array|false|mixed|string|string[]|null
+     */
+    public function tableize($value)
+    {
+        if( !ctype_lower($value)) {
+            $value = preg_replace('/\s+/u', '', ucwords($value));
+            $value = mb_strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1'.'_', $value), 'UTF-8');
+        }
+        return $value;
+    }
+
     protected function _serializeEntity( $entity )
     {
         $className = get_class( $entity );
@@ -103,7 +117,7 @@ class OSS_Doctrine2_EntitySerializer
         foreach( $metadata->fieldMappings as $field => $mapping )
         {
             $value = $metadata->reflFields[$field]->getValue( $entity );
-            $field = Inflector::tableize( $field );
+            $field = $this->tableize( $field );
             if( $value instanceof \DateTime )
             {
                 // We cast DateTime to array to keep consistency with array result
@@ -121,7 +135,7 @@ class OSS_Doctrine2_EntitySerializer
   
         foreach( $metadata->associationMappings as $field => $mapping )
         {
-            $key = Inflector::tableize( $field );
+            $key = $this->tableize( $field );
             if( $mapping['isCascadeDetach'] )
             {
                 $data[$key] = $metadata->reflFields[$field]->getValue( $entity );

@@ -59,7 +59,7 @@ function smarty_modifier_date_formatter($string, $format=null, $default_date='',
             $format = str_replace($_win_from, $_win_to, $format);
         }
 
-        return strftime($format, $timestamp);
+        return date($format, $timestamp);
     } else {
         return date($format, $timestamp);
     }

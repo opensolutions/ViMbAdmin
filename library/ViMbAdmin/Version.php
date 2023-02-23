@@ -49,6 +49,14 @@ final class ViMbAdmin_Version
     const VERSION = '3.3.0';
 
     /**
+     * Version milestone
+     *
+     * The version milestone is used to publicly identify the running version
+     * and should therefore not include the patch level.
+     */
+    const MILESTONE = '3.3';
+
+    /**
      * Database schema version
      */
     const DBVERSION = 1;

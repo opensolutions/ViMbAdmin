@@ -19,29 +19,31 @@ benefit from this application.
 
     <div id="modal_dialog" class="modal hide fade"> </div>
     <footer>
+
         <p>
             Copyright &copy; 2011 - {$smarty.now|date_formatter:"%Y"} <a href="http://www.opensolutions.ie/" target="_blank" title="Open Source Solutions Limited">Open Source Solutions Limited</a>.
             This Program is provided AS IS, without warranty.
         </p>
         <p>
-            <a href="https://github.com/opensolutions/ViMbAdmin/wiki">ViMbAdmin V{ViMbAdmin_Version::VERSION}</a>.
+            <a href="http://www.vimbadmin.net/">ViMbAdmin</a>
+                <a href="https://github.com/opensolutions/ViMbAdmin/releases">
+                    {if $hasIdentity and $user->isSuper()}
+                        v{ViMbAdmin_Version::VERSION}</a>.
+                    {else}
+                        v{ViMbAdmin_Version::MILESTONE}</a>.
+                    {/if}
             Licensed under the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html" target="_blank" title="GNU GPL v3">
                 GNU General Public License V3
             </a>.
         </p>
 
         <p>
-            Keep up with
-            <span class="label label-info">
-                <a class="aplain" href="http://www.opensolutions.ie/blog/category/vimbadmin/">ViMbAdmin</a>
-            </span>
-        	&nbsp;|&nbsp;
             Get the source at
             <span class="label label-info">
                 <a class="aplain" href="https://github.com/opensolutions/ViMbAdmin">GitHub</a>
             </span>
-        	&nbsp;|&nbsp;
-        	Learn more about
+            &nbsp;|&nbsp;
+            Learn more about
             <span class="label label-info">
                 <a class="aplain" href="http://www.opensolutions.ie/">Open Solutions</a>
             </span>

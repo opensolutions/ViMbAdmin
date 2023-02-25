@@ -46,7 +46,7 @@ final class ViMbAdmin_Version
     /**
      * Version identification - see compareVersion()
      */
-    const VERSION = '3.3.0';
+    const VERSION = '3.4.1';
 
     /**
      * Version milestone
@@ -54,17 +54,17 @@ final class ViMbAdmin_Version
      * The version milestone is used to publicly identify the running version
      * and should therefore not include the patch level.
      */
-    const MILESTONE = '3.3';
+    const MILESTONE = '3.4';
 
     /**
      * Database schema version
      */
-    const DBVERSION = 1;
+    const DBVERSION = 2;
 
     /**
      * Database schema version
      */
-    const DBVERSION_NAME = 'Venus';
+    const DBVERSION_NAME = 'Earth';
 
     /**
      * The latest stable version Zend Framework available

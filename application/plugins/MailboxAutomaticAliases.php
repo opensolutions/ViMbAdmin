@@ -74,7 +74,7 @@ class ViMbAdminPlugin_MailboxAutomaticAliases extends ViMbAdmin_Plugin implement
 
     public function __construct( OSS_Controller_Action $controller )
     {
-        parent::__construct( $controller, get_class() );
+        parent::__construct( $controller, get_class( $this ) );
 
         // read config parameters
         $this->defaultAliases = isset( $controller->getOptions()['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases'] )

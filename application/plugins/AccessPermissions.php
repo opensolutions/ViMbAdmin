@@ -50,7 +50,7 @@ class ViMbAdminPlugin_AccessPermissions extends ViMbAdmin_Plugin implements OSS_
 
     public function __construct( OSS_Controller_Action $controller )
     {
-        parent::__construct( $controller, get_class() );
+        parent::__construct( $controller, get_class( $this ) );
         
         // no setup tasks are required
         //

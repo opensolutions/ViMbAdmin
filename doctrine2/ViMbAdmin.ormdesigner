@@ -48,7 +48,7 @@
       <field name="active" type="boolean" default="1" required="true" uuid="e7edc5a1-a302-489a-bfbc-b65f16dd1e73"/>
       <field name="created" type="datetime" required="true" uuid="9c9200e4-08e2-4428-a653-c4bd38745977"/>
       <field name="modified" type="datetime" uuid="720dced4-fc3e-44c4-8a53-9c64eb3ae872"/>
-      <index name="IX_Username_1" unique="true">
+      <index name="IX_Username_admin" unique="true">
         <index-field name="username"/>
       </index>
       <orm-attributes>
